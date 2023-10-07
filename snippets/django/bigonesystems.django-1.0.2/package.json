@@ -1,0 +1,21 @@
+{
+	"contributes": {
+		"snippets": [{
+				"language": "python",
+				"path": "./snippets/django-snippets.json"
+			},
+			{
+				"language": "python",
+				"path": "./snippets/forms/classes.json"
+			},
+			{
+				"language": "python",
+				"path": "./snippets/forms/fields.json"
+			},
+			{
+				"language": "html",
+				"path": "./snippets/django-templates.json"
+			}
+		]
+	}
+}

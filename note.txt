@@ -1,0 +1,170 @@
+--[[
+使用 json 格式的 snippet 要注意不能有多餘的
+逗號和註解
+強調大部分的錯誤都是逗點和註解
+且檔案必須為 json 格式
+且不能有 "_comment" 自段的註解
+vscode 下載的 snippets 路徑如下 :
+  /mnt/c/Users/Andy6/.vscode/extensions/
+]]
+--[[
+先決條件 :
+~/.local/bin 需要有 nvim
+  nvim 可使用 ln -s ~/nvim.appimage nvim 製作
+需要有 node 和 npm
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
+  nvm install 16.15.1
+  nvm use 16.15.1
+要有 rust 和 cargo
+  curl https://sh.rustup.rs -sSf | sh
+要有 fd 和 rg
+  lunarvim 安裝包會用 cargo 幫忙裝
+  但 fd 有可能裝失敗
+  可用 conda 裝 : conda install -c conda-forge fd-find
+安裝/解除安裝 lunarvim
+  bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
+  bash ~/.local/share/lunarvim/lvim/utils/installer/uninstall.sh
+要修改鍵位
+  修改 which-key
+  ~/.local/share/lunarvim/lvim/lua/lvim/core/which-key.lua
+其他
+  server 上 api   那台 treesitter rainbow 安裝有問題，複製 WSL 上的整個 lunarvim 目錄當作安裝包即可 (不用下 bash <(curl -s ...) 了)
+    但後續可以在 config.lua 安裝新的套件
+  server 上 lab53 那台不知為何 lazy pug install manager 有問題，同上複製整個 lunarvim 安裝好的目錄即可解決
+    後續無法安裝新的套件 (後續都要靠複製安裝好的目錄的方式去解決)
+    (需要從根本解決 lunarvin 安裝的問題 [到底是甚麼原因 ?])
+]]
+
+-- -- Autocommands (`:help autocmd`) <https://neovim.io/doc/user/autocmd.html>
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "zsh",
+--   callback = function()
+--     -- let treesitter use bash highlight for zsh files as well
+--     require("nvim-treesitter.highlight").attach(0, "bash")
+--   end,
+-- })
+
+
+
+-- lvim.builtin.which_key
+-- lvim.builtin.nvimtree
+--[[
+  -- Add useful keymaps
+  if #lvim.builtin.nvimtree.setup.view.mappings.list == 0 then
+    lvim.builtin.nvimtree.setup.view.mappings.list = {
+      { key = { "l", "<CR>", "o" }, action = "edit", mode = "n" },
+      { key = "h", action = "close_node" },
+      { key = "v", action = "vsplit" },
+      { key = "C", action = "cd" },
+      -- change below key
+      { key = "<leader>sf", action = "telescope_find_files", action_cb = telescope_find_files },
+      { key = "<leader>sg", action = "telescope_live_grep", action_cb = telescope_live_grep },
+      { key = "s", nil },
+      { key = "sk", action = "split" },
+  }
+  end
+--]]
+-- lvim.builtin.lir
+-- Path : /root/.local/share/lunarvim/lvim/lua/lvim/core/cmp.lua
+--  source_names = { ultisnips = "(Snippet)" }
+-- require("luasnip/loaders/from_vscode").load { paths = { "~/.config/lvim/snippets/python-snippets" } }
+--[[
+    experimental = {
+      ghost_text = false -> true,
+      native_menu = false,
+--]]
+
+--[[
+require("cmp_nvim_ultisnips").setup {}
+local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
+lvim.builtin.cmp.snippet = {
+  expand = function(args)
+    vim.fn["UltiSnips#Anon"](args.body)
+  end,
+  ---
+  { name = "ultisnips" }
+  ... UltiSnips = "(USnippet)",
+}
+lvim.builtin.cmp.sources = { name = "ultisnips" }
+]]
+-- lvim.builtin.telescope.default
+
+-- lvim.lsp.buffer_mappings.normal_mode["<Space>lr"] = nil
+--lvim.lsp.buffer_mappings.normal_mode['<leader>l'] = nil
+
+-- lvim.keys.normal_mode["<leader>lr"] = ""
+-- lvim.keys.normal_mode["<leader>lr"] = ""
+
+-- lvim.keys.normal_mode['<c-p>']            = nil
+-- lvim.keys.normal_mode['<c-p>']            = lvim.keys.normal_mode['<leader>f']
+-- -- lvim.which
+
+-- to disable icons and use a minimalist setup, uncomment the following
+-- lvim.use_icons = false
+
+-- keymappings <https://www.lunarvim.org/docs/configuration/keybindings>
+lvim.leader                = "space"
+-- add your own keymapping
+-- lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
+lvim.keys.normal_mode["S"] = ":w<cr>"
+
+
+
+
+
+-- Automatically install missing parsers when entering buffer
+lvim.builtin.treesitter.auto_install = true
+-- lvim.builtin.treesitter.ignore_install = { "haskell" }
+
+-- -- generic LSP settings <https://www.lunarvim.org/docs/languages#lsp-support>
+
+-- --- disable automatic installation of servers
+-- lvim.lsp.installer.setup.automatic_installation = false
+
+-- ---configure a server manually. IMPORTANT: Requires `:LvimCacheReset` to take effect
+-- ---see the full default list `:lua =lvim.lsp.automatic_configuration.skipped_servers`
+-- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
+-- local opts = {} -- check the lspconfig documentation for a list of all possible options
+-- require("lvim.lsp.manager").setup("pyright", opts)
+-- local config_group = vim.api.nvim_create_augroup('MyConfigGroup', {}) -- A global group for all your config autocommands
+
+
+-- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. IMPORTANT: Requires `:LvimCacheReset` to take effect
+-- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
+-- lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
+--   return server ~= "emmet_ls"
+-- end, lvim.lsp.automatic_configuration.skipped_servers)
+
+-- -- you can set a custom on_attach function that will be used for all the language servers
+-- -- See <https://github.com/neovim/nvim-lspconfig#keybindings-and-completion>
+-- lvim.lsp.on_attach_callback = function(client, bufnr)
+--   local function buf_set_option(...)
+--     vim.api.nvim_buf_set_option(bufnr, ...)
+--   end
+
+--   --Enable completion triggered by <c-x><c-o>
+--   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+-- end
+
+-- -- linters and formatters <https://www.lunarvim.org/docs/languages#lintingformatting>
+-- local formatters = require "lvim.lsp.null-ls.formatters"
+-- formatters.setup {
+--   { command = "stylua" },
+--   {
+--     command = "prettier",
+--     extra_args = { "--print-width", "100" },
+--     filetypes = { "typescript", "typescriptreact" },
+--   },
+-- }
+-- local linters = require "lvim.lsp.null-ls.linters"
+-- linters.setup {
+--   { command = "flake8", filetypes = { "python" } },
+--   {
+--     command = "shellcheck",
+--     args = { "--severity", "warning" },
+--   },
+-- }
+
+-- -- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>
+-- lvim.plugins = {
+-- }
