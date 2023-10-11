@@ -67,6 +67,9 @@ lvim.keys.normal_mode["<F6>"]          = "<Cmd>tabmove -1<CR>"
 lvim.keys.normal_mode["<F7>"]          = "<Cmd>tabmove +1<CR>"
 lvim.keys.normal_mode["<a-\\>"]        = "<Cmd>tabclose<CR>"
 
+lvim.keys.normal_mode["<leader>["]     = "<Cmd>cprevious<CR>"
+lvim.keys.normal_mode["<leader>]"]     = "<Cmd>cnext<CR>"
+
 lvim.keys.normal_mode["<C-j>"]         = "<Cmd>BufferLineCyclePrev<CR>"
 lvim.keys.normal_mode["<C-l>"]         = "<Cmd>BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["<a-j>"]         = "<Cmd>BufferLineMovePrev<CR>"
