@@ -7,6 +7,7 @@
 require "opt"
 require "user.plugins"
 require "user.bufferline"
+require "user.tabpage"
 require "user.telescope"
 require "user.nvimtree"
 require "user.neotree"
