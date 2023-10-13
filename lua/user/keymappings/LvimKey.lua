@@ -58,6 +58,7 @@ lvim.keys.visual_mode['<leader>o']     = "za"
 -- lvim.keys.visual_mode['<leader>Od'] = "zo"
 
 lvim.keys.normal_mode["<F10>"]         = "<Cmd>SessionManager save_current_session<CR>"
+lvim.keys.normal_mode["<leader>S"]     = "<Cmd>SessionManager save_current_session<CR>"
 
 lvim.keys.normal_mode["<a-'>"]         = "<Cmd>tab split<CR>"
 lvim.keys.normal_mode["<a-/>"]         = "<Cmd>tabn 1<CR>"
