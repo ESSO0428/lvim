@@ -39,10 +39,13 @@ function toggle_syntax()
   end
 end
 
-function ReStartNotTableFileTypeLayout()
+function ReStartNotTableFileTypeLayout(action)
   local datatable_filetypes = { 'csv', 'tsv', 'csv_semicolon', 'csv_whitespace', 'csv_pipe', 'rfc_csv', 'rfc_semicolon' }
-  -- if vim.fn.index(datatable_filetypes, vim.bo.filetype) ~= -1 then
-  if vim.fn.index(datatable_filetypes, vim.bo.filetype) == -1 then
+  local int_bool = -1
+  if action == 'leave' then
+    int_bool = 1
+  end
+  if vim.fn.index(datatable_filetypes, vim.bo.filetype) == int_bool then
     -- vim.cmd("lua require('lualine').setup()")
     vim.cmd("set laststatus=3")
   end
@@ -62,5 +65,6 @@ vim.cmd([[
   autocmd BufNewFile,BufRead *.tsv.txt   set filetype=tsv
   autocmd BufNewFile,BufRead *.dat   set filetype=csv_pipe
   " autocmd BufLeave,WinLeave * lua ReStartNotTableFileTypeLayout()
-  autocmd WinEnter * lua ReStartNotTableFileTypeLayout()
+  autocmd WinEnter * lua ReStartNotTableFileTypeLayout('enter')
+  autocmd BufLeave * lua ReStartNotTableFileTypeLayout('leave')
 ]])
