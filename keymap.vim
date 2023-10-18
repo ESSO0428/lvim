@@ -539,6 +539,13 @@ function! SetWrapKeymaps()
     nnoremap <buffer><silent> K 5gj
     nnoremap <buffer><silent> J g0
     nnoremap <buffer><silent> L g$
+
+    vnoremap <buffer><silent> i gk
+    vnoremap <buffer><silent> k gj
+    vnoremap <buffer><silent> I 5gk
+    vnoremap <buffer><silent> K 5gj
+    vnoremap <buffer><silent> J g0
+    vnoremap <buffer><silent> L g$
   else
     " 如果 wrap 為 false
     nnoremap <buffer><silent> i k
@@ -547,6 +554,13 @@ function! SetWrapKeymaps()
     nnoremap <buffer><silent> K 5j
     nnoremap <buffer><silent> J 0
     nnoremap <buffer><silent> L $
+
+    vnoremap <buffer><silent> i k
+    vnoremap <buffer><silent> k j
+    vnoremap <buffer><silent> I 5k
+    vnoremap <buffer><silent> K 5j
+    vnoremap <buffer><silent> J 0
+    vnoremap <buffer><silent> L $
   endif
 endfunction
 
