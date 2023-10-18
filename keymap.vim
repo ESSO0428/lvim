@@ -533,20 +533,20 @@ nnoremap <silent> <a-h> :call XOpenFileOrFold()<CR>
 function! SetWrapKeymaps()
   if &wrap
     " 如果 wrap 為 true
-    nnoremap <silent> i gk
-    nnoremap <silent> k gj
-    nnoremap <silent> I 5gk
-    nnoremap <silent> K 5gj
-    nnoremap <silent> J g0
-    nnoremap <silent> L g$
+    nnoremap <buffer><silent> i gk
+    nnoremap <buffer><silent> k gj
+    nnoremap <buffer><silent> I 5gk
+    nnoremap <buffer><silent> K 5gj
+    nnoremap <buffer><silent> J g0
+    nnoremap <buffer><silent> L g$
   else
     " 如果 wrap 為 false
-    nnoremap <silent> i k
-    nnoremap <silent> k j
-    nnoremap <silent> I 5k
-    nnoremap <silent> K 5j
-    nnoremap <silent> J 0
-    nnoremap <silent> L $
+    nnoremap <buffer><silent> i k
+    nnoremap <buffer><silent> k j
+    nnoremap <buffer><silent> I 5k
+    nnoremap <buffer><silent> K 5j
+    nnoremap <buffer><silent> J 0
+    nnoremap <buffer><silent> L $
   endif
 endfunction
 
