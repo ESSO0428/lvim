@@ -70,6 +70,11 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
       vim_item.kind = lvim.icons.misc.Smiley
       vim_item.kind_hl_group = "CmpItemKindEmoji"
     end
+
+    if entry.source.name == "orgmode" then
+      vim_item.kind = ""
+      vim_item.kind_hl_group = "CmpItemKindCopilot"
+    end
   end
   vim_item.menu = lvim.builtin.cmp.formatting.source_names[entry.source.name]
   vim_item.dup = lvim.builtin.cmp.formatting.duplicates[entry.source.name]
