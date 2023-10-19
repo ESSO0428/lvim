@@ -414,9 +414,9 @@ nnoremap sgf <c-w>gf
 function! FindAndSelectFile(window_command)
   if a:window_command == 'v' || a:window_command == 'v-sp' || a:window_command == 'v-vsp' || a:window_command == 'v-tab'
     let cfile = getreg('f')
-    if cfile =~ '[\"+{}]' || cfile =~ "[']"
+    if cfile =~ '[\"+ ]' || cfile =~ "[']"
       " 使用 substitute 函数去除特定字符
-      let cfile = substitute(cfile, '[\"+{}]', '', 'g')
+      let cfile = substitute(cfile, '[\"+ ]', '', 'g')
       let cfile = substitute(cfile, "[']", '', 'g')
     endif
   else
