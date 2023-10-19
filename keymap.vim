@@ -412,7 +412,16 @@ nnoremap sgF <c-w>gF
 nnoremap sgf <c-w>gf
 
 function! FindAndSelectFile(window_command)
-  let cfile = expand('<cfile>')
+  if a:window_command == 'v' || a:window_command == 'v-sp' || a:window_command == 'v-vsp' || a:window_command == 'v-tab'
+    let cfile = getreg('f')
+    if cfile =~ '[\"+{}]' || cfile =~ "[']"
+      " 使用 substitute 函数去除特定字符
+      let cfile = substitute(cfile, '[\"+{}]', '', 'g')
+      let cfile = substitute(cfile, "[']", '', 'g')
+    endif
+  else
+    let cfile = expand('<cfile>')
+  end
   let is_home_or_relative = cfile =~# '^\~/' || cfile =~# '^' . $HOME . '/'
 
   let newcfile = is_home_or_relative ? cfile : substitute(cfile, '^\(\.\./\|\./\|/\)\{1,}', '', '')
@@ -487,6 +496,11 @@ nnoremap <silent> gm :call FindAndSelectFile('')<CR>
 nnoremap <silent> sgmk :call FindAndSelectFile('sp')<CR>
 nnoremap <silent> sgml :call FindAndSelectFile('vsp')<CR>
 nnoremap <silent> sm :call FindAndSelectFile('tab')<CR>
+
+vnoremap <silent> gm "fy:call FindAndSelectFile('v')<CR>
+vnoremap <silent> sgmk "fy:call FindAndSelectFile('v-sp')<CR>
+vnoremap <silent> sgml "fy:call FindAndSelectFile('v-vsp')<CR>
+vnoremap <silent> sm "fy:call FindAndSelectFile('v-tab')<CR>
 
 nnoremap <silent> <Leader>t1 :tabn 1<CR>
 nnoremap <silent> <Leader>t2 :tabn 2<CR>
