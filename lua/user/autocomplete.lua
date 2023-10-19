@@ -75,6 +75,10 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
       vim_item.kind = ""
       vim_item.kind_hl_group = "CmpItemKindCopilot"
     end
+    if entry.source.name == "vim-dadbod-completion" then
+      vim_item.kind = ""
+      vim_item.kind_hl_group = "CmpItemKindEmoji"
+    end
   end
   vim_item.menu = lvim.builtin.cmp.formatting.source_names[entry.source.name]
   vim_item.dup = lvim.builtin.cmp.formatting.duplicates[entry.source.name]
