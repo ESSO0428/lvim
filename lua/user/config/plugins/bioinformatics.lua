@@ -12,6 +12,7 @@ vim.api.nvim_create_user_command('TUorUT', "silent!'<,'>!tr 'TtUu' 'UuTt'", { ra
 vim.api.nvim_create_user_command('FileTypeOnFasta', 'set filetype=fasta', { nargs = "*" })
 vim.api.nvim_create_user_command('FileTypeOnCsv', 'set filetype=csv', { nargs = "*" })
 vim.api.nvim_create_user_command('FileTypeOnTsv', 'set filetype=tsv', { nargs = "*" })
+vim.api.nvim_create_user_command('FileTypeOnText', 'set filetype=text', { nargs = "*" })
 
 vim.api.nvim_create_user_command('FileTypeOnCsvSemicolon', 'set filetype=csv_semicolon', { nargs = "*" })
 vim.api.nvim_create_user_command('FileTypeOnCsvWhitespace', 'set filetype=csv_whitespace', { nargs = "*" })
@@ -22,6 +23,19 @@ vim.api.nvim_create_user_command('FileTypeOnRfcSemicolon', 'set filetype=rfc_sem
 
 -----------------------------------------------------------------
 function toggle_syntax()
+  if vim.bo.filetype == '' and vim.fn.expand('%:e') == '' then
+    print('Failed : filetype is empty')
+    return
+  elseif vim.bo.filetype == '' or vim.bo.filetype == 'text' then
+    if vim.fn.expand('%:e') == 'csv' then
+      vim.cmd('set filetype=csv')
+    elseif vim.fn.expand('%:e') == 'txt' then
+      vim.cmd('set filetype=tsv')
+    else
+      print('Failed : filetype is empty')
+      return
+    end
+  end
   local current_syntax = vim.api.nvim_buf_get_option(0, 'syntax')
   if current_syntax == '' or current_syntax == 'off' then
     vim.b.current_buffer_syntax = 'on'

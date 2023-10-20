@@ -545,6 +545,9 @@ nnoremap <silent> <a-h> :call XOpenFileOrFold()<CR>
 
 
 function! SetWrapKeymaps()
+  if exists('b:venn_enabled') && b:venn_enabled
+    return
+  endif
   if &wrap
     " 如果 wrap 為 true
     nnoremap <buffer><silent> i gk
