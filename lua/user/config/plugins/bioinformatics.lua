@@ -23,30 +23,30 @@ vim.api.nvim_create_user_command('FileTypeOnRfcSemicolon', 'set filetype=rfc_sem
 
 -----------------------------------------------------------------
 function toggle_syntax()
-  local exclude_filetypes = { 'python' }
-  local is_match_filetype = vim.fn.index(exclude_filetypes, vim.bo.filetype) ~= -1 and 1 or -1
-  if is_match_filetype == 1 then return end
-
-  if vim.bo.filetype == '' and vim.fn.expand('%:e') == '' then
+  local current_filetype = vim.bo.filetype
+  local ext = vim.fn.expand('%:e')
+  if current_filetype == '' and ext == '' then
     print('Failed : filetype is empty')
     return
-  elseif vim.bo.filetype == '' or vim.bo.filetype == 'text' then
-    if vim.fn.expand('%:e') == 'csv' then
-      vim.cmd('set filetype=csv')
-    elseif vim.fn.expand('%:e') == 'txt' then
-      vim.cmd('set filetype=tsv')
-    else
-      print('Failed : filetype is empty')
+  elseif current_filetype == '' or current_filetype == 'text' then
+    local syntax_map = { ['csv'] = 'csv', ['txt'] = 'tsv' } -- 添加更多映射
+    local new_filetype = syntax_map[ext]
+    if not new_filetype then
+      print('Failed: unknown file type')
       return
     end
+
+    vim.cmd('set filetype=' .. new_filetype)
   end
+
   local current_syntax = vim.api.nvim_buf_get_option(0, 'syntax')
   if current_syntax == '' or current_syntax == 'off' then
     vim.b.current_buffer_syntax = 'on'
     vim.cmd('setlocal syntax=on')
     local datatable_filetypes = { 'csv', 'tsv', 'csv_semicolon', 'csv_whitespace', 'csv_pipe', 'rfc_csv', 'rfc_semicolon' }
-    if vim.fn.index(datatable_filetypes, vim.bo.filetype) ~= -1 then
-      vim.cmd('set syntax=' .. vim.bo.filetype)
+    local is_match_filetype = vim.fn.index(datatable_filetypes, current_filetype) ~= -1 and 1 or -1
+    if is_match_filetype ~= -1 then
+      vim.cmd('set syntax=' .. current_filetype)
     end
     print('syntax on')
   else
