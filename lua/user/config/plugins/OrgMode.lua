@@ -20,16 +20,17 @@ local function check_org_notes()
     end
   end
 end
-vim.api.nvim_create_augroup("check_org_dir_and_note", {})
-vim.api.nvim_create_autocmd({
-  "VimEnter"
-}, {
-  group = "check_org_dir_and_note",
-  callback = function()
-    check_org_notes()
-  end
-})
-
+if next(vim.fn.argv()) == nil then
+  vim.api.nvim_create_augroup("check_org_dir_and_note", {})
+  vim.api.nvim_create_autocmd({
+    "VimEnter"
+  }, {
+    group = "check_org_dir_and_note",
+    callback = function()
+      check_org_notes()
+    end
+  })
+end
 
 
 
@@ -193,8 +194,17 @@ vim.api.nvim_create_autocmd({
     modify_calendar_keymaps()
   end
 })
+function create_directory(path)
+  -- 检查目录是否存在，如果不存在则创建它
+  if vim.fn.isdirectory(path) == 0 then
+    vim.fn.mkdir(path, "p")
+  end
+end
+
 function goto_OrgFile(filename)
-  file_full_path = "~/Dropbox/org/" .. filename
+  local org_dir = vim.fn.expand("~/Dropbox/org/")
+  create_directory(org_dir)
+  local file_full_path = org_dir .. filename
   local buf_nr = vim.fn.bufnr(file_full_path)
   if buf_nr ~= -1 and vim.api.nvim_buf_is_loaded(buf_nr) then
     -- if buffer is already loaded, go to the end of the file
@@ -207,7 +217,9 @@ function goto_OrgFile(filename)
 end
 
 function goto_WorkSpaceOrgFile(filename)
-  file_full_path = ('%s/Dropbox/org/%s'):format(vim.fn.getcwd(), filename)
+  local org_dir = ('%s/Dropbox/org/'):format(vim.fn.getcwd())
+  create_directory(org_dir)
+  local file_full_path = org_dir .. filename
   local buf_nr = vim.fn.bufnr(file_full_path)
   if buf_nr ~= -1 and vim.api.nvim_buf_is_loaded(buf_nr) then
     -- if buffer is already loaded, go to the end of the file
