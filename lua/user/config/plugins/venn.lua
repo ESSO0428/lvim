@@ -1,9 +1,9 @@
 function _G.Toggle_venn(command)
   if command == "close" then
     vim.b.venn_enabled = nil
-    vim.cmd [[setlocal ve=NONE]]
+    vim.cmd [[setlocal ve=]]
     vim.cmd [[mapclear <buffer>]]
-    print('clear venn and set ve=NONE')
+    print('clear all setting of venn and set ve=NONE')
     return
   end
   local venn_enabled = vim.inspect(vim.b.venn_enabled)
@@ -19,10 +19,11 @@ function _G.Toggle_venn(command)
     -- draw a box by pressing "f" with visual selection
     vim.api.nvim_buf_set_keymap(0, "v", "f", ":VBox<CR>", { noremap = true })
   else
-    vim.cmd [[setlocal ve=]]
+    -- vim.cmd [[setlocal ve=]]
+    vim.cmd [[setlocal ve=all]]
     vim.cmd [[mapclear <buffer>]]
     vim.b.venn_enabled = nil
-    print('mapclear venn and set ve=')
+    print('mapclear venn and set ve=all')
   end
 end
 
