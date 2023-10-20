@@ -72,8 +72,17 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
     end
 
     if entry.source.name == "orgmode" then
-      vim_item.kind = ""
-      vim_item.kind_hl_group = "CmpItemKindCopilot"
+      -- vim_item.kind = ""
+      -- vim_item.kind_hl_group = "CmpItemKindCopilot"
+      local ok, devicons = pcall(require, 'nvim-web-devicons')
+      if ok then
+        icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
+        if icon == nil then
+          icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
+        end
+        vim_item.kind = icon
+        vim_item.kind_hl_group = icon_highlight_group
+      end
     end
     if entry.source.name == "vim-dadbod-completion" then
       vim_item.kind = ""
