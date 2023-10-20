@@ -23,6 +23,10 @@ vim.api.nvim_create_user_command('FileTypeOnRfcSemicolon', 'set filetype=rfc_sem
 
 -----------------------------------------------------------------
 function toggle_syntax()
+  local exclude_filetypes = { 'python' }
+  local is_match_filetype = vim.fn.index(exclude_filetypes, vim.bo.filetype) ~= -1 and 1 or -1
+  if is_match_filetype == 1 then return end
+
   if vim.bo.filetype == '' and vim.fn.expand('%:e') == '' then
     print('Failed : filetype is empty')
     return
@@ -59,7 +63,8 @@ function ReStartNotTableFileTypeLayout(action)
   if action == 'leave' then
     int_bool = 1
   end
-  if vim.fn.index(datatable_filetypes, vim.bo.filetype) == int_bool then
+  local is_match_filetype = vim.fn.index(datatable_filetypes, vim.bo.filetype) ~= -1 and 1 or -1
+  if is_match_filetype == int_bool then
     -- vim.cmd("lua require('lualine').setup()")
     vim.cmd("set laststatus=3")
   end
