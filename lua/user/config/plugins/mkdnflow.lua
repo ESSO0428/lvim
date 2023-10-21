@@ -3,10 +3,13 @@ local success, msg = pcall(function()
     new_file_template = {
       use_template = true,
       template = [[
-  # {{ title }}
-  Date: {{ date }}
-  Filename: {{ filename }}
-  ]],
+---
+title: {{ title }}
+author: Andy6
+date: {{ date }}
+filename: {{ filename }}
+---
+]],
       placeholders = {
         before = {
           date = function()
