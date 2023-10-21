@@ -301,6 +301,7 @@ vim.cmd('cnoreabbrev howdo Telescope howdoi')
 -- lvim.keys.normal_mode['<a-b>'] = { "<Cmd>Telescope buffers<cr>" }
 lvim.builtin.which_key.mappings.s.s                 = { "<cmd>Telescope buffers<cr>", "Find" }
 lvim.builtin.which_key.mappings.s['`']              = { "<cmd>Telescope marks<cr>", "Marks" }
+lvim.builtin.which_key.mappings.s.j                 = { "<cmd>Telescope jumplist<cr>", "jumplist" }
 lvim.builtin.which_key.mappings.s.G                 = { "<cmd>Telescope live_grep_args<cr>", "Live_grep_args" }
 lvim.builtin.which_key.mappings.s.u                 = { "<cmd>Telescope telescope-tabs list_tabs<cr>", "Search Tabs" }
 
