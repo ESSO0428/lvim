@@ -22,6 +22,12 @@ vim.api.nvim_create_user_command('FileTypeOnRfcSemicolon', 'set filetype=rfc_sem
 
 
 -----------------------------------------------------------------
+-- 添加更多映射
+my_ext_syntax_map = {
+  ['csv'] = 'csv',
+  ['txt'] = 'tsv',
+  ['tab'] = 'tsv'
+}
 function toggle_syntax()
   local current_filetype = vim.bo.filetype
   local ext = vim.fn.expand('%:e')
@@ -29,8 +35,8 @@ function toggle_syntax()
     print('Failed : filetype is empty')
     return
   elseif current_filetype == '' or current_filetype == 'text' then
-    local syntax_map = { ['csv'] = 'csv', ['txt'] = 'tsv' } -- 添加更多映射
-    local new_filetype = syntax_map[ext]
+    local new_filetype = my_ext_syntax_map[ext]
+    current_filetype = new_filetype
     if not new_filetype then
       print('Failed: unknown file type')
       return
