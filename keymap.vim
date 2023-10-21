@@ -16,28 +16,7 @@ tnoremap <C-O> <C-\><C-N><C-O>
 autocmd BufRead,BufNewFile *.md inoremap <buffer> ,, <++>
             \| noremap <buffer><LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>"_c4l
             \| inoremap <buffer> ,c ```<++>```<CR><CR><++><Esc>2ki<CR><Esc>f>a<CR><Esc>2k$a
-            \| noremap <buffer> ,c a```<++>```<CR><CR><++><Esc>2ki<CR><Esc>f>a<CR><Esc>2k$a
             \| inoremap <buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>"_c4l
-            \| noremap <buffer> ,f /<++><CR>:nohlsearch<CR>"_c4l
-            \| inoremap <buffer> ,b `<++>`<Esc>F`a
-            \| nnoremap <buffer> ,b a`<++>`<Esc>F`a
-            \| nnoremap <buffer><silent> [] a- [ ] <++><Cr><Esc>
-            \| nnoremap <buffer><silent> ,> 0i><Esc>
-            \| nnoremap <buffer><silent> ,< :s/^\s*>//e<CR>
-            \| nnoremap <buffer><silent> ,, a- <Esc>a
-            \| nnoremap <buffer><silent> ,<tab> :if getline('.') == ''<Bar>execute 'normal! I    '<Bar>startinsert!<Bar>else<Bar>execute 'normal! >>'<Bar>endif<CR>
-            \| nnoremap <buffer><silent> <<tab> :if getline('.') != ''<Bar>execute 'normal! <<'<Bar>else<Bar>startinsert<Bar>endif<CR>
-            \| nnoremap <buffer><silent> # a# <++><Cr><Cr><Esc>
-            \| nnoremap <buffer><silent> ,0 a0. <++><Cr><Esc>
-            \| nnoremap <buffer><silent> ,1 a1. <++><Cr><Esc>
-            \| nnoremap <buffer><silent> ,2 a2. <++><Cr><Esc>
-            \| nnoremap <buffer><silent> ,3 a3. <++><Cr><Esc>
-            \| nnoremap <buffer><silent> ,4 a4. <++><Cr><Esc>
-            \| nnoremap <buffer><silent> ,5 a5. <++><Cr><Esc>
-            \| nnoremap <buffer><silent> ,6 a6. <++><Cr><Esc>
-            \| nnoremap <buffer><silent> ,7 a7. <++><Cr><Esc>
-            \| nnoremap <buffer><silent> ,8 a8. <++><Cr><Esc>
-            \| nnoremap <buffer><silent> ,9 a9. <++><Cr><Esc>
 
 
 noremap <c-w> :bd<CR>
@@ -246,7 +225,6 @@ noremap <C-K> 5<C-e>
 " source $HOME/.config/nvim/cursor.vim
 " normal Keyborad
 " If you use Qwerty keyboard, uncomment the next line.
-source $HOME/.config/lvim/cursor_for_qwerty.vim
 
 
 
@@ -386,6 +364,28 @@ noremap gj J
 vnoremap gj J
 noremap <a-a> <c-x>
 noremap <a-d> <c-a>
+
+
+" ==================== spell ====================
+noremap ,G zG
+noremap ,g zg
+noremap ,w zw
+noremap ,W zW
+noremap ,uw zuw
+noremap ,ug zug
+noremap ,uW zuW
+noremap ,uG zuG
+noremap ,= z=
+vnoremap ,G zG
+vnoremap ,g zg
+vnoremap ,w zw
+vnoremap ,W zW
+vnoremap ,uw zuw
+vnoremap ,ug zug
+vnoremap ,uW zuW
+vnoremap ,uG zuG
+vnoremap ,= z=
+
 
 function! NotNeg(number)
   let min_current_line=1

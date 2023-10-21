@@ -8,5 +8,7 @@
 " syntax match markdownHeader2 /^##\ze\s/ conceal cchar=○
 " syntax match markdownHeader3 /^###\ze\s/ conceal cchar=✸
 " syntax match markdownHeader4 /^####\ze\s/ conceal cchar=✿
-syntax match qut />\ze/ conceal nextgroup=@text.quote cchar=|
-
+syntax match placeholder /<++>\ze/
+syntax match quote_type1 />\ze/ conceal nextgroup=@text.quote cchar=┃
+highlight link markdownError Normal
+highlight link placeholder Keyword

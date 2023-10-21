@@ -41,7 +41,7 @@ vim.cmd "au ColorScheme * hi IlluminatedWordText guibg=none"
 
 vim.cmd "au ColorScheme * highlight IndentBlanklineContextChar guifg=#A184FE gui=nocombine" -- #737aa2
 vim.cmd "au ColorScheme * hi Todo cterm=bold gui=bold guifg=#71839b guibg=none"
-vim.cmd "au BufEnter *.md set syntax=on"
+vim.cmd "au BufEnter *.md setlocal syntax=markdown"
 
 vim.g['semshi#filetypes'] = { 'python' }
 vim.g['semshi#simplify_markup'] = false
