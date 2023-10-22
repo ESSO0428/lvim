@@ -1,4 +1,13 @@
 local M = {}
+function M.encodeHostname(jsonHost)
+  local hexHostname = ""
+  for i = 1, #jsonHost do
+    local byte = string.byte(jsonHost, i)
+    hexHostname = hexHostname .. string.format("%02x", byte)
+  end
+  return hexHostname
+end
+
 function _G.code(file)
   local buffers = vim.api.nvim_list_bufs()
   local fileNames = {}
@@ -29,8 +38,6 @@ function _G.code(file)
     table.insert(fileNames, fileName)
   end
 
-  local cwd = vim.fn.getcwd()
-  local cwd = vim.fn.getcwd()
   local cwd = vim.fn.getcwd()
   if not cwd:find("/$") then
     cwd = cwd .. "/"
@@ -68,10 +75,6 @@ function _G.rcode(file)
     table.insert(fileNames, fileName)
   end
   local cwd = vim.fn.getcwd()
-  local cwd = vim.fn.getcwd()
-  -- if not cwd:find("/$") then
-  --   cwd = cwd .. "/"
-  -- end
   if cwd:find("/$") then
     cwd = cwd:sub(1, -2)
   end
@@ -84,8 +87,12 @@ function _G.rcode(file)
 
   -- local str = "code --remote ssh-remote+" ..
   --     host .. " `\n" .. cwd .. " `\n" .. "-g `\n" .. table.concat(fileNames, " `\n")
+
+  -- 将字符串转换为十六进制编码
+  local jsonHost = '{"hostName":"' .. host .. '"}' -- 将主机名转换为 JSON 格式
+  local hexHost = M.encodeHostname(jsonHost)       -- 调用 encodeHostname 函数
   local str = "code --remote ssh-remote+" ..
-      host .. " `\n" .. cwd
+      hexHost .. " `\n" .. cwd
   str = str .. "; `\n" ..
       str ..
       " `\n" .. "-g `\n" .. table.concat(fileNames, " `\n")
@@ -105,4 +112,3 @@ function _G.rcode(file)
 end
 
 return M
-
