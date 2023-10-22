@@ -67,19 +67,10 @@ function GetServerHostName(host)
   vim.g.host = host
   -- use hostname of ~/.ssh/host_names
   -- 在 ~/.ssh/host_names 寫上各主機的 hostname 和 ip 即可
-  local filepath = os.getenv("HOME") .. "/.ssh/ssh_hostnames"
+  -- local filepath = os.getenv("HOME") .. "/.ssh/ssh_hostnames"
   local ip = nil
-  local command = io.popen("ifconfig")
-  for line in command:lines() do
-    -- 在输出中查找 IP 地址的行
-    -- 这里假设 IP 地址所在行包含 "inet " 字符串
-    if line:find("inet ") then
-      -- 提取 IP 地址，这里假设 IP 地址位于 "inet " 后面的部分
-      ip = line:match("inet%s+([%d.]+)")
-      break
-    end
-  end
-
+  local command = io.popen("hostname -I | awk '{print $1}'")
+  ip = command:read("*line")
   command:close()
 
   -- 使用 Lua 读取 ~/.ssh/host_names 文件获取主机名和对应的 IP
