@@ -63,40 +63,44 @@ end
 --code --remote ssh-remote+LabServerDP
 -- default hostname
 host = "YourVscodeReomoteServerName"
-vim.g.host = host
--- use hostname of ~/.ssh/host_names
--- 在 ~/.ssh/host_names 寫上各主機的 hostname 和 ip 即可
-local filepath = os.getenv("HOME") .. "/.ssh/ssh_hostnames"
-local ip = nil
-local command = io.popen("ifconfig")
-for line in command:lines() do
-  -- 在输出中查找 IP 地址的行
-  -- 这里假设 IP 地址所在行包含 "inet " 字符串
-  if line:find("inet ") then
-    -- 提取 IP 地址，这里假设 IP 地址位于 "inet " 后面的部分
-    ip = line:match("inet%s+([%d.]+)")
-    break
-  end
-end
-
-command:close()
-
--- 使用 Lua 读取 ~/.ssh/host_names 文件获取主机名和对应的 IP
-local hostnames_file = os.getenv("HOME") .. "/.ssh/host_names"
-if vim.fn.filereadable(hostnames_file) == 1 then
-  local file = io.open(hostnames_file, "r")
-  if file then
-    for line in file:lines() do
-      local hostname, hostname_ip = line:match("(%S+)%s+(%S+)")
-      if hostname_ip and hostname_ip == ip then
-        host = hostname
-        vim.g.host = host
-        break
-      end
+function GetServerHostName(host)
+  vim.g.host = host
+  -- use hostname of ~/.ssh/host_names
+  -- 在 ~/.ssh/host_names 寫上各主機的 hostname 和 ip 即可
+  local filepath = os.getenv("HOME") .. "/.ssh/ssh_hostnames"
+  local ip = nil
+  local command = io.popen("ifconfig")
+  for line in command:lines() do
+    -- 在输出中查找 IP 地址的行
+    -- 这里假设 IP 地址所在行包含 "inet " 字符串
+    if line:find("inet ") then
+      -- 提取 IP 地址，这里假设 IP 地址位于 "inet " 后面的部分
+      ip = line:match("inet%s+([%d.]+)")
+      break
     end
-    file:close()
+  end
+
+  command:close()
+
+  -- 使用 Lua 读取 ~/.ssh/host_names 文件获取主机名和对应的 IP
+  local hostnames_file = os.getenv("HOME") .. "/.ssh/host_names"
+  if vim.fn.filereadable(hostnames_file) == 1 then
+    local file = io.open(hostnames_file, "r")
+    if file then
+      for line in file:lines() do
+        local hostname, hostname_ip = line:match("(%S+)%s+(%S+)")
+        if hostname_ip and hostname_ip == ip then
+          host = hostname
+          vim.g.host = host
+          break
+        end
+      end
+      file:close()
+    end
   end
 end
+
+GetServerHostName(host)
 
 vim.cmd('source $HOME/.config/lvim/init.vim')
 vim.cmd('source $HOME/.config/lvim/keymap.vim')

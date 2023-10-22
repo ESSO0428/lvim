@@ -1,4 +1,6 @@
 local M = {}
+M.host = vim.g.host
+
 function M.encodeHostname(jsonHost)
   local hexHostname = ""
   for i = 1, #jsonHost do
@@ -6,6 +8,13 @@ function M.encodeHostname(jsonHost)
     hexHostname = hexHostname .. string.format("%02x", byte)
   end
   return hexHostname
+end
+
+function M.is_match_exclude_hostname(hostname)
+  local is_match_exclude_hostname_bool = vim.fn.index(
+    { "YourVscodeReomoteServerName", "" }
+    , hostname) ~= -1 and 1 or -1
+  return is_match_exclude_hostname_bool
 end
 
 function _G.code(file)
@@ -88,23 +97,31 @@ function _G.rcode(file)
   -- local str = "code --remote ssh-remote+" ..
   --     host .. " `\n" .. cwd .. " `\n" .. "-g `\n" .. table.concat(fileNames, " `\n")
 
-  -- 将字符串转换为十六进制编码
-  local jsonHost = '{"hostName":"' .. host .. '"}' -- 将主机名转换为 JSON 格式
-  local hexHost = M.encodeHostname(jsonHost)       -- 调用 encodeHostname 函数
-  local str = "code --remote ssh-remote+" ..
-      hexHost .. " `\n" .. cwd
-  str = str .. "; `\n" ..
-      str ..
-      " `\n" .. "-g `\n" .. table.concat(fileNames, " `\n")
-
-  local command = "$command = \'" .. str .. "\'; Invoke-Expression $command"
-  local is_match_exclude_hostname = vim.fn.index(
-    { "YourVscodeReomoteServerName", "" }
-    , host) ~= -1 and 1 or -1
-  if is_match_exclude_hostname == 1 then
-    str = "Failed : Not found usefull hostname"
+  local is_match_exclude_hostname_bool = M.is_match_exclude_hostname(host)
+  local str
+  if is_match_exclude_hostname_bool == 1 then
+    GetServerHostName(M.host)
+    M.host = vim.g.host
+    is_match_exclude_hostname_bool = M.is_match_exclude_hostname(M.host)
+    if is_match_exclude_hostname_bool == 1 then
+      str = "Failed : Not found usefull hostname\n" ..
+          "Use left command to Update hostname from Windows PC sshconfig to current Server :UpdateRegisterHostHameFromLocal\n" ..
+          "P.S. : Check local open reverse ssh port to current remote server"
+    end
   end
-  -- print(command)
+
+  -- 将字符串转换为十六进制编码
+  if is_match_exclude_hostname_bool == -1 then
+    local jsonHost = '{"hostName":"' .. M.host .. '"}' -- 将主机名转换为 JSON 格式
+    local hexHost = M.encodeHostname(jsonHost)         -- 调用 encodeHostname 函数
+    str = "code --remote ssh-remote+" ..
+        hexHost .. " `\n" .. cwd
+    str = str .. "; `\n" ..
+        str ..
+        " `\n" .. "-g `\n" .. table.concat(fileNames, " `\n")
+    local command = "$command = \'" .. str .. "\'; Invoke-Expression $command"
+    -- print(command)
+  end
   -- 將指令字串寫入檔案
   local logFile = vim.fn.expand('~/.NeovimVscode.log')
   local f = io.open(logFile, 'w')
@@ -114,7 +131,7 @@ function _G.rcode(file)
   -- 使用tabnew命令打開新標籤頁顯示檔案
   vim.cmd('tabnew ' .. logFile)
 
-  -- print("code --remote ssh-remote+" .. host .. " -g " .. cwd .. " " .. table.concat(fileNames, " "))
+  -- print("code --remote ssh-remote+" .. M.host .. " -g " .. cwd .. " " .. table.concat(fileNames, " "))
 end
 
 return M
