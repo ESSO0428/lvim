@@ -98,6 +98,12 @@ function _G.rcode(file)
       " `\n" .. "-g `\n" .. table.concat(fileNames, " `\n")
 
   local command = "$command = \'" .. str .. "\'; Invoke-Expression $command"
+  local is_match_exclude_hostname = vim.fn.index(
+    { "YourVscodeReomoteServerName", "" }
+    , host) ~= -1 and 1 or -1
+  if is_match_exclude_hostname == 1 then
+    str = "Failed : Not found usefull hostname"
+  end
   -- print(command)
   -- 將指令字串寫入檔案
   local logFile = vim.fn.expand('~/.NeovimVscode.log')
