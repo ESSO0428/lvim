@@ -1,4 +1,6 @@
 noremap ; :set relativenumber!<CR>
+let mapleader = " " " map leader to Space
+
 let g:neoterm_autoscroll = 1
 tnoremap <C-N> <C-\><C-N>
 tnoremap <C-O> <C-\><C-N><C-O>
@@ -257,13 +259,13 @@ noremap qf <C-w>o
 " noremap <LEADER>j <C-w>h
 " noremap <LEADER>l <C-w>l
 
-noremap <LEADER>i <C-w>k<CR>
-noremap <LEADER>k <C-w>j<CR>
-noremap <LEADER>j <C-w>h<CR>
-noremap <LEADER>l <C-w>l<CR>
+noremap <LEADER>i <C-w>k
+noremap <LEADER>k <C-w>j
+noremap <LEADER>j <C-w>h
+noremap <LEADER>l <C-w>l
 
-noremap <LEADER>J <C-w>t<CR>
-noremap <LEADER>n <C-w><C-p><CR>
+noremap <LEADER>J <C-w>t
+noremap <LEADER>n <C-w><C-p>
 
 
 " Disable the default s key

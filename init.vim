@@ -195,6 +195,7 @@ iron.setup({
   },
 })
 EOF
+let g:nvim_ipy_perform_mappings = 0
 
 autocmd VimEnter * silent! execute '!chmod -R 755 ~/.config/lvim/jupyter_ascending/'
 source ~/.config/lvim/jupyter_ascending/PythonInteractive_JupterNotebook.vim
