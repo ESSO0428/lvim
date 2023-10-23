@@ -31,8 +31,6 @@ local function get_dynamic_terminal_size(direction, size)
 end
 
 function _G.ToggleTermExec(term_mode)
-
-
   local execs = lvim.builtin.terminal.execs
   local exec = nil
   local i = nil
@@ -61,12 +59,9 @@ function _G.ToggleTermExec(term_mode)
     end,
   }
   M.add_exec(opts)
-
 end
 
 function _G.ToggleTermExecFzfRg(term_mode)
-
-
   local execs = lvim.builtin.terminal.execs
   local exec = nil
   local i = nil
@@ -95,7 +90,6 @@ function _G.ToggleTermExecFzfRg(term_mode)
     end,
   }
   M.add_execFzfRg(opts)
-
 end
 
 M.add_exec = function(opts)
@@ -120,7 +114,6 @@ M._exec_toggle = function(opts)
     " count=" ..
     -- opts.count .. " size=" .. opts.size() .. " direction=" .. opts.direction .. " go_back=0")
     opts.count .. " size=" .. opts.size() .. " direction=" .. opts.direction .. " dir=" .. opts.basedir .. " go_back=0")
-
 end
 
 M._exec_toggleFzfRg = function(opts)
@@ -136,7 +129,6 @@ M._exec_toggleFzfRg = function(opts)
     " count=" ..
     -- opts.count .. " size=" .. opts.size() .. " direction=" .. opts.direction .. " go_back=0")
     opts.count .. " size=" .. opts.size() .. " direction=" .. opts.direction .. " dir=" .. opts.basedir .. " go_back=0")
-
 end
 
 return M
