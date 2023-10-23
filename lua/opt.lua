@@ -26,6 +26,8 @@ vim.opt.spelllang = { 'en_us' }
 vim.opt.list = false
 vim.opt.listchars:append "space:⋅"
 
+vim.g.PythonEnv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
+
 -- 用於 nvim-navbuddy
 -- 更新 core plug 的 nvim-navic
 -- (到該目錄下先執行) git fetch; git pull

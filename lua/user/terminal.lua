@@ -1,7 +1,7 @@
 lvim.builtin.terminal.execs = {
-  { nil, "<leader><M-8>", "Horizontal Terminal", "horizontal", 0.3 },
-  { nil, "<leader><M-9>", "Vertical Terminal",   "vertical",   0.4 },
-  { nil, "<leader><M-0>", "Float Terminal",      "float",      nil },
+  { nil, "<C-8>", "Horizontal Terminal", "horizontal", 0.3 },
+  { nil, "<C-9>", "Vertical Terminal",   "vertical",   0.4 },
+  { nil, "<C-0>", "Float Terminal",      "float",      nil },
 }
 require "user.integrated.Term"
 lvim.builtin.which_key.mappings["<M-1>"] = { "<Cmd>lua ToggleTermExec('horizontal')<CR>", "Horizontal Terminal" }

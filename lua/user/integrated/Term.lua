@@ -108,6 +108,9 @@ M._exec_toggle = function(opts)
   --   " count=" .. opts.count .. " size=" .. opts.size() .. " direction=" .. opts.direction .. " dir=" .. opts.basedir)
   local venv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
   opts.cmd = "'conda activate " .. venv .. "'"
+  if venv == vim.g.PythonEnv then
+    opts.cmd = ""
+  end
   vim.cmd("TermExec" ..
     " cmd=" ..
     opts.cmd ..
@@ -123,6 +126,9 @@ M._exec_toggleFzfRg = function(opts)
   --   " count=" .. opts.count .. " size=" .. opts.size() .. " direction=" .. opts.direction .. " dir=" .. opts.basedir)
   local venv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
   opts.cmd = "'conda activate " .. venv .. "; fzf_rg'"
+  if venv == vim.g.PythonEnv then
+    opts.cmd = "'fzf_rg'"
+  end
   vim.cmd("TermExec" ..
     " cmd=" ..
     opts.cmd ..
