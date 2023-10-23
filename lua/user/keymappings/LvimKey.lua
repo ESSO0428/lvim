@@ -131,6 +131,6 @@ lvim.keys.normal_mode["<M-N>"]          = { "<cmd>lua require('illuminate').goto
 lvim.keys.normal_mode["]d"]             = { "<cmd>lua require('goto-breakpoints').next()<cr>" }
 lvim.keys.normal_mode["[d"]             = { "<cmd>lua require('goto-breakpoints').prev()<cr>" }
 lvim.keys.normal_mode["]S"]             = { "<cmd>lua require('goto-breakpoints').stopped()<cr>" }
-
+lvim.keys.normal_mode['<leader>\\']     = { "<cmd>lua require('dap').toggle_breakpoint()<cr>" }
 
 vim.cmd('noremap <a-p> <Nop>')
