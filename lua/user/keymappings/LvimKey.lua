@@ -126,4 +126,11 @@ lvim.keys.normal_mode['<leader>se']     = { '<cmd>SessionManager load_session<cr
 -- lvim.keys.normal_mode['<leader>F']      = { '<Plug>(leap-backward)' }
 lvim.keys.normal_mode["<M-n>"]          = { "<cmd>lua require('illuminate').goto_next_reference(wrap)<cr>" }
 lvim.keys.normal_mode["<M-N>"]          = { "<cmd>lua require('illuminate').goto_prev_reference(wrap)<cr>" }
+
+-- debug
+lvim.keys.normal_mode["]d"]             = { "<cmd>lua require('goto-breakpoints').next()<cr>" }
+lvim.keys.normal_mode["[d"]             = { "<cmd>lua require('goto-breakpoints').prev()<cr>" }
+lvim.keys.normal_mode["]S"]             = { "<cmd>lua require('goto-breakpoints').stopped()<cr>" }
+
+
 vim.cmd('noremap <a-p> <Nop>')

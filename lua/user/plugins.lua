@@ -483,6 +483,7 @@ lvim.plugins = {
   },
   { "IllustratedMan-code/telescope-conda.nvim" },
   { "nvim-telescope/telescope-dap.nvim" },
+  { "ofirgall/goto-breakpoints.nvim" },
   {
     "mfussenegger/nvim-dap-python",
     build = "pip install debugpy"
