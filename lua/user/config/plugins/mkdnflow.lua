@@ -81,3 +81,4 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.keymap.set('n', '<leader>uv', ':MarkdownHeadersClosest<cr>', { silent = true, buffer = true })
   end,
 })
+vim.api.nvim_create_user_command('Date', 'silent! r! date +"\\%A, \\%B, \\%d, \\%Y"', { nargs = "*" })
