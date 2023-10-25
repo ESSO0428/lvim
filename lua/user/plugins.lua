@@ -684,7 +684,7 @@ lvim.plugins = {
   { "rbong/vim-flog" },
   { "sindrets/diffview.nvim" },
   {
-    "lkhphuc/jupyter-kernel.nvim",
+    "ESSO0428/jupyter-kernel.nvim",
     opts = {
       inspect = {
         -- opts for vim.lsp.util.open_floating_preview

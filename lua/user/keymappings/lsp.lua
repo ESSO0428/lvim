@@ -1,7 +1,19 @@
 -- lvim.lsp.
 lvim.lsp.buffer_mappings.normal_mode['K']  = nil
 lvim.lsp.buffer_mappings.normal_mode['gs'] = nil
-lvim.keys.normal_mode['gh']                = ":lua vim.lsp.buf.signature_help()<cr>"
+-- lvim.keys.normal_mode['gh']                = ":lua vim.lsp.buf.signature_help()<cr>"
+function lsp_or_jupyter_signature_help()
+  local is_jupyter_attached = vim.b.jupyter_attached or false
+
+  if is_jupyter_attached then
+    vim.cmd('JupyterInspect')
+  else
+    vim.cmd('lua vim.lsp.buf.hover()')
+  end
+end
+
+lvim.lsp.buffer_mappings.normal_mode['gh'] = { ":lua lsp_or_jupyter_signature_help()<cr>", "Show documentation" }
+
 lvim.keys.normal_mode['gs']                = ":Antovim<cr>"
 
 -- replace to Lspsaga code action
@@ -40,5 +52,5 @@ lvim.keys.normal_mode['<leader>uq']        = ":lua vim.lsp.diagnostic.setloclist
 
 -- lvim.lsp.buffer_mappings.normal_mode['<a-d>'] = { vim.lsp.buf.hover, "Show documentation" }
 -- lvim.lsp.buffer_mappings.normal_mode['<a-s>'] = { vim.lsp.buf.hover, "Show documentation" }
-lvim.lsp.buffer_mappings.normal_mode['gh'] = { vim.lsp.buf.hover, "Show documentation" }
+-- lvim.lsp.buffer_mappings.normal_mode['gh'] = { vim.lsp.buf.hover, "Show documentation" }
 -- lvim.keys.normal_mode['<c-t>'] = ":SymbolsOutline<cr>"
