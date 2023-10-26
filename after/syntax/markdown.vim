@@ -14,3 +14,7 @@ syntax match quote_type1 />\ze/ conceal nextgroup=@text.quote cchar=┃
 highlight link markdownError Normal
 highlight link placeholder Keyword
 highlight link mathematical_symbol Normal
+
+syntax match left_brackets /\\\[/ conceal cchar=[
+syntax match right_brackets /\\\]/ conceal cchar=]
+
