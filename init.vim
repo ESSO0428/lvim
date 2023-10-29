@@ -82,8 +82,8 @@ let g:jupytext_style = 'hydrogen'
 " Depends on the text object defined in vim-textobj-hydrogen
 " You first need to be connected to IronRepl
 " nmap ]x ctrih/^# %%<CR><CR>
-nmap [x ctrah<ESC>/^# %%<CR><space><CR>
-nmap ]x ctrih<ESC>/^# %%<CR><space><CR>
+nmap [x strah<ESC>/^# %%<CR><space><CR>
+nmap ]x strih<ESC>/^# %%<CR><space><CR>
 
 
 " ==================== Ultisnips ====================
@@ -190,8 +190,8 @@ iron.setup({
     },
   },
   keymaps = {
-    send_motion = "ctr",
-    visual_send = "ctr",
+    send_motion = "str",
+    visual_send = "str",
   },
 })
 EOF
