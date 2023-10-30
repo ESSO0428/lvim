@@ -1,4 +1,4 @@
-noremap ; :set relativenumber!<CR>
+nnoremap ; :set relativenumber!<CR>
 let mapleader = " " " map leader to Space
 
 let g:neoterm_autoscroll = 1
@@ -21,12 +21,12 @@ autocmd BufRead,BufNewFile *.md inoremap <buffer> ,, <++>
             \| inoremap <buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>"_c4l
 
 
-noremap <c-w> :bd<CR>
+nnoremap <c-w> :bd<CR>
 " inoremap <c-t> <ESC>pi<ESC>i
 " inoremap <c-t> <c-r>*
 
 " Find pair
-noremap ,. %
+nnoremap ,. %
 vnoremap ni $%
 " Search
 " noremap <LEADER><CR> :nohlsearch<CR>
@@ -35,19 +35,19 @@ vnoremap ni $%
 
 
 map u <Nop>
-noremap o o<ESC>
-noremap u O<ESC>
-noremap O <Nop>
-noremap O dd
+nnoremap o o<ESC>
+nnoremap u O<ESC>
+nnoremap O <Nop>
+nnoremap O dd
 
-noremap u O<ESC>
-noremap U ddk
+nnoremap u O<ESC>
+nnoremap U ddk
 " noremap <c-y> yyp
-noremap <c-d> yyp
+nnoremap <c-d> yyp
 " nmap < <<CR>
 " nmap > ><CR>
 
-nnoremap <c-n> <tab>
+" nnoremap <c-n> <tab>
 nnoremap <Tab> >>_
 nnoremap <S-Tab> <<_
 inoremap <S-Tab> <C-D>
@@ -84,7 +84,7 @@ nnoremap S :w<CR>
 " colemak keyboard
 " noremap l u
 " normal keyboard
-noremap z u
+nnoremap z u
 " Insert Key
 " noremap m a
 " noremap M A
@@ -123,12 +123,12 @@ inoremap <c-p> <ESC><CR>
 
 
 " Find pair
-noremap ,. %
+nnoremap ,. %
 vnoremap ni $%
 " Search
 " noremap <LEADER><CR> :nohlsearch<CR>
 " Adjacent duplicate words
-noremap <LEADER>dw /\(\<\w\+\>\)\_s*\1
+nnoremap <LEADER>dw /\(\<\w\+\>\)\_s*\1
 
 
 " Space to Tab
@@ -162,15 +162,15 @@ nnoremap <a-v> <c-v>
 " noremap <silent> i l
 
 " normal keyborad
-noremap <silent> i k
-noremap <silent> j h
-noremap <silent> k j
+nnoremap <silent> i k
+nnoremap <silent> j h
+nnoremap <silent> k j
 " noremap <silent> l l
 
 " colemak keyborad
 " noremap <silent> gu gk
 " noremap <silent> ge gj
-noremap <silent> \v v$h
+nnoremap <silent> \v v$h
 
 " normal keyborad
 noremap <silent> gi gk
@@ -259,17 +259,17 @@ noremap qf <C-w>o
 " noremap <LEADER>j <C-w>h
 " noremap <LEADER>l <C-w>l
 
-noremap <LEADER>i <C-w>k
-noremap <LEADER>k <C-w>j
-noremap <LEADER>j <C-w>h
-noremap <LEADER>l <C-w>l
+nnoremap <LEADER>i <C-w>k
+nnoremap <LEADER>k <C-w>j
+nnoremap <LEADER>j <C-w>h
+nnoremap <LEADER>l <C-w>l
 
-noremap <LEADER>J <C-w>t
-noremap <LEADER>n <C-w><C-p>
+nnoremap <LEADER>J <C-w>t
+nnoremap <LEADER>n <C-w><C-p>
 
 
 " Disable the default s key
-noremap s <nop>
+nnoremap s <nop>
 " split the screens to up (horizontal), down (horizontal), left (vertical), right (vertical)
 " colemak keyboard
 " noremap su :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
@@ -278,34 +278,34 @@ noremap s <nop>
 " noremap si :set splitright<CR>:vsplit<CR>
 
 " normal keyboard
-noremap si :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
-noremap sk :set splitbelow<CR>:split<CR>
-noremap sj :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
-noremap sl :set splitright<CR>:vsplit<CR>
+nnoremap si :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
+nnoremap sk :set splitbelow<CR>:split<CR>
+nnoremap sj :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
+nnoremap sl :set splitright<CR>:vsplit<CR>
 
 
 
 " Resize splits with arrow keys
 " noremap <up> :res +5<CR>
 " noremap <down> :res -5<CR>
-noremap <up> :res -5<CR>
-noremap <down> :res +5<CR>
+nnoremap <up> :res -5<CR>
+nnoremap <down> :res +5<CR>
 
 
-noremap <left> :vertical resize-5<CR>
-noremap <right> :vertical resize+5<CR>
+nnoremap <left> :vertical resize-5<CR>
+nnoremap <right> :vertical resize+5<CR>
 " Place the two screens up and down
-noremap sh <C-w>t<C-w>K
+nnoremap sh <C-w>t<C-w>K
 " Place the two screens side by side
-noremap sv <C-w>t<C-w>H
+nnoremap sv <C-w>t<C-w>H
 " Rotate screens
-noremap srh <C-w>b<C-w>K
-noremap srv <C-w>b<C-w>H
+nnoremap srh <C-w>b<C-w>K
+nnoremap srv <C-w>b<C-w>H
 
 " Press <SPACE> + q to close the window below the current window
 " noremap <LEADER>q <C-w>j:q<CR>
 " close current window only
-noremap <LEADER>q :q<CR>
+nnoremap <LEADER>q :q<CR>
  
 
 " ==================== Tab management ====================
@@ -362,22 +362,22 @@ vmap gt   :GTabularize / <c-r>0 /l0
 vnoremap Y "+y
 vnoremap <leader><c-c> "+y
 vnoremap <leader><c-x> "+d
-noremap gj J
+nnoremap gj J
 vnoremap gj J
-noremap <a-a> <c-x>
-noremap <a-d> <c-a>
+nnoremap <a-a> <c-x>
+nnoremap <a-d> <c-a>
 
 
 " ==================== spell ====================
-noremap ,G zG
-noremap ,g zg
-noremap ,w zw
-noremap ,W zW
-noremap ,uw zuw
-noremap ,ug zug
-noremap ,uW zuW
-noremap ,uG zuG
-noremap ,= z=
+nnoremap ,G zG
+nnoremap ,g zg
+nnoremap ,w zw
+nnoremap ,W zW
+nnoremap ,uw zuw
+nnoremap ,ug zug
+nnoremap ,uW zuW
+nnoremap ,uG zuG
+nnoremap ,= z=
 vnoremap ,G zG
 vnoremap ,g zg
 vnoremap ,w zw
