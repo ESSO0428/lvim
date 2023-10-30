@@ -90,8 +90,10 @@ nnoremap z u
 " noremap M A
 " noremap h a
 " noremap H A
-noremap h i
-noremap H I
+nnoremap h i
+nnoremap H I
+vnoremap h i
+vnoremap H I
 
 
 " noremap <a-[> i
@@ -138,9 +140,14 @@ nnoremap <LEADER>dw /\(\<\w\+\>\)\_s*\1
 " vnoremap <LEADER>st :s/\t/    /g
 
 " Folding
-noremap <silent> <LEADER>o za
-noremap <silent> <LEADER>Oa zM
-noremap <silent> <LEADER>Od zR
+nnoremap <silent> <LEADER>o za
+nnoremap <silent> <LEADER>Oa zM
+nnoremap <silent> <LEADER>Od zR
+
+vnoremap <silent> <LEADER>o za
+vnoremap <silent> <LEADER>Oa zM
+vnoremap <silent> <LEADER>Od zR
+
 
 " insert a pair of {} and go to the next line
 " inoremap <c-y> <ESC>A {}<ESC>i<CR><ESC>ko
@@ -165,6 +172,11 @@ nnoremap <a-v> <c-v>
 nnoremap <silent> i k
 nnoremap <silent> j h
 nnoremap <silent> k j
+" visual keyborad
+vnoremap <silent> i k
+vnoremap <silent> j h
+vnoremap <silent> k j
+
 " noremap <silent> l l
 
 " colemak keyborad
@@ -175,6 +187,9 @@ nnoremap <silent> \v v$h
 " normal keyborad
 noremap <silent> gi gk
 noremap <silent> gk gj
+" visual keyborad
+vnoremap <silent> gi gk
+vnoremap <silent> gk gj
 
 " 覆蓋 i, k 成 gk, gj 
 " noremap <silent> i gk
@@ -184,9 +199,13 @@ noremap <silent> gk gj
 " colemak keyborad
 " noremap <silent> U 5k
 " noremap <silent> E 5j
+
 " normal keyborad
 noremap <silent> I 5k
 noremap <silent> K 5j
+" visual keyborad
+vnoremap <silent> I 5k
+vnoremap <silent> K 5j
 
 " 覆蓋 I, K 成 5gk, 5gj 
 " noremap <silent> I 5gk
@@ -195,20 +214,30 @@ noremap <silent> K 5j
 " N key: go to the start of the line
 " colemak keyborad
 " noremap <silent> N 0
+
 " normal keyborad
-noremap <silent> J 0
+nnoremap <silent> J 0
+" visual keyborad
+vnoremap <silent> J 0
+
 " I key: go to the end of the line
 " colemak keyborad
 " noremap <silent> I $
+
 " normal keyborad
-noremap <silent> L $
+nnoremap <silent> L $
+" visual keyborad
+vnoremap <silent> L $
 
 " noremap <silent> J g0
 " noremap <silent> L g$
 
 " Faster in-line navigation
-noremap W 5w
-noremap B 5b
+nnoremap W 5w
+nnoremap B 5b
+vnoremap W 5w
+vnoremap B 5b
+
 " set h (same as n, cursor left) to 'end of word'
 " noremap h e
 " noremap h e
@@ -252,7 +281,7 @@ cnoremap <M-w> <S-Right>
 " noremap <LEADER>e <C-w>j
 " noremap <LEADER>n <C-w>h
 " noremap <LEADER>i <C-w>l
-noremap qf <C-w>o
+nnoremap qf <C-w>o
 " normal keyboard
 " noremap <LEADER>i <C-w>k
 " noremap <LEADER>k <C-w>j
