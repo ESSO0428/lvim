@@ -1,5 +1,6 @@
 require "user.config.plugins.dressing"
 require "user.config.plugins.AsyncRun"
+require "user.config.plugins.VimVisualMulti"
 require "user.config.plugins.ranger"
 require "user.config.plugins.LspSaga"
 require "user.config.plugins.wilder"
