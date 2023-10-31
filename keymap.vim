@@ -43,7 +43,7 @@ nnoremap O dd
 nnoremap u O<ESC>
 nnoremap U ddk
 " noremap <c-y> yyp
-nnoremap <c-d> yyp
+nnoremap <c-d> "dyyp
 " nmap < <<CR>
 " nmap > ><CR>
 

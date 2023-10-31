@@ -67,9 +67,6 @@ end
 host = "YourVscodeReomoteServerName"
 function GetServerHostName(host)
   vim.g.host = host
-  -- use hostname of ~/.ssh/host_names
-  -- 在 ~/.ssh/host_names 寫上各主機的 hostname 和 ip 即可
-  -- local filepath = os.getenv("HOME") .. "/.ssh/ssh_hostnames"
   local ip = nil
   local command = io.popen("hostname -I | awk '{print $1}'")
   ip = command:read("*line")
