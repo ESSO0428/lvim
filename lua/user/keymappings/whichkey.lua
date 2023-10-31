@@ -112,3 +112,6 @@ endfunction
 
 -- lvim.builtin.which_key.mappings['E'] = { "<cmd>Explore<cr>", "Explore" }
 lvim.builtin.which_key.mappings['E'] = { "<cmd>Neotree toggle remote<cr>", "Neotree remote" }
+
+-- buffer clear (clear not in windows buffer)
+lvim.builtin.which_key.mappings.b['c'] = { "<cmd>BDelete hidden<cr>", "close hidden buffer (not in windws)" }
