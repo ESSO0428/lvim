@@ -359,6 +359,7 @@ lvim.plugins = {
         mode = "fuzzy"
       },
       modes = {
+        char = { enabled = false },
         search = {
           enabled = false
         }
