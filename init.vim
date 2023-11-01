@@ -59,6 +59,7 @@ nmap <silent>'q :RunQtConsole<CR>gg
 
 " nmap <silent>]q :ipython<Space>--existing<Space>--no-window<cr><plug>(IPy-Runcell)<cr>/^# %%<cr><leader><cr>
 " nmap <silent>\x :IPython<Space>--existing<Space>--no-window<CR><Plug>(IPy-RunCell)<CR>/^# %%<CR><leader><CR>
+nmap <silent> \E :IronRepl<CR>
 nmap <silent>\x :IPython<Space>--existing<Space>--no-window<CR><Plug>(IPy-RunCell)
 " nmap <silent>]e :IPython<Space>--existing<Space>--no-window<CR><Plug>(IPy-RunAll)
 nmap <silent>\e :IPython<Space>--existing<Space>--no-window<CR><Plug>(IPy-RunAll)

@@ -96,6 +96,7 @@ lvim.keys.normal_mode["<leader>d<c-w>"] = "<cmd>bd!<CR>"
 -- lvim.keys.normal_mode["<a-2>"] = nil
 -- lvim.keys.normal_mode["<a-3>"] = nil
 
+lvim.keys.normal_mode["gy"]             = "<cmd>let @+ = expand('%:p')<CR>"
 lvim.keys.normal_mode["<a-1>"]          = "<Cmd>BufferLineGoToBuffer 1<CR>"
 lvim.keys.normal_mode["<a-2>"]          = "<Cmd>BufferLineGoToBuffer 2<CR>"
 lvim.keys.normal_mode["<a-3>"]          = "<Cmd>BufferLineGoToBuffer 3<CR>"
