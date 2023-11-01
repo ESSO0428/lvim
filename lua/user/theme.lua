@@ -52,7 +52,6 @@ vim.g['semshi#error_sign'] = false
 -- pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#e0949e")
 pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#FF6666")
 pcall(vim.cmd, "au ColorScheme * highlight! semshiGlobal gui=bold guifg=#87CEEB")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiLocal gui=bold guifg=#87CEEB")
 
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameter @parameter")
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameterUnused @parameter")
