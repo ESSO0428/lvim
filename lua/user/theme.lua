@@ -46,7 +46,7 @@ vim.cmd "au BufEnter *.md setlocal syntax=markdown"
 vim.g['semshi#filetypes'] = { 'python' }
 vim.g['semshi#simplify_markup'] = false
 vim.g['semshi#error_sign'] = false
--- pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#cc6e79")
+-- pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#e0949e")
 pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#FF6666")
 pcall(vim.cmd, "au ColorScheme * highlight! semshiGlobal gui=bold")
 
