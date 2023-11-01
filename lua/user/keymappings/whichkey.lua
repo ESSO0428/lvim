@@ -83,6 +83,9 @@ lvim.builtin.which_key.mappings.d['fW'] = { "<cmd>diffoff!<cr>", "diffoff!" }
 
 -- <leader>o
 lvim.builtin.which_key.mappings['o'] = { "za", "Folding Code (Toggle)" }
+lvim.keys.visual_mode['<leader>o'] = "zA"
+lvim.keys.visual_mode['<leader>Oa'] = "zO"
+lvim.keys.visual_mode['<leader>Od'] = "zC"
 -- lvim.builtin.which_key.mappings['O'] = { "zR", "Folding Code (Open All)" }
 -- lvim.builtin.which_key.mappings['Oa'] = { "zM", "Folding Code (Close All)" }
 -- lvim.builtin.which_key.mappings['Od'] = { "zR", "Folding Code (Open All)" }
