@@ -522,13 +522,13 @@ function! FindAndSelectFile(window_command)
 endfunction
 
 nnoremap <silent> gm :call FindAndSelectFile('')<CR>
-nnoremap <silent> sgmk :call FindAndSelectFile('sp')<CR>
-nnoremap <silent> sgml :call FindAndSelectFile('vsp')<CR>
+nnoremap <silent> sgk :call FindAndSelectFile('sp')<CR>
+nnoremap <silent> sgl :call FindAndSelectFile('vsp')<CR>
 nnoremap <silent> sm :call FindAndSelectFile('tab')<CR>
 
 vnoremap <silent> gm "fy:call FindAndSelectFile('v')<CR>
-vnoremap <silent> sgmk "fy:call FindAndSelectFile('v-sp')<CR>
-vnoremap <silent> sgml "fy:call FindAndSelectFile('v-vsp')<CR>
+vnoremap <silent> sgk "fy:call FindAndSelectFile('v-sp')<CR>
+vnoremap <silent> sgl "fy:call FindAndSelectFile('v-vsp')<CR>
 vnoremap <silent> sm "fy:call FindAndSelectFile('v-tab')<CR>
 
 nnoremap <silent> <Leader>t1 :tabn 1<CR>
