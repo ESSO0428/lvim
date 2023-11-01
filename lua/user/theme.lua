@@ -30,6 +30,8 @@ vim.cmd "let &fcs='eob: '"
 
 vim.cmd "au ColorScheme * hi BufferLineBufferSelected guifg=#3ab6f0"
 vim.cmd "au ColorScheme,FileType python hi @include guifg=#A184FE"
+vim.cmd "au ColorScheme,FileType python hi @field guifg=#D19A66"
+vim.cmd "au ColorScheme,FileType python hi @boolean guifg=#3ab6f0"
 vim.cmd "au ColorScheme * hi BufferLineTabSelected guifg=#3ab6f0"
 vim.cmd "au ColorScheme * hi BufferLineNumbersSelected cterm=bold,italic gui=bold,italic guifg=#3ab6f0"
 vim.cmd "au ColorScheme * hi LineNr guifg=#71839b"
