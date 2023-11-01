@@ -90,10 +90,8 @@ nnoremap z u
 " noremap M A
 " noremap h a
 " noremap H A
-nnoremap h i
-nnoremap H I
-vnoremap h i
-vnoremap H I
+noremap h i
+noremap H I
 
 
 " noremap <a-[> i
