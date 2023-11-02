@@ -29,10 +29,11 @@ vim.cmd "let &fcs='eob: '"
 -- vim.cmd "au ColorScheme * hi BufferLineTabSeparator guifg=#000000"
 
 vim.cmd "au ColorScheme * hi BufferLineBufferSelected guifg=#3ab6f0"
-vim.cmd "au ColorScheme,FileType python hi @include guifg=#a184fe"
-vim.cmd "au ColorScheme,FileType python hi @field guifg=#d19a66"
-vim.cmd "au ColorScheme,FileType python hi @boolean guifg=#3ab6f0"
-vim.cmd "au ColorScheme,FileType python hi @operator guifg=#ffffff"
+vim.cmd "au ColorScheme * hi @include guifg=#a184fe"
+vim.cmd "au ColorScheme * hi @variable guifg=#87ceeb"
+vim.cmd "au ColorScheme * hi @field guifg=#d19a66"
+vim.cmd "au ColorScheme * hi @boolean guifg=#3ab6f0"
+vim.cmd "au ColorScheme * hi @operator guifg=#ffffff"
 
 vim.cmd "au ColorScheme * hi BufferLineTabSelected guifg=#3ab6f0"
 vim.cmd "au ColorScheme * hi BufferLineNumbersSelected cterm=bold,italic gui=bold,italic guifg=#3ab6f0"
@@ -61,7 +62,7 @@ pcall(vim.cmd, "au ColorScheme * highlight! semshiParameterUnused gui=undercurl"
 -- pcall(vim.cmd, "au ColorScheme * highlight! link semshiAttribute @attribute")
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiAttribute @field")
 -- pcall(vim.cmd, "au ColorScheme * highlight! link semshiBuiltin @function.builtin")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiBuiltin guifg=#D19A66")
+pcall(vim.cmd, "au ColorScheme * highlight! semshiBuiltin guifg=#dbc074")
 -- pcall(vim.cmd, "au ColorScheme * highlight! link semshiBuiltin @field")
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiUnresolved @text.warning")
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiSelf @variable.builtin")
