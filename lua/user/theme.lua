@@ -29,9 +29,11 @@ vim.cmd "let &fcs='eob: '"
 -- vim.cmd "au ColorScheme * hi BufferLineTabSeparator guifg=#000000"
 
 vim.cmd "au ColorScheme * hi BufferLineBufferSelected guifg=#3ab6f0"
-vim.cmd "au ColorScheme,FileType python hi @include guifg=#A184FE"
-vim.cmd "au ColorScheme,FileType python hi @field guifg=#D19A66"
+vim.cmd "au ColorScheme,FileType python hi @include guifg=#a184fe"
+vim.cmd "au ColorScheme,FileType python hi @field guifg=#d19a66"
 vim.cmd "au ColorScheme,FileType python hi @boolean guifg=#3ab6f0"
+vim.cmd "au ColorScheme,FileType python hi @operator guifg=#ffffff"
+
 vim.cmd "au ColorScheme * hi BufferLineTabSelected guifg=#3ab6f0"
 vim.cmd "au ColorScheme * hi BufferLineNumbersSelected cterm=bold,italic gui=bold,italic guifg=#3ab6f0"
 vim.cmd "au ColorScheme * hi LineNr guifg=#71839b"
@@ -50,8 +52,8 @@ vim.g['semshi#filetypes'] = { 'python' }
 vim.g['semshi#simplify_markup'] = false
 vim.g['semshi#error_sign'] = false
 -- pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#e0949e")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#FF6666")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiGlobal gui=bold guifg=#87CEEB")
+pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#ff6666")
+pcall(vim.cmd, "au ColorScheme * highlight! semshiGlobal gui=bold guifg=#87ceeb")
 
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameter @parameter")
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameterUnused @parameter")
