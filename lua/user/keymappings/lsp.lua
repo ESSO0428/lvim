@@ -8,7 +8,7 @@ function lsp_or_jupyter_signature_help()
   if is_jupyter_attached then
     vim.cmd('JupyterInspect')
   else
-    vim.cmd('lua vim.lsp.buf.hover()')
+    vim.lsp.buf.hover()
   end
 end
 
@@ -26,8 +26,11 @@ lvim.keys.normal_mode['<leader>=']         = ":lua vim.lsp.buf.format()<CR>"
 lvim.keys.normal_mode['<leader>rn']        = ":lua require'lspactions'.rename()<CR>"
 lvim.keys.normal_mode['<leader>ui']        = { ":LspInfo<cr>" }
 lvim.keys.normal_mode['<leader>uI']        = { ":Mason<cr>" }
-lvim.keys.normal_mode['<leader>uo']        = { ":lua vim.diagnostic.goto_next()<cr>" }
-lvim.keys.normal_mode['<leader>uu']        = { ":lua vim.diagnostic.goto_prev()<cr>" }
+-- lvim.keys.normal_mode['<leader>uo']        = { ":lua vim.diagnostic.goto_next()<cr>" }
+-- lvim.keys.normal_mode['<leader>uu']        = { ":lua vim.diagnostic.goto_prev()<cr>" }
+lvim.keys.normal_mode['>']                 = { ":lua vim.diagnostic.goto_next()<cr>" }
+lvim.keys.normal_mode['<']                 = { ":lua vim.diagnostic.goto_prev()<cr>" }
+
 lvim.keys.normal_mode['<leader>ul']        = { ":lua vim.lsp.codelens.run()<cr>" }
 lvim.keys.normal_mode['<leader>uq']        = { ":lua vim.diagnostic.setloclist()<cr>" }
 
@@ -35,7 +38,8 @@ lvim.keys.normal_mode['<leader>us']        = { ":Telescope lsp_document_symbols<
 lvim.keys.normal_mode['<leader>uS']        = { ":Telescope lsp_dynamic_workspace_symbols<cr>" }
 lvim.keys.normal_mode['<leader>ue']        = { ":Telescope quickfix<cr>" }
 
-lvim.keys.normal_mode['<a-u>']             = ":LspInfo<CR>"
+-- lvim.keys.normal_mode['<a-u>']             = ":LspInfo<CR>"
+-- now replace to <leader>ui
 
 lvim.builtin.which_key.mappings['c']       = { ":Telescope lsp_references<CR>", "lsp_references" }
 lvim.builtin.which_key.mappings['v']       = { ":Telescope lsp_document_symbols<CR>", "lsp_document_symbols" }

@@ -68,6 +68,24 @@ require('ufo').setup({
     -- return ftMap[filetype] or {'treesitter', 'indent'}
     return ftMap[filetype]
   end,
+  preview = {
+    mappings = {
+      scrollU = '<C-u>',
+      scrollD = '<C-o>',
+      jumpTop = 'gg',
+      jumpBot = 'G',
+      switch = '<leader>uu'
+    }
+  },
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "*",
+  callback = function()
+    if vim.api.nvim_buf_get_name(0):match("UfoPreviewFloatWin") then
+      vim.opt_local.list = false
+    end
+  end
 })
 
 -- global handler

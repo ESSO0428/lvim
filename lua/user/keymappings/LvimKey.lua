@@ -51,10 +51,18 @@ vim.keymap.set('v', '<a-right>', "<Plug>MoveBlockRight")
 
 -- <leader>o
 -- lvim.builtin.which_key.mappings['o'] = { "za", "Folding Code (Toggle)" }
+--
 -- -- lvim.builtin.which_key.mappings['O'] = { "zR", "Folding Code (Open All)" }
 -- lvim.builtin.which_key.mappings['Oa'] = { "zM", "Folding Code (Close All)" }
 -- lvim.builtin.which_key.mappings['Od'] = { "zR", "Folding Code (Open All)" }
-lvim.keys.visual_mode['<leader>o']     = "za"
+lvim.keys.visual_mode['<leader>o'] = "za"
+
+function peekFoldedLinesUnderCursor()
+  require('ufo').peekFoldedLinesUnderCursor()
+end
+
+lvim.keys.normal_mode['<leader>uu']    = { "<cmd>lua peekFoldedLinesUnderCursor()<cr>" }
+
 -- lvim.keys.visual_mode['<leader>Od'] = "zo"
 
 lvim.keys.normal_mode["<F10>"]         = { ":SessionManager save_current_session<CR>", silent = false }
