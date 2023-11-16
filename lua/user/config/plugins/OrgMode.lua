@@ -269,7 +269,7 @@ vim.api.nvim_create_autocmd({
   callback = function()
     vim.keymap.set('n', '<leader><a-o>', '<cmd>lua OpenFileLink()<cr>', { silent = true, buffer = true })
     vim.cmd('noremap <silent> <buffer> <leader>o <Nop>')
-    vim.keymap.set('n', '<leader>Oo', '<cmd>silent! norm!za<cr>', { silent = true, buffer = true })
+    vim.keymap.set('n', '<leader>oo', '<cmd>silent! norm!za<cr>', { silent = true, buffer = true })
   end
 })
 vim.api.nvim_create_augroup("orgagenda_custom", {})
