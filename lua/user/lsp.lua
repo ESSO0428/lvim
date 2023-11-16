@@ -21,13 +21,13 @@ end)
 -- autocmd({ "FileType" }, { pattern = { "python" }, command = "setlocal foldmethod=indent" })
 
 -- 獲取當前的工作目錄
-local current_directory = vim.fn.getcwd()
+-- local current_directory = vim.fn.getcwd()
 
 local custom_python_paths = {
   "/home/Andy6/research",
   "/home/andy6/research",
   "/root/research",
-  current_directory -- 將當前目錄加入到路徑列表中
+  -- current_directory -- 將當前目錄加入到路徑列表中
   -- ... 添加其他路徑
 }
 
@@ -54,3 +54,20 @@ for _, path in ipairs(custom_python_paths) do
 end
 
 vim.fn.setenv("PYTHONPATH", current_pythonpath)
+
+local initial_pythonpath = vim.fn.getenv("PYTHONPATH") or ""
+local function modify_pythonpath()
+  local file_directory = vim.fn.expand("%:p:h")
+  local modified_pythonpath = initial_pythonpath
+  if not string.find(":" .. modified_pythonpath .. ":", ":" .. file_directory .. ":") then
+    modified_pythonpath = file_directory .. ":" .. modified_pythonpath
+  end
+  vim.fn.setenv("PYTHONPATH", modified_pythonpath)
+end
+
+local function reset_pythonpath()
+  vim.fn.setenv("PYTHONPATH", initial_pythonpath)
+end
+
+vim.api.nvim_create_autocmd("BufEnter", { pattern = "*.py", callback = modify_pythonpath })
+vim.api.nvim_create_autocmd("BufLeave", { pattern = "*.py", callback = reset_pythonpath })
