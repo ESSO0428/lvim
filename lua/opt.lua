@@ -16,6 +16,10 @@ vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 -- vim.g.conda_auto_activate_base = 0 -- 关闭base环境的自动激活
 -- vim.g.conda_auto_env = 1 -- 开启自动激活环境
 -- vim.g.conda_env = 'base' -- 设置自动激活的conda环境
+
+-- signcolumn
+vim.wo.signcolumn = "auto:2-6"
+
 -- 取消預覽取代結果
 -- vim.o.fileformats = "unix"
 -- vim.opt.inccommand = ""
