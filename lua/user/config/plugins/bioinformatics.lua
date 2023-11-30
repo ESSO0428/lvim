@@ -64,6 +64,9 @@ function toggle_syntax()
 end
 
 function ReStartNotTableFileTypeLayout(action)
+  if vim.fn.getcmdline() ~= '' then
+    return
+  end
   local datatable_filetypes = { 'csv', 'tsv', 'csv_semicolon', 'csv_whitespace', 'csv_pipe', 'rfc_csv', 'rfc_semicolon' }
   local int_bool = -1
   if action == 'leave' then
