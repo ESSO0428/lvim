@@ -229,6 +229,7 @@ lvim.plugins = {
       vim.g.copilot_no_tab_map = true
     end,
   },
+  { "f3fora/cmp-spell" },
   {
     "hrsh7th/cmp-copilot",
     -- config = function()
