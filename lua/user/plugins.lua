@@ -231,16 +231,10 @@ lvim.plugins = {
   -- },
   {
     "zbirenbaum/copilot.lua",
-    -- event = "VeryLazy",
+    cmd = "Copilot",
+    event = "InsertEnter",
     config = function()
-      -- copilot assume mapped
-      vim.g.copilot_assume_mapped = true
-      vim.g.copilot_no_tab_map = true
       require("copilot").setup({})
-      -- require("copilot").setup({
-      --   suggestion = { enabled = false },
-      --   panel = { enabled = false },
-      -- })
     end,
   },
   { "f3fora/cmp-spell" },
