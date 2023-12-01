@@ -79,6 +79,8 @@ vim.api.nvim_create_autocmd('FileType', {
   group = vim.api.nvim_create_augroup('markdown_only_keymap', { clear = true }),
   callback = function()
     vim.keymap.set('n', '<leader>uv', ':MarkdownHeadersClosest<cr>', { silent = true, buffer = true })
+    vim.keymap.set('n', '<leader>o', '<Nop>', { silent = true, buffer = true })
+    vim.keymap.set('n', '<leader>oo', 'za', { silent = true, buffer = true })
   end,
 })
 vim.api.nvim_create_user_command('Date', 'silent! r! date +"\\%A, \\%B, \\%d, \\%Y"', { nargs = "*" })
