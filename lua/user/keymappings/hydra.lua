@@ -14,8 +14,8 @@ local hydra_config = {
     { '(', ':cprevious<CR>', { desc = 'cprevious' } }
   }
 }
-
 hydra(hydra_config)
+
 hydra_config = {
   name = "debug",
   mode = { "n" },
@@ -29,6 +29,21 @@ hydra_config = {
     { ']', ":lua require('goto-breakpoints').next()<CR>",    { desc = 'next breakpoints' } },
     { '[', ":lua require('goto-breakpoints').prev()<CR>",    { desc = 'prev breakpoints' } },
     { 'S', ":lua require('goto-breakpoints').stopped()<CR>", { desc = 'go to breakpoints stop' } },
+  }
+}
+hydra(hydra_config)
+
+hydra_config = {
+  name = "FoldMode",
+  mode = { "n" },
+  config = {
+    invoke_on_body = true,
+    color = "pink",
+    hint = { border = "rounded" },
+  },
+  body = "<leader>ho",
+  heads = {
+    { 'o', "za", { desc = 'Folding Code (Toggle)' } },
   }
 }
 
