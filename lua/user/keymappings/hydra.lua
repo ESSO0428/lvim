@@ -43,7 +43,8 @@ hydra_config = {
   },
   body = "<leader>ho",
   heads = {
-    { 'o', "za", { desc = 'Folding Code (Toggle)' } },
+    { 'o', "za",                                    { desc = 'Folding Code (Toggle)' } },
+    { 'u', ":lua peekFoldedLinesUnderCursor()<cr>", { desc = "Folding Preview" } }
   }
 }
 
