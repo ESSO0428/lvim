@@ -156,6 +156,60 @@ lvim.plugins = {
       require('goto-preview').setup {}
     end
   },
+  {
+    "GCBallesteros/NotebookNavigator.nvim",
+    keys = {
+      { "]h",        function() require("notebook-navigator").move_cell "d" end },
+      { "[h",        function() require("notebook-navigator").move_cell "u" end },
+      { "<leader>X", "<cmd>lua require('notebook-navigator').run_cell()<cr>" },
+      { "<leader>x", "<cmd>lua require('notebook-navigator').run_and_move()<cr>" },
+    },
+    dependencies = {
+      "echasnovski/mini.comment",
+      -- "akinsho/toggleterm.nvim", -- alternative repl provider
+      "anuvyklack/hydra.nvim",
+    },
+    event = "VeryLazy",
+    config = function()
+      local nn = require "notebook-navigator"
+      nn.setup({
+        activate_hydra_keys = "<leader>hj",
+        show_hydra_hint = false,
+        hydra_keys = {
+          comment = "c",
+          run = "e",
+          run_and_move = "nil",
+          move_up = "i",
+          move_down = "k",
+          add_cell_before = "a",
+          add_cell_after = "b",
+        },
+        repl_provider = "iron",
+      })
+    end,
+  },
+  {
+    "echasnovski/mini.ai",
+    event = "VeryLazy",
+    dependencies = { "GCBallesteros/NotebookNavigator.nvim" },
+    opts = function()
+      local nn = require "notebook-navigator"
+
+      local opts = { custom_textobjects = { h = nn.miniai_spec } }
+      return opts
+    end,
+  },
+  {
+    "echasnovski/mini.hipatterns",
+    event = "VeryLazy",
+    dependencies = { "GCBallesteros/NotebookNavigator.nvim" },
+    opts = function()
+      local nn = require "notebook-navigator"
+
+      local opts = { highlighters = { cells = nn.minihipatterns_spec } }
+      return opts
+    end,
+  },
   { "jbyuki/venn.nvim" },
   { "ESSO0428/bookmarks.nvim" },
   { "tpope/vim-dadbod" },
@@ -599,6 +653,17 @@ lvim.plugins = {
       --Please make sure you install markdown and markdown_inline parser
       { "nvim-treesitter/nvim-treesitter" }
     },
+  },
+  {
+    "roobert/hoversplit.nvim",
+    config = function()
+      require("hoversplit").setup({
+        key_bindings = {
+          split = "<c-]>",
+          vsplit = "<c-[>",
+        },
+      })
+    end,
   },
   {
     "ESSO0428/md-headers.nvim",

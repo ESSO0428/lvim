@@ -41,6 +41,9 @@ lvim.builtin.which_key.mappings.d['s'] = { "<cmd>Telescope dap configurations<cr
 lvim.builtin.which_key.mappings.T['T'] = { "<Cmd>TodoTelescope theme=get_ivy<cr>", "ToDo Telescope" }
 lvim.builtin.which_key.mappings.T['w'] = { "<Cmd>TodoTrouble<cr>", "ToDo TodoTrouble (all buffers)" }
 
+lvim.builtin.which_key.mappings['tgh'] = { "<Cmd>lua require('hoversplit').split_remain_focused()<cr>",
+  "split_remain_focused" }
+
 function TodoTrubleCurrentFile()
   local command = "TodoTrouble cwd=" .. vim.fn.expand("%:p")
   vim.api.nvim_command(command)

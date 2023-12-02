@@ -369,10 +369,10 @@ nnoremap <LEADER>q :q<CR>
 """"" noremap <F6> :-tabmove<CR>
 """"" noremap <F7> :+tabmove<CR>
 
-nmap <LEADER>f "fyaw/<c-r>f<CR>
-nmap <LEADER>F "fyaw/<c-r>f\C<CR>
-nmap <LEADER>h "fyaw:.,$s/<c-r>f//gc<Left><Left><Left>
-nmap <LEADER>H "fyaw:.,$s/<c-r>f\C//gc<Left><Left><Left>
+" nmap <LEADER>f "fyaw/<c-r>f<CR>
+" nmap <LEADER>F "fyaw/<c-r>f\C<CR>
+" nmap <LEADER>h "fyaw:.,$s/<c-r>f//gc<Left><Left><Left>
+" nmap <LEADER>H "fyaw:.,$s/<c-r>f\C//gc<Left><Left><Left>
 
 " ==================== tabular ====================
 vmap ga   :Tabularize /
