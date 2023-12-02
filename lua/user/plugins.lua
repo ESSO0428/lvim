@@ -655,17 +655,6 @@ lvim.plugins = {
     },
   },
   {
-    "roobert/hoversplit.nvim",
-    config = function()
-      require("hoversplit").setup({
-        key_bindings = {
-          split = "<leader>tgh",
-          vsplit = "<leader>tvgh",
-        },
-      })
-    end,
-  },
-  {
     "ESSO0428/md-headers.nvim",
     deprecated = { 'nvim-lua/plenary.nvim' }
   },
