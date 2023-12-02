@@ -659,8 +659,8 @@ lvim.plugins = {
     config = function()
       require("hoversplit").setup({
         key_bindings = {
-          split = "<c-]>",
-          vsplit = "<c-[>",
+          split = "<leader>tgh",
+          vsplit = "<leader>tvgh",
         },
       })
     end,
