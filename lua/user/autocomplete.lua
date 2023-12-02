@@ -186,6 +186,9 @@ function BufferAllCompleteToggle()
   end
 end
 
+local status_cmp_ok, cmp_types = pcall(require, "cmp.types.cmp")
+local ConfirmBehavior = cmp_types.ConfirmBehavior
+local SelectBehavior = cmp_types.SelectBehavior
 for k, v in pairs(lvim.builtin.cmp.mapping) do
   -- print(k)
   if k == "<C-K>" then
@@ -204,6 +207,18 @@ for k, v in pairs(lvim.builtin.cmp.mapping) do
     lvim.builtin.cmp.mapping["<C-d>"] = v
   end
   if k == "<C-Y>" then
+    local confirm_opts = vim.deepcopy(lvim.builtin.cmp.confirm_opts) -- avoid mutating the original opts below
+    v = {
+      -- i = cmp_mapping.confirm { behavior = ConfirmBehavior.Replace, select = false },
+      i = cmp_mapping.confirm { confirm_opts },
+      c = function(fallback)
+        if cmp.visible() then
+          cmp.confirm { behavior = ConfirmBehavior.Replace, select = false }
+        else
+          fallback()
+        end
+      end,
+    }
     lvim.builtin.cmp.mapping["<M-l>"] = v
   end
   if k == "<Tab>" then
@@ -219,6 +234,29 @@ for k, v in pairs(lvim.builtin.cmp.mapping) do
   end
   if k == "<C-E>" then
     lvim.builtin.cmp.mapping[k] = nil
+  end
+  if k == "<CR>" then
+    lvim.builtin.cmp.mapping[k] = cmp_mapping(function(fallback)
+      if cmp.visible() then
+        local confirm_opts = vim.deepcopy(lvim.builtin.cmp.confirm_opts) -- avoid mutating the original opts below
+        local is_insert_mode = function()
+          return vim.api.nvim_get_mode().mode:sub(1, 1) == "i"
+        end
+        if is_insert_mode() then -- prevent overwriting brackets
+          confirm_opts.behavior = ConfirmBehavior.Insert
+        end
+        local entry = cmp.get_selected_entry()
+        local is_copilot = entry and entry.source.name == "copilot"
+        -- if is_copilot then
+        --   confirm_opts.behavior = ConfirmBehavior.Replace
+        --   confirm_opts.select = true
+        -- end
+        if cmp.confirm(confirm_opts) then
+          return -- success, exit early
+        end
+      end
+      fallback() -- if not exited early, always fallback
+    end)
   end
 end
 local cmp_mapping = require "cmp.config.mapping"
