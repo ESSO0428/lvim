@@ -220,51 +220,51 @@ lvim.plugins = {
   },
   -- { "hrsh7th/cmp-vsnip" },
   -- { "hrsh7th/vim-vsnip" },
-  -- {
-  --   "github/copilot.vim",
-  --   -- event = "VeryLazy",
-  --   config = function()
-  --     -- copilot assume mapped
-  --     vim.g.copilot_assume_mapped = true
-  --     vim.g.copilot_no_tab_map = true
-  --   end,
-  -- },
   {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
+    "github/copilot.vim",
+    -- event = "VeryLazy",
     config = function()
-      require("copilot").setup({})
+      -- copilot assume mapped
+      vim.g.copilot_assume_mapped = true
+      vim.g.copilot_no_tab_map = true
     end,
   },
-  { "f3fora/cmp-spell" },
   -- {
-  --   "hrsh7th/cmp-copilot",
-  --   -- config = function()
-  --   --   lvim.builtin.cmp.formatting.source_names["copilot"] = "( )"
-  --   --   table.insert(lvim.builtin.cmp.sources, 2, { name = "copilot" })
-  --   -- end,
+  --   "zbirenbaum/copilot.lua",
+  --   cmd = "Copilot",
+  --   event = "InsertEnter",
+  --   config = function()
+  --     require("copilot").setup({})
+  --   end,
   -- },
+  { "f3fora/cmp-spell" },
   {
-    "zbirenbaum/copilot-cmp",
-    config = function()
-      require("copilot_cmp").setup({
-        suggestion = {
-          enabled = true,
-          auto_trigger = true,
-          debounce = 75,
-          keymap = {
-            accept = "<M-l>",
-            accept_word = false,
-            accept_line = false,
-            next = "<M-]>",
-            prev = "<M-[>",
-            dismiss = "<C-]>",
-          },
-        }
-      })
-    end
+    "hrsh7th/cmp-copilot",
+    -- config = function()
+    --   lvim.builtin.cmp.formatting.source_names["copilot"] = "( )"
+    --   table.insert(lvim.builtin.cmp.sources, 2, { name = "copilot" })
+    -- end,
   },
+  -- {
+  --   "zbirenbaum/copilot-cmp",
+  --   config = function()
+  --     require("copilot_cmp").setup({
+  --       suggestion = {
+  --         enabled = true,
+  --         auto_trigger = true,
+  --         debounce = 75,
+  --         keymap = {
+  --           accept = "<M-l>",
+  --           accept_word = false,
+  --           accept_line = false,
+  --           next = "<M-]>",
+  --           prev = "<M-[>",
+  --           dismiss = "<C-]>",
+  --         },
+  --       }
+  --     })
+  --   end
+  -- },
   -- { "HiPhish/nvim-ts-rainbow2" },
   { "HiPhish/rainbow-delimiters.nvim" },
   -- { "p00f/nvim-ts-rainbow" },

@@ -20,7 +20,7 @@ if lvim.builtin.bufferline.options.show_tab_indicators == false then
   for _, autocommand in pairs(autocommands) do
     table.insert(lvim.autocommands, autocommand)
   end
-  require "user.integrated.bufferline.tabline"
+  require "user.integrated.bufferline.nvimTabline"
 else
   require "user.integrated.bufferline.tabpages"
 end
