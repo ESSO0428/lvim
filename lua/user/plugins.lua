@@ -181,6 +181,7 @@ lvim.plugins = {
           run_and_move = "nil",
           move_up = "i",
           move_down = "k",
+          split_cell = "sc",
           add_cell_before = "a",
           add_cell_after = "b",
         },
