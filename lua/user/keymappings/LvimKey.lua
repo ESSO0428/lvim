@@ -154,3 +154,5 @@ lvim.keys.normal_mode["<F5>"]           = { "<cmd>lua require('dap').continue()<
 lvim.keys.normal_mode["<F17>"]          = { "<cmd>lua require('dap').close()<cr>" }
 
 vim.cmd('noremap <a-p> <Nop>')
+vim.keymap.set('i', '<a-u>', "<Esc>:m .-2<CR>==gi")
+vim.keymap.set('i', '<a-o>', "<Esc>:m .+1<CR>==gi")

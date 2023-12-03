@@ -2,22 +2,23 @@ lvim.transparent_window = true
 ---[[
 -- lvim.colorscheme = "tokyonight-night"
 -- lvim.builtin.lualine.options.theme = "tokyonight-night"
-vim.cmd "au ColorScheme * hi Normal ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi SignColumn ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi NormalNC ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi MsgArea ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi TelescopeNormal ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi NormalFloat ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi FloatBorder ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi Float ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi NvimFloat ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi WhichKeyFloat ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi NvimTreeNormal ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi NvimTreeNormalNC ctermbg=none guibg=none"
--- vim.cmd "au ColorScheme * hi WinSeparator cterm=bold gui=bold guifg=#000000"
-vim.cmd "au ColorScheme * hi NvimTreeWinSeparator ctermbg=none guibg=none"
-vim.cmd "au ColorScheme * hi Navbuddy ctermbg=none guibg=none"
-
+if lvim.transparent_window == true then
+  vim.cmd "au ColorScheme * hi Normal ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi SignColumn ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi NormalNC ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi MsgArea ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi TelescopeNormal ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi NormalFloat ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi FloatBorder ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi Float ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi NvimFloat ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi WhichKeyFloat ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi NvimTreeNormal ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi NvimTreeNormalNC ctermbg=none guibg=none"
+  -- vim.cmd "au ColorScheme * hi WinSeparator cterm=bold gui=bold guifg=#000000"
+  vim.cmd "au ColorScheme * hi NvimTreeWinSeparator ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi Navbuddy ctermbg=none guibg=none"
+end
 vim.cmd "let &fcs='eob: '"
 -- vim.cmd "au ColorScheme * hi BufferLineSeparator guifg=#504945"
 -- vim.cmd "au ColorScheme * hi BufferLineSeparatorSelected guifg=#504945"
@@ -28,24 +29,28 @@ vim.cmd "let &fcs='eob: '"
 -- vim.cmd "au ColorScheme * hi BufferLineSeparatorVisible guifg=#000000"
 -- vim.cmd "au ColorScheme * hi BufferLineTabSeparator guifg=#000000"
 
-vim.cmd "au ColorScheme * hi BufferLineBufferSelected guifg=#3ab6f0"
 vim.cmd "au ColorScheme * hi @include guifg=#a184fe"
 vim.cmd "au ColorScheme * hi @variable guifg=#87ceeb"
 vim.cmd "au ColorScheme * hi @field guifg=#d19a66"
 vim.cmd "au ColorScheme * hi @boolean guifg=#3ab6f0"
 vim.cmd "au ColorScheme * hi @operator guifg=#ffffff"
 
-vim.cmd "au ColorScheme * hi BufferLineTabSelected guifg=#3ab6f0"
-vim.cmd "au ColorScheme * hi BufferLineNumbersSelected cterm=bold,italic gui=bold,italic guifg=#3ab6f0"
-vim.cmd "au ColorScheme * hi LineNr guifg=#71839b"
-vim.cmd "au ColorScheme * hi CursorLineNr cterm=bold gui=bold guifg=#dbc074"
-vim.cmd "au ColorScheme * hi IlluminatedWord guibg=none"
-vim.cmd "au ColorScheme * hi illuminatedCurWord guibg=none"
-vim.cmd "au ColorScheme * hi IlluminatedWordWrite guibg=none"
-vim.cmd "au ColorScheme * hi IlluminatedWordRead guibg=none"
-vim.cmd "au ColorScheme * hi IlluminatedWordText guibg=none"
+if lvim.transparent_window == true then
+  vim.cmd "au ColorScheme * hi BufferLineBufferSelected guifg=#3ab6f0"
 
-vim.cmd "au ColorScheme * highlight IndentBlanklineContextChar guifg=#A184FE gui=nocombine" -- #737aa2
+  vim.cmd "au ColorScheme * hi BufferLineTabSelected guifg=#3ab6f0"
+  vim.cmd "au ColorScheme * hi BufferLineNumbersSelected cterm=bold,italic gui=bold,italic guifg=#3ab6f0"
+  vim.cmd "au ColorScheme * hi LineNr guifg=#71839b"
+  vim.cmd "au ColorScheme * hi CursorLineNr cterm=bold gui=bold guifg=#dbc074"
+  vim.cmd "au ColorScheme * hi IlluminatedWord guibg=none"
+  vim.cmd "au ColorScheme * hi illuminatedCurWord guibg=none"
+  vim.cmd "au ColorScheme * hi IlluminatedWordWrite guibg=none"
+  vim.cmd "au ColorScheme * hi IlluminatedWordRead guibg=none"
+  vim.cmd "au ColorScheme * hi IlluminatedWordText guibg=none"
+
+  vim.cmd "au ColorScheme * highlight IndentBlanklineContextChar guifg=#A184FE gui=nocombine" -- #737aa2
+end
+
 vim.cmd "au ColorScheme * hi Todo cterm=bold gui=bold guifg=#71839b guibg=none"
 vim.cmd "au BufEnter *.md setlocal syntax=markdown"
 
@@ -69,9 +74,10 @@ pcall(vim.cmd, "au ColorScheme * highlight! link semshiSelf @variable.builtin")
 
 -- vim.cmd "au ColorScheme * highlight! @variable guifg=#ba4351"
 
-
-vim.cmd "au ColorScheme * hi Comment guifg=#71839b"
 vim.cmd "au ColorScheme * hi Whitespace guifg=#504945"
+if lvim.transparent_window == true then
+  vim.cmd "au ColorScheme * hi Comment guifg=#71839b"
+end
 --]]
 
 -- lvim.builtin.bufferline
