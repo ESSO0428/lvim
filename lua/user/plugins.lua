@@ -159,10 +159,7 @@ lvim.plugins = {
   {
     "GCBallesteros/NotebookNavigator.nvim",
     keys = {
-      { "]h",        function() require("notebook-navigator").move_cell "d" end },
-      { "[h",        function() require("notebook-navigator").move_cell "u" end },
-      { "<leader>X", "<cmd>lua require('notebook-navigator').run_cell()<cr>" },
-      { "<leader>x", "<cmd>lua require('notebook-navigator').run_and_move()<cr>" },
+      { "]e", function() require("notebook-navigator").run_cells_below "" end },
     },
     dependencies = {
       "echasnovski/mini.comment",
@@ -179,11 +176,11 @@ lvim.plugins = {
           comment = "c",
           run = "e",
           run_and_move = "nil",
-          move_up = "i",
-          move_down = "k",
+          move_up = "{",
+          move_down = "}",
           split_cell = "sc",
-          add_cell_before = "a",
-          add_cell_after = "b",
+          add_cell_before = "nil",
+          add_cell_after = "nil",
         },
         repl_provider = "iron",
       })
