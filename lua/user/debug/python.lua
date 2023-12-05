@@ -1,62 +1,31 @@
 local dap = require('dap')
 require "dap-python".setup("python", {})
-dap.adapters.python = {
-  type = "executable",
-  command = "python",
-  args = { "-m", "debugpy.adapter" },
-}
-dap.configurations.python = {
-  {
-    type = 'python',
-    request = 'launch',
-    name = "Launch PythonScript",
-    program = "${file}",
-    justMyCode = true,
-    console = "internalConsole",
-  },
-  {
-    type = "python",
-    request = "attach",
-    name = "Attach Remote pydebug",
-    cwd = "${workspaceFolder}",
-    -- cwd = vim.fn.getcwd(),
-    pathMappings = {
-      {
-        -- localRoot = vim.fn.getcwd(),
-        localRoot = '${workspaceFolder}',
-        remoteRoot = '/usr/local/apache2/htdocs/mysite/'
-      },
+local attach_config = {
+  type = "python",
+  request = "attach",
+  name = "Attach remote (django [example])",
+  cwd = "${workspaceFolder}",
+  mode = "remote",
+  pathMappings = {
+    {
+      localRoot = '${workspaceFolder}',
+      remoteRoot = '/usr/local/apache2/htdocs/mysite/'
     },
-    console = "internalConsole",
-    host = function()
-      local value = vim.fn.input('Host [127.0.0.1]: ')
-      if value ~= "" then
-        return value
-      end
-      return '127.0.0.1'
-    end,
-    port = function()
-      local val = vim.fn.input('Port: ')
-      if val ~= "" then
-        return val
-      end
-      return 5678
-    end,
   },
-  {
-    type = 'python',
-    request = 'launch',
-    name = "Launch django project",
-    -- program = "${file}";
-    program = "${workspaceFolder}/manage.py",
-    args = {
-      "runserver",
-      "--noreload",
-      -- "--insecure",
-      "127.0.0.1:80"
-    },
-    console = "internalConsole",
-    django = true
-    -- port = 5678,
-  },
+  console = "internalConsole",
+  connect = function()
+    local host = vim.fn.input('Host [127.0.0.1]: ')
+    host = host ~= '' and host or '127.0.0.1'
+    local port = tonumber(vim.fn.input('Port [5678]: ')) or 5678
+    return { host = host, port = port }
+  end,
 }
+-- NOTE: 嘗試加載 vim.fn.getcwd()/.vscode/launch.json
+local status, err = pcall(function()
+  require('dap.ext.vscode').load_launchjs()
+end)
+-- NOTE: 失敗則改用原始的配置
+if not status then
+  print("Failed to load launch.json. Please check for trailing commas or if the file exists.")
+  table.insert(dap.configurations.python, attach_config)
+end
