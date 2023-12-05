@@ -20,12 +20,19 @@ local attach_config = {
     return { host = host, port = port }
   end,
 }
--- NOTE: 嘗試加載 vim.fn.getcwd()/.vscode/launch.json
-local status, err = pcall(function()
-  require('dap.ext.vscode').load_launchjs()
-end)
--- NOTE: 失敗則改用原始的配置
-if not status then
-  print("Failed to load launch.json. Please check for trailing commas or if the file exists.")
+-- 檢查 launch.json 文件是否存在
+local launch_json_path = vim.fn.getcwd() .. '/.vscode/launch.json'
+if vim.fn.filereadable(launch_json_path) == 0 then
+  print("launch.json does not exist. Using default configuration.")
   table.insert(dap.configurations.python, attach_config)
+else
+  -- 嘗試加載 launch.json
+  local status, err = pcall(function()
+    require('dap.ext.vscode').load_launchjs()
+  end)
+  -- 如果加載失敗，則使用備用配置
+  if not status then
+    print("Failed to load launch.json. Please check for trailing commas or if the file exists.")
+    table.insert(dap.configurations.python, attach_config)
+  end
 end
