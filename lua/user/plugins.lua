@@ -602,14 +602,14 @@ lvim.plugins = {
         min_width = 30,
         force_max_height = false,
         keys = {
-          jump_to = 'l',
-          expand_or_jump = '<cr>',
+          shuttle = '<c-s>',
+          toggle_or_open = { 'l', '<cr>' },
           vsplit = '<a-l>',
           split = '<a-k>',
           tabe = 't',
           tabnew = 'r',
-          quit = { 'q', '<ESC>' },
-          close_in_preview = '<ESC>',
+          quit = { "q", "<ESC>", "<leader>q" },
+          -- close = '<ESC>',
         },
       },
       outline = {
@@ -624,8 +624,9 @@ lvim.plugins = {
         auto_resize = false,
         custom_sort = nil,
         keys = {
-          expand_or_jump = '<cr>',
-          quit = "q",
+          toggle_or_jump = 'l',
+          jump = { '<cr>', 'o' },
+          quit = { "q", "<ESC>", "<leader>q" },
         },
       },
       symbol_in_winbar = {
