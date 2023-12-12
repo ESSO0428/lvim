@@ -12,6 +12,7 @@ function lsp_or_jupyter_signature_help()
   end
 end
 
+lvim.keys.normal_mode['gh']                = ":lua lsp_or_jupyter_signature_help<cr>"
 lvim.lsp.buffer_mappings.normal_mode['gh'] = { ":lua lsp_or_jupyter_signature_help()<cr>", "Show documentation" }
 
 lvim.keys.normal_mode['gs']                = ":Antovim<cr>"
