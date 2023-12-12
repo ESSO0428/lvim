@@ -20,6 +20,27 @@ mv ~/.config/lvim/ ~/.config/lvim_stage/
 wget https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
 chmod u+x nvim.appimage
 
+# Test if the nightly version works
+if ./nvim.appimage --version; then
+    echo "Neovim Nightly is executable."
+else
+    echo "Neovim Nightly can't execute. Downloading Release instead."
+    rm -rf nvim.appimage
+    wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+    chmod u+x nvim.appimage
+
+    # Test if the release version works
+    if ./nvim.appimage --version; then
+        echo "Neovim Release is executable."
+    else
+        echo "Neovim Release can't execute. Reverting changes."
+        mv ~/.config/lvim_stage/ ~/.config/lvim/
+        mv ~/nvim.appimage.$current_nvm_version ~/nvim.appimage
+        echo "Reverted to the previous configuration and Neovim version."
+        exit 1
+    fi
+fi
+
 curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh | bash
 mv ~/.config/lvim_stage/ ~/.config/lvim/
 
