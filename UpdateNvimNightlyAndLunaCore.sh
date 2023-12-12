@@ -10,12 +10,17 @@ echo "mv ~/.config/lvim_stage/ ~/.config/lvim/"
 current_nvm_version=`~/nvim.appimage --version | head -2 | paste -sd "_" - | sed -e 's/^NVIM //;s/Build type: //;s/ /_/g'`
 echo "Backup current nvim version: $current_nvm_version"
 echo "mv ~/nvim.appimage ~/nvim.appimage.$current_nvm_version"
+echo "(backup current nvim to ~/nvim.appimage.$current_nvm_version)"
 mv ~/nvim.appimage ~/nvim.appimage.$current_nvm_version
 
 # NOTE: Use below command to update nvim nightly (and update lunavim core for nvim nightly)
 cd ~
 mv ~/.config/lvim/ ~/.config/lvim_stage/
-bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
+
+wget https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
+chmod u+x nvim.appimage
+
+curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh | bash
 mv ~/.config/lvim_stage/ ~/.config/lvim/
 
 # NOTE: Install maybe sucessful, now notice below guide
