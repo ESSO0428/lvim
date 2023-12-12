@@ -594,7 +594,7 @@ lvim.plugins = {
   {
     "glepnir/lspsaga.nvim",
     branch = "main",
-    commit = "4f07545",
+    -- commit = "4f07545",
     event = "LspAttach",
     opts = {
       finder = {
