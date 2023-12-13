@@ -139,20 +139,39 @@ for k, v in pairs(custom_mappings_plus) do
   custom_mappings[k] = v
 end
 local neotree_source = {}
-if vim.fn.system("whoami"):gsub("\n", "") == 'root' then
-  neotree_source = {
-    "filesystem", -- Neotree filesystem source
-    "buffers",
-    "git_status",
-    "netman.ui.neo-tree", -- The one you really care about 😉
-  }
-else
-  neotree_source = {
-    "filesystem", -- Neotree filesystem source
-    "buffers",
-    "git_status",
-  }
+-- 检查 Docker 是否可用的函数
+local function is_docker_available()
+  -- 使用 'command -v' 来检查 Docker 是否安装
+  local handle = io.popen("command -v docker")
+  local result = handle:read("*a")
+  handle:close()
+
+  return result ~= ""
 end
+
+-- 自定义的 netman.providers 版本
+local function custom_netman_providers()
+  local providers = { "netman.providers.ssh" }
+
+  -- 如果 Docker 可用，添加 Docker 提供者
+  if is_docker_available() then
+    table.insert(providers, "netman.providers.docker")
+  end
+
+  return providers
+end
+
+-- 覆盖原始的 netman.providers
+package.preload["netman.providers"] = custom_netman_providers
+
+-- 现在，任何后续的 require("netman.providers") 调用都将返回你自定义的内容
+
+neotree_source = {
+  "filesystem",   -- Neotree filesystem source
+  "buffers",
+  "git_status",
+  "netman.ui.neo-tree",   -- The one you really care about 😉
+}
 neotree.setup({
   sources = neotree_source,
   use_default_mappings = false,
