@@ -670,7 +670,7 @@ lvim.plugins = {
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
-    branch = "v2.x",
+    branch = "v3.x",
     deprecated = {
       "miversen33/netman.nvim",
       "nvim-lua/plenary.nvim",

@@ -163,10 +163,10 @@ neotree.setup({
   commands = custom_commands,
   close_if_last_window = false,
   buffers = {
-    follow_current_file = true,
+    follow_current_file = { enable = true },
   },
   filesystem = {
-    follow_current_file = true,
+    follow_current_file = { enable = true },
     bind_to_cwd = false,
     hijack_netrw_behavior = "open_current",
     filtered_items = {
