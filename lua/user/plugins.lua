@@ -293,6 +293,8 @@ lvim.plugins = {
   {
     "romgrk/nvim-treesitter-context",
     config = function()
+      vim.keymap.set('n', '[a', function() require("treesitter-context").go_to_context() end,
+        { silent = true, nowait = true })
       require("treesitter-context").setup {
         enable = true,   -- Enable this plugin (Can be enabled/disabled later via commands)
         throttle = true, -- Throttles plugin updates (may improve performance)
