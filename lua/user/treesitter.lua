@@ -28,7 +28,7 @@ lvim.builtin.treesitter.ensure_installed       = {
   "python", "lua", "vim", "bash", "html", "css", "scss", "json", "javascript"
   -- "regex"
 }
-lvim.builtin.treesitter.ignore_install         = { "regex" }
+lvim.builtin.treesitter.ignore_install         = { "regex", "csv", "tsv" }
 lvim.builtin.treesitter.highlight              = {
   enable = true,        -- false will disable the whole extension
   disable = { "rust" }, -- list of language that will be disabled
