@@ -29,8 +29,12 @@ vim.cmd "let &fcs='eob: '"
 -- vim.cmd "au ColorScheme * hi BufferLineSeparatorVisible guifg=#000000"
 -- vim.cmd "au ColorScheme * hi BufferLineTabSeparator guifg=#000000"
 
-vim.cmd "au ColorScheme * hi @include guifg=#a184fe"
-vim.cmd "au ColorScheme * hi @variable guifg=#87ceeb"
+vim.cmd "au ColorScheme * hi @include guifg=#c586c0"
+vim.cmd "au ColorScheme * hi @variable guifg=#9cdcfe"
+vim.cmd "au ColorScheme * hi @conditional guifg=#c586c0"
+vim.cmd "au ColorScheme * hi @exception guifg=#c586c0"
+vim.cmd "au ColorScheme * hi @method.call guifg=#daccaa"
+vim.cmd "au ColorScheme * hi @keyword.function guifg=#569cd6"
 vim.cmd "au ColorScheme * hi @field guifg=#d19a66"
 vim.cmd "au ColorScheme * hi @boolean guifg=#3ab6f0"
 vim.cmd "au ColorScheme * hi @operator guifg=#ffffff"
@@ -58,8 +62,9 @@ vim.g['semshi#filetypes'] = { 'python' }
 vim.g['semshi#simplify_markup'] = false
 vim.g['semshi#error_sign'] = false
 -- pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#e0949e")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#ff6666")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiGlobal gui=bold guifg=#87ceeb")
+-- pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#ff6666")
+pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#4ec9b0")
+pcall(vim.cmd, "au ColorScheme * highlight! semshiGlobal gui=bold guifg=#9cdcfe")
 
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameter @parameter")
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameterUnused @parameter")
@@ -67,7 +72,7 @@ pcall(vim.cmd, "au ColorScheme * highlight! semshiParameterUnused gui=undercurl"
 -- pcall(vim.cmd, "au ColorScheme * highlight! link semshiAttribute @attribute")
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiAttribute @field")
 -- pcall(vim.cmd, "au ColorScheme * highlight! link semshiBuiltin @function.builtin")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiBuiltin guifg=#dbc074")
+pcall(vim.cmd, "au ColorScheme * highlight! semshiBuiltin guifg=#dcdcaa")
 -- pcall(vim.cmd, "au ColorScheme * highlight! link semshiBuiltin @field")
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiUnresolved @text.warning")
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiSelf @variable.builtin")
