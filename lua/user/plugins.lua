@@ -333,7 +333,6 @@ lvim.plugins = {
       require('symbols-outline').setup()
     end
   },
-  { "EdenEast/nightfox.nvim" },
   {
     "kevinhwang91/nvim-bqf",
     event = { "BufRead", "BufNew" },

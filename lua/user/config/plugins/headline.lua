@@ -8,7 +8,7 @@ vim.cmd "au ColorScheme * highlight Headline2 guibg=#505429 gui=italic"
 vim.cmd "au ColorScheme * highlight Dash guifg=#D19A66 gui=bold"
 
 -- orgmode link
-vim.cmd "au ColorScheme * highlight org_hyperlink guifg=#3399FF gui=underline"
+vim.cmd "au ColorScheme * highlight org_hyperlink guifg=#3794FF gui=underline"
 
 require("headlines").setup {
   markdown = {

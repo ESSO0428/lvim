@@ -29,14 +29,23 @@ vim.cmd "let &fcs='eob: '"
 -- vim.cmd "au ColorScheme * hi BufferLineSeparatorVisible guifg=#000000"
 -- vim.cmd "au ColorScheme * hi BufferLineTabSeparator guifg=#000000"
 
-vim.cmd "au ColorScheme * hi @include guifg=#c586c0"
+vim.cmd "au ColorScheme * hi @include.python guifg=#c586c0"
 vim.cmd "au ColorScheme * hi @variable guifg=#9cdcfe"
-vim.cmd "au ColorScheme * hi @conditional guifg=#c586c0"
-vim.cmd "au ColorScheme * hi @exception guifg=#c586c0"
-vim.cmd "au ColorScheme * hi @method.call guifg=#daccaa"
-vim.cmd "au ColorScheme * hi @field guifg=#d19a66"
-vim.cmd "au ColorScheme * hi @boolean guifg=#3ab6f0"
+vim.cmd "au ColorScheme * hi @conditional.python guifg=#c586c0"
+vim.cmd "au ColorScheme * hi @exception.python guifg=#c586c0"
+vim.cmd "au ColorScheme * hi @method.call.python guifg=#daccaa"
+vim.cmd "au ColorScheme * hi @function.python guifg=#daccaa"
+vim.cmd "au ColorScheme * hi @function.call.python guifg=#daccaa"
+vim.cmd "au ColorScheme * hi @field.python guifg=#d19a66"
+vim.cmd "au ColorScheme * hi @boolean.python guifg=#3ab6f0"
 vim.cmd "au ColorScheme * hi @operator guifg=#ffffff"
+vim.cmd "au ColorScheme * hi @text.reference guifg=#3794ff"
+vim.cmd "au ColorScheme * hi @punctuation.special.markdown guifg=#9d7cd8"
+vim.cmd "au ColorScheme * hi @number.python guifg=#b5cea8"
+vim.cmd "au ColorScheme * hi @string.python guifg=#ce9178"
+vim.cmd "au ColorScheme * hi @parameter.python guifg=#68b2c8"
+vim.cmd "au ColorScheme * hi @field.python guifg=#4ec9b0"
+vim.cmd "au ColorScheme * hi @type.python guifg=#4ec9b0"
 
 if lvim.transparent_window == true then
   vim.cmd "au ColorScheme * hi BufferLineBufferSelected guifg=#3ab6f0"
@@ -63,10 +72,11 @@ vim.g['semshi#error_sign'] = false
 -- pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#e0949e")
 -- pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#ff6666")
 pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#4ec9b0")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiGlobal gui=bold guifg=#9cdcfe")
+-- pcall(vim.cmd, "au ColorScheme * highlight! semshiGlobal gui=bold guifg=#9cdcfe")
+pcall(vim.cmd, "au ColorScheme * highlight! semshiGlobal gui=bold")
 
-pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameter @parameter")
-pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameterUnused @parameter")
+pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameter @parameter.python")
+pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameterUnused @parameter.python")
 pcall(vim.cmd, "au ColorScheme * highlight! semshiParameterUnused gui=undercurl")
 -- pcall(vim.cmd, "au ColorScheme * highlight! link semshiAttribute @attribute")
 pcall(vim.cmd, "au ColorScheme * highlight! link semshiAttribute @field")
