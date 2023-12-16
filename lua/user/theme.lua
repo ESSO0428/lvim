@@ -46,6 +46,7 @@ vim.cmd "au ColorScheme * hi @string.python guifg=#ce9178"
 vim.cmd "au ColorScheme * hi @parameter.python guifg=#68b2c8"
 vim.cmd "au ColorScheme * hi @field.python guifg=#4ec9b0"
 vim.cmd "au ColorScheme * hi @type.python guifg=#4ec9b0"
+vim.cmd "au ColorScheme * hi @constant.python guifg=#4fceff"
 
 if lvim.transparent_window == true then
   vim.cmd "au ColorScheme * hi BufferLineBufferSelected guifg=#3ab6f0"
