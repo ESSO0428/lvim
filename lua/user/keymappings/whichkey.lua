@@ -79,6 +79,9 @@ lvim.builtin.which_key.mappings.s['O'] = { "<Cmd>Telescope orgmode search_headin
 lvim.builtin.which_key.mappings.d['ft'] = { "<cmd>diffthis<cr>", "diffthis" }
 lvim.builtin.which_key.mappings.d['fw'] = { "<cmd>diffoff<cr>", "diffoff" }
 lvim.builtin.which_key.mappings.d['fW'] = { "<cmd>diffoff!<cr>", "diffoff!" }
+lvim.builtin.which_key.mappings.d['fs'] = { "<cmd>set scrollbind!<cr>", "wind_scrollsync (set scrollbind!)" }
+lvim.builtin.which_key.mappings.d['fe'] = { "<cmd>windo set noscrollbind<cr>",
+  "wind_scrollsync_all_not (windo set noscrollbind)" }
 
 
 -- lvim.builtin.which_key.mappings['B'] = { "<Cmd>Telescope bookmarks<cr>", "Bookmarks" }

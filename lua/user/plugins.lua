@@ -124,6 +124,20 @@ lvim.plugins = {
     end,
   },
   {
+    "Eandrju/cellular-automaton.nvim",
+    config = function()
+      CellularAutomaton_make_it_rain = function()
+        local status, err = pcall(function()
+          vim.cmd("CellularAutomaton make_it_rain")
+        end)
+        if not status then
+          print('CellularAutomaton : folding and wrapping is not supported')
+        end
+      end
+      vim.keymap.set("n", "<leader>tc", "<cmd>lua CellularAutomaton_make_it_rain()<CR>")
+    end
+  },
+  {
     'linrongbin16/lsp-progress.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
