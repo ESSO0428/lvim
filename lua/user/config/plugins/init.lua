@@ -18,5 +18,7 @@ require "user.config.plugins.DiffView"
 require "user.config.plugins.Muren"
 
 -- require "user.config.plugins.text"
+-- .env file will load by dotenv
+require "user.config.plugins.env_template"
 require "user.config.plugins.dadbod"
 require "user.config.plugins.bioinformatics"

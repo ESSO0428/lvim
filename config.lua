@@ -7,6 +7,7 @@
 require "opt"
 require "user.lazy"
 require "user.plugins"
+require "user.builtin"
 require "user.bufferline"
 require "user.tabpage"
 require "user.telescope"
