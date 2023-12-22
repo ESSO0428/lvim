@@ -31,6 +31,10 @@ Run :checkhealth for more info
 - Install `lunavim` and `neovim` use my script
     1. clone this repo to `~/.config/`
         ```bash
+        # NOTE: Step1
+        cd ~/.config/
+
+        # NOTE: Step2 (Dev or Common user)
         # Dev (ex: myself)
         # Prerequisites:
         # 1. Ensure you have an SSH key: cat ~/.ssh/id_rsa.pub
