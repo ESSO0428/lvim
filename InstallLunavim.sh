@@ -223,7 +223,7 @@ hash_cargo_pkg=(
 )
 hash_conda_pkg=(
   ["fd"]="conda install -c conda-forge fd-find"
-  ["rg"]="conda install -c anaconda ripgrep"
+  ["rg"]="conda install -c conda-forge ripgrep"
 )
 # Function to install Anaconda3 version 2023.09-0
 install_anaconda3_2023_09_0() {
