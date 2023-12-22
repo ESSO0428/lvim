@@ -46,6 +46,7 @@ Run :checkhealth for more info
         ```
     2. install `lunavim` and `neovim` use my script
         ```bash
+        cd ~
         sh ~/.config/lvim/InstallLunavim.sh
         ```
 - Install `lunavim` and `neovim` manually
