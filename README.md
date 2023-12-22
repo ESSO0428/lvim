@@ -135,3 +135,19 @@ if you are only a user, suggest ask `your admin` to help you install `glbc-2.14`
         :LspInstall pyright
         ```
         ```
+    - copilot
+        ```vim
+        " error
+        Error detected while processing TextChangedI Autocommands for "*":
+        Error executing lua callback: TextChangedI Autocommands for "*"..function copilot#Complete[6]..copilot#Request[2]..<SNR>151_AgentRequest, line 9:
+
+        " notic error is copilot#Complete
+        " It usually nodejs version is not support
+        " solve is update nodejs version
+        ```
+        ```bash
+        # in terminal
+        nvm install 19.8.1
+        # and execute below command in terminal and write to ~/.bashrc
+        nvm use 19.8.1
+        ```

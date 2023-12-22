@@ -123,9 +123,9 @@ if ! command -v nvm > /dev/null 2>&1; then
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
     # Install and use Node.js version 16.9.0
-    nvm install 16.9.0
-    nvm use 16.9.0
-    echo "nvm use 16.9.0" >> ~/.bashrc
+    nvm install 19.8.1
+    nvm use 19.8.1
+    echo "nvm use 19.8.1" >> ~/.bashrc
   else
     echo "NVM installation skipped."
     restore_my_lvim_config
