@@ -215,6 +215,30 @@ else
   echo "A suitable version of Git is already installed."
 fi
 
+# NOTE: install go
+cd ~
+PATH=$HOME/bin/go/bin/:$PATH
+if ! command -v go > /dev/null 2>&1; then
+  required_notice "go"
+  read -p "Do you want to install go? (y/n) " answer
+  if [ "$answer" != "${answer#[Yy]}" ]; then
+    echo "Installing go... in ~/bin/go/"
+    echo "When install finished, will write PATH=$HOME/bin/go/bin/:$PATH to ~/.bashrc"
+    cd ~/bin/
+    wget https://go.dev/dl/go1.19.3.linux-amd64.tar.gz
+    tar zxvf go1.19.3.linux-amd64.tar.gz
+    echo "PATH=$HOME/bin/go/bin/:$PATH" >> ~/.bashrc
+  else
+    echo "go installation skipped."
+    restore_my_lvim_config
+    exit 1
+  fi
+else
+  cd ~
+  echo "go is already installed."
+fi
+  
+
 # NOTE: Install fd (fd-find) and rg (ripgrep)
 # Check if fd and rg are installed
 # install use cargo or conda

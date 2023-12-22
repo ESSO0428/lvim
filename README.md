@@ -49,6 +49,7 @@ Run :checkhealth for more info
         cd ~
         sh ~/.config/lvim/InstallLunavim.sh
         ```
+    3. other [reference](#about-update-lunavim-and-neovim-core-to-nightly) after step2
 - Install `lunavim` and `neovim` manually
     1. install `neovim`
         1. install nvim.appimage
@@ -93,7 +94,7 @@ if you are only a user, suggest ask `your admin` to help you install `glbc-2.14`
     ```bash
     sh ~/.config/lvim/UpdateNvimNightlyAndLunaCore.sh
     ```
-2. If update success (can use below command to init lunavim)
+2. If update (or install) success (can use below command to init lunavim)
     ```bash
     # NOTE: init lvim (install plugins and install treesitter parsers)
     # Maybe restart lvim two times above (because solve plugin dependency)
@@ -104,4 +105,17 @@ if you are only a user, suggest ask `your admin` to help you install `glbc-2.14`
     " NOTE: Some Python based plugins may need this command to be run after installation.
     :UpdateRemotePlugins
     ```
+3. below is some maybe error and how to solve
+    ```vim
+    " erro
+    vim-hexokinase needs updating. Run `make hexokinase` in project root. See `:h hexokinase-installation` for more info.
+    " solve in vim cmd
+    :!export PATH=$HOME/bin/go/bin/:$PATH && cd ~/.config/lvim/plugged/vim-hexokinase/ && git submodule init && git submodule update && cd hexokinase/ && go build
+    ```
 
+    ```bash
+    # or solve in terminal
+    export PATH=$HOME/bin/go/bin/:$PATH && cd ~/.config/lvim/plugged/vim-hexokinase/ && git submodule init && git submodule update && cd hexokinase/ && go build && cd ~
+    ```
+
+    
