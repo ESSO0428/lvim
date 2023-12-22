@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 # NOTE: Foolproofing
-echo "This script will install Neovim Nightly and LunaVim core."
+echo "This script will install Neovim Release and LunaVim core."
 echo "Your current LunaVim configuration will be backed up to ~/.config/lvim_stage/"
 echo "In case of failure, manually restore it by running:"
 echo "mv ~/.config/lvim_stage/ ~/.config/lvim/"
 
-# NOTE: Install NeovimNightly or Release
+# NOTE: Install NeovimRelease
 cd ~
 rm -rf ~/nvim.appimage
 unlink ~/.config/lvim/snapshots/default.json > /dev/null 2>&1
@@ -33,27 +33,19 @@ restore_my_lvim_config() {
   fi
 }
 
-wget https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
+rm -rf nvim.appimage
+wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
 chmod u+x nvim.appimage
 
-# Test if the nightly version works
+# Test if the release version works
+echo "Downloading Neovim Release ..."
 if ./nvim.appimage --version; then
-  echo "Neovim Nightly is executable."
+  echo "Neovim Release is executable."
 else
-  echo "Neovim Nightly can't execute. Downloading Release instead."
+  echo "Neovim can't use in this system. Please check your system."
+  mv ~/.config/lvim_stage/ ~/.config/lvim/
   rm -rf nvim.appimage
-  wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
-  chmod u+x nvim.appimage
-
-  # Test if the release version works
-  if ./nvim.appimage --version; then
-    echo "Neovim Release is executable."
-  else
-    echo "Neovim can't use in this system. Please check your system."
-    mv ~/.config/lvim_stage/ ~/.config/lvim/
-    rm -rf nvim.appimage
-    exit 1
-  fi
+  exit 1
 fi
 
 # NOTE: Create symbolic link in ~/.local/bin for lunavim

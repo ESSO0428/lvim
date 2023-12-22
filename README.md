@@ -134,7 +134,6 @@ if you are only a user, suggest ask `your admin` to help you install `glbc-2.14`
         " LSP
         :LspInstall pyright
         ```
-        ```
     - copilot
         ```vim
         " error
@@ -143,6 +142,7 @@ if you are only a user, suggest ask `your admin` to help you install `glbc-2.14`
 
         " notic error is copilot#Complete
         " It usually nodejs version is not support
+        
         " solve is update nodejs version
         ```
         ```bash

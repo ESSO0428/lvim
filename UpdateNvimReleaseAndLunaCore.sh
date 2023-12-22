@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # NOTE: Foolproofing
-echo "This script will update Neovim Nightly and LunaVim core."
+echo "This script will update Neovim Release and LunaVim core."
 echo "Your current LunaVim configuration will be backed up to ~/.config/lvim_stage/"
 echo "In case of failure, manually restore it by running:"
 echo "mv ~/.config/lvim_stage/ ~/.config/lvim/"
@@ -23,33 +23,25 @@ restore_my_lvim_config() {
   fi
 }
 
-# NOTE: Use below command to update nvim nightly (and update lunavim core for nvim nightly)
+# NOTE: Use below command to update nvim release (and update lunavim core for nvim release)
 cd ~
 unlink ~/.config/lvim/snapshots/default.json > /dev/null 2>&1
 mv ~/.config/lvim/ ~/.config/lvim_stage/
 
-wget https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
+echo "Downloading Neovim Release ..."
+rm -rf nvim.appimage
+wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
 chmod u+x nvim.appimage
 
-# Test if the nightly version works
+# Test if the release version works
 if ./nvim.appimage --version; then
-  echo "Neovim Nightly is executable."
+  echo "Neovim Release is executable."
 else
-  echo "Neovim Nightly can't execute. Downloading Release instead."
-  rm -rf nvim.appimage
-  wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
-  chmod u+x nvim.appimage
-
-  # Test if the release version works
-  if ./nvim.appimage --version; then
-    echo "Neovim Release is executable."
-  else
-    echo "Neovim Release can't execute. Reverting changes."
-    mv ~/.config/lvim_stage/ ~/.config/lvim/
-    mv ~/nvim.appimage.$current_nvm_version ~/nvim.appimage
-    echo "Reverted to the previous configuration and Neovim version."
-    exit 1
-  fi
+  echo "Neovim Release can't execute. Reverting changes."
+  mv ~/.config/lvim_stage/ ~/.config/lvim/
+  mv ~/nvim.appimage.$current_nvm_version ~/nvim.appimage
+  echo "Reverted to the previous configuration and Neovim version."
+  exit 1
 fi
 
 curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh | bash
