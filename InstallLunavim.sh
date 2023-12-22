@@ -106,6 +106,10 @@ fi
 # NOTE: install nvm v0.39.3 (if not installed)
 # Check if nvm is installed
 cd ~
+# 初始化 NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" > /dev/null 2>&1  # 加載 nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" > /dev/null 2>&1  # 加載 nvm bash_completion
 if ! command -v nvm > /dev/null 2>&1; then
   required_notice "NVM"
   read -p "Do you want to install NVM v0.39.3? (y/n) " answer
@@ -114,7 +118,7 @@ if ! command -v nvm > /dev/null 2>&1; then
     wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
     
     # Source the NVM script to make it available in the current session
-    export NVM_DIR="$HOME/.nvm"
+    # export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
