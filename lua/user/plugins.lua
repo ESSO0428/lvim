@@ -224,8 +224,10 @@ lvim.plugins = {
   },
   { "jbyuki/venn.nvim" },
   { "ESSO0428/bookmarks.nvim" },
-  { "tpope/vim-dadbod" },
-  { "kristijanhusak/vim-dadbod-ui" },
+  {
+    "kristijanhusak/vim-dadbod-ui",
+    dependencies = { "tpope/vim-dadbod", "tpope/vim-dotenv" },
+  },
   { "kristijanhusak/vim-dadbod-completion" },
   { "LinArcX/telescope-command-palette.nvim" },
   { "nvim-telescope/telescope-live-grep-args.nvim" },

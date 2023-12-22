@@ -1,6 +1,5 @@
 require "user.snippets"
 require("luasnip.loaders.from_lua").lazy_load { paths = "~/.config/lvim/LuaSnipSourceSnippets/" }
-require "user.dadbod"
 local cmp = require("lvim.utils.modules").require_on_index "cmp"
 local cmp_mapping = require "cmp.config.mapping"
 local luasnip = require("lvim.utils.modules").require_on_index "luasnip"

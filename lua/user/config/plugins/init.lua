@@ -18,4 +18,5 @@ require "user.config.plugins.DiffView"
 require "user.config.plugins.Muren"
 
 -- require "user.config.plugins.text"
+require "user.config.plugins.dadbod"
 require "user.config.plugins.bioinformatics"
