@@ -13,8 +13,19 @@ echo "mv ~/nvim.appimage ~/nvim.appimage.$current_nvm_version"
 echo "(backup current nvim to ~/nvim.appimage.$current_nvm_version)"
 mv ~/nvim.appimage ~/nvim.appimage.$current_nvm_version
 
+# Function to restore the original LunarVim configuration and exit
+restore_my_lvim_config() {
+  cd ~
+  if [ -d "$HOME/.config/lvim_stage" ]; then
+    echo "Restoring the LunarVim (Andy6) configuration..."
+    rm -rf "$HOME/.config/lvim/"
+    mv "$HOME/.config/lvim_stage/" "$HOME/.config/lvim/"
+  fi
+}
+
 # NOTE: Use below command to update nvim nightly (and update lunavim core for nvim nightly)
 cd ~
+unlink ~/.config/lvim/snapshots/default.json > /dev/null 2>&1
 mv ~/.config/lvim/ ~/.config/lvim_stage/
 
 wget https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
@@ -22,27 +33,28 @@ chmod u+x nvim.appimage
 
 # Test if the nightly version works
 if ./nvim.appimage --version; then
-    echo "Neovim Nightly is executable."
+  echo "Neovim Nightly is executable."
 else
-    echo "Neovim Nightly can't execute. Downloading Release instead."
-    rm -rf nvim.appimage
-    wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
-    chmod u+x nvim.appimage
+  echo "Neovim Nightly can't execute. Downloading Release instead."
+  rm -rf nvim.appimage
+  wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+  chmod u+x nvim.appimage
 
-    # Test if the release version works
-    if ./nvim.appimage --version; then
-        echo "Neovim Release is executable."
-    else
-        echo "Neovim Release can't execute. Reverting changes."
-        mv ~/.config/lvim_stage/ ~/.config/lvim/
-        mv ~/nvim.appimage.$current_nvm_version ~/nvim.appimage
-        echo "Reverted to the previous configuration and Neovim version."
-        exit 1
-    fi
+  # Test if the release version works
+  if ./nvim.appimage --version; then
+    echo "Neovim Release is executable."
+  else
+    echo "Neovim Release can't execute. Reverting changes."
+    mv ~/.config/lvim_stage/ ~/.config/lvim/
+    mv ~/nvim.appimage.$current_nvm_version ~/nvim.appimage
+    echo "Reverted to the previous configuration and Neovim version."
+    exit 1
+  fi
 fi
 
 curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh | bash
-mv ~/.config/lvim_stage/ ~/.config/lvim/
+echo "LunarVim updated successfully !!!"
+restore_my_lvim_config
 
 # NOTE: Install maybe sucessful, now notice below guide
 echo "$ lvim ."
@@ -57,9 +69,9 @@ read -p "Do you want to remove the old LunarVim directory at ~/.local/share/luna
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    rm -rf ~/.local/share/lunarvim.old/
-    echo "Old LunarVim directory removed."
+  rm -rf ~/.local/share/lunarvim.old/
+  echo "Old LunarVim directory removed."
 else
-    echo "Old LunarVim directory retained."
+  echo "Old LunarVim directory retained."
 fi
 
