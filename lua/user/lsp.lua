@@ -1,10 +1,6 @@
 local autocmd = vim.api.nvim_create_autocmd
 local navbuddy = require("nvim-navbuddy")
 
-lvim.lsp.installer.setup.automatic_installation = {
-  'emmet_ls'
-}
-
 lvim.lsp.on_attach_callback = function(client, bufnr)
   if client.server_capabilities.documentSymbolProvider then
     navbuddy.attach(client, bufnr)
