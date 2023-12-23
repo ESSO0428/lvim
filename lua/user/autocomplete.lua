@@ -10,6 +10,34 @@ lvim.builtin.cmp.snippet = {
     vim.fn["UltiSnips#Anon"](args.body)
   end,
 }
+local function remove_copilot_if_node_version_too_low()
+  -- 執行 `node --version` 並獲取輸出
+  local handle = io.popen("node --version")
+  local result = handle:read("*a")
+  handle:close()
+
+  -- 解析版本號
+  local major, minor, patch = result:match("v(%d+)%.(%d+)%.(%d+)")
+  major, minor, patch = tonumber(major), tonumber(minor), tonumber(patch)
+
+  -- 檢查版本是否低於標準（假設標準是 18.x）
+  if major and major < 18 then
+    -- 遍歷並移除 copilot
+    for i, source in ipairs(lvim.builtin.cmp.sources) do
+      if source.name == "copilot" then
+        table.remove(lvim.builtin.cmp.sources, i)
+        print(
+          table.concat(
+          { 'Copilot: Node.js version 18.x ablove required',
+            '(neaad update; ex: nvm install 16.9.0 && nvm use 1.9.0 >> ~/.bashrc)' }, ' '))
+        break
+      end
+    end
+  end
+end
+
+-- 調用函數
+remove_copilot_if_node_version_too_low()
 lvim.builtin.cmp.experimental.ghost_text = true
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "luasnip" }
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "jupyter" }
