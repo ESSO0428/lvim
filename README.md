@@ -12,11 +12,11 @@ use neovim pre-config lunavim
 
 ### Current support neovim version
 
-NVIM v0.9.2 (nightly)
+NVIM v0.9.4 (release)
 
 ```bash
 $ nvim --version
-NVIM v0.9.2
+NVIM v0.9.4
 Build type: Release
 LuaJIT 2.1.1692716794
 
@@ -49,7 +49,7 @@ Run :checkhealth for more info
         cd ~
         sh ~/.config/lvim/InstallLunavim.sh
         ```
-    3. other [reference](#about-update-lunavim-and-neovim-core-to-nightly) after step2
+    3. other [reference](#about-update-lunavim-and-neovim-core-to-latest-release) after step2
 - Install `lunavim` and `neovim` manually
     1. install `neovim`
         1. install nvim.appimage
@@ -88,11 +88,11 @@ some server install neovim will get below error:
 need to use `sudo compile glibc-2.14`  
 if you are only a user, suggest ask `your admin` to help you install `glbc-2.14`
 
-### About update lunavim and neovim core to nightly
+### About update lunavim and neovim core to Latest Release
 
-1. Can use below command to update lunavim and neovim core to nightly
+1. Can use below command to update lunavim and neovim core to Latest Release
     ```bash
-    sh ~/.config/lvim/UpdateNvimNightlyAndLunaCore.sh
+    sh ~/.config/lvim/UpdateNvimReleaseAndLunaCore.sh
     ```
 2. If update (or install) success (can use below command to init lunavim)
     ```bash
