@@ -140,20 +140,3 @@ if you are only a user, suggest ask `your admin` to help you install `glbc-2.14`
         # or solve in terminal
         export PATH=$HOME/bin/go/bin/:$PATH && cd ~/.config/lvim/plugged/vim-hexokinase/ && git submodule init && git submodule update && cd hexokinase/ && go build && cd ~
         ```
-    - session-error
-        ```vim
-        " erro
-        Error executing vim.schedule lua callback: ...opt/neovim-session-manager/lua/session_manager/utils.lua:65: /nfs/ev02_sdb/home/Andy6/.local/share/lvim/sessions/__usr__local__dkdata__apache-django__website__mysite[48]..BufReadPost Autocom
-        mands for "*": Vim(append):Error executing lua callback: /tmp/.mount_lvimq9BMmx/usr/share/nvim/runtime/filetype.lua:24: Error executing lua: /tmp/.mount_lvimq9BMmx/usr/share/nvim/runtime/filetype.lua:25: /nfs/ev02_sdb/home/Andy6/.local/
-        share/lvim/sessions/__usr__local__dkdata__apache-django__website__mysite[48]..BufReadPost Autocommands for "*"..FileType Autocommands for "*"..function <SNR>1_LoadFTPlugin[19]..script /nfs/ev02_sdb/home/Andy6/.local/share/lunarvim/site/
-        after/ftplugin/python.lua: Vim(runtime):E5113: Error while calling lua chunk: vim/shared.lua:0: t: expected table, got nil
-
-        " notice above error display ftplugin/python.lua, it can be deduced filetype occur error
-        
-        " solve (above usually not isntall tree-sitter parser or LSP)
-        " above example is python
-        " tree-sitter parser
-        :TSInstall python
-        " LSP
-        :LspInstall pyright
-        ```
