@@ -5,6 +5,7 @@
 -- Discord: https://discord.com/invite/Xb9B4Ny
 
 require "opt"
+require "user.mason"
 require "user.lazy"
 require "user.plugins"
 require "user.builtin"
