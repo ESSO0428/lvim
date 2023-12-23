@@ -1,4 +1,3 @@
-local autocmd = vim.api.nvim_create_autocmd
 local navbuddy = require("nvim-navbuddy")
 
 lvim.lsp.on_attach_callback = function(client, bufnr)
