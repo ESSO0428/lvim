@@ -28,8 +28,8 @@ local function remove_copilot_if_node_version_too_low()
         table.remove(lvim.builtin.cmp.sources, i)
         print(
           table.concat(
-          { 'Copilot: Node.js version 18.x ablove required',
-            '(neaad update; ex: nvm install 16.9.0 && nvm use 1.9.0 >> ~/.bashrc)' }, ' '))
+            { 'Copilot: Node.js version 18.x ablove required',
+              '(neaad update; ex: nvm install 19.8.1 && nvm use 19.8.1 >> ~/.bashrc)' }, ' '))
         break
       end
     end
