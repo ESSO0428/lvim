@@ -1,17 +1,29 @@
+table.insert(lvim.plugins, {
+  "nvim-tree/nvim-tree.lua",
+  config = function()
+    require("lvim.core.nvimtree").setup()
+  end,
+  enabled = lvim.builtin.nvimtree.active,
+  cmd = { "NvimTreeToggle", "NvimTreeOpen", "NvimTreeFocus", "NvimTreeFindFileToggle" },
+  event = "VimEnter",
+})
+
 lvim.builtin.nvimtree.active = true -- NOTE: using neo-tree
 require "user.integrated.TermForNvimTree"
 function open_nvim_tree()
   -- open the tree
   -- if vim.g.SessionLoad then return end
   if vim.bo.filetype ~= "alpha" and vim.bo.filetype ~= "lir" and next(vim.fn.argv()) ~= nil then
-    require("nvim-tree.api").tree.toggle(false, true)
+    -- require("nvim-tree.api").tree.toggle(false, true)
+    vim.cmd([[NvimTreeOpen]])
     -- vim.cmd([[wincmd w]])
   end
 end
 
 function session_open_nvim_tree()
   -- open the tree
-  require("nvim-tree.api").tree.toggle(false, true)
+  -- require("nvim-tree.api").tree.toggle(false, true)
+  vim.cmd([[NvimTreeOpen]])
   -- vim.cmd([[wincmd w]])
 end
 

@@ -16,7 +16,8 @@ if lvim.builtin.nvimtree.active == false then
   lvim.builtin.which_key.mappings['e'] = { "<Cmd>Neotree toggle=true dir=/<cr>", "Neotree" }
   lvim.builtin.which_key.mappings.b['e'] = { "<Cmd>Neotree buffers toggle=true dir=/<cr>", "Neotree buffers" }
 else
-  lvim.builtin.which_key.mappings['e'] = { "<Cmd>lua require('nvim-tree.api').tree.toggle(false, false)<cr>", "Neotree" }
+  -- lvim.builtin.which_key.mappings['e'] = { "<Cmd>lua require('nvim-tree.api').tree.toggle(false, false)<cr>", "NvimTree" }
+  lvim.builtin.which_key.mappings['e'] = { "<Cmd>NvimTreeToggle<cr>", "NvimTree" }
   lvim.keys.normal_mode["<c-k>"] = "<Cmd>NvimTreeFocus<CR>"
 end
 lvim.builtin.which_key.mappings.u = lvim.builtin.which_key.mappings.l
