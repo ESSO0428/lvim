@@ -35,7 +35,8 @@ Plug 'kana/vim-textobj-line'
 Plug 'GCBallesteros/vim-textobj-hydrogen'
 Plug 'GCBallesteros/jupytext.vim'
 "
-Plug 'bfredl/nvim-ipy'
+" Plug 'bfredl/nvim-ipy'
+Plug 'ESSO0428/nvim-ipy'
 " command! -nargs=0 RunQtConsole
 "   \ call jobstart("jupyter qtconsole --JupyterWidget.include_other_output=True --style monokai")
 command! -nargs=0 RunQtConsole call OpenQtConsole()
