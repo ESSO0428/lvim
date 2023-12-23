@@ -88,6 +88,29 @@ some server install neovim will get below error:
 need to use `sudo compile glibc-2.14`  
 if you are only a user, suggest ask `your admin` to help you install `glbc-2.14`
 
+#### Copilot
+
+- **Automatic Activation**: Copilot will automatically start when you open Neovim, regardless of whether you have registered it or not.
+- **Version Requirements**:
+  - **Node.js version 18.x or above is required**.
+  - If your Node.js version is below 18.x:
+    - A reminder message will be displayed when you open Neovim.
+    - This will not affect other functionalities of Neovim.
+    - If you use `NVM`, you can install and activate `Node.js 18.x or above` by following these steps:
+      ```bash
+      # NOTE: Execute the following commands in the terminal
+      # Install Node.js version 18.x or above (example version 19.8.1)
+      nvm install 19.8.1
+      # Activate the environment for Node.js version 18.x or above
+      nvm use 19.8.1
+      # Don't forget to write this setting into .bashrc or .zshrc (for activating Node.js 18.x or above on next login)
+      echo 'nvm use 19.8.1' >> ~/.bashrc
+      ```
+  - If your Node.js version is 18.x or above:
+    - You can use the `:Copilot auth` command (in cmd of nvim) to register Copilot service on this Neovim server.
+    - **Prerequisites**: You should have registered for Copilot service and successfully logged in on GitHub.
+
+
 ### About update lunavim and neovim core to Latest Release
 
 1. Can use below command to update lunavim and neovim core to Latest Release
@@ -133,21 +156,4 @@ if you are only a user, suggest ask `your admin` to help you install `glbc-2.14`
         :TSInstall python
         " LSP
         :LspInstall pyright
-        ```
-    - copilot
-        ```vim
-        " error
-        Error detected while processing TextChangedI Autocommands for "*":
-        Error executing lua callback: TextChangedI Autocommands for "*"..function copilot#Complete[6]..copilot#Request[2]..<SNR>151_AgentRequest, line 9:
-
-        " notic error is copilot#Complete
-        " It usually nodejs version is not support
-        
-        " solve is update nodejs version
-        ```
-        ```bash
-        # in terminal
-        nvm install 19.8.1
-        # and execute below command in terminal and write to ~/.bashrc
-        nvm use 19.8.1
         ```
