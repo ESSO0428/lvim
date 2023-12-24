@@ -14,16 +14,16 @@ function open_nvim_tree()
   -- open the tree
   -- if vim.g.SessionLoad then return end
   if vim.bo.filetype ~= "alpha" and vim.bo.filetype ~= "lir" and next(vim.fn.argv()) ~= nil then
-    -- require("nvim-tree.api").tree.toggle(false, true)
-    vim.cmd([[NvimTreeOpen]])
+    require("nvim-tree.api").tree.toggle(false, true)
+    -- vim.cmd([[NvimTreeOpen]])
     -- vim.cmd([[wincmd w]])
   end
 end
 
 function session_open_nvim_tree()
   -- open the tree
-  -- require("nvim-tree.api").tree.toggle(false, true)
-  vim.cmd([[NvimTreeOpen]])
+  require("nvim-tree.api").tree.toggle(false, true)
+  -- vim.cmd([[NvimTreeOpen]])
   -- vim.cmd([[wincmd w]])
 end
 

@@ -36,8 +36,7 @@ lvim.plugins = {
           default_command         = 'im-select.exe',
 
           -- Restore the default input method state when the following events are triggered
-          -- set_default_events      = { "VimEnter", "FocusGained", "InsertLeave", "CmdlineLeave" },
-          set_default_events      = { "VimEnter", "FocusGained", "InsertLeave" },
+          set_default_events      = { "VimEnter", "InsertLeavePre" },
 
           -- Restore the previous used input method state when the following events
           -- are triggered, if you don't want to restore previous used im in Insert mode,
@@ -137,13 +136,14 @@ lvim.plugins = {
       vim.keymap.set("n", "<leader>tc", "<cmd>lua CellularAutomaton_make_it_rain()<CR>")
     end
   },
-  {
-    'linrongbin16/lsp-progress.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require('lsp-progress').setup()
-    end
-  },
+  -- WARNING: 這會造成 Nvim-tree 上運行 Telescope 出錯 (可能要壞成其他替代的套件)
+  -- {
+  --   'linrongbin16/lsp-progress.nvim',
+  --   dependencies = { 'nvim-tree/nvim-web-devicons' },
+  --   config = function()
+  --     require('lsp-progress').setup()
+  --   end
+  -- },
   { "kazhala/close-buffers.nvim" },
   {
     "AckslD/muren.nvim",
@@ -241,6 +241,7 @@ lvim.plugins = {
     ft = { "org" },
     build = ":lua require('orgmode').setup_ts_grammar()",
     config = function()
+      require('orgmode').setup_ts_grammar()
       require("orgmode").setup {}
     end,
   },
@@ -506,7 +507,23 @@ lvim.plugins = {
   },
   -- { "elijahmanor/export-to-vscode.nvim" },
   -- 已將其代碼自行 copy 到我的 lua dir 下了
-  { "petertriho/nvim-scrollbar" },
+  {
+    "petertriho/nvim-scrollbar",
+    config = function()
+      require("scrollbar").setup({
+        show = true,
+        handle = {
+          text = " ",
+          color = "#928374",
+          hide_if_all_visible = true,
+        },
+        marks = {
+          Search = { color = "yellow" },
+          Misc = { color = "purple" },
+        },
+      })
+    end
+  },
   {
     "zane-/howdoi.nvim",
     build = 'pip install howdoi'

@@ -43,7 +43,21 @@ lvim.builtin.telescope.defaults.mappings.n = {
   ['<a-d>'] = action_layout.toggle_preview,
   ['<c-p>'] = action_layout.cycle_layout_next
 }
+-- NOTE: 自訂 Telescope 在 nvim-tree 中的 insert 模式下的 <CR> 行為。
+--       由於 im-select 插件在退出插入模式時可能導致 Telescope 無法正確跳轉到指定窗口並產生錯誤，
+--       這裡通過先發送 <Esc> 退出插入模式，然後經過 200~300 毫秒的延遲後再發送 <CR>，
+--       以規避 im-select 的干擾，確保 Telescope 能夠正確處理文件跳轉。
 lvim.builtin.telescope.defaults.mappings.i = {
+  ['<CR>'] = function()
+    vim.api.nvim_input('<Esc>')
+    vim.defer_fn(function()
+      vim.api.nvim_input('<CR>')
+    end, 300)
+  end,
+  ['<C-q>'] = function(...)
+    actions.smart_send_to_qflist(...)
+    actions.open_qflist(...)
+  end,
   ['<c-k>'] = function(...)
   end,
   ["<C-j>"] = function(...)
@@ -60,6 +74,9 @@ lvim.builtin.telescope.defaults.mappings.i = {
   ['<a-k>'] = actions.select_horizontal,
   ['<a-d>'] = action_layout.toggle_preview,
   ['<c-p>'] = action_layout.cycle_layout_next
+}
+lvim.builtin.telescope.pickers.buffers.mappings.i = {
+  ["<CR>"] = actions.select_default
 }
 
 function telescope_find_files(_)

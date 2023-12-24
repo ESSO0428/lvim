@@ -114,7 +114,7 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
       -- vim_item.kind_hl_group = "CmpItemKindCopilot"
       local ok, devicons = pcall(require, 'nvim-web-devicons')
       if ok then
-        icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
+        local icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
         if icon == nil then
           icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
         end

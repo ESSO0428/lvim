@@ -98,15 +98,6 @@ end
 
 -- lvim.builtin.bufferline
 
-local function LspStatus()
-  return require("lsp-progress").progress({
-    format = function(messages)
-      return #messages > 0 and " LSP " .. table.concat(messages, " ") or ""
-    end,
-  })
-end
-
-
 lvim.builtin.lualine.options                           = {
   globalstatus = true,
   component_separators = { left = '', right = '' },
@@ -118,8 +109,7 @@ lvim.builtin.lualine.sections                          = {
   lualine_c = {
     components.diff,
     components.python_env,
-    { 'b:jupyter_kernel' },
-    LspStatus
+    { 'b:jupyter_kernel' }
   },
   lualine_x = {
     { 'vim.api.nvim_call_function("getcwd", {0})' }, { 'encoding' },
@@ -150,19 +140,6 @@ lvim.builtin.telescope.defaults.layout_config          = {
   }
 }
 vim.cmd "autocmd User TelescopePreviewerLoaded setlocal number"
-require("scrollbar").setup()
-require("scrollbar").setup({
-  show = true,
-  handle = {
-    text = " ",
-    color = "#928374",
-    hide_if_all_visible = true,
-  },
-  marks = {
-    Search = { color = "yellow" },
-    Misc = { color = "purple" },
-  },
-})
 local status_ok, PlugNotify = pcall(require, "notify")
 if not status_ok then
   return
