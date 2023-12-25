@@ -11,8 +11,9 @@ lvim.plugins = {
       require('hlslens').setup({})
     end
   },
+  -- NOTE: 使用我 folk 的版本，原先的版本對於 nvim-tree 上使用 telescopte 可能造成開檔錯誤 (這裡引入 exclude filetpe 排除 telscope 中運行該代碼)
   {
-    "keaising/im-select.nvim",
+    "ESSO0428/im-select.nvim",
     config = function()
       -- Check if im-select.exe exists
       local has_im_select = os.execute('which im-select.exe > /dev/null 2>&1') == 0
@@ -26,29 +27,32 @@ lvim.plugins = {
           --               "1" for Fcitx
           --               "xkb:us::eng" for ibus
           -- You can use `im-select` or `fcitx5-remote -n` to get the IM's name
-          default_im_select       = "com.apple.keylayout.ABC",
+          default_im_select                   = "com.apple.keylayout.ABC",
 
           -- Can be binary's name or binary's full path,
           -- e.g. 'im-select' or '/usr/local/bin/im-select'
           -- For Windows/WSL, default: "im-select.exe"
           -- For macOS, default: "im-select"
           -- For Linux, default: "fcitx5-remote" or "fcitx-remote" or "ibus"
-          default_command         = 'im-select.exe',
+          default_command                     = 'im-select.exe',
 
           -- Restore the default input method state when the following events are triggered
-          set_default_events      = { "VimEnter", "InsertLeavePre" },
+          set_default_events                  = { "VimEnter", "InsertLeave" },
+
+          -- Restore the default input method state (exclude filetype)
+          set_default_events_exclude_filetype = { 'TelescopePrompt' },
 
           -- Restore the previous used input method state when the following events
           -- are triggered, if you don't want to restore previous used im in Insert mode,
           -- e.g. deprecated `disable_auto_restore = 1`, just let it empty
           -- as `set_previous_events = {}`
-          set_previous_events     = { "InsertEnter" },
+          set_previous_events                 = { "InsertEnter" },
 
           -- Show notification about how to install executable binary when binary missed
-          keep_quiet_on_no_binary = false,
+          keep_quiet_on_no_binary             = false,
 
           -- Async run `default_command` to switch IM or not
-          async_switch_im         = true
+          async_switch_im                     = true
         })
       end
     end,
@@ -137,13 +141,13 @@ lvim.plugins = {
     end
   },
   -- WARNING: 這會造成 Nvim-tree 上運行 Telescope 出錯 (可能要壞成其他替代的套件)
-  -- {
-  --   'linrongbin16/lsp-progress.nvim',
-  --   dependencies = { 'nvim-tree/nvim-web-devicons' },
-  --   config = function()
-  --     require('lsp-progress').setup()
-  --   end
-  -- },
+  {
+    'linrongbin16/lsp-progress.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lsp-progress').setup()
+    end
+  },
   { "kazhala/close-buffers.nvim" },
   {
     "AckslD/muren.nvim",
@@ -287,8 +291,6 @@ lvim.plugins = {
       })
     end
   },
-  -- { "hrsh7th/cmp-vsnip" },
-  -- { "hrsh7th/vim-vsnip" },
   {
     "github/copilot.vim",
   },
@@ -307,30 +309,31 @@ lvim.plugins = {
     "nvim-treesitter/playground",
     event = "BufRead",
   },
-  {
-    "romgrk/nvim-treesitter-context",
-    config = function()
-      vim.keymap.set('n', '[a', function() require("treesitter-context").go_to_context() end,
-        { silent = true, nowait = true })
-      require("treesitter-context").setup {
-        enable = true,   -- Enable this plugin (Can be enabled/disabled later via commands)
-        throttle = true, -- Throttles plugin updates (may improve performance)
-        max_lines = 0,   -- How many lines the window should span. Values <= 0 mean no limit.
-        patterns = {
-          -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
-          -- For all filetypes
-          -- Note that setting an entry here replaces all other patterns for this entry.
-          -- By setting the 'default' entry below, you can control which nodes you want to
-          -- appear in the context window.
-          default = {
-            'class',
-            'function',
-            'method',
-          },
-        },
-      }
-    end
-  },
+  -- WARNING: 目前先停用此套件，因為可能對於 nvim-tree 上使用 telescope 造成開檔錯誤
+  -- {
+  --   "romgrk/nvim-treesitter-context",
+  --   config = function()
+  --     vim.keymap.set('n', '[a', function() require("treesitter-context").go_to_context() end,
+  --       { silent = true, nowait = true })
+  --     require("treesitter-context").setup {
+  --       enable = true,   -- Enable this plugin (Can be enabled/disabled later via commands)
+  --       throttle = true, -- Throttles plugin updates (may improve performance)
+  --       max_lines = 0,   -- How many lines the window should span. Values <= 0 mean no limit.
+  --       patterns = {
+  --         -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
+  --         -- For all filetypes
+  --         -- Note that setting an entry here replaces all other patterns for this entry.
+  --         -- By setting the 'default' entry below, you can control which nodes you want to
+  --         -- appear in the context window.
+  --         default = {
+  --           'class',
+  --           'function',
+  --           'method',
+  --         },
+  --       },
+  --     }
+  --   end
+  -- },
   {
     "windwp/nvim-ts-autotag",
     config = function()
@@ -342,8 +345,6 @@ lvim.plugins = {
     'kevinhwang91/nvim-ufo',
     deprecated = { 'kevinhwang91/promise-async' },
   },
-  -- { "tmhedberg/SimpylFold" },
-  -- { "Konfekt/FastFold" },
   {
     "simrat39/symbols-outline.nvim",
     config = function()

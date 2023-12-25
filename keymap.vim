@@ -615,6 +615,9 @@ autocmd BufEnter * call SetWrapKeymaps()
 autocmd OptionSet wrap call SetWrapKeymaps()
 
 function! SendInputMethodCommandToLocal(mode)
+  if &ft == 'TelescopePrompt'
+    return
+  endif
   " 檢查~/.rssh_tunnel文件是否存在
   if filereadable(expand("~/.rssh_tunnel"))
     " 讀取文件內容以獲取端口號
