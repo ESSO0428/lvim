@@ -7,6 +7,30 @@ table.insert(lvim.plugins, {
   cmd = { "NvimTreeToggle", "NvimTreeOpen", "NvimTreeFocus", "NvimTreeFindFileToggle" },
   event = "VimEnter",
 })
+function close_specific_windows()
+  -- print(vim.bo.filetype)
+  if vim.bo.filetype ~= "lua" and vim.bo.buftype ~= '' then
+    return
+  end
+  local tabpage = vim.api.nvim_get_current_tabpage()
+  local windows = vim.api.nvim_tabpage_list_wins(tabpage)
+  for _, win in ipairs(windows) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    local name = vim.api.nvim_buf_get_name(buf)
+    local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
+    local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
+
+    -- 如果窗口没有文件名、buftype 为 'nofile' 或没有 filetype，则关闭并打印信息
+    if name == "" and buftype == "nofile" and filetype == "" then
+      vim.api.nvim_win_close(win, false)
+    end
+  end
+end
+
+vim.api.nvim_create_autocmd("BufWinLeave", {
+  pattern = "*",
+  callback = close_specific_windows
+})
 
 lvim.builtin.nvimtree.active = true -- NOTE: using neo-tree
 require "user.integrated.TermForNvimTree"
