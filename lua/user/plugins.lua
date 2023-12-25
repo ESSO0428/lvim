@@ -141,13 +141,13 @@ lvim.plugins = {
     end
   },
   -- WARNING: 這會造成 Nvim-tree 上運行 Telescope 出錯 (可能要壞成其他替代的套件)
-  {
-    'linrongbin16/lsp-progress.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require('lsp-progress').setup()
-    end
-  },
+  -- {
+  --   'linrongbin16/lsp-progress.nvim',
+  --   dependencies = { 'nvim-tree/nvim-web-devicons' },
+  --   config = function()
+  --     require('lsp-progress').setup()
+  --   end
+  -- },
   { "kazhala/close-buffers.nvim" },
   {
     "AckslD/muren.nvim",
