@@ -315,7 +315,7 @@ lvim.plugins = {
   -- 這個解決方案主要處理了 NvimTreePicker 啟用前的一個特殊情況：
   -- 在啟用 window-picker 功能前，會首先建立一個擁有 lua 文件類型（filetype）且缓冲区类型（buftype）為空的臨時窗口。
   -- 在離開這類窗口時，此函數將關閉所有疑似由 nvim-treesitter-context 插件創建的浮動窗口 (沒處理好的話會在 window-picker 前被讀取)，
-  -- 這些窗口沒有 filetype 和 buftype，可能會干擾文件正常的打開過程。
+  -- 這些窗口包含 filenam == '', filetype == '' 和 buftype == 'nofile 的屬性，可能會干擾文件正常的打開過程。
   {
     "romgrk/nvim-treesitter-context",
     config = function()
