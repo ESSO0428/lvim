@@ -9,7 +9,7 @@ table.insert(lvim.plugins, {
 })
 function close_specific_windows()
   -- print(vim.bo.filetype)
-  if vim.bo.filetype ~= "lua" or vim.bo.buftype ~= '' then
+  if vim.bo.filetype ~= "lua" and vim.bo.buftype ~= '' then
     return
   end
   print(vim.bo.filetype)
