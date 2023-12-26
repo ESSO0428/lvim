@@ -9,7 +9,8 @@ table.insert(lvim.plugins, {
 })
 function close_specific_windows()
   -- print(vim.bo.filetype)
-  if vim.bo.filetype ~= "lua" and vim.bo.buftype ~= '' then
+  -- if vim.bo.filetype ~= "lua" and vim.bo.buftype ~= '' then
+  if vim.bo.buftype ~= '' then
     return
   end
   local tabpage = vim.api.nvim_get_current_tabpage()
@@ -28,7 +29,7 @@ function close_specific_windows()
 end
 
 vim.api.nvim_create_autocmd("BufWinLeave", {
-  pattern = "*",
+  pattern = "*lua",
   callback = close_specific_windows
 })
 
