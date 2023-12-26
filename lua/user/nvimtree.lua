@@ -40,6 +40,7 @@ vim.api.nvim_create_autocmd("WinLeave", {
   callback = close_specific_windows
 })
 
+
 lvim.builtin.nvimtree.active = true -- NOTE: using neo-tree
 require "user.integrated.TermForNvimTree"
 function open_nvim_tree()
