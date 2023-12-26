@@ -615,11 +615,9 @@ autocmd BufEnter * call SetWrapKeymaps()
 autocmd OptionSet wrap call SetWrapKeymaps()
 
 function! SendInputMethodCommandToLocal(mode)
-  " NOTE: 先註解掉以下代碼，原先是為了避免 telesope 和 nvimtree 交互時 im-select 會產生不良影響
-  " 但後續於 nvimtree.lua 新增了 autocmd BufWinLeave * lua (close_specific_windows) 後，此問題已經徹底解決 (應該)
-  " if &ft == 'TelescopePrompt'
-  "   return
-  " endif
+  if &ft == 'TelescopePrompt'
+    return
+  endif
   " 檢查~/.rssh_tunnel文件是否存在
   if filereadable(expand("~/.rssh_tunnel"))
     " 讀取文件內容以獲取端口號
