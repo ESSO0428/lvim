@@ -14,11 +14,9 @@ function close_specific_windows()
   if vim.bo.filetype == "NvimTree" and vim.bo.buftype == "nofile" then
     _LastBufWinLeaveIsNvimTree = 1
     return
-  else
-    _LastBufWinLeaveIsNvimTree = 0
   end
 
-  if _LastBufWinLeaveIsNvimTree then
+  if _LastBufWinLeaveIsNvimTree == 1 then
     local tabpage = vim.api.nvim_get_current_tabpage()
     local windows = vim.api.nvim_tabpage_list_wins(tabpage)
     for _, win in ipairs(windows) do
@@ -33,6 +31,7 @@ function close_specific_windows()
       end
     end
   end
+  _LastBufWinLeaveIsNvimTree = 0
 end
 
 -- 设置自动命令以在离开任何窗口时调用 close_specific_windows 函数
