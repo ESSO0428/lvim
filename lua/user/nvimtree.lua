@@ -9,9 +9,10 @@ table.insert(lvim.plugins, {
 })
 function close_specific_windows()
   -- print(vim.bo.filetype)
-  if vim.bo.filetype ~= "lua" and vim.bo.buftype ~= '' then
+  if vim.bo.filetype ~= "lua" or vim.bo.buftype ~= '' then
     return
   end
+  print(vim.bo.filetype)
   local tabpage = vim.api.nvim_get_current_tabpage()
   local windows = vim.api.nvim_tabpage_list_wins(tabpage)
   for _, win in ipairs(windows) do
