@@ -1,7 +1,7 @@
 lvim.plugins = {
   {
     "folke/trouble.nvim",
-    cmd = "TroubleToggle",
+    cmd = "TroubleToggle"
   },
   { "skywind3000/asyncrun.vim" },
   { "kevinhwang91/rnvimr" },
@@ -55,7 +55,7 @@ lvim.plugins = {
           async_switch_im                     = true
         })
       end
-    end,
+    end
   },
   {
     "LukasPietzschmann/telescope-tabs",
@@ -120,11 +120,11 @@ lvim.plugins = {
         max_height = math.floor(vim.api.nvim_win_get_height(0) / 4),
         -- minimum_width = 50,
         -- ERROR > WARN > INFO > DEBUG > TRACE
-        level = "TRACE",
+        level = "TRACE"
       })
 
       vim.notify = notify
-    end,
+    end
   },
   {
     "Eandrju/cellular-automaton.nvim",
@@ -151,7 +151,7 @@ lvim.plugins = {
   { "kazhala/close-buffers.nvim" },
   {
     "AckslD/muren.nvim",
-    config = true,
+    config = true
   },
   { "ESSO0428/calc.vim" },
   { "ESSO0428/bioSyntax-vim" },
@@ -200,9 +200,9 @@ lvim.plugins = {
           add_cell_before = "nil",
           add_cell_after = "nil",
         },
-        repl_provider = "iron",
+        repl_provider = "iron"
       })
-    end,
+    end
   },
   {
     "echasnovski/mini.ai",
@@ -213,7 +213,7 @@ lvim.plugins = {
 
       local opts = { custom_textobjects = { h = nn.miniai_spec } }
       return opts
-    end,
+    end
   },
   {
     "echasnovski/mini.hipatterns",
@@ -224,13 +224,13 @@ lvim.plugins = {
 
       local opts = { highlighters = { cells = nn.minihipatterns_spec } }
       return opts
-    end,
+    end
   },
   { "jbyuki/venn.nvim" },
   { "ESSO0428/bookmarks.nvim" },
   {
     "kristijanhusak/vim-dadbod-ui",
-    dependencies = { "tpope/vim-dadbod", "tpope/vim-dotenv" },
+    dependencies = { "tpope/vim-dadbod", "tpope/vim-dotenv" }
   },
   { "kristijanhusak/vim-dadbod-completion" },
   { "LinArcX/telescope-command-palette.nvim" },
@@ -247,7 +247,7 @@ lvim.plugins = {
     config = function()
       require('orgmode').setup_ts_grammar()
       require("orgmode").setup {}
-    end,
+    end
   },
   {
     'akinsho/org-bullets.nvim',
@@ -291,20 +291,11 @@ lvim.plugins = {
       })
     end
   },
-  {
-    "github/copilot.vim",
-  },
   { "f3fora/cmp-spell" },
-  {
-    "hrsh7th/cmp-copilot",
-    -- config = function()
-    --   lvim.builtin.cmp.formatting.source_names["copilot"] = "( )"
-    --   table.insert(lvim.builtin.cmp.sources, 2, { name = "copilot" })
-    -- end,
-  },
+  { "github/copilot.vim" },
+  { "hrsh7th/cmp-copilot" },
   -- { "HiPhish/nvim-ts-rainbow2" },
   { "HiPhish/rainbow-delimiters.nvim" },
-  -- { "p00f/nvim-ts-rainbow" },
   {
     "nvim-treesitter/playground",
     event = "BufRead",
@@ -316,8 +307,10 @@ lvim.plugins = {
   -- 在啟用 window-picker 功能前，會首先建立一個擁有 lua 文件類型（filetype）且缓冲区类型（buftype）為空的臨時窗口。
   -- 在離開這類窗口時，此函數將關閉所有疑似由 nvim-treesitter-context 插件創建的浮動窗口 (沒處理好的話會在 window-picker 前被讀取)，
   -- 這些窗口包含 filenam == '', filetype == '' 和 buftype == 'nofile 的屬性，可能會干擾文件正常的打開過程。
+  -- NOTE: 這裡先固定 commit 後續 nvim 大改再考慮更新
   {
     "romgrk/nvim-treesitter-context",
+    commit = "652ec51",
     config = function()
       vim.keymap.set('n', '[a', function() require("treesitter-context").go_to_context() end,
         { silent = true, nowait = true })
@@ -341,12 +334,12 @@ lvim.plugins = {
     "windwp/nvim-ts-autotag",
     config = function()
       require("nvim-ts-autotag").setup()
-    end,
+    end
   },
   { "kevinhwang91/promise-async" },
   {
     'kevinhwang91/nvim-ufo',
-    deprecated = { 'kevinhwang91/promise-async' },
+    deprecated = { 'kevinhwang91/promise-async' }
   },
   {
     "simrat39/symbols-outline.nvim",
@@ -364,21 +357,21 @@ lvim.plugins = {
           win_height = 12,
           win_vheight = 12,
           delay_syntax = 80,
-          border_chars = { "┃", "┃", "━", "━", "┏", "┓", "┗", "┛", "█" },
+          border_chars = { "┃", "┃", "━", "━", "┏", "┓", "┗", "┛", "█" }
         },
         func_map = {
           vsplit = "",
           ptogglemode = "z,",
-          stoggleup = "",
+          stoggleup = ""
         },
         filter = {
           fzf = {
             action_for = { ["ctrl-s"] = "split" },
-            extra_opts = { "--bind", "ctrl-o:toggle-all", "--prompt", "> " },
-          },
-        },
+            extra_opts = { "--bind", "ctrl-o:toggle-all", "--prompt", "> " }
+          }
+        }
       })
-    end,
+    end
   },
   -- {
   --   "tzachar/cmp-tabnine",
@@ -402,7 +395,7 @@ lvim.plugins = {
     end
     -- init = function()
     --   require('html-css'):setup()
-    -- end,
+    -- end
   },
   { "junegunn/vim-peekaboo" },
   { "godlygeek/tabular" },
@@ -415,8 +408,7 @@ lvim.plugins = {
   -- { "quangnguyen30192/cmp-nvim-ultisnips" },
   { "lfv89/vim-interestingwords" },
   { "Shatur/neovim-session-manager" },
-  { "stevearc/dressing.nvim",
-  },
+  { "stevearc/dressing.nvim" },
   -- { "ggandor/leap.nvim" },
   {
     "folke/flash.nvim",
@@ -452,15 +444,15 @@ lvim.plugins = {
         function() require("flash").toggle() end,
         desc =
         "Toggle Flash Search"
-      },
-    },
+      }
+    }
   },
   { "rhysd/clever-f.vim" },
   {
     "AckslD/nvim-neoclip.lua",
     config = function()
       require('neoclip').setup()
-    end,
+    end
   },
   { "MunifTanjim/nui.nvim" },
   -- core plug : but too old (so change me control)
@@ -471,7 +463,7 @@ lvim.plugins = {
       require("lvim.core.breadcrumbs").setup()
     end,
     event = "User FileOpened",
-    enabled = lvim.builtin.breadcrumbs.active,
+    enabled = lvim.builtin.breadcrumbs.active
   },
   {
     "SmiteshP/nvim-navbuddy",
@@ -482,7 +474,7 @@ lvim.plugins = {
       "MunifTanjim/nui.nvim"
     },
     keys = {
-      { "<leader>uv", "<cmd>Navbuddy<cr>", desc = "Nav" },
+      { "<leader>uv", "<cmd>Navbuddy<cr>", desc = "Nav" }
     },
     config = function()
       local actions = require("nvim-navbuddy.actions")
@@ -503,7 +495,7 @@ lvim.plugins = {
           ["h"] = actions.insert_name(),
           ["H"] = actions.insert_scope(),
           ["a"] = actions.append_name(),
-          ["A"] = actions.append_scope(),
+          ["A"] = actions.append_scope()
         },
         lsp = { auto_attach = true }
       })
@@ -519,11 +511,11 @@ lvim.plugins = {
         handle = {
           text = " ",
           color = "#928374",
-          hide_if_all_visible = true,
+          hide_if_all_visible = true
         },
         marks = {
           Search = { color = "yellow" },
-          Misc = { color = "purple" },
+          Misc = { color = "purple" }
         },
       })
     end
@@ -557,7 +549,7 @@ lvim.plugins = {
           border = "rounded"
         }
       })
-    end,
+    end
   },
   { "SirVer/ultisnips" },
   { "theniceboy/vim-snippets" },
@@ -587,7 +579,7 @@ lvim.plugins = {
         properties = {
           "documentation",
           "detail",
-          "additionalTextEdits",
+          "additionalTextEdits"
         },
       }
 
@@ -604,22 +596,22 @@ lvim.plugins = {
               "typescriptreact",
               "javascriptreact",
               "svelte",
-              "vue",
+              "vue"
             },
             root_dir = function(fname)
               return vim.loop.cwd()
             end,
-            settings = {},
-          },
+            settings = {}
+          }
         }
       end
       lspconfig.emmet_ls.setup({ capabilities = capabilities })
-    end,
+    end
   },
   { "nvim-lua/popup.nvim" },
   {
     "RishabhRD/lspactions",
-    commit = "0ea962f",
+    commit = "0ea962f"
   },
   {
     "iamcco/markdown-preview.nvim",
@@ -627,7 +619,7 @@ lvim.plugins = {
     ft = "markdown",
     config = function()
       vim.g.mkdp_auto_start = 1
-    end,
+    end
   },
   {
     "glepnir/lspsaga.nvim",
@@ -664,8 +656,8 @@ lvim.plugins = {
         keys = {
           toggle_or_jump = 'l',
           jump = { '<cr>', 'o' },
-          quit = { "q", "<ESC>", "<leader>q" },
-        },
+          quit = { "q", "<ESC>", "<leader>q" }
+        }
       },
       symbol_in_winbar = {
         enable = false,
@@ -675,36 +667,34 @@ lvim.plugins = {
         show_file = true,
         folder_level = 2,
         respect_root = false,
-        color_mode = true,
+        color_mode = true
       },
       lightbulb = {
         enable = true,
         enable_in_insert = true,
         sign = true,
         sign_priority = 40,
-        virtual_text = false,
+        virtual_text = false
       },
     },
     deprecated = {
       { "nvim-tree/nvim-web-devicons" },
       --Please make sure you install markdown and markdown_inline parser
       { "nvim-treesitter/nvim-treesitter" }
-    },
+    }
   },
   {
     "ESSO0428/md-headers.nvim",
     deprecated = { 'nvim-lua/plenary.nvim' }
   },
-  {
-    "ESSO0428/mkdnflow.nvim",
-  },
+  { "ESSO0428/mkdnflow.nvim", },
   {
     "DougBeney/pickachu",
     build = 'pip install Zenity'
   },
   { "dhruvasagar/vim-table-mode" },
   {
-    "miversen33/netman.nvim",
+    "miversen33/netman.nvim"
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -713,7 +703,7 @@ lvim.plugins = {
       "miversen33/netman.nvim",
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-      "MunifTanjim/nui.nvim",
+      "MunifTanjim/nui.nvim"
     }
   },
   {
@@ -743,9 +733,9 @@ lvim.plugins = {
               height = 0.65,
             },
             callbacks = {
-              function() vim.wo.wrap = true end,
-            },
-          },
+              function() vim.wo.wrap = true end
+            }
+          }
         },
         -- popup = {
         --   -- NOTE: Add popup-effect (replace the window on-zoom with a `[No Name]`).
@@ -764,7 +754,7 @@ lvim.plugins = {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "m00qek/baleia.nvim"
-    },
+    }
   },
   -- { "tpope/vim-fugitive" },
   { "ESSO0428/vim-fugitive" },
@@ -780,13 +770,13 @@ lvim.plugins = {
         },
       },
       -- time to wait for kernel's response in seconds
-      timeout = 0.5,
+      timeout = 0.5
     },
     cmd = { "JupyterAttach", "JupyterInspect", "JupyterExecute" },
     build = { "pip install -U pynvim jupyter_client", ":UpdateRemotePlugins" },
     keys = {
       -- { "<leader><a-s>", "<Cmd>JupyterInspect<CR>", desc = "Inspect object in kernel" },
-      { "<leader>gh", "<Cmd>JupyterInspect<CR>", desc = "Inspect object in kernel" },
+      { "<leader>gh", "<Cmd>JupyterInspect<CR>", desc = "Inspect object in kernel" }
     }
   },
 }
