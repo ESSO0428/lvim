@@ -35,7 +35,7 @@ function close_specific_windows()
 end
 
 -- 设置自动命令以在离开任何窗口时调用 close_specific_windows 函数
-vim.api.nvim_create_autocmd("BufWinLeave", {
+vim.api.nvim_create_autocmd("WinLeave", {
   pattern = "*",
   callback = close_specific_windows
 })
