@@ -40,7 +40,10 @@ lvim.plugins = {
           set_default_events                  = { "VimEnter", "InsertLeave" },
 
           -- Restore the default input method state (exclude filetype)
-          set_default_events_exclude_filetype = { 'TelescopePrompt' },
+          -- NOTE: 先註解掉以下代碼，原先是為了避免 telesope 和 nvimtree 交互時 im-select 會產生不良影響
+          -- 但後續於 nvimtree.lua 新增了 autocmd BufWinLeave * lua (close_specific_windows) 後，此問題已經徹底解決 (應該)
+          -- set_default_events_exclude_filetype = { 'TelescopePrompt' },
+          set_default_events_exclude_filetype = {},
 
           -- Restore the previous used input method state when the following events
           -- are triggered, if you don't want to restore previous used im in Insert mode,
