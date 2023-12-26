@@ -615,6 +615,7 @@ autocmd BufEnter * call SetWrapKeymaps()
 autocmd OptionSet wrap call SetWrapKeymaps()
 
 function! SendInputMethodCommandToLocal(mode)
+  " NOTE: 這裡引入 exclude filetpe 排除 im-select 在 nvimtree 和 telescope 交互時的會造成的 window-picker 的開檔錯誤
   if &ft == 'TelescopePrompt'
     return
   endif

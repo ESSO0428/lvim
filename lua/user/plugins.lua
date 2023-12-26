@@ -11,7 +11,7 @@ lvim.plugins = {
       require('hlslens').setup({})
     end
   },
-  -- NOTE: 使用我 folk 的版本，原先的版本對於 nvim-tree 上使用 telescopte 可能造成開檔錯誤 (這裡引入 exclude filetpe 排除 telscope 中運行該代碼)
+  -- NOTE: 使用我 folk 的版本，原先的版本對於 nvim-tree 上使用 telescopte 可能造成開檔錯誤 (這裡引入 exclude filetpe 排除 telescope 中運行該代碼)
   {
     "ESSO0428/im-select.nvim",
     config = function()
@@ -303,9 +303,9 @@ lvim.plugins = {
   -- WARNING: 使用此套件時請謹慎，因為它可能會導致在 nvim-tree 中結合使用 telescope 時出現開啟文件的錯誤。
   -- 當前的暫時解決方案是在 Neovim 配置文件中添加名為 close_specific_windows (nvimtree.lua) 的函數，
   -- 並在 BufWinLeave 事件中觸發該函數。
-  -- 這個解決方案主要處理了 NvimTreePicker 啟用前的一個特殊情況：
-  -- 在啟用 window-picker 功能前，會首先建立一個擁有 lua 文件類型（filetype）且缓冲区类型（buftype）為空的臨時窗口。
-  -- 在離開這類窗口時，此函數將關閉所有疑似由 nvim-treesitter-context 插件創建的浮動窗口 (沒處理好的話會在 window-picker 前被讀取)，
+  -- 這個解決方案主要處理了 NvimTreePicker 啟用前會先離開 NvimTree 的機制：
+  -- 在啟用 window-picker 功能前，會先離開 filetype 為 NvimTree 和 buftype 為 nofile 的 buffer window，
+  -- 在離開該窗口時，此函數將關閉所有疑似由 nvim-treesitter-context 插件創建的浮動窗口 (沒處理好的話會在 window-picker 前被讀取)，
   -- 這些窗口包含 filenam == '', filetype == '' 和 buftype == 'nofile 的屬性，可能會干擾文件正常的打開過程。
   -- NOTE: 這裡先固定 commit 後續 nvim 大改再考慮更新
   {

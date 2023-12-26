@@ -7,27 +7,35 @@ table.insert(lvim.plugins, {
   cmd = { "NvimTreeToggle", "NvimTreeOpen", "NvimTreeFocus", "NvimTreeFindFileToggle" },
   event = "VimEnter",
 })
+-- 全局变量用于紀錄上個離開的 buffer 是否為 NvimTree
+_LastBufWinLeaveIsNvimTree = 0
+-- close_specific_windows 函数
 function close_specific_windows()
-  -- print(vim.bo.filetype)
-  if vim.bo.filetype ~= "lua" and vim.bo.buftype ~= '' then
+  if vim.bo.filetype == "NvimTree" and vim.bo.buftype == "nofile" then
+    _LastBufWinLeaveIsNvimTree = 1
     return
+  else
+    _LastBufWinLeaveIsNvimTree = 0
   end
-  print(vim.bo.filetype)
-  local tabpage = vim.api.nvim_get_current_tabpage()
-  local windows = vim.api.nvim_tabpage_list_wins(tabpage)
-  for _, win in ipairs(windows) do
-    local buf = vim.api.nvim_win_get_buf(win)
-    local name = vim.api.nvim_buf_get_name(buf)
-    local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
-    local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
 
-    -- 如果窗口没有文件名、buftype 为 'nofile' 或没有 filetype，则关闭并打印信息
-    if name == "" and buftype == "nofile" and filetype == "" then
-      vim.api.nvim_win_close(win, false)
+  if _LastBufWinLeaveIsNvimTree then
+    local tabpage = vim.api.nvim_get_current_tabpage()
+    local windows = vim.api.nvim_tabpage_list_wins(tabpage)
+    for _, win in ipairs(windows) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      local name = vim.api.nvim_buf_get_name(buf)
+      local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
+      local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
+
+      -- 如果窗口没有文件名、buftype 为 'nofile' 或没有 filetype，则关闭并打印信息
+      if name == "" and buftype == "nofile" and filetype == "" then
+        vim.api.nvim_win_close(win, false)
+      end
     end
   end
 end
 
+-- 设置自动命令以在离开任何窗口时调用 close_specific_windows 函数
 vim.api.nvim_create_autocmd("BufWinLeave", {
   pattern = "*",
   callback = close_specific_windows
