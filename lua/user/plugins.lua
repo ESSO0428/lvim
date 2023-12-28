@@ -301,7 +301,7 @@ lvim.plugins = {
     event = "BufRead",
   },
   -- WARNING: 使用此套件時請謹慎，因為它可能會導致在 nvim-tree 中結合使用 telescope 時出現開啟文件的錯誤。
-  -- 當前的暫時解決方案是在 Neovim 配置文件中添加名為 close_specific_windows (nvimtree.lua) 的函數，
+  -- 當前的暫時解決方案是在 Neovim 配置文件中添加名為 handle_telescope_nvimtree_interaction (nvimtree.lua) 的函數，
   -- 並在 BufWinLeave 事件中觸發該函數。
   -- 這個解決方案主要處理了 NvimTreePicker 啟用前會先離開 NvimTree 的機制：
   -- 在啟用 window-picker 功能前，會先離開 filetype 為 NvimTree 和 buftype 為 nofile 的 buffer window，
