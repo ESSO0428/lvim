@@ -16,7 +16,12 @@ function close_specific_windows()
     return
   end
 
-  if _LastBufWinLeaveIsNvimTree == 1 then
+  local LastBufWinLeaveIsTeleScope = 0
+  if vim.bo.filetype == "TelescopePrompt" and vim.bo.buftype == "prompt" then
+    LastBufWinLeaveIsTeleScope = 1
+  end
+
+  if _LastBufWinLeaveIsNvimTree == 1 and LastBufWinLeaveIsTeleScope == 1 then
     local tabpage = vim.api.nvim_get_current_tabpage()
     local windows = vim.api.nvim_tabpage_list_wins(tabpage)
     for _, win in ipairs(windows) do
