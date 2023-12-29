@@ -25,7 +25,8 @@ vim.g.rainbow_delimiters                       = {
 
 lvim.builtin.treesitter.ensure_installed       = {
   "comment", "markdown", "markdown_inline",
-  "python", "lua", "vim", "bash", "html", "css", "scss", "json", "javascript"
+  "python", "lua", "vim", "bash", "html", "css", "scss", "json", "javascript",
+  "dap_repl"
   -- "regex"
 }
 lvim.builtin.treesitter.ignore_install         = { "regex", "csv", "tsv" }

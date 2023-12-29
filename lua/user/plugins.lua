@@ -568,6 +568,12 @@ lvim.plugins = {
   },
   { "theHamsta/nvim-dap-virtual-text" },
   {
+    "LiadOz/nvim-dap-repl-highlights",
+    config = function()
+      require('nvim-dap-repl-highlights').setup()
+    end
+  },
+  {
     "aca/emmet-ls",
     config = function()
       local lspconfig = require("lspconfig")
