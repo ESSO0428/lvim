@@ -1,3 +1,13 @@
+function find_tabpage_index(tab_id)
+  local tabpages = vim.api.nvim_list_tabpages()
+  for index, tp in ipairs(tabpages) do
+    if tp == tab_id then
+      return index
+    end
+  end
+  return nil   -- 如果找不到相應的 index，返回 nil
+end
+
 function get_current_tab_name()
   local tab_id = vim.fn.tabpagenr()
 

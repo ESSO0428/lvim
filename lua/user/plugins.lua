@@ -66,12 +66,24 @@ lvim.plugins = {
             return
           end
           local TablineData = vim.fn.json_decode(vim.g.Tabline_session_data)
+          -- need require "user.tabpage" in config.lua
+          local status_ok, tabpage_id = pcall(find_tabpage_index, tab_id)
+          if not status_ok then
+            print(table.concat(
+              {
+                "telescope-tabs Error : need require \"user.tabpage\" with function find_tabpage_index in config.lua",
+                "telescope-tabs Error : or Not found correctly tab_id in nvim tab list"
+              },
+              "\n")
+            )
+            return
+          end
 
-          local tab_name = TablineData[tab_id].name
+          local tab_name = TablineData[tabpage_id].name
           -- require("tabby.feature.tab_name").get(tab_id)
           -- return string.format("%d: %s%s", tab_id, tab_id, is_current and " <" or "")
           local entry_string = table.concat(file_names, ', ')
-          return string.format('%d [%s]: %s%s', tab_id, tab_name, entry_string, is_current and ' <' or '')
+          return string.format('%d [%s]: %s%s', tabpage_id, tab_name, entry_string, is_current and ' <' or '')
         end,
         entry_ordinal = function(tab_id, buffer_ids, file_names, file_paths, is_current)
           -- return table.concat(file_names, ' ')
@@ -79,10 +91,15 @@ lvim.plugins = {
             return
           end
           local TablineData = vim.fn.json_decode(vim.g.Tabline_session_data)
+          -- need require "user.tabpage" in config.lua
+          local status_ok, tabpage_id = pcall(find_tabpage_index, tab_id)
+          if not status_ok then
+            return
+          end
 
           -- return TablineData[tab_id].name
           local entry_string = table.concat(file_names, ', ')
-          return string.format('%d %s %s', tab_id, TablineData[tab_id].name, entry_string)
+          return string.format('%d %s %s', tabpage_id, TablineData[tabpage_id].name, entry_string)
           -- require("tabby.feature.tab_name").get(tab_id)
         end
       }
