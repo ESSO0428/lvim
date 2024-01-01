@@ -106,7 +106,7 @@ lvim.plugins = {
     end
   },
   {
-    'kdheepak/tabline.nvim',
+    'ESSO0428/tabline.nvim',
     config = function()
       require 'tabline'.setup {
         enable = false,
