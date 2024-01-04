@@ -246,7 +246,7 @@ lvim.plugins = {
   { "jbyuki/venn.nvim" },
   { "ESSO0428/bookmarks.nvim" },
   {
-    "kristijanhusak/vim-dadbod-ui",
+    "ESSO0428/vim-dadbod-ui",
     dependencies = { "tpope/vim-dadbod", "tpope/vim-dotenv" }
   },
   { "kristijanhusak/vim-dadbod-completion" },
