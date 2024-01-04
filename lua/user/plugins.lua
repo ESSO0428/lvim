@@ -711,6 +711,7 @@ lvim.plugins = {
     deprecated = { 'nvim-lua/plenary.nvim' }
   },
   { "ESSO0428/mkdnflow.nvim", },
+  { "jmbuhr/otter.nvim", },
   {
     "DougBeney/pickachu",
     build = 'pip install Zenity'

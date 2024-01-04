@@ -45,6 +45,7 @@ table.insert(lvim.builtin.cmp.sources, 2, { name = "jupyter" })
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "ultisnips" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vsnip" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "orgmode" }
+lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "otter" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vim-dadbod-completion" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = {
   name = "spell",
@@ -311,6 +312,7 @@ lvim.builtin.cmp.formatting.source_names.vsnip = "(V-Snippet)"
 lvim.builtin.cmp.formatting.source_names.luasnip = "(L-Snippet)"
 lvim.builtin.cmp.formatting.source_names.ultisnips = "(U-Snippet)"
 lvim.builtin.cmp.formatting.source_names.orgmode = "(orgmode)"
+lvim.builtin.cmp.formatting.source_names.otter = "(otter)"
 lvim.builtin.cmp.formatting.source_names['vim-dadbod-completion'] = "(dadbod-sql)"
 lvim.builtin.cmp.formatting.source_names['spell'] = "(spell)"
 lvim.builtin.cmp.formatting.source_names.jupyter = "(jupyter)"
