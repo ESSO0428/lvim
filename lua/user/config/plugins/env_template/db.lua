@@ -15,6 +15,10 @@ DB_USERNAME=
 # You can specify any number of connections using the `DB_UI_` prefix.
 # For example, `DB_UI_DEV_PORT` or `DB_UI_PRODUCTION` will be converted to `dev_port` or `production` connections.
 # Omitting `DB_DATABASE` will include the entire DBMS as the connection target.
+
+# NOTE: If the same variable name appears multiple times in the configuration file, the first occurrence of the variable will take precedence.
+# Therefore, any new values must be defined in new variables for use in DB_UI... =
+# ex : DB2_CONNECTION, DB2_PORT, DB2_DATABASE, DB2_USERNAME, DB2_PASSWORD
 DB_UI_DEV="${DB_CONNECTION}://${DB_USERNAME}@127.0.0.1:${DB_PORT}/${DB_DATABASE}"
 ]]
   -- 插入模板到当前 buffer
