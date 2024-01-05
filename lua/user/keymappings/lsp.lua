@@ -29,8 +29,8 @@ lvim.keys.normal_mode['<leader>ui']        = { ":LspInfo<cr>" }
 lvim.keys.normal_mode['<leader>uI']        = { ":Mason<cr>" }
 -- lvim.keys.normal_mode['<leader>uo']        = { ":lua vim.diagnostic.goto_next()<cr>" }
 -- lvim.keys.normal_mode['<leader>uu']        = { ":lua vim.diagnostic.goto_prev()<cr>" }
-lvim.keys.normal_mode['>']                 = { ":lua vim.diagnostic.goto_next()<cr>" }
-lvim.keys.normal_mode['<']                 = { ":lua vim.diagnostic.goto_prev()<cr>" }
+lvim.keys.normal_mode['>']                 = { "<cmd>lua vim.diagnostic.goto_next()<cr>" }
+lvim.keys.normal_mode['<']                 = { "<cmd>lua vim.diagnostic.goto_prev()<cr>" }
 
 lvim.keys.normal_mode['<leader>ul']        = { ":lua vim.lsp.codelens.run()<cr>" }
 lvim.keys.normal_mode['<leader>uq']        = { ":lua vim.diagnostic.setloclist()<cr>" }
@@ -45,7 +45,7 @@ lvim.keys.normal_mode['<leader>ue']        = { ":Telescope quickfix<cr>" }
 lvim.builtin.which_key.mappings['c']       = { ":Telescope lsp_references<CR>", "lsp_references" }
 lvim.builtin.which_key.mappings['v']       = { ":Telescope lsp_document_symbols<CR>", "lsp_document_symbols" }
 
-lvim.lsp.buffer_mappings.normal_mode['gd'] = nil
+-- lvim.lsp.buffer_mappings.normal_mode['gd'] = nil
 -- lvim.keys.normal_mode['<a-o>']             = ":lua vim.lsp.buf.definition()<CR>"
 lvim.keys.normal_mode['<a-o>']             = "<cmd>Lspsaga goto_definition<CR>"
 lvim.keys.normal_mode['<leader><a-o>']     = ":lua require('goto-preview').goto_preview_definition()<CR>"
