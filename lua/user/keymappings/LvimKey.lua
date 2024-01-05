@@ -40,8 +40,8 @@ lvim.keys.normal_mode['<a-up>']        = "<Plug>MoveLineUp"
 lvim.keys.normal_mode['<a-down>']      = "<Plug>MoveLineDown"
 -- lvim.keys.normal_mode['<c-u>']        = "<c-u>"
 -- lvim.keys.normal_mode['<c-o>']        = "<c-d>"
-lvim.keys.normal_mode['<c-u>']         = ":lua require('neoscroll').scroll(-vim.wo.scroll, true, 250)<CR>"
-lvim.keys.normal_mode['<c-o>']         = ":lua require('neoscroll').scroll(vim.wo.scroll, true, 250)<CR>"
+lvim.keys.normal_mode['<c-u>']         = "<cmd>lua require('neoscroll').scroll(-vim.wo.scroll, true, 250)<CR>"
+lvim.keys.normal_mode['<c-o>']         = "<cmd>lua require('neoscroll').scroll(vim.wo.scroll, true, 250)<CR>"
 -- vim.keymap.set('v', '<c-u>', "<Plug>MoveBlockUp")
 -- vim.keymap.set('v', '<c-o>', "<Plug>MoveBlockDown")
 vim.keymap.set('v', '<a-up>', "<Plug>MoveBlockUp")
