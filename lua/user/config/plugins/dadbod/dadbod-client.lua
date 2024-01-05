@@ -6,3 +6,12 @@ vim.g.dbs = {
   -- { name = 'orchid_db_v3', url = 'mysql://root@127.0.0.1:3306/orchid_db_v3' },
   { name = 'all_mysql_db_3306', url = 'mysql://root@127.0.0.1:3306' }
 }
+vim.g.db_ui_table_helpers = {
+  mysql = {
+    List = "select * from {dbname}.`{table}` LIMIT 200",
+    ['Primary Keys'] =
+    "SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = '{dbname}' AND TABLE_NAME = '{table}' AND CONSTRAINT_TYPE = 'PRIMARY KEY'",
+    ['Foreign Keys'] =
+    "SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = '{dbname}' AND TABLE_NAME = '{table}' AND CONSTRAINT_TYPE = 'FOREIGN KEY'"
+  }
+}
