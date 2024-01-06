@@ -58,6 +58,16 @@ lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = {
     end,
   },
 }
+lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = {
+  name = "cmp_yanky",
+  option = {
+    -- only suggest items which match the current filetype
+    onlyCurrentFiletype = false,
+    -- only suggest items with a minimum length
+    minLength = 3,
+  },
+}
+
 
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = {
   name = "html-css",
@@ -315,6 +325,7 @@ lvim.builtin.cmp.formatting.source_names.orgmode = "(orgmode)"
 lvim.builtin.cmp.formatting.source_names.otter = "(otter)"
 lvim.builtin.cmp.formatting.source_names['vim-dadbod-completion'] = "(dadbod-sql)"
 lvim.builtin.cmp.formatting.source_names['spell'] = "(spell)"
+lvim.builtin.cmp.formatting.source_names['cmp_yanky'] = "(yank)"
 lvim.builtin.cmp.formatting.source_names.jupyter = "(jupyter)"
 lvim.builtin.cmp.formatting.duplicates = {
   buffer = 1,

@@ -466,11 +466,14 @@ lvim.plugins = {
   },
   { "rhysd/clever-f.vim" },
   {
-    "AckslD/nvim-neoclip.lua",
-    config = function()
-      require('neoclip').setup()
-    end
+    "gbprod/yanky.nvim",
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
   },
+  { "chrisgrieser/cmp_yanky" },
   { "MunifTanjim/nui.nvim" },
   -- core plug : but too old (so change me control)
   {
