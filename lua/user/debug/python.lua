@@ -1,4 +1,3 @@
-local dap = require('dap')
 require "dap-python".setup("python", {})
 local attach_config = {
   type = "python",

@@ -1,3 +1,5 @@
+local dap = require('dap')
+dap.defaults.fallback.switchbuf = 'useopen,uselast'
 require "user.debug.python"
 require "nvim-dap-virtual-text".setup()
 local function reloadLaunchJson()
