@@ -440,6 +440,18 @@ nnoremap sgl <c-w>vgf
 nnoremap sgF <c-w>gF
 nnoremap sgf <c-w>gf
 
+function! OpenFileUnderCursor(window_command)
+  if a:window_command == 'v'
+    let cfile = getreg('f')
+  else
+    let cfile = expand('<cfile>')
+  endif
+  execute 'edit ' . cfile
+endfunction
+
+nnoremap <silent> <M-f> :call OpenFileUnderCursor("n")<CR>
+vnoremap <silent> <M-f> "fy:call OpenFileUnderCursor("v")<CR>
+
 function! FindAndSelectFile(window_command)
   if a:window_command == 'v' || a:window_command == 'v-sp' || a:window_command == 'v-vsp' || a:window_command == 'v-tab'
     let cfile = getreg('f')
