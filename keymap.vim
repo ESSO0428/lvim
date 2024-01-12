@@ -449,8 +449,8 @@ function! OpenFileUnderCursor(window_command)
   execute 'edit ' . cfile
 endfunction
 
-nnoremap <silent> <M-f> :call OpenFileUnderCursor("n")<CR>
-vnoremap <silent> <M-f> "fy:call OpenFileUnderCursor("v")<CR>
+nnoremap <silent> <leader>gf :call OpenFileUnderCursor("n")<CR>
+vnoremap <silent> <leader>gf "fy:call OpenFileUnderCursor("v")<CR>
 
 function! FindAndSelectFile(window_command)
   if a:window_command == 'v' || a:window_command == 'v-sp' || a:window_command == 'v-vsp' || a:window_command == 'v-tab'
