@@ -250,7 +250,7 @@ else
 
     local useful_keys = {
       ["l"] = { api.node.open.edit, opts "Open" },
-      ["o"] = { api.node.open.edit, opts "Open" },
+      ["o"] = { api.node.open.no_window_picker, opts "Open: No Window Picker" },
       ["<CR>"] = { api.node.open.edit, opts "Open" },
       ["b"] = { api.tree.toggle_no_buffer_filter, opts "Toggle No Buffer" },
       ["gi"] = { api.node.navigate.sibling.first, opts "First Sibling" },
