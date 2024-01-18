@@ -209,8 +209,9 @@ lvim.builtin.telescope.extensions.command_palette = {
     { "Delete Session",                   ":SessionManager delete_session" },
   },
   { "Buffer",
-    { "Buffer All Complete (Toggle)", ":lua BufferAllCompleteToggle()" },
-    { "Clear All Buffers",            ":silent! bufdo BufferKill" }
+    { "Buffer All Complete (Toggle)",          ":lua BufferAllCompleteToggle()" },
+    { "Current Tab Windows Complete (Toggle)", ":lua CurrentTabCompleteToggle()" },
+    { "Clear All Buffers",                     ":silent! bufdo BufferKill" }
   },
   { "OrgMode",
     { "go to OrgWorkSpace", ":e /root/Dropbox/org/" }
