@@ -125,7 +125,8 @@ lvim.builtin.nvimtree.setup.actions.change_dir = {
   global = true,
   restrict_above_cwd = false,
 }
-lvim.builtin.nvimtree.setup.tab.sync.open = true
+-- nvimtree tab sync default is false
+lvim.builtin.nvimtree.setup.tab.sync.open = false
 -- general
 lvim.log.level = "info"
 lvim.format_on_save = {
