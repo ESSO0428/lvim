@@ -31,7 +31,7 @@ local function get_dynamic_terminal_size(direction, size)
   end
 end
 
-function _G.nvimtreeToggleTerm(term_mode, state)
+local function get_basedir_and_is_folder(term_mode, state)
   local execs = lvim.builtin.terminal.execs
   local exec = nil
   local i = nil
@@ -44,6 +44,10 @@ function _G.nvimtreeToggleTerm(term_mode, state)
   elseif term_mode == "float" then
     exec = execs[3]
     i = 3
+  end
+  if not exec then
+    exec = { nil, nil, nil, nil }
+    i = 1
   end
   local direction = exec[4] or lvim.builtin.terminal.direction
   local abspath
@@ -75,140 +79,36 @@ function _G.nvimtreeToggleTerm(term_mode, state)
       return get_dynamic_terminal_size(direction, exec[5])
     end,
   }
-  M.add_exec(opts)
+  return opts
+end
+
+
+function _G.nvimtreeToggleTerm(term_mode, state)
+  local opts = get_basedir_and_is_folder(term_mode, state)
+  M.exec_toggle(opts)
 end
 
 function _G.nvimtreeToggleTermFzfRg(term_mode, state)
-  local execs = lvim.builtin.terminal.execs
-  local exec = nil
-  local i = nil
-  if term_mode == "horizontal" then
-    exec = execs[1]
-    i = 1
-  elseif term_mode == "vertical" then
-    exec = execs[2]
-    i = 2
-  elseif term_mode == "float" then
-    exec = execs[3]
-    i = 3
-  end
-  local direction = exec[4] or lvim.builtin.terminal.direction
-  local abspath
-  local is_folder
-  local success, node = pcall(function()
-    return state.tree:get_node()
-  end)
-  if success then
-    abspath = node.link_to or node.path
-    is_folder = node.type == "directory"
-  else
-    node = require("nvim-tree.lib").get_node_at_cursor()
-    abspath = node.link_to or node.absolute_path
-    is_folder = node.open ~= nil
-  end
-  -- local node = require("nvim-tree.lib").get_node_at_cursor()
-  -- local abspath = node.link_to or node.absolute_path
-  -- local is_folder = node.open ~= nil
-  local basedir = is_folder and abspath or vim.fn.fnamemodify(abspath, ":h")
-  local opts = {
-    cmd = exec[1] or lvim.builtin.terminal.shell,
-    keymap = exec[2],
-    label = exec[3],
-    -- NOTE: unable to consistently bind id/count <= 9, see #2146
-    count = i + 100,
-    direction = direction,
-    basedir = basedir,
-    size = function()
-      return get_dynamic_terminal_size(direction, exec[5])
-    end,
-  }
-  M.add_execFzfRg(opts)
+  local opts = get_basedir_and_is_folder(term_mode, state)
+  M.exec_toggleFzfRg(opts)
 end
 
 function _G.nvimtreeToggleTermRanger(term_mode, state)
-  local execs = lvim.builtin.terminal.execs
-  local exec = nil
-  local i = nil
-  if term_mode == "horizontal" then
-    exec = execs[1]
-    i = 1
-  elseif term_mode == "vertical" then
-    exec = execs[2]
-    i = 2
-  elseif term_mode == "float" then
-    exec = execs[3]
-    i = 3
-  end
-  local direction = exec[4] or lvim.builtin.terminal.direction
-  local abspath
-  local is_folder
-  local success, node = pcall(function()
-    return state.tree:get_node()
-  end)
-  if success then
-    abspath = node.link_to or node.path
-    is_folder = node.type == "directory"
-  else
-    node = require("nvim-tree.lib").get_node_at_cursor()
-    abspath = node.link_to or node.absolute_path
-    is_folder = node.open ~= nil
-  end
-  -- local node = require("nvim-tree.lib").get_node_at_cursor()
-  -- local abspath = node.link_to or node.absolute_path
-  -- local is_folder = node.open ~= nil
-  local basedir = is_folder and abspath or vim.fn.fnamemodify(abspath, ":h")
-  local opts = {
-    cmd = exec[1] or lvim.builtin.terminal.shell,
-    keymap = exec[2],
-    label = exec[3],
-    -- NOTE: unable to consistently bind id/count <= 9, see #2146
-    count = i + 100,
-    direction = direction,
-    basedir = basedir,
-    size = function()
-      return get_dynamic_terminal_size(direction, exec[5])
-    end,
-  }
-  M.add_execRanger(opts)
+  local opts = get_basedir_and_is_folder(term_mode, state)
+  M.exec_Ranger(opts)
 end
 
 function _G.nvimtreeCder(term_mode, state)
-  local abspath
-  local is_folder
-  local success, node = pcall(function()
-    return state.tree:get_node()
-  end)
-  if success then
-    abspath = node.link_to or node.path
-    is_folder = node.type == "directory"
-  else
-    node = require("nvim-tree.lib").get_node_at_cursor()
-    abspath = node.link_to or node.absolute_path
-    is_folder = node.open ~= nil
-  end
-  -- local node = require("nvim-tree.lib").get_node_at_cursor()
-  -- local abspath = node.link_to or node.absolute_path
-  -- local is_folder = node.open ~= nil
-  local basedir = is_folder and abspath or vim.fn.fnamemodify(abspath, ":h")
-  local opts = {
-    basedir = basedir,
-  }
-  M.add_exec_cder(opts)
+  local opts = get_basedir_and_is_folder(term_mode, state)
+  M.exec_cder(opts)
 end
 
-M.add_exec = function(opts)
-  M._exec_toggle(opts)
-end
-M.add_execFzfRg = function(opts)
-  M._exec_toggleFzfRg(opts)
-end
-M.add_execRanger = function(opts)
-  M._exec_Ranger(opts)
+function _G.nvimtreeToDoTelescope(term_mode, state)
+  local opts = get_basedir_and_is_folder(term_mode, state)
+  M.exec_ToDoTelescope(opts)
 end
 
-
-
-M._exec_toggle = function(opts)
+M.exec_toggle = function(opts)
   -- vim.cmd("ToggleTerm" ..
   --   " cmd=" ..
   --   opts.cmd ..
@@ -225,7 +125,7 @@ M._exec_toggle = function(opts)
     opts.count .. " size=" .. opts.size() .. " direction=" .. opts.direction .. " dir=" .. opts.basedir .. " go_back=0")
 end
 
-M._exec_toggleFzfRg = function(opts)
+M.exec_toggleFzfRg = function(opts)
   -- vim.cmd("ToggleTerm" ..
   --   " cmd=" ..
   --   opts.cmd ..
@@ -242,19 +142,12 @@ M._exec_toggleFzfRg = function(opts)
     opts.count .. " size=" .. opts.size() .. " direction=" .. opts.direction .. " dir=" .. opts.basedir .. " go_back=0")
 end
 
-M._exec_Ranger = function(opts)
+M.exec_Ranger = function(opts)
   local basedir = opts.basedir
   vim.fn['rnvimr#open'](basedir)
 end
 
-
-
-
-M.add_exec_cder = function(opts)
-  M._exec_cder(opts)
-end
-
-M._exec_cder = function(opts)
+M.exec_cder = function(opts)
   require('telescope').setup({
     defaults = require('telescope.themes').get_ivy({}),
   })
@@ -280,35 +173,7 @@ M._exec_cder = function(opts)
   require('telescope').setup({ defaults = lvim.builtin.telescope.defaults })
 end
 
-function _G.nvimtreeToDoTelescope(term_mode, state)
-  local abspath
-  local is_folder
-  local success, node = pcall(function()
-    return state.tree:get_node()
-  end)
-  if success then
-    abspath = node.link_to or node.path
-    is_folder = node.type == "directory"
-  else
-    node = require("nvim-tree.lib").get_node_at_cursor()
-    abspath = node.link_to or node.absolute_path
-    is_folder = node.open ~= nil
-  end
-  -- local node = require("nvim-tree.lib").get_node_at_cursor()
-  -- local abspath = node.link_to or node.absolute_path
-  -- local is_folder = node.open ~= nil
-  local basedir = is_folder and abspath or vim.fn.fnamemodify(abspath, ":h")
-  local opts = {
-    basedir = basedir,
-  }
-  M.add_exec_ToDoTelescope(opts)
-end
-
-M.add_exec_ToDoTelescope = function(opts)
-  M._exec_ToDoTelescope(opts)
-end
-
-M._exec_ToDoTelescope = function(opts)
+M.exec_ToDoTelescope = function(opts)
   vim.cmd("TodoTelescope" .. " cwd=" .. opts.basedir .. " theme=get_ivy")
 end
 
