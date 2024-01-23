@@ -75,6 +75,8 @@ local function get_basedir_and_is_folder(term_mode, state)
     count = i + 100,
     direction = direction,
     basedir = basedir,
+    abspath = abspath,
+    is_folder = is_folder,
     size = function()
       return get_dynamic_terminal_size(direction, exec[5])
     end,
@@ -91,6 +93,11 @@ end
 function _G.nvimtreeToggleTermFzfRg(term_mode, state)
   local opts = get_basedir_and_is_folder(term_mode, state)
   M.exec_toggleFzfRg(opts)
+end
+
+function _G.nvimtreeToggleTermMore(term_mode, state)
+  local opts = get_basedir_and_is_folder(term_mode, state)
+  M.exec_toggleBatOrMore(opts)
 end
 
 function _G.nvimtreeToggleTermRanger(term_mode, state)
@@ -140,6 +147,44 @@ M.exec_toggleFzfRg = function(opts)
     opts.cmd ..
     " count=" ..
     opts.count .. " size=" .. opts.size() .. " direction=" .. opts.direction .. " dir=" .. opts.basedir .. " go_back=0")
+end
+
+M.exec_toggleBatOrMore = function(opts)
+  if opts.is_folder then
+    print("Cannot use bat/more to open a directory.")
+    return
+  end
+
+  local cmd_exists = function(cmd)
+    return vim.fn.system("command -v " .. cmd) ~= ""
+  end
+
+  local file_cmd
+  if cmd_exists("bat") then
+    file_cmd = "bat --paging=always --style=full --wrap=never " .. opts.abspath
+  else
+    file_cmd = "more " .. opts.abspath
+  end
+
+  local venv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
+  if venv and venv ~= vim.g.PythonEnv then
+    file_cmd = "'conda activate " .. venv .. " && " .. file_cmd .. "'"
+  end
+
+  local Terminal = require("toggleterm.terminal").Terminal
+  local viewer = Terminal:new {
+    cmd = file_cmd,
+    dir = opts.basedir,
+    hidden = true,
+    direction = "float",
+    close_on_exit = true,
+    on_open = function(term)
+      vim.cmd "startinsert!"
+      vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<c-\\>", "<cmd>close<CR>", { noremap = true, silent = true })
+    end,
+    count = opts.count
+  }
+  viewer:toggle()
 end
 
 M.exec_Ranger = function(opts)

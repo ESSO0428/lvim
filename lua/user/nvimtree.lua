@@ -114,6 +114,15 @@ function horizontal_termFzfRg(...)
   nvimtreeToggleTermFzfRg("horizontal", state)
 end
 
+function float_termMore(...)
+  local args = { ... }
+  local state = nil
+  if select("#", ...) > 0 then
+    state = args[1]
+  end
+  nvimtreeToggleTermMore("float", state)
+end
+
 function float_termRanger(...)
   local args = { ... }
   local state = nil
@@ -250,6 +259,7 @@ else
 
     local useful_keys = {
       ["l"] = { api.node.open.edit, opts "Open" },
+      ["u"] = { float_termMore, opts "lvim_FloatTermMore" },
       ["o"] = { api.node.open.no_window_picker, opts "Open: No Window Picker" },
       ["<CR>"] = { api.node.open.edit, opts "Open" },
       ["b"] = { api.tree.toggle_no_buffer_filter, opts "Toggle No Buffer" },
