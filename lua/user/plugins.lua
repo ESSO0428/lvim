@@ -761,6 +761,13 @@ lvim.plugins = {
     end
   },
   {
+    "folke/twilight.nvim",
+    config = function()
+      -- NOTE: dims `inactive` portions of the code you're editing
+      vim.keymap.set("n", "<leader>ta", "<cmd>Twilight<CR>")
+    end
+  },
+  {
     "princejoogie/chafa.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",

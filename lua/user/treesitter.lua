@@ -77,3 +77,10 @@ vim.builtin.treesitter.indent = {
   enable = true
 }
 ]]
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'mysql',
+  callback = function(args)
+    vim.treesitter.start(args.buf, 'sql')
+    vim.bo[args.buf].syntax = 'on'    -- only if additional legacy syntax is needed
+  end
+})
