@@ -203,7 +203,7 @@ M.add_execFzfRg = function(opts)
   M._exec_toggleFzfRg(opts)
 end
 M.add_execRanger = function(opts)
-  M._exec_toggleRanger(opts)
+  M._exec_Ranger(opts)
 end
 
 
@@ -242,30 +242,9 @@ M._exec_toggleFzfRg = function(opts)
     opts.count .. " size=" .. opts.size() .. " direction=" .. opts.direction .. " dir=" .. opts.basedir .. " go_back=0")
 end
 
-M._exec_toggleRanger = function(opts)
-  -- vim.cmd("ToggleTerm" ..
-  --   " cmd=" ..
-  --   opts.cmd ..
-  --   " count=" .. opts.count .. " size=" .. opts.size() .. " direction=" .. opts.direction .. " dir=" .. opts.basedir)
-  local venv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
-  opts.cmd = "'conda activate " .. venv .. "; ranger'"
-  if venv == vim.g.PythonEnv then
-    opts.cmd = "'ranger'"
-  end
-  local Terminal = require("toggleterm.terminal").Terminal
-  local Ranger = Terminal:new {
-    cmd = opts.cmd,
-    dir = opts.basedir,
-    hidden = true,
-    direction = "float",
-    close_on_exit = true,
-    on_open = function(term)
-      vim.cmd "startinsert!"
-      vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<c-\\>", "<cmd>close<CR>", { noremap = true, silent = true })
-    end,
-    count = opts.count
-  }
-  Ranger:toggle()
+M._exec_Ranger = function(opts)
+  local basedir = opts.basedir
+  vim.fn['rnvimr#open'](basedir)
 end
 
 

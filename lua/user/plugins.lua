@@ -154,7 +154,7 @@ lvim.plugins = {
           print('CellularAutomaton : folding and wrapping is not supported')
         end
       end
-      vim.keymap.set("n", "<leader>tc", "<cmd>lua CellularAutomaton_make_it_rain()<CR>")
+      vim.keymap.set("n", "<leader>Tc", "<cmd>lua CellularAutomaton_make_it_rain()<CR>")
     end
   },
   -- WARNING: 這會造成 Nvim-tree 上運行 Telescope 出錯 (可能要壞成其他替代的套件)
