@@ -81,6 +81,8 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'mysql',
   callback = function(args)
     vim.treesitter.start(args.buf, 'sql')
-    vim.bo[args.buf].syntax = 'on'    -- only if additional legacy syntax is needed
+    vim.bo[args.buf].syntax = 'on' -- only if additional legacy syntax is needed
   end
 })
+local ft = require('Comment.ft')
+ft.set('mysql', '-- %s')
