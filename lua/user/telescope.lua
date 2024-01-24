@@ -15,6 +15,7 @@ lvim.builtin.telescope.on_config_done = function(telescope)
   pcall(telescope.load_extension, "dap")
   pcall(telescope.load_extension, "howdoi")
   pcall(telescope.load_extension, "yank_history")
+  pcall(telescope.load_extension, "harpoon")
   pcall(telescope.load_extension, "bookmarks")
   -- any other extensions loading
 end
@@ -318,11 +319,19 @@ lvim.builtin.telescope.extensions.howdoi       = vim.tbl_deep_extend(
 vim.cmd('cnoreabbrev howdo Telescope howdoi')
 
 -- lvim.keys.normal_mode['<a-b>'] = { "<Cmd>Telescope buffers<cr>" }
-lvim.builtin.which_key.mappings.s.s                 = { "<cmd>Telescope buffers<cr>", "Find" }
-lvim.builtin.which_key.mappings.s['`']              = { "<cmd>Telescope marks<cr>", "Marks" }
-lvim.builtin.which_key.mappings.s.j                 = { "<cmd>Telescope jumplist<cr>", "jumplist" }
-lvim.builtin.which_key.mappings.s.G                 = { "<cmd>Telescope live_grep_args<cr>", "Live_grep_args" }
-lvim.builtin.which_key.mappings.s.u                 = { "<cmd>Telescope telescope-tabs list_tabs<cr>", "Search Tabs" }
+lvim.builtin.which_key.mappings.s.s    = { "<cmd>Telescope buffers<cr>", "Find" }
+lvim.builtin.which_key.mappings.s['`'] = { "<cmd>Telescope marks<cr>", "Marks" }
+lvim.builtin.which_key.mappings.s.j    = { "<cmd>Telescope jumplist<cr>", "jumplist" }
+lvim.builtin.which_key.mappings.s.G    = { "<cmd>Telescope live_grep_args<cr>", "Live_grep_args" }
+lvim.builtin.which_key.mappings.s.u    = { "<cmd>Telescope telescope-tabs list_tabs<cr>", "Search Tabs" }
+
+lvim.builtin.which_key.mappings.s.l    = { "<cmd>Telescope harpoon marks<cr>", "Search harpoon marks" }
+lvim.builtin.which_key.mappings.s.w    = { "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>",
+  "harpoon menu" }
+lvim.keys.normal_mode["mf"]            = "<cmd>lua require('harpoon.mark').add_file()<cr>"
+lvim.keys.normal_mode["_"]             = "<cmd>lua require('harpoon.ui').nav_prev()<cr>"
+lvim.keys.normal_mode["+"]             = "<cmd>lua require('harpoon.ui').nav_next()<cr>"
+
 
 lvim.builtin.which_key.mappings.b["["]              = { "<cmd>BufferLineCloseLeft<cr>", "Close all to the left" }
 lvim.builtin.which_key.mappings.b["]"]              = { "<cmd>BufferLineCloseRight<cr>", "Close all to the Right" }

@@ -167,6 +167,13 @@ lvim.plugins = {
   -- },
   { "kazhala/close-buffers.nvim" },
   {
+    "ThePrimeagen/harpoon",
+    config = function()
+      require("harpoon").setup()
+    end,
+    dependencies = { "nvim-lua/plenary.nvim" }
+  },
+  {
     "AckslD/muren.nvim",
     config = true
   },
