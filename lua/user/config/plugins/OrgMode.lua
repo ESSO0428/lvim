@@ -1,7 +1,15 @@
 -- Load custom treesitter grammar for org filetype
 local function check_org_notes()
+  local home_dir = os.getenv("HOME")
+  local current_dir = vim.fn.getcwd()
+
   local notes_file = ('%s/Dropbox/org/notes.org'):format(vim.fn.getcwd())
   local org_dir = ('%s/Dropbox/org'):format(vim.fn.getcwd())
+
+  -- 检查当前目录是否从第一个字符开始与主目录匹配
+  if not (current_dir:sub(1, #home_dir) == home_dir) then
+    return
+  end
 
   -- 檢查 notes.org 檔案是否存在
   local notes_exist = vim.fn.filereadable(notes_file) == 1
