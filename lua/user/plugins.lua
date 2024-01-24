@@ -174,6 +174,12 @@ lvim.plugins = {
     dependencies = { "nvim-lua/plenary.nvim" }
   },
   {
+    "ThePrimeagen/refactoring.nvim",
+    config = function()
+      require("refactoring").setup({})
+    end
+  },
+  {
     "AckslD/muren.nvim",
     config = true
   },
