@@ -701,6 +701,13 @@ lvim.plugins = {
     }
   },
   {
+    "danymat/neogen",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    config = true,
+    -- Uncomment next line if you want to follow only stable versions
+    -- version = "*"
+  },
+  {
     "ESSO0428/md-headers.nvim",
     deprecated = { 'nvim-lua/plenary.nvim' }
   },

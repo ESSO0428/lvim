@@ -126,3 +126,6 @@ lvim.builtin.which_key.mappings['E'] = { "<cmd>Neotree toggle remote<cr>", "Neot
 
 -- buffer clear (clear not in windows buffer)
 lvim.builtin.which_key.mappings.b['c'] = { "<cmd>BDelete hidden<cr>", "close hidden buffer (not in windws)" }
+
+-- NOTE: neogen for write program document
+lvim.builtin.which_key.mappings["to"] = { "<cmd>Neogen<cr>", "Document Generate" }
