@@ -22,4 +22,5 @@ require "user.config.plugins.Muren"
 -- .env file will load by dotenv
 require "user.config.plugins.env_template"
 require "user.config.plugins.dadbod"
+require "user.config.plugins.floatwindow"
 require "user.config.plugins.bioinformatics"
