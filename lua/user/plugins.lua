@@ -215,6 +215,22 @@ lvim.plugins = {
     end
   },
   {
+    "amrbashir/nvim-docs-view",
+    config = function()
+      require("docs-view").setup {
+        position = "bottom",
+        width = 60,
+      }
+      vim.keymap.set("n", "<leader>th", "<cmd>DocsViewToggle<CR>")
+    end
+  },
+  {
+    "VidocqH/lsp-lens.nvim",
+    config = function()
+      require 'lsp-lens'.setup({})
+    end
+  },
+  {
     "GCBallesteros/NotebookNavigator.nvim",
     keys = {
       { "]e", function() require("notebook-navigator").run_cells_below "" end },
@@ -267,6 +283,22 @@ lvim.plugins = {
     end
   },
   { "jbyuki/venn.nvim" },
+  {
+    'ZhiyuanLck/smart-pairs',
+    event = 'InsertEnter',
+    config = function()
+      require('pairs'):setup({
+        mapping = {
+          -- jump_left_in_any   = '<m-[>',
+          jump_left_in_any   = '<m-,>',
+          -- jump_right_out_any = '<m-]>',
+          jump_right_out_any = '<m-.>',
+          -- jump_left_out_any  = '<m-{>',
+          -- jump_right_in_any  = '<m-}>',
+        }
+      })
+    end
+  },
   { "ESSO0428/bookmarks.nvim" },
   {
     "ESSO0428/vim-dadbod-ui",

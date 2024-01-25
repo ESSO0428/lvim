@@ -28,6 +28,7 @@ function refactor_completion(ArgLead, CmdLine, CursorPos)
 end
 
 lvim.builtin.which_key.mappings.u["="] = { "<cmd>lua require('lvim.lsp.utils').format()<cr>", "Format" }
+lvim.builtin.which_key.mappings.u.r = { "<cmd>LspLensToggle<cr>", "Like IDEA : definition info" }
 
-lvim.keys.visual_mode['<leader>uf'] = "<cmd>lua refactor_prompt()<CR>"
-lvim.builtin.which_key.mappings.u["f"] = { "<cmd>lua refactor_prompt()<CR>", "Refactor" }
+lvim.keys.visual_mode['<leader>rf'] = "<cmd>lua refactor_prompt()<CR>"
+lvim.keys.normal_mode['<leader>rf'] = "<cmd>lua refactor_prompt()<CR>"
