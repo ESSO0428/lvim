@@ -63,6 +63,29 @@ function toggle_syntax()
   end
 end
 
+-- NOTE: for link highlight toggle
+function toggle_conceal()
+  local buf = vim.api.nvim_get_current_buf()
+
+  -- 初始化当前 buffer 的 conceal 状态，如果它还不存在
+  if vim.b.current_buffer_conceal_change == nil or vim.b.current_buffer_conceal_change == '' then
+    vim.b.current_buffer_conceal_change = 'off'
+  end
+
+  -- 如果 conceallevel 已经被更改，恢复到原始状态
+  if vim.b.current_buffer_conceal_change == 'on' then
+    vim.b.current_buffer_conceal_change = 'off'
+    vim.o.conceallevel = vim.b.original_conceallevel
+    print('conceal 0 → ' .. (vim.b.original_conceallevel) .. ' (default)')
+  else
+    -- 如果还没更改过，保存当前 conceallevel 并设置为 0
+    vim.b.original_conceallevel = vim.o.conceallevel
+    vim.b.current_buffer_conceal_change = 'on'
+    vim.o.conceallevel = 0
+    print('conceal ' .. (vim.b.original_conceallevel or 0) .. ' (default)' .. ' → 0')
+  end
+end
+
 function ReStartNotTableFileTypeLayout(action)
   if vim.fn.getcmdline() ~= '' then
     return
@@ -80,6 +103,7 @@ function ReStartNotTableFileTypeLayout(action)
 end
 
 lvim.keys.normal_mode["sn"] = { "<cmd>lua toggle_syntax()<cr>" }
+lvim.keys.normal_mode["sc"] = { "<cmd>lua toggle_conceal()<cr>" }
 vim.cmd([[
   " autocmd FileType csv,tsv syntax off
   augroup disable_syntax
