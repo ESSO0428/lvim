@@ -294,7 +294,16 @@ lvim.plugins = {
     'ZhiyuanLck/smart-pairs',
     event = 'InsertEnter',
     config = function()
+      local fb = require('pairs.fallback')
       require('pairs'):setup({
+        delete = {
+          empty_line = {
+            text_text = {
+              strategy = nil,
+              fallbacke = fb.delete,
+            }
+          }
+        },
         mapping = {
           -- jump_left_in_any   = '<m-[>',
           jump_left_in_any   = '<m-,>',
@@ -637,6 +646,14 @@ lvim.plugins = {
     "LiadOz/nvim-dap-repl-highlights",
     config = function()
       require('nvim-dap-repl-highlights').setup()
+    end
+  },
+  {
+    'ESSO0428/persistent-breakpoints.nvim',
+    config = function()
+      require('persistent-breakpoints').setup {
+        load_breakpoints_event = { "BufReadPost" }
+      }
     end
   },
   {

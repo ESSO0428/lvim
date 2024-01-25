@@ -159,5 +159,5 @@ lvim.builtin.terminal.active                        = true
 lvim.builtin.nvimtree.setup.view.side               = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 
--- git
-lvim.builtin.gitsigns.opts.current_line_blame       = true
+-- git default false
+lvim.builtin.gitsigns.opts.current_line_blame       = false

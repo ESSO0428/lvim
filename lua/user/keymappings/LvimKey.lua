@@ -143,13 +143,22 @@ lvim.keys.normal_mode["<M-N>"]          = { "<cmd>lua require('illuminate').goto
 lvim.keys.normal_mode["]d"]             = { "<cmd>lua require('goto-breakpoints').next()<cr>" }
 lvim.keys.normal_mode["[d"]             = { "<cmd>lua require('goto-breakpoints').prev()<cr>" }
 lvim.keys.normal_mode["]S"]             = { "<cmd>lua require('goto-breakpoints').stopped()<cr>" }
-lvim.keys.normal_mode['<leader>\\']     = { "<cmd>lua require('dap').toggle_breakpoint()<cr>" }
-lvim.builtin.which_key.mappings.d['\\'] = { "<cmd>lua require('dap').clear_breakpoints()<cr>", 'Clear All Breakpoint' }
+-- lvim.keys.normal_mode['<leader>\\']     = { "<cmd>lua require('dap').toggle_breakpoint()<cr>" }
+lvim.keys.normal_mode['<leader>\\']     = { "<cmd>lua require('persistent-breakpoints.api').toggle_breakpoint()<cr>" }
+-- lvim.builtin.which_key.mappings.d['\\'] = { "<cmd>lua require('dap').clear_breakpoints()<cr>", 'Clear All Breakpoint' }
+lvim.builtin.which_key.mappings.d['\\'] = { "<cmd>lua require('persistent-breakpoints.api').clear_breakpoints()<cr>",
+  'Clear All Breakpoint' }
+-- lvim.builtin.which_key.mappings.d['lc'] = {
+--   "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), nil)<CR>",
+--   'Breakpoint Condition' }
 lvim.builtin.which_key.mappings.d['lc'] = {
-  "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), nil)<CR>",
+  "<cmd>lua require('persistent-breakpoints.api').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), nil)<CR>",
   'Breakpoint Condition' }
+-- lvim.builtin.which_key.mappings.d['ll'] = {
+--   "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), vim.fn.input('Log point message: '))<CR>",
+--   'Condition Logponit Message' }
 lvim.builtin.which_key.mappings.d['ll'] = {
-  "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), vim.fn.input('Log point message: '))<CR>",
+  "<cmd>lua require('persistent-breakpoints.api').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), vim.fn.input('Log point message: '))<CR>",
   'Condition Logponit Message' }
 lvim.keys.normal_mode["<M-s>"]          = { '<cmd>lua require("dapui").eval()<cr>' }
 lvim.keys.normal_mode["<F5>"]           = { "<cmd>lua require('dap').continue()<cr>" }
