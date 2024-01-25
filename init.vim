@@ -26,7 +26,7 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}
-Plug 'RRethy/vim-hexokinase', { 'do': 'cd ~/.config/lvim/plugged/vim-hexokinase/; make hexokinase' }
+" Plug 'RRethy/vim-hexokinase', { 'do': 'cd ~/.config/lvim/plugged/vim-hexokinase/; make hexokinase' }
 Plug 'tpope/vim-surround'
 Plug 'mbbill/undotree'
 Plug 'hkupty/iron.nvim'

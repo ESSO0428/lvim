@@ -199,6 +199,16 @@ lvim.plugins = {
     }
   },
   {
+    "NvChad/nvim-colorizer.lua",
+    config = function()
+      require("colorizer").setup {
+        user_default_options = {
+          mode = "virtualtext"
+        }
+      }
+    end
+  },
+  {
     'rmagatti/goto-preview',
     config = function()
       require('goto-preview').setup {}
