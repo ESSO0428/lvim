@@ -58,7 +58,7 @@ lvim.plugins = {
     end
   },
   {
-    "LukasPietzschmann/telescope-tabs",
+    "ESSO0428/telescope-tabs",
     config = function()
       require("telescope-tabs").setup {
         entry_formatter = function(tab_id, buffer_ids, file_names, file_paths, is_current)
@@ -82,6 +82,13 @@ lvim.plugins = {
           local tab_name = TablineData[tabpage_id].name
           -- require("tabby.feature.tab_name").get(tab_id)
           -- return string.format("%d: %s%s", tab_id, tab_id, is_current and " <" or "")
+
+          -- Get the focused window's buffer ID for the current tab
+          local focused_win = vim.fn.tabpagewinnr(tabpage_id)
+
+          -- Iterate over file_names and add '<' if the corresponding buffer exists
+          file_names[focused_win] = file_names[focused_win] .. " #"
+
           local entry_string = table.concat(file_names, ', ')
           return string.format('%d [%s]: %s%s', tabpage_id, tab_name, entry_string, is_current and ' <' or '')
         end,

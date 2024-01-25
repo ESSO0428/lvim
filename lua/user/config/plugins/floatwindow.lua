@@ -36,136 +36,171 @@ end
 vim.api.nvim_create_user_command('OpenFloat', open_float_window, {})
 lvim.keys.normal_mode['sw'] = "<Cmd>OpenFloat<CR>"
 
+
+local pickers = require('telescope.pickers')
+local finders = require('telescope.finders')
+local previewers = require('telescope.previewers')
+local conf = require('telescope.config').values
+local actions = require('telescope.actions')
+local action_state = require('telescope.actions.state')
+
+local function close_select_window(prompt_bufnr, window_infos)
+  local current_picker = action_state.get_current_picker(prompt_bufnr)
+  local selection = action_state.get_selected_entry()
+  if selection and selection.value and vim.api.nvim_win_is_valid(selection.value.win) then
+    vim.api.nvim_win_close(selection.value.win, false)
+
+    -- 从 window_infos 中移除关闭的窗口并刷新选择器
+    for i, win_info in ipairs(window_infos) do
+      if win_info.win == selection.value.win then
+        table.remove(window_infos, i)
+        break
+      end
+    end
+    current_picker:refresh(finders.new_table({
+      results = window_infos,
+      entry_maker = function(entry)
+        return {
+          value = entry,
+          display = entry.name,
+          ordinal = entry.name,
+          bufnr = entry.bufnr,
+        }
+      end,
+    }), { reset_prompt = true })
+  end
+end
+
+
+local function close_selected_window(window_infos, prompt_bufnr)
+  local success, err_message = pcall(function()
+    local current_picker = action_state.get_current_picker(prompt_bufnr)
+    local selection = action_state.get_selected_entry()
+    if selection and selection.value and vim.api.nvim_win_is_valid(selection.value.win) then
+      vim.api.nvim_win_close(selection.value.win, false)
+
+      -- 從 window_infos 中移除關閉的窗口並刷新選擇器
+      for i, win_info in ipairs(window_infos) do
+        if win_info.win == selection.value.win then
+          table.remove(window_infos, i)
+          break
+        end
+      end
+      current_picker:refresh(finders.new_table({
+        results = window_infos,
+        entry_maker = function(entry)
+          return {
+            value = entry,
+            display = entry.name,
+            ordinal = entry.name,
+            bufnr = entry.bufnr,
+          }
+        end,
+      }), { reset_prompt = true })
+    end
+  end)
+
+  if not success then
+    print("Cannot close the last window")
+    -- 可以加入其他錯誤處理邏輯，如果需要的話
+  end
+end
+
 local function list_and_select_windows_in_tab()
-  local tabpage = vim.api.nvim_get_current_tabpage()
-  local windows = vim.api.nvim_tabpage_list_wins(tabpage)
   local window_infos = {}
 
+  local windows = vim.api.nvim_tabpage_list_wins(0)
   for _, win in ipairs(windows) do
     local buf = vim.api.nvim_win_get_buf(win)
-    local name = vim.fn.expand('#' .. buf .. ':t') -- 獲取檔案名
+    local name = vim.fn.expand('#' .. buf .. ':t')     -- 获取文件名
+    local filepath = vim.fn.expand('#' .. buf .. ':p') -- 获取文件路径
+
     if name == '' then
       name = '[No Name]'
     end
-    local filepath = vim.fn.expand('#' .. buf .. ':p') -- 獲取檔案名
     if filepath ~= '' then
       name = name .. ' (' .. filepath .. ')'
     end
 
     local is_float = vim.api.nvim_win_get_config(win).relative ~= ''
-    local prefix = is_float and "f: " or "n: "
-    table.insert(window_infos, { win = win, name = prefix .. name })
+    local prefix = is_float and "[Float]: " or "[Normal]: "
+    table.insert(window_infos, { win = win, name = prefix .. name, bufnr = buf })
   end
 
-  -- 將浮動窗口放在列表前面
+  -- 对 window_infos 进行排序
   table.sort(window_infos, function(a, b)
     return a.name < b.name
   end)
 
-  local buf = vim.api.nvim_create_buf(false, true)
-  local lines = {}
-  local function remove_line_from_list(line, lines)
-    if window_infos[line] then
-      table.remove(window_infos, line)
-      table.remove(lines, line)
-      vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-    end
-  end
 
-  for i, win_info in ipairs(window_infos) do
-    lines[i] = win_info.name
-  end
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-
-  local width = 100
-  local height = math.min(10, #lines)
-  local row = math.max(1, math.floor((vim.o.lines - height) / 2))
-  local col = math.max(1, math.floor((vim.o.columns - width) / 2))
-
-  local float_win = vim.api.nvim_open_win(buf, true, {
-    relative = 'editor',
-    width = width,
-    height = height,
-    row = row,
-    col = col,
-    border = 'single'
-  })
-  vim.api.nvim_buf_set_keymap(buf, 'n', '<CR>', '', {
-    callback = function()
-      local line = vim.api.nvim_win_get_cursor(float_win)[1]
-      local target_win = window_infos[line].win
-      -- 關閉列表浮動窗口
-      if vim.api.nvim_win_is_valid(float_win) then
-        vim.api.nvim_win_close(float_win, true)
-      end
-      -- 然後切換到目標窗口
-      if vim.api.nvim_win_is_valid(target_win) then
-        vim.api.nvim_set_current_win(target_win)
-      end
-    end,
-    noremap = true
-  })
-
-  -- 添加 'dd' 鍵映射
-  vim.api.nvim_buf_set_keymap(buf, 'n', 'dd', '', {
-    callback = function()
-      local line = vim.api.nvim_win_get_cursor(float_win)[1]
-      local target_win = window_infos[line] and window_infos[line].win
-
-      -- 检查是否还有其他窗口存在
-      if #window_infos > 1 then
-        if target_win and vim.api.nvim_win_is_valid(target_win) then
-          vim.api.nvim_win_close(target_win, false)
-          vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-        else
-          print("Window not valid")
+  pickers.new({}, {
+    prompt_title = 'Windows',
+    finder = finders.new_table({
+      results = window_infos,
+      entry_maker = function(entry)
+        if not entry or not entry.bufnr then
+          return nil
         end
-        remove_line_from_list(line, lines)
-      else
-        print("Cannot close the last window")
-      end
-    end,
-    noremap = true
-  })
-
-  -- <c-w> 关闭已保存的文件
-  vim.api.nvim_buf_set_keymap(buf, 'n', '<c-w>', '', {
-    callback = function()
-      local line = vim.api.nvim_win_get_cursor(float_win)[1]
-      local target_win_info = window_infos[line]
-      if target_win_info and vim.api.nvim_win_is_valid(target_win_info.win) then
-        local target_buf = vim.api.nvim_win_get_buf(target_win_info.win)
-        if vim.api.nvim_buf_is_loaded(target_buf) and not vim.api.nvim_buf_get_option(target_buf, 'modified') then
-          vim.api.nvim_buf_delete(target_buf, { force = false })
-          remove_line_from_list(line, lines)
-        else
-          print("Buffer has unsaved changes")
+        return {
+          value = entry,
+          display = entry.name,
+          ordinal = entry.name,
+          bufnr = entry.bufnr,
+        }
+      end,
+    }),
+    sorter = conf.generic_sorter({}),
+    previewer = previewers.new_buffer_previewer({
+      define_preview = function(self, entry, status)
+        if not entry or not entry.bufnr or not vim.api.nvim_buf_is_loaded(entry.bufnr) then
+          return
         end
-      else
-        print("Window not valid")
-        remove_line_from_list(line, lines)
-      end
-    end,
-    noremap = true
-  })
 
-  -- <leader><c-w> 强制关闭文件
-  vim.api.nvim_buf_set_keymap(buf, 'n', '<leader><c-w>', '', {
-    callback = function()
-      local line = vim.api.nvim_win_get_cursor(float_win)[1]
-      local target_win_info = window_infos[line]
-      if target_win_info and vim.api.nvim_win_is_valid(target_win_info.win) then
-        local target_buf = vim.api.nvim_win_get_buf(target_win_info.win)
-        if vim.api.nvim_buf_is_loaded(target_buf) then
-          vim.api.nvim_buf_delete(target_buf, { force = true })
+        -- 清除预览窗口的内容
+        vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, {})
+
+        -- 获取并设置内容
+        local content = vim.api.nvim_buf_get_lines(entry.bufnr, 0, -1, false)
+        vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, content)
+
+        -- 应用语法高亮
+        local filetype = vim.api.nvim_buf_get_option(entry.bufnr, 'filetype')
+        vim.api.nvim_buf_set_option(self.state.bufnr, 'filetype', filetype)
+
+        -- 尝试手动触发 Tree-sitter 高亮
+        vim.api.nvim_command('setlocal foldmethod=expr')
+        vim.api.nvim_command('setlocal foldexpr=nvim_treesitter#foldexpr()')
+      end,
+    }),
+    attach_mappings = function(prompt_bufnr, map)
+      actions.select_default:replace(function()
+        local selection = action_state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        if selection and selection.value and vim.api.nvim_win_is_valid(selection.value.win) then
+          vim.api.nvim_set_current_win(selection.value.win)
         end
-      else
-        print("Window not valid")
-      end
-      remove_line_from_list(line, lines)
+      end)
+
+      -- 添加 <c-d> 键映射以关闭选中的窗口并刷新选择器
+      map('i', '<c-d>', function()
+        close_selected_window(window_infos, prompt_bufnr)
+      end)
+      map('n', 'dd', function()
+        close_selected_window(window_infos, prompt_bufnr)
+      end)
+      -- 添加 <c-d> 键映射以删除选中的 buffer
+      map('n', '<c-w>', function()
+        local success, err_message = pcall(function()
+          actions.delete_buffer(prompt_bufnr)
+        end)
+        if not success then
+          print("Cannot close the buffer")
+          -- 可以加入其他錯誤處理邏輯，如果需要的話
+        end
+      end)
+      return true
     end,
-    noremap = true
-  })
+  }):find()
 end
 
 -- 將此函數綁定到一個命令或快捷鍵
