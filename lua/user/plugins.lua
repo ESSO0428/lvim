@@ -231,12 +231,13 @@ lvim.plugins = {
       vim.keymap.set("n", "<leader>th", "<cmd>DocsViewToggle<CR>")
     end
   },
-  {
-    "VidocqH/lsp-lens.nvim",
-    config = function()
-      require 'lsp-lens'.setup({})
-    end
-  },
+  -- WARNING: 這會造成大量讀檔 (process too many files) lsof -p neovim_pid | wc -l 的問題，導致後續各種套件和 neovim 本身的功能失效 (待解決前先禁用)
+  -- {
+  --   "VidocqH/lsp-lens.nvim",
+  --   config = function()
+  --     require 'lsp-lens'.setup({})
+  --   end
+  -- },
   {
     "GCBallesteros/NotebookNavigator.nvim",
     keys = {
@@ -698,10 +699,6 @@ lvim.plugins = {
     end
   },
   { "nvim-lua/popup.nvim" },
-  {
-    "RishabhRD/lspactions",
-    commit = "0ea962f"
-  },
   {
     "iamcco/markdown-preview.nvim",
     build = "cd app && npm install",

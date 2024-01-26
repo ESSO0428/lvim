@@ -165,11 +165,15 @@ local function list_and_select_windows_in_tab()
 
         -- 应用语法高亮
         local filetype = vim.api.nvim_buf_get_option(entry.bufnr, 'filetype')
-        vim.api.nvim_buf_set_option(self.state.bufnr, 'filetype', filetype)
+        pcall(function()
+          vim.api.nvim_buf_set_option(self.state.bufnr, 'filetype', filetype)
+        end)
 
         -- 尝试手动触发 Tree-sitter 高亮
-        vim.api.nvim_command('setlocal foldmethod=expr')
-        vim.api.nvim_command('setlocal foldexpr=nvim_treesitter#foldexpr()')
+        pcall(function()
+          vim.api.nvim_command('setlocal foldmethod=expr')
+          vim.api.nvim_command('setlocal foldexpr=nvim_treesitter#foldexpr()')
+        end)
       end,
     }),
     attach_mappings = function(prompt_bufnr, map)

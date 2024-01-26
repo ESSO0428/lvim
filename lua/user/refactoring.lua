@@ -1,7 +1,15 @@
 function refactor_prompt()
-  vim.ui.input({ prompt = ':Refactor ', completion = 'customlist,v:lua.refactor_completion' }, function(input)
-    if input then
-      vim.fn.execute("Refactor " .. input)
+  vim.g.dress_input = true
+  vim.ui.input({ prompt = 'Refactor ', completion = 'customlist,v:lua.refactor_completion' }, function(method)
+    if method then
+      vim.g.dress_input = true
+      vim.ui.input({ prompt = 'Refactor ' .. method .. ' ' }, function(input)
+        if input then
+          vim.fn.execute(table.concat({ "Refactor", method, input }, " "))
+        else
+          vim.fn.execute(table.concat({ "Refactor", method }, " "))
+        end
+      end)
     end
   end)
 end

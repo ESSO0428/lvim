@@ -12,6 +12,12 @@ function lsp_or_jupyter_signature_help()
   end
 end
 
+local function LspbufRename()
+  vim.g.dress_input = true
+  vim.lsp.buf.rename()
+end
+vim.api.nvim_create_user_command('LspbufRename', LspbufRename, {})
+
 lvim.keys.normal_mode['gh']                = ":lua lsp_or_jupyter_signature_help<cr>"
 lvim.lsp.buffer_mappings.normal_mode['gh'] = { ":lua lsp_or_jupyter_signature_help()<cr>", "Show documentation" }
 
@@ -24,7 +30,7 @@ lvim.keys.normal_mode['<leader>uw']        = { ":Telescope diagnostics<cr>" }
 -- lvim.keys.normal_mode['<leader>uf'] = { require("lvim.lsp.utils").format() }
 lvim.keys.normal_mode['<leader>=']         = ":lua vim.lsp.buf.format()<CR>"
 -- lvim.keys.normal_mode['<leader>rn'] = ":lua vim.lsp.buf.rename()<CR>"
-lvim.keys.normal_mode['<leader>rn']        = ":lua require'lspactions'.rename()<CR>"
+lvim.keys.normal_mode['<leader>rn']        = ":LspbufRename<CR>"
 lvim.keys.normal_mode['<leader>ui']        = { ":LspInfo<cr>" }
 lvim.keys.normal_mode['<leader>uI']        = { ":Mason<cr>" }
 -- lvim.keys.normal_mode['<leader>uo']        = { ":lua vim.diagnostic.goto_next()<cr>" }
