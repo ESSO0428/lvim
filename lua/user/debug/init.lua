@@ -1,5 +1,13 @@
 local dap = require('dap')
 dap.defaults.fallback.switchbuf = 'useopen,uselast'
+
+
+lvim.builtin.which_key.mappings.s.b = { "<cmd>lua require'telescope'.extensions.dap.list_breakpoints()<cr>",
+  "List breakpoints" }
+lvim.builtin.which_key.mappings.s.B = { "<cmd>Telescope git_branches<cr>", "Checkout branch" }
+lvim.builtin.which_key.mappings.s['`'] = { "<cmd>lua require'dap'.restart()CR>", "Restart" }
+
+
 require "user.debug.python"
 require "nvim-dap-virtual-text".setup()
 local function reloadLaunchJson()
