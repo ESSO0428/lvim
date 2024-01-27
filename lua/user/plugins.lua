@@ -639,7 +639,16 @@ lvim.plugins = {
     -- build = 'cargo install exa'
     build = 'cargo install --list | grep -q "exa v" || cargo install exa'
   },
-  { "IllustratedMan-code/telescope-conda.nvim" },
+  {
+    "ESSO0428/swenv.nvim",
+    config = function()
+      require('swenv').setup({
+        post_set_venv = function()
+          vim.cmd("LspRestart")
+        end,
+      })
+    end
+  },
   { "nvim-telescope/telescope-dap.nvim" },
   { "ofirgall/goto-breakpoints.nvim" },
   {
