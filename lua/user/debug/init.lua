@@ -5,7 +5,8 @@ dap.defaults.fallback.switchbuf = 'useopen,uselast'
 lvim.builtin.which_key.mappings.s.b = { "<cmd>lua require'telescope'.extensions.dap.list_breakpoints()<cr>",
   "List breakpoints" }
 lvim.builtin.which_key.mappings.s.B = { "<cmd>Telescope git_branches<cr>", "Checkout branch" }
-lvim.builtin.which_key.mappings.s['`'] = { "<cmd>lua require'dap'.restart()CR>", "Restart" }
+lvim.builtin.which_key.mappings.d[';'] = { "<cmd>lua require'telescope'.extensions.dap.commands()<cr>", "Command" }
+lvim.builtin.which_key.mappings.d['`'] = { "<cmd>lua require'dap'.restart()<cr>", "Restart" }
 
 
 require "user.debug.python"
