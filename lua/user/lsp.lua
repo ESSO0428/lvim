@@ -80,8 +80,8 @@ local pyright_opts = {
       analysis = {
         autoImportCompletions = true,
         autoSearchPaths = true,
-        diagnosticMode = "workspace", -- openFilesOnly, workspace
-        typeCheckingMode = "basic",   -- off, basic, strict
+        diagnosticMode = "workspace",  -- openFilesOnly, workspace
+        typeCheckingMode = "standard", -- off, basic, strict
         useLibraryCodeForTypes = true
       }
     }
