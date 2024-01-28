@@ -167,10 +167,10 @@ package.preload["netman.providers"] = custom_netman_providers
 -- 现在，任何后续的 require("netman.providers") 调用都将返回你自定义的内容
 
 neotree_source = {
-  "filesystem",   -- Neotree filesystem source
+  "filesystem", -- Neotree filesystem source
   "buffers",
   "git_status",
-  "netman.ui.neo-tree",   -- The one you really care about 😉
+  "netman.ui.neo-tree", -- The one you really care about 😉
 }
 neotree.setup({
   sources = neotree_source,

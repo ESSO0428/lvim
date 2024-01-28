@@ -65,3 +65,6 @@ lvim.keys.normal_mode['<leader>uq']        = ":lua vim.lsp.diagnostic.setloclist
 -- lvim.lsp.buffer_mappings.normal_mode['<a-s>'] = { vim.lsp.buf.hover, "Show documentation" }
 -- lvim.lsp.buffer_mappings.normal_mode['gh'] = { vim.lsp.buf.hover, "Show documentation" }
 -- lvim.keys.normal_mode['<c-t>'] = ":SymbolsOutline<cr>"
+-- lvim.keys.normal_mode['<c-t>'] = "<cmd>Lspsaga outline<cr>"
+lvim.keys.normal_mode['<c-t>']             = "<cmd>Outline!<cr>"
+lvim.keys.normal_mode['<leader><c-t>']     = "<cmd>OutlineFocusOutline<cr>"

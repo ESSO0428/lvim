@@ -365,6 +365,7 @@ lvim.plugins = {
     "joaomsa/telescope-orgmode.nvim"
   },
   { "f3fora/cmp-spell" },
+  { "rcarriga/cmp-dap" },
   { "github/copilot.vim" },
   { "hrsh7th/cmp-copilot" },
   -- { "HiPhish/nvim-ts-rainbow2" },
@@ -413,12 +414,6 @@ lvim.plugins = {
   {
     'kevinhwang91/nvim-ufo',
     deprecated = { 'kevinhwang91/promise-async' }
-  },
-  {
-    "simrat39/symbols-outline.nvim",
-    config = function()
-      require('symbols-outline').setup()
-    end
   },
   {
     "kevinhwang91/nvim-bqf",
@@ -742,6 +737,7 @@ lvim.plugins = {
         },
       },
       outline = {
+        enable = false,
         win_position = "right",
         win_with = "",
         win_width = 30,
@@ -775,12 +771,41 @@ lvim.plugins = {
         sign_priority = 40,
         virtual_text = false
       },
+      callhierarchy = {
+        enable = true,
+        layout = "normal",
+        keys = {
+          edit = 'e',
+          vsplit = '<a-l>',
+          split = '<a-k>',
+          tabe = 't',
+          quit = { "q", "<ESC>", "<leader>q" },
+          shuttle = '<c-s>',
+          toggle_or_req = { 'l', '<cr>' },
+          close = '<c-w>'
+        }
+      }
     },
     deprecated = {
       { "nvim-tree/nvim-web-devicons" },
       --Please make sure you install markdown and markdown_inline parser
       { "nvim-treesitter/nvim-treesitter" }
     }
+  },
+  {
+    "hedyhli/outline.nvim",
+    config = function()
+      -- Example mapping to toggle outline
+      vim.keymap.set("n", "<leader>o", "<cmd>Outline<CR>",
+        { desc = "Toggle Outline" })
+
+      require("outline").setup {
+        -- Your setup opts here (leave empty to use defaults)
+        preview_window = {
+          auto_preview = true,
+        }
+      }
+    end,
   },
   {
     "danymat/neogen",

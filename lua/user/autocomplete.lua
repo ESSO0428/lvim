@@ -4,6 +4,19 @@ local cmp = require("lvim.utils.modules").require_on_index "cmp"
 local cmp_mapping = require "cmp.config.mapping"
 local luasnip = require("lvim.utils.modules").require_on_index "luasnip"
 local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
+
+lvim.builtin.cmp.enabled = function()
+  local buftype = vim.api.nvim_buf_get_option(0, "buftype")
+  if buftype == "prompt" then
+    return false or require("cmp_dap").is_dap_buffer()
+  end
+  return lvim.builtin.cmp.active
+end
+require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+  sources = {
+    { name = "dap" },
+  }
+})
 lvim.builtin.cmp.snippet = {
   expand = function(args)
     -- luasnip.lsp_expand(args.body)
@@ -45,7 +58,7 @@ table.insert(lvim.builtin.cmp.sources, 2, { name = "jupyter" })
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "ultisnips" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vsnip" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "orgmode" }
-lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "otter" }
+lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "dap" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vim-dadbod-completion" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = {
   name = "spell",
@@ -96,10 +109,12 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
     vim_item.kind = lvim.builtin.cmp.formatting.kind_icons[vim_item.kind]
 
     if entry.source.name == "copilot" then
+      if vim.bo.filetype == "prompt" then
+        return
+      end
       vim_item.kind = lvim.icons.git.Octoface
       vim_item.kind_hl_group = "CmpItemKindCopilot"
     end
-
     if entry.source.name == "cmp_tabnine" then
       vim_item.kind = lvim.icons.misc.Robot
       vim_item.kind_hl_group = "CmpItemKindTabnine"
@@ -363,7 +378,7 @@ lvim.builtin.cmp.formatting.source_names.vsnip = "(V-Snippet)"
 lvim.builtin.cmp.formatting.source_names.luasnip = "(L-Snippet)"
 lvim.builtin.cmp.formatting.source_names.ultisnips = "(U-Snippet)"
 lvim.builtin.cmp.formatting.source_names.orgmode = "(orgmode)"
-lvim.builtin.cmp.formatting.source_names.otter = "(otter)"
+lvim.builtin.cmp.formatting.source_names.dap = "(dap)"
 lvim.builtin.cmp.formatting.source_names['vim-dadbod-completion'] = "(dadbod-sql)"
 lvim.builtin.cmp.formatting.source_names['spell'] = "(spell)"
 lvim.builtin.cmp.formatting.source_names['cmp_yanky'] = "(yank)"
