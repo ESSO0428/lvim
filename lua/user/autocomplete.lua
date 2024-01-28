@@ -15,6 +15,34 @@ end
 require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
   sources = {
     { name = "dap" },
+    {
+      name = "buffer",
+      option = {
+        get_bufnrs = function()
+          local max_size = 100000     -- 设置文件大小限制为 100,000 字节
+          local bufs = {}
+
+          -- 获取当前 Tab 中的所有窗口
+          local windows = vim.api.nvim_tabpage_list_wins(0)
+          for _, win in ipairs(windows) do
+            -- 获取每个窗口的缓冲区编号
+            local buf = vim.api.nvim_win_get_buf(win)
+            -- 检查文件类型是否不是 neo-tree
+            if vim.api.nvim_buf_get_option(buf, 'filetype') ~= 'neo-tree' then
+              -- 检查文件大小
+              local size = vim.fn.getfsize(vim.api.nvim_buf_get_name(buf))
+              if size > 0 and size < max_size then
+                bufs[buf] = true
+              end
+            end
+          end
+
+          return vim.tbl_keys(bufs)
+        end
+      }
+
+    },
+    { name = "spell" }
   }
 })
 lvim.builtin.cmp.snippet = {
