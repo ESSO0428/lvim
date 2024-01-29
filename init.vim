@@ -29,7 +29,7 @@ Plug 'ojroques/vim-oscyank', {'branch': 'main'}
 " Plug 'RRethy/vim-hexokinase', { 'do': 'cd ~/.config/lvim/plugged/vim-hexokinase/; make hexokinase' }
 Plug 'tpope/vim-surround'
 Plug 'mbbill/undotree'
-Plug 'hkupty/iron.nvim'
+Plug 'ESSO0428/iron.nvim'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-line'
 Plug 'GCBallesteros/vim-textobj-hydrogen'
@@ -179,14 +179,15 @@ iron.setup({
   config = {
     repl_open_cmd = view.split.vertical.botright(0.45),
     should_map_plug = false,
+    execute_repl_with_workspace = true,
     scratch_repl = true,
     repl_definition = {
       python = {
         -- command = { "ipython" },
         -- command = { "ptpython" },
         -- command = { "ptpython", "--dark-bg" },
-        command = { "ptipython", "--dark-bg" },
-        -- command = { "jupyter", "console" },
+        -- command = { "ptipython", "--dark-bg" },
+        command = { "jupyter", "console" },
         format = require("iron.fts.common").bracketed_paste,
       },
     },
