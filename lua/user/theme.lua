@@ -114,7 +114,11 @@ lvim.builtin.lualine.sections                          = {
   lualine_x = {
     { 'vim.api.nvim_call_function("getcwd", {0})' }, { 'encoding' },
     { 'fileformat' },
-    { 'filetype',                                 icon_only = false }
+    { 'filetype',                                 icon_only = false },
+    {
+      'pid',
+      fmt = function() return "pid:" .. vim.fn.getpid() end
+    }
   },
 }
 lvim.builtin.telescope.pickers.find_files.find_command = { "fd", "--type", "f" }
