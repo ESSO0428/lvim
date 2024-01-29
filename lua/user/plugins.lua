@@ -782,7 +782,7 @@ lvim.plugins = {
           quit = { "q", "<ESC>", "<leader>q" },
           shuttle = '<c-s>',
           toggle_or_req = { 'l', '<cr>' },
-          close = '<c-w>'
+          close = '<C-c>k'
         }
       }
     },
