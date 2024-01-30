@@ -18,8 +18,8 @@ local function LspbufRename()
 end
 vim.api.nvim_create_user_command('LspbufRename', LspbufRename, {})
 
-lvim.keys.normal_mode['gh']                = ":lua lsp_or_jupyter_signature_help<cr>"
-lvim.lsp.buffer_mappings.normal_mode['gh'] = { ":lua lsp_or_jupyter_signature_help()<cr>", "Show documentation" }
+lvim.keys.normal_mode['gh']                = "<cmd>lua lsp_or_jupyter_signature_help()<cr>"
+lvim.lsp.buffer_mappings.normal_mode['gh'] = { "<cmd>lua lsp_or_jupyter_signature_help()<cr>", "Show documentation" }
 
 lvim.keys.normal_mode['gs']                = ":Antovim<cr>"
 
