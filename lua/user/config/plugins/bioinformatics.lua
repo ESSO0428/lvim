@@ -120,3 +120,11 @@ vim.cmd([[
   autocmd WinEnter * lua ReStartNotTableFileTypeLayout('enter')
   autocmd BufLeave * lua ReStartNotTableFileTypeLayout('leave')
 ]])
+
+local function format_json(opts)
+  local line1 = opts.line1 or 1
+  local line2 = opts.line2 or vim.api.nvim_buf_line_count(0)
+  vim.cmd(line1 .. ',' .. line2 .. '!xargs -0 -I {} node -e \'console.log(JSON.stringify({}, null, 2));\'')
+end
+
+vim.api.nvim_create_user_command('FormatJson', format_json, { range = '%' })

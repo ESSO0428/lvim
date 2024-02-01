@@ -12,6 +12,7 @@ local attach_config = {
       remoteRoot = '/usr/local/apache2/htdocs/mysite/'
     },
   },
+  django = true,
   console = "internalConsole",
   connect = function()
     local host = vim.fn.input('Host [127.0.0.1]: ')
