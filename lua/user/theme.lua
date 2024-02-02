@@ -97,7 +97,7 @@ end
 --]]
 
 -- lvim.builtin.bufferline
-
+vim.g.vim_pid                                          = vim.fn.getpid()
 lvim.builtin.lualine.options                           = {
   globalstatus = true,
   component_separators = { left = '', right = '' },
@@ -117,7 +117,7 @@ lvim.builtin.lualine.sections                          = {
     { 'filetype',                                 icon_only = false },
     {
       'pid',
-      fmt = function() return "pid:" .. vim.fn.getpid() end
+      fmt = function() return "pid:" .. vim.g.vim_pid end
     }
   },
 }
