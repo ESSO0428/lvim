@@ -37,7 +37,7 @@ vim.g.PythonEnv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
 -- (到該目錄下先執行) git fetch; git pull
 
 -- lvim.keys.normal_mode['<F1>'] = ":set relativenumber!<cr>"
-lvim.keys.normal_mode[';'] = ":set relativenumber!<cr>"
+lvim.keys.normal_mode['s;'] = ":set relativenumber!<cr>"
 lvim.keys.normal_mode["<leader>n"] = "<c-w><c-p>"
 lvim.builtin.lir.active = true
 -- lvim.builtin.breadcrumbs.active = false

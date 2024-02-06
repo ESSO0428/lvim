@@ -1,4 +1,4 @@
-nnoremap ; :set relativenumber!<CR>
+nnoremap s; :set relativenumber!<CR>
 let mapleader = " " " map leader to Space
 
 let g:neoterm_autoscroll = 1
