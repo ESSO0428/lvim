@@ -123,7 +123,8 @@ inoremap <c-p> <ESC><CR>
 
 
 " Find pair
-nnoremap ,. %
+" nnoremap ,. %
+nnoremap g, %
 vnoremap ni $%
 " Search
 " noremap <LEADER><CR> :nohlsearch<CR>

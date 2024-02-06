@@ -515,7 +515,13 @@ lvim.plugins = {
       }
     }
   },
-  { "rhysd/clever-f.vim" },
+  {
+    "rhysd/clever-f.vim",
+    config = function()
+      vim.keymap.set("n", ";", "<Plug>(clever-f-repeat-forward)", {})
+      vim.keymap.set("n", ",", "<Plug>(clever-f-repeat-back)", {})
+    end
+  },
   {
     "gbprod/yanky.nvim",
     opts = {
