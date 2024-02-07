@@ -144,9 +144,11 @@ nnoremap <silent> <LEADER>Oa zM
 nnoremap <silent> <LEADER>Od zR
 
 vnoremap <silent> <LEADER>o za
-vnoremap <silent> <LEADER>Oa zM
-vnoremap <silent> <LEADER>Od zR
+vnoremap <silent> <LEADER>Oa zC
+vnoremap <silent> <LEADER>Od zO
 
+nnoremap <silent> [{ zk
+nnoremap <silent> ]} zj
 
 " insert a pair of {} and go to the next line
 " inoremap <c-y> <ESC>A {}<ESC>i<CR><ESC>ko
