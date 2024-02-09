@@ -10,6 +10,14 @@ vim.cmd "au ColorScheme * highlight Dash guifg=#D19A66 gui=bold"
 -- orgmode link
 vim.cmd "au ColorScheme * highlight org_hyperlink guifg=#3794FF gui=underline"
 
+vim.cmd "au ColorScheme * highlight link @text.title.1 @OrgTSHeadlineLevel1"
+vim.cmd "au ColorScheme * highlight link @text.title.2 @OrgTSHeadlineLevel2"
+vim.cmd "au ColorScheme * highlight link @text.title.3 @OrgTSHeadlineLevel3"
+vim.cmd "au ColorScheme * highlight link @text.title.4 @OrgTSHeadlineLevel4"
+vim.cmd "au ColorScheme * highlight link @text.title.5 @OrgTSHeadlineLevel5"
+vim.cmd "au ColorScheme * highlight link @text.title.6 @OrgTSHeadlineLevel6"
+
+
 require("headlines").setup {
   markdown = {
     query = vim.treesitter.query.parse(
@@ -27,12 +35,27 @@ require("headlines").setup {
             (thematic_break) @dash
 
             (fenced_code_block) @codeblock
+
+            (block_quote_marker) @quote
+
+            (block_quote (paragraph (inline (block_continuation) @quote)))
+            (block_quote (paragraph (block_continuation) @quote))
+            (block_quote (block_continuation) @quote)
       ]]
     ),
     headline_highlights = {
       "Headline1",
       "Headline2"
     },
+    bullet_highlights = {
+      "@text.title.1.marker.markdown",
+      "@text.title.2.marker.markdown",
+      "@text.title.3.marker.markdown",
+      "@text.title.4.marker.markdown",
+      "@text.title.5.marker.markdown",
+      "@text.title.6.marker.markdown",
+    },
+    bullets = { "◉", "○", "✸", "✿" },
     dash_highlight = "Dash",
     dash_string = "—",
     fat_headlines = false,
