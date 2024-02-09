@@ -10,19 +10,19 @@ vim.cmd "au ColorScheme * highlight Dash guifg=#D19A66 gui=bold"
 -- orgmode link
 vim.cmd "au ColorScheme * highlight org_hyperlink guifg=#3794FF gui=underline"
 
-vim.cmd "au ColorScheme * highlight link @text.title.1 @OrgTSHeadlineLevel1"
-vim.cmd "au ColorScheme * highlight link @text.title.2 @OrgTSHeadlineLevel2"
-vim.cmd "au ColorScheme * highlight link @text.title.3 @OrgTSHeadlineLevel3"
-vim.cmd "au ColorScheme * highlight link @text.title.4 @OrgTSHeadlineLevel4"
-vim.cmd "au ColorScheme * highlight link @text.title.5 @OrgTSHeadlineLevel5"
-vim.cmd "au ColorScheme * highlight link @text.title.6 @OrgTSHeadlineLevel6"
+vim.cmd "au ColorScheme * highlight link @text.title.1 Title"
+vim.cmd "au ColorScheme * highlight link @text.title.2 Constant"
+vim.cmd "au ColorScheme * highlight link @text.title.3 Identifier"
+vim.cmd "au ColorScheme * highlight link @text.title.4 Statement"
+vim.cmd "au ColorScheme * highlight link @text.title.5 PreProc"
+vim.cmd "au ColorScheme * highlight link @text.title.6 Type"
 
-vim.cmd "au ColorScheme * highlight link markdownH1Delimiter @OrgTSHeadlineLevel1"
-vim.cmd "au ColorScheme * highlight link markdownH2Delimiter @OrgTSHeadlineLevel2"
-vim.cmd "au ColorScheme * highlight link markdownH3Delimiter @OrgTSHeadlineLevel3"
-vim.cmd "au ColorScheme * highlight link markdownH4Delimiter @OrgTSHeadlineLevel4"
-vim.cmd "au ColorScheme * highlight link markdownH5Delimiter @OrgTSHeadlineLevel5"
-vim.cmd "au ColorScheme * highlight link markdownH6Delimiter @OrgTSHeadlineLevel6"
+vim.cmd "au ColorScheme * highlight link markdownH1Delimiter Title"
+vim.cmd "au ColorScheme * highlight link markdownH2Delimiter Constant"
+vim.cmd "au ColorScheme * highlight link markdownH3Delimiter Identifier"
+vim.cmd "au ColorScheme * highlight link markdownH4Delimiter Statement"
+vim.cmd "au ColorScheme * highlight link markdownH5Delimiter PreProc"
+vim.cmd "au ColorScheme * highlight link markdownH6Delimiter Type"
 
 
 require("headlines").setup {
