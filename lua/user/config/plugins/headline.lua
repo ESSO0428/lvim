@@ -17,6 +17,13 @@ vim.cmd "au ColorScheme * highlight link @text.title.4 @OrgTSHeadlineLevel4"
 vim.cmd "au ColorScheme * highlight link @text.title.5 @OrgTSHeadlineLevel5"
 vim.cmd "au ColorScheme * highlight link @text.title.6 @OrgTSHeadlineLevel6"
 
+vim.cmd "au ColorScheme * highlight link markdownH1Delimiter @OrgTSHeadlineLevel1"
+vim.cmd "au ColorScheme * highlight link markdownH2Delimiter @OrgTSHeadlineLevel2"
+vim.cmd "au ColorScheme * highlight link markdownH3Delimiter @OrgTSHeadlineLevel3"
+vim.cmd "au ColorScheme * highlight link markdownH4Delimiter @OrgTSHeadlineLevel4"
+vim.cmd "au ColorScheme * highlight link markdownH5Delimiter @OrgTSHeadlineLevel5"
+vim.cmd "au ColorScheme * highlight link markdownH6Delimiter @OrgTSHeadlineLevel6"
+
 
 require("headlines").setup {
   markdown = {
