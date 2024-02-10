@@ -2,6 +2,7 @@ function code_runner()
   local filetype = vim.bo.filetype                                   -- 获取当前文件类型
   local filedir = vim.fn.expand('%:p:h')                             -- 获取当前文件的目录
   local term_cd_cmd = "cd " .. vim.fn.shellescape(filedir) .. " && " -- 构造终端中执行的 cd 命令
+  local filename = vim.fn.expand('%:t')
 
   -- 根据文件类型执行不同的命令
   if filetype == 'python' then
@@ -31,6 +32,14 @@ function code_runner()
   elseif filetype == 'tex' then
     vim.cmd("silent! VimtexStop")
     vim.cmd("silent! VimtexCompile")
+  elseif filetype == 'scss' then
+    vim.o.splitbelow = true
+    local output_filename = filename:gsub("%.scss$", ".css")
+    vim.cmd("sp | term " .. term_cd_cmd .. "sass " .. filename .. " " .. output_filename)
+  elseif filetype == 'sass' then
+    vim.o.splitbelow = true
+    local output_filename = filename:gsub("%.sass$", ".css")
+    vim.cmd("sp | term " .. term_cd_cmd .. "sass " .. filename .. " " .. output_filename)
   elseif filetype == 'dart' then
     vim.cmd("CocCommand flutter.run -d " .. vim.g.flutter_default_device .. " " .. vim.g.flutter_run_args)
     vim.cmd("silent! CocCommand flutter.dev.openDevLog")
