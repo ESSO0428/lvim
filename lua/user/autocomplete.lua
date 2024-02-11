@@ -40,6 +40,7 @@ require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
           return vim.tbl_keys(bufs)
         end
       }
+
     },
     { name = "spell" }
   }
@@ -79,33 +80,10 @@ end
 -- 調用函數
 remove_copilot_if_node_version_too_low()
 lvim.builtin.cmp.experimental.ghost_text = true
-lvim.builtin.cmp.cmdline.enable = true
-lvim.builtin.cmp.cmdline.options = {
-  {
-    type = ":",
-    sources = cmp.config.sources(
-      {
-        { name = "path" }
-      },
-      {
-        { name = 'cmdline_history' },
-        { name = "cmdline" }
-      }
-    )
-  },
-  {
-    type = { "/", "?" },
-    sources = {
-      { name = "buffer" },
-    },
-  }
-}
-
-
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "luasnip" }
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "jupyter" }
 table.insert(lvim.builtin.cmp.sources, 2, { name = "jupyter" })
--- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "cmdline_history" }
+lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "cmdline_history" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "ultisnips" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vsnip" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "orgmode" }
@@ -206,16 +184,6 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
     if entry.source.name == "spell" then
       vim_item.kind = "󰉿"
       vim_item.kind_hl_group = "CmpItemKindConstant"
-    end
-    if entry.source.name == "path" then
-      local ok, devicons = pcall(require, 'nvim-web-devicons')
-      if ok then
-        local icon, icon_highlight_group = devicons.get_icon(entry:get_completion_item().label)
-        if icon then
-          vim_item.kind = icon
-          vim_item.kind_hl_group = icon_highlight_group
-        end
-      end
     end
   end
   vim_item.menu = lvim.builtin.cmp.formatting.source_names[entry.source.name]
@@ -435,7 +403,6 @@ end, { "i", "c" })
 vim.keymap.set('i', '<a-j>', "<ESC>")
 lvim.builtin.cmp.mapping["<M-j>"] = cmp.mapping(cmp_mapping.abort(), { "i", "c" })
 
-lvim.builtin.cmp.formatting.source_names.cmdline_history = "(cmd-history)"
 lvim.builtin.cmp.formatting.source_names.vsnip = "(V-Snippet)"
 lvim.builtin.cmp.formatting.source_names.luasnip = "(L-Snippet)"
 lvim.builtin.cmp.formatting.source_names.ultisnips = "(U-Snippet)"
