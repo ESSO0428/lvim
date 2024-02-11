@@ -19,7 +19,7 @@ require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
       name = "buffer",
       option = {
         get_bufnrs = function()
-          local max_size = 100000     -- 设置文件大小限制为 100,000 字节
+          local max_size = 100000 -- 设置文件大小限制为 100,000 字节
           local bufs = {}
 
           -- 获取当前 Tab 中的所有窗口
@@ -40,7 +40,6 @@ require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
           return vim.tbl_keys(bufs)
         end
       }
-
     },
     { name = "spell" }
   }
@@ -80,9 +79,29 @@ end
 -- 調用函數
 remove_copilot_if_node_version_too_low()
 lvim.builtin.cmp.experimental.ghost_text = true
+lvim.builtin.cmp.cmdline.enable = true
+lvim.builtin.cmp.cmdline.options = {
+  {
+    type = ":",
+    sources = {
+      { name = 'cmdline_history' },
+      { name = "path" },
+      { name = "cmdline" },
+    },
+  },
+  {
+    type = { "/", "?" },
+    sources = {
+      { name = "buffer" },
+    },
+  }
+}
+
+
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "luasnip" }
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "jupyter" }
 table.insert(lvim.builtin.cmp.sources, 2, { name = "jupyter" })
+lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "cmdline_history" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "ultisnips" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vsnip" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "orgmode" }
@@ -402,6 +421,7 @@ end, { "i", "c" })
 vim.keymap.set('i', '<a-j>', "<ESC>")
 lvim.builtin.cmp.mapping["<M-j>"] = cmp.mapping(cmp_mapping.abort(), { "i", "c" })
 
+lvim.builtin.cmp.formatting.source_names.cmdline_history = "(cmd-history)"
 lvim.builtin.cmp.formatting.source_names.vsnip = "(V-Snippet)"
 lvim.builtin.cmp.formatting.source_names.luasnip = "(L-Snippet)"
 lvim.builtin.cmp.formatting.source_names.ultisnips = "(U-Snippet)"

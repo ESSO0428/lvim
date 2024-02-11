@@ -364,6 +364,8 @@ lvim.plugins = {
   {
     "joaomsa/telescope-orgmode.nvim"
   },
+  { "hrsh7th/cmp-cmdline" },
+  { "dmitmel/cmp-cmdline-history" },
   { "f3fora/cmp-spell" },
   { "rcarriga/cmp-dap" },
   { "github/copilot.vim" },

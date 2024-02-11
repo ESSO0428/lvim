@@ -17,7 +17,7 @@ if has('nvim')
     UpdateRemotePlugins
   endfunction
 
-  Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+  " Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 else
   Plug 'gelguy/wilder.nvim'
 
