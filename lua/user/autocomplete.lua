@@ -83,11 +83,15 @@ lvim.builtin.cmp.cmdline.enable = true
 lvim.builtin.cmp.cmdline.options = {
   {
     type = ":",
-    sources = {
-      { name = 'cmdline_history' },
-      { name = "path" },
-      { name = "cmdline" },
-    },
+    sources = cmp.config.sources(
+      {
+        { name = "path" }
+      },
+      {
+        { name = 'cmdline_history' },
+        { name = "cmdline" }
+      }
+    )
   },
   {
     type = { "/", "?" },
