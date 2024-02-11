@@ -101,7 +101,7 @@ lvim.builtin.cmp.cmdline.options = {
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "luasnip" }
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "jupyter" }
 table.insert(lvim.builtin.cmp.sources, 2, { name = "jupyter" })
-lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "cmdline_history" }
+-- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "cmdline_history" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "ultisnips" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vsnip" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "orgmode" }
@@ -202,6 +202,17 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
     if entry.source.name == "spell" then
       vim_item.kind = "󰉿"
       vim_item.kind_hl_group = "CmpItemKindConstant"
+    end
+    if entry.source.name == "path" then
+      local ok, devicons = pcall(require, 'nvim-web-devicons')
+      if ok then
+        local icon, icon_highlight_group = devicons.get_icon(entry:get_completion_item().label)
+        if icon then
+          icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
+          vim_item.kind = icon
+          vim_item.kind_hl_group = icon_highlight_group
+        end
+      end
     end
   end
   vim_item.menu = lvim.builtin.cmp.formatting.source_names[entry.source.name]
