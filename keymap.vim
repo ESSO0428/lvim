@@ -565,9 +565,15 @@ nnoremap <silent> <Leader>t. :tabnext<CR>
 nnoremap <silent> <Leader>t\\ :tabclose<CR>
 
 set isfname+=32
-function! XOpenFileOrFold()
-  let line = expand('<cfile>')
-  let path = trim(line)
+function! XOpenFileOrFold(mode)
+  let cfile = ''
+  if a:mode == 'v'
+    let cfile = getreg('f')
+  else
+    let cfile = expand('<cfile>')
+  endif
+
+  let path = trim(cfile)
   if path[0] == '~'
     let path = expand('~') . path[1:]
   endif
@@ -585,8 +591,8 @@ function! XOpenFileOrFold()
   endif
 endfunction
 
-nnoremap <silent> <a-h> :call XOpenFileOrFold()<CR>
-
+nnoremap <silent> <a-h> :call XOpenFileOrFold('n')<CR>
+vnoremap <silent> <a-h> "fy:call XOpenFileOrFold('v')<CR>
 
 function! SetWrapKeymaps()
   if exists('b:venn_enabled') && b:venn_enabled
