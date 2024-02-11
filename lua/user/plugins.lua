@@ -198,6 +198,7 @@ lvim.plugins = {
   { "ESSO0428/bioSyntax-vim" },
   {
     "wookayin/semshi",
+    ft = "python",
     build = ":UpdateRemotePlugins",
   },
   {
@@ -363,6 +364,11 @@ lvim.plugins = {
   },
   {
     "joaomsa/telescope-orgmode.nvim"
+  },
+  {
+    'gelguy/wilder.nvim',
+    build = ":UpdateRemotePlugins",
+    event = "CmdlineEnter"
   },
   { "f3fora/cmp-spell" },
   { "rcarriga/cmp-dap" },

@@ -1,4 +1,4 @@
-pcall(function()
+local success, msg = pcall(function()
   local wilder = require('wilder')
   wilder.setup({
     modes = { ':', '/', '?' },
@@ -48,3 +48,6 @@ pcall(function()
   vim.api.nvim_set_keymap('c', '<a-j>', [[wilder#in_context() ? wilder#reject_completion() : '<a-j>']],
     { noremap = true, expr = true })
 end)
+if not success then
+  print("Error setting up wilder")
+end

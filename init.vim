@@ -17,7 +17,8 @@ if has('nvim')
     UpdateRemotePlugins
   endfunction
 
-  Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+  " this plugin now is setup with lazy.nvim
+  " Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 else
   Plug 'gelguy/wilder.nvim'
 

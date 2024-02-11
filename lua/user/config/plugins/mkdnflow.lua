@@ -72,7 +72,7 @@ filename: {{ filename }}
   })
 end)
 if not success then
-  print("Error setting up mkdnflow:")
+  print("Error setting up mkdnflow")
 end
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'markdown',
