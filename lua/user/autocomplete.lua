@@ -212,7 +212,6 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
       if ok then
         local icon, icon_highlight_group = devicons.get_icon(entry:get_completion_item().label)
         if icon then
-          icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
           vim_item.kind = icon
           vim_item.kind_hl_group = icon_highlight_group
         end
