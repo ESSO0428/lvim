@@ -413,6 +413,7 @@ lvim.builtin.cmp.formatting.source_names['spell'] = "(spell)"
 lvim.builtin.cmp.formatting.source_names['cmp_yanky'] = "(yank)"
 lvim.builtin.cmp.formatting.source_names.jupyter = "(jupyter)"
 lvim.builtin.cmp.formatting.duplicates = {
+  ['html-css'] = 1,
   buffer = 1,
   path = 1,
   nvim_lsp = 0,

@@ -297,29 +297,12 @@ lvim.plugins = {
   },
   { "jbyuki/venn.nvim" },
   {
-    'ZhiyuanLck/smart-pairs',
-    event = 'InsertEnter',
-    config = function()
-      local fb = require('pairs.fallback')
-      require('pairs'):setup({
-        delete = {
-          empty_line = {
-            text_text = {
-              strategy = nil,
-              fallbacke = fb.delete,
-            }
-          }
-        },
-        mapping = {
-          -- jump_left_in_any   = '<m-[>',
-          jump_left_in_any   = '<m-,>',
-          -- jump_right_out_any = '<m-]>',
-          jump_right_out_any = '<m-.>',
-          -- jump_left_out_any  = '<m-{>',
-          -- jump_right_in_any  = '<m-}>',
-        }
-      })
-    end
+    'altermo/ultimate-autopair.nvim',
+    event = { 'InsertEnter', 'CmdlineEnter' },
+    branch = 'v0.6', --recommended as each new version will have breaking changes
+    opts = {
+      --Config goes here
+    }
   },
   { "ESSO0428/bookmarks.nvim" },
   {
@@ -473,21 +456,10 @@ lvim.plugins = {
   -- },
   {
     'ESSO0428/nvim-html-css',
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter' },
-    -- commit = '6f256a5',
     dependencies = {
       "nvim-lua/plenary.nvim",
       "hrsh7th/nvim-cmp"
-    },
-    event = { "VeryLazy" },
-    config = function()
-      if vim.fn.getcwd() ~= vim.fn.expand("$HOME") then
-        require("html-css"):setup()
-      end
-    end
-    -- init = function()
-    --   require('html-css'):setup()
-    -- end
+    }
   },
   { "junegunn/vim-peekaboo" },
   { "godlygeek/tabular" },

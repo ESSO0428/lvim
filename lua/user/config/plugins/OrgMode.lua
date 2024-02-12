@@ -1,3 +1,6 @@
+local custom_cycle = require("user.builtin.orgmode.action").custom_cycle
+require('orgmode.config.mappings').org.org_cycle.handler = custom_cycle
+
 -- Load custom treesitter grammar for org filetype
 local function check_org_notes()
   local home_dir = os.getenv("HOME")
@@ -9,6 +12,27 @@ local function check_org_notes()
   -- 检查当前目录是否从第一个字符开始与主目录匹配
   if not (current_dir:sub(1, #home_dir) == home_dir) then
     return
+  end
+  -- 检查当前目录是否为 Dropbox 或 org 的后缀
+  if current_dir:match('.*/Dropbox$') or current_dir:match('.*/org$') then
+    return
+  end
+
+  -- 使用 command -v 检查 git 命令是否可用
+  local git_available = vim.fn.system("command -v git")
+  if git_available == "" then
+    -- git 不可用，检查当前目录是否有 .git 目录
+    if vim.fn.isdirectory(current_dir .. "/.git") == 0 then
+      -- 没有 .git 目录，直接返回
+      return
+    end
+    return
+  else
+    -- 检查当前目录是否为 Git 仓库
+    local is_git_repo = vim.fn.system("git rev-parse --is-inside-work-tree"):match("true")
+    if is_git_repo then
+      return
+    end
   end
 
   -- 檢查 notes.org 檔案是否存在
@@ -45,7 +69,7 @@ end
 require('orgmode').setup_ts_grammar()
 vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
-opt_org_agenda_files = { '~/Dropbox/org/*', '~/my-orgs/**/*', ('%s/Dropbox/org/*'):format(vim.fn.getcwd()) }
+local opt_org_agenda_files = { '~/Dropbox/org/*', '~/my-orgs/**/*', ('%s/Dropbox/org/*'):format(vim.fn.getcwd()) }
 
 -- 將 ~ 轉成絕對路徑
 local home = os.getenv("HOME") or ""
