@@ -110,8 +110,7 @@ lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = {
   },
 }
 
-
-lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = {
+table.insert(lvim.builtin.cmp.sources, 1, {
   name = "html-css",
   option = {
     max_count = {}, -- not ready yet
@@ -126,7 +125,7 @@ lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = {
     -- "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css",
     -- }
   }
-}
+})
 lvim.builtin.cmp.formatting.source_names["html-css"] = "(html-css)"
 ---[[
 lvim.builtin.cmp.formatting.format = function(entry, vim_item)
