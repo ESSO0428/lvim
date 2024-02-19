@@ -22,6 +22,7 @@ lvim.keys.normal_mode['gh']                = "<cmd>lua lsp_or_jupyter_signature_
 lvim.lsp.buffer_mappings.normal_mode['gh'] = { "<cmd>lua lsp_or_jupyter_signature_help()<cr>", "Show documentation" }
 
 lvim.keys.normal_mode['gs']                = ":Antovim<cr>"
+lvim.keys.normal_mode['ga']                = ":TSJToggle<cr>"
 
 -- replace to Lspsaga code action
 -- lvim.keys.normal_mode['<leader>ua']           = { "<cmd>lua vim.lsp.buf.code_action()<cr>" }

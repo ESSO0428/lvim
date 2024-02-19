@@ -467,6 +467,15 @@ lvim.plugins = {
   { "mg979/vim-visual-multi" },
   { "matze/vim-move" },
   { "theniceboy/antovim" },
+  {
+    'Wansmer/treesj',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('treesj').setup({
+        use_default_keymaps = false
+      })
+    end,
+  },
   -- { "theniceboy/vim-snippets" },
   -- cmp-nvim-ultisnips 有可能造成補全失效
   -- { "quangnguyen30192/cmp-nvim-ultisnips" },
