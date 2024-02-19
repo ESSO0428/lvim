@@ -322,11 +322,11 @@ for k, v in pairs(lvim.builtin.cmp.mapping) do
   end
   if k == "<C-D>" then
     lvim.builtin.cmp.mapping[k] = nil
-    lvim.builtin.cmp.mapping["<C-a>"] = v
+    lvim.builtin.cmp.mapping["<C-u>"] = v
   end
   if k == "<C-F>" then
     lvim.builtin.cmp.mapping[k] = nil
-    lvim.builtin.cmp.mapping["<C-d>"] = v
+    lvim.builtin.cmp.mapping["<C-o>"] = v
   end
   if k == "<C-Y>" then
     local confirm_opts = vim.deepcopy(lvim.builtin.cmp.confirm_opts) -- avoid mutating the original opts below
