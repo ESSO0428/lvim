@@ -99,32 +99,48 @@ local function compile_sass()
   end
 end
 
-local sass_auto_compile_enabled = false
-vim.g.watch_sass = sass_auto_compile_enabled
+-- 初始化自动编译Sass的全局变量
+vim.g.watch_sass = true
 
+-- 创建auto_compile_sass组，但不添加任何autocmd
+-- 这样可以避免在不需要时就启动autocmd
+vim.api.nvim_create_augroup("auto_compile_sass", {})
+
+-- 在Neovim启动时检查是否需要启用自动编译
+if vim.g.watch_sass then
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    group = "auto_compile_sass",
+    pattern = { "*.scss", "*.sass" },
+    callback = function()
+      local filename = vim.fn.expand('%:t')
+      if not string.match(filename, "^_") then -- 忽略以_开头的文件
+        compile_sass()
+      end
+    end,
+  })
+end
+
+-- 定义切换Sass自动编译状态的命令
 local function toggle_sass_auto_compile()
-  if sass_auto_compile_enabled then
-    -- 禁用自动编译
-    vim.api.nvim_clear_autocmds({ group = "auto_compile_sass" })
-    sass_auto_compile_enabled = false
-    print("Sass auto compile disabled.")
-  else
-    -- 启用自动编译
-    vim.api.nvim_create_augroup("auto_compile_sass", {})
+  vim.g.watch_sass = not vim.g.watch_sass
+  if vim.g.watch_sass then
+    -- 如果启用了自动编译，添加相关的autocmd
     vim.api.nvim_create_autocmd("BufWritePost", {
       group = "auto_compile_sass",
       pattern = { "*.scss", "*.sass" },
       callback = function()
         local filename = vim.fn.expand('%:t')
-        if not string.match(filename, "^_") then -- 忽略以_开头的文件
+        if not string.match(filename, "^_") then
           compile_sass()
         end
       end,
     })
-    sass_auto_compile_enabled = true
     print("Sass auto compile enabled.")
+  else
+    -- 如果禁用了自动编译，清除相关的autocmd
+    vim.api.nvim_clear_autocmds({ group = "auto_compile_sass" })
+    print("Sass auto compile disabled.")
   end
-  vim.g.watch_sass = sass_auto_compile_enabled
 end
 
 -- 创建一个命令，方便用户开关自动编译功能
