@@ -59,9 +59,9 @@ local function sass_watch_status()
   local filetype = vim.bo.filetype
   if filetype == 'sass' or filetype == 'scss' then
     if vim.g.watch_sass then
-      return " Watch Sass"
+      return " Watch Sass: true"
     else
-      return " Watch Sass"
+      return " Watch Sass: false"
     end
   end
   return "" -- 对于非sass/scss文件，不显示任何信息
@@ -94,6 +94,7 @@ local function compile_sass()
     else
       -- 没有错误，显示成功信息
       vim.notify("Compiled: " .. filename .. " to " .. output_filename, vim.log.levels.INFO)
+      vim.fn.setqflist({}, 'r')
     end
   end
 end
