@@ -55,6 +55,82 @@ function code_runner()
   end
 end
 
+local function sass_watch_status()
+  local filetype = vim.bo.filetype
+  if filetype == 'sass' or filetype == 'scss' then
+    if vim.g.watch_sass then
+      return " Watch Sass"
+    else
+      return " Watch Sass"
+    end
+  end
+  return "" -- 对于非sass/scss文件，不显示任何信息
+end
+
+local function compile_sass()
+  local filetype = vim.bo.filetype               -- 获取当前文件类型
+  local filedir = vim.fn.expand('%:p:h')         -- 获取当前文件的目录
+  local filename = vim.fn.expand('%:t')          -- 获取当前文件名
+  local relative_filename = vim.fn.expand('%:.') -- 获取当前文件名 (相對路徑)
+  local output_filename = filename:gsub("%.scss$", ".css"):gsub("%.sass$", ".css")
+  local full_output_path = filedir .. '/' .. output_filename
+
+  -- 检查文件类型是否为sass或scss，忽略以下划线开头的文件
+  if filetype == "sass" or filetype == "scss" and not string.match(filename, "^_") then
+    -- 构建并执行sass命令，直接在命令中改变工作目录
+    local sass_cmd = string.format("cd %s && sass %s %s", vim.fn.shellescape(filedir), vim.fn.shellescape(filename),
+      vim.fn.shellescape(full_output_path))
+    local result = vim.fn.systemlist(sass_cmd)
+
+    if #result > 0 then
+      -- 如果有输出或错误，将其添加到quickfix列表
+      local qf = {}
+      for _, line in ipairs(result) do
+        table.insert(qf, { filename = relative_filename, lnum = 0, col = 0, text = line })
+      end
+      vim.fn.setqflist(qf, 'r') -- 使用'replace'选项来替换当前的quickfix列表内容
+      -- 显示警告通知，并提醒用户可以通过:copen命令查看详细信息
+      vim.notify("Compilation warnings or errors detected. Use ':copen' to view details.", vim.log.levels.WARN)
+    else
+      -- 没有错误，显示成功信息
+      vim.notify("Compiled: " .. filename .. " to " .. output_filename, vim.log.levels.INFO)
+    end
+  end
+end
+
+local sass_auto_compile_enabled = false
+vim.g.watch_sass = sass_auto_compile_enabled
+
+local function toggle_sass_auto_compile()
+  if sass_auto_compile_enabled then
+    -- 禁用自动编译
+    vim.api.nvim_clear_autocmds({ group = "auto_compile_sass" })
+    sass_auto_compile_enabled = false
+    print("Sass auto compile disabled.")
+  else
+    -- 启用自动编译
+    vim.api.nvim_create_augroup("auto_compile_sass", {})
+    vim.api.nvim_create_autocmd("BufWritePost", {
+      group = "auto_compile_sass",
+      pattern = { "*.scss", "*.sass" },
+      callback = function()
+        local filename = vim.fn.expand('%:t')
+        if not string.match(filename, "^_") then -- 忽略以_开头的文件
+          compile_sass()
+        end
+      end,
+    })
+    sass_auto_compile_enabled = true
+    print("Sass auto compile enabled.")
+  end
+  vim.g.watch_sass = sass_auto_compile_enabled
+end
+
+-- 创建一个命令，方便用户开关自动编译功能
+vim.api.nvim_create_user_command("ToggleSassWatch", toggle_sass_auto_compile, {})
+
+lvim.builtin.lualine.sections.lualine_c[#lvim.builtin.lualine.sections.lualine_c + 1] = { sass_watch_status }
+
 -- 创建一个 Neovim 命令来调用这个函数
 vim.api.nvim_create_user_command('CodeRunner', code_runner, {})
 lvim.keys.normal_mode["<leader>rr"] = "<cmd>CodeRunner<CR>"
