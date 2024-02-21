@@ -1,6 +1,3 @@
-local custom_cycle = require("user.builtin.orgmode.action").custom_cycle
-require('orgmode.config.mappings').org.org_cycle.handler = custom_cycle
-
 -- Load custom treesitter grammar for org filetype
 local function check_org_notes()
   local home_dir = os.getenv("HOME")

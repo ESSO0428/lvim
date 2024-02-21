@@ -317,14 +317,23 @@ lvim.plugins = {
     dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
   },
   {
-    "nvim-orgmode/orgmode",
-    branch = "master",
-    ft = { "org" },
-    build = ":lua require('orgmode').setup_ts_grammar()",
+    'nvim-orgmode/orgmode',
+    dependencies = {
+      { 'nvim-treesitter/nvim-treesitter', lazy = true },
+    },
+    event = 'VeryLazy',
     config = function()
+      -- Load treesitter grammar for org
       require('orgmode').setup_ts_grammar()
-      require("orgmode").setup {}
-    end
+
+      -- Setup treesitter
+      require('nvim-treesitter.configs').setup({
+        highlight = {
+          enable = true,
+        },
+        ensure_installed = { 'org' },
+      })
+    end,
   },
   {
     'akinsho/org-bullets.nvim',
@@ -333,21 +342,15 @@ lvim.plugins = {
       require('org-bullets').setup()
     end
   },
-  -- {
-  --   'ESSO0428/org-bullets-markdown.nvim',
-  --   ft = { "markdown" },
-  --   config = function()
-  --     require('org-bullets-markdown').setup()
-  --   end
-  -- },
   {
     'lukas-reineke/headlines.nvim',
     dependencies = "nvim-treesitter/nvim-treesitter",
     config = true, -- or `opts = {}`
   },
-  {
-    "joaomsa/telescope-orgmode.nvim"
-  },
+  -- NOTE: because orgmode update and org.parser.files depend on orgmode, so I have to disable it
+  -- {
+  --   "joaomsa/telescope-orgmode.nvim"
+  -- },
   {
     'gelguy/wilder.nvim',
     build = ":UpdateRemotePlugins",
