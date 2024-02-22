@@ -426,6 +426,9 @@ lvim.plugins = {
     end
   },
   {
+    'junegunn/fzf',
+  },
+  {
     "kevinhwang91/nvim-bqf",
     event = { "BufRead", "BufNew" },
     config = function()
@@ -438,9 +441,13 @@ lvim.plugins = {
           border_chars = { "┃", "┃", "━", "━", "┏", "┓", "┗", "┛", "█" }
         },
         func_map = {
-          vsplit = "",
+          split = "<a-k>",
+          vsplit = "<a-l>",
           ptogglemode = "z,",
-          stoggleup = ""
+          stoggleup = "",
+          pscrollup = "<c-u>",
+          pscrolldown = '<C-o>',
+          fzffilter = '<c-f>'
         },
         filter = {
           fzf = {
