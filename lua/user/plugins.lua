@@ -321,7 +321,6 @@ lvim.plugins = {
     dependencies = {
       { 'nvim-treesitter/nvim-treesitter', lazy = true },
     },
-    event = 'VeryLazy',
     config = function()
       -- Load treesitter grammar for org
       require('orgmode').setup_ts_grammar()
@@ -672,12 +671,7 @@ lvim.plugins = {
     build = "pip install debugpy"
   },
   { "theHamsta/nvim-dap-virtual-text" },
-  {
-    "LiadOz/nvim-dap-repl-highlights",
-    config = function()
-      require('nvim-dap-repl-highlights').setup()
-    end
-  },
+  { "LiadOz/nvim-dap-repl-highlights" },
   {
     'ESSO0428/persistent-breakpoints.nvim',
     config = function()

@@ -1,9 +1,9 @@
 -- This module contains a number of default definitions
 -- NOTE: 與 treesitter regex 不兼融，請避免 TSInstall regex
-local rainbow_delimiters                       = require 'rainbow-delimiters'
+local rainbow_delimiters = require 'rainbow-delimiters'
 
 ---@class rainbow_delimiters
-vim.g.rainbow_delimiters                       = {
+vim.g.rainbow_delimiters = {
   strategy = {
     [''] = rainbow_delimiters.strategy['global'],
     vim = rainbow_delimiters.strategy['local'],
@@ -22,14 +22,17 @@ vim.g.rainbow_delimiters                       = {
     'RainbowDelimiterCyan',
   },
 }
-
+pcall(function()
+  require('nvim-dap-repl-highlights').setup()
+end)
+require 'nvim-treesitter.install'.compilers    = { "clang", "gcc" }
 lvim.builtin.treesitter.ensure_installed       = {
   "comment", "markdown", "markdown_inline",
   "python", "lua", "vim", "bash", "html", "css", "scss", "json", "javascript",
   "dap_repl"
   -- "regex"
 }
-lvim.builtin.treesitter.ignore_install         = { "regex", "csv", "tsv" }
+lvim.builtin.treesitter.ignore_install         = { "regex" }
 lvim.builtin.treesitter.highlight              = {
   enable = true,        -- false will disable the whole extension
   disable = { "rust" }, -- list of language that will be disabled

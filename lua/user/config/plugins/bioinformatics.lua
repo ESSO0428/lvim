@@ -46,12 +46,14 @@ function toggle_syntax()
   end
 
   local current_syntax = vim.api.nvim_buf_get_option(0, 'syntax')
+  local datatable_filetypes = { 'csv', 'tsv', 'csv_semicolon', 'csv_whitespace', 'csv_pipe', 'rfc_csv', 'rfc_semicolon' }
+  local is_match_filetype = vim.fn.index(datatable_filetypes, current_filetype) ~= -1 and 1 or -1
+
   if current_syntax == '' or current_syntax == 'off' then
     vim.b.current_buffer_syntax = 'on'
     vim.cmd('setlocal syntax=on')
-    local datatable_filetypes = { 'csv', 'tsv', 'csv_semicolon', 'csv_whitespace', 'csv_pipe', 'rfc_csv', 'rfc_semicolon' }
-    local is_match_filetype = vim.fn.index(datatable_filetypes, current_filetype) ~= -1 and 1 or -1
     if is_match_filetype ~= -1 then
+      vim.cmd('TSDisable highlight')
       vim.cmd('set syntax=' .. current_filetype)
     end
     print('syntax on')
@@ -59,6 +61,9 @@ function toggle_syntax()
     vim.b.current_buffer_syntax = 'off'
     vim.cmd('setlocal syntax=off')
     vim.cmd('set laststatus=3')
+    if is_match_filetype ~= -1 then
+      vim.cmd('TSEnable highlight')
+    end
     print('syntax off')
   end
 end
