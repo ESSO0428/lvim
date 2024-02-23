@@ -15,45 +15,53 @@ end)
 -- autocmd({ "FileType" }, { pattern = { "python", "html" }, command = "UltiSnipsAddFiletypes python.django.html.css" })
 -- autocmd({ "FileType" }, { pattern = { "python" }, command = "setlocal foldmethod=indent" })
 
--- 獲取當前的工作目錄
--- local current_directory = vim.fn.getcwd()
+local function initializeAndDeduplicatePythonPaths()
+  local custom_python_paths = {
+    "/home/Andy6/research",
+    "/home/andy6/research",
+    "/root/research",
+    vim.fn.getcwd(), -- 添加当前工作目录
+    -- current_directory -- 将当前目录加入到路径列表中
+    -- ... 添加其他路径
+  }
 
-local custom_python_paths = {
-  "/home/Andy6/research",
-  "/home/andy6/research",
-  "/root/research",
-  -- current_directory -- 將當前目錄加入到路徑列表中
-  -- ... 添加其他路徑
-}
-
--- 去重複的方法
-local unique_paths = {}
-for _, path in ipairs(custom_python_paths) do
-  unique_paths[path] = true
-end
-
--- 將唯一的路徑轉回到列表中
-local deduplicated_paths = {}
-for path, _ in pairs(unique_paths) do
-  table.insert(deduplicated_paths, path)
-end
-custom_python_paths = deduplicated_paths
-
-local current_pythonpath = vim.fn.getenv("PYTHONPATH") or ""
-for _, path in ipairs(custom_python_paths) do
-  if current_pythonpath == "" or current_pythonpath == vim.NIL then
-    current_pythonpath = path
-  else
-    current_pythonpath = current_pythonpath .. ":" .. path
+  -- 去重复的方法
+  local unique_paths = {}
+  for _, path in ipairs(custom_python_paths) do
+    unique_paths[path] = true
   end
+
+  -- 将唯一的路径转回到列表中
+  local deduplicated_paths = {}
+  for path, _ in pairs(unique_paths) do
+    table.insert(deduplicated_paths, path)
+  end
+
+  -- 将处理后的路径列表用于更新PYTHONPATH
+  local current_pythonpath = vim.fn.getenv("PYTHONPATH") or ""
+  for _, path in ipairs(deduplicated_paths) do
+    if current_pythonpath == "" or current_pythonpath == vim.NIL then
+      current_pythonpath = path
+    else
+      current_pythonpath = current_pythonpath .. ":" .. path
+    end
+  end
+
+  vim.fn.setenv("PYTHONPATH", current_pythonpath)
 end
 
-vim.fn.setenv("PYTHONPATH", current_pythonpath)
+-- 初始时设置PYTHONPATH
+initializeAndDeduplicatePythonPaths()
 
 local initial_pythonpath = vim.fn.getenv("PYTHONPATH") or ""
+
 local function modify_pythonpath()
+  local work_directory = vim.fn.getcwd()
   local file_directory = vim.fn.expand("%:p:h")
   local modified_pythonpath = initial_pythonpath
+  if not string.find(":" .. modified_pythonpath .. ":", ":" .. work_directory .. ":") then
+    modified_pythonpath = work_directory .. ":" .. modified_pythonpath
+  end
   if not string.find(":" .. modified_pythonpath .. ":", ":" .. file_directory .. ":") then
     modified_pythonpath = file_directory .. ":" .. modified_pythonpath
   end
