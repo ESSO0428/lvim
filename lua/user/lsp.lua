@@ -20,7 +20,6 @@ local function initializeAndDeduplicatePythonPaths()
     "/home/Andy6/research",
     "/home/andy6/research",
     "/root/research",
-    vim.fn.getcwd(), -- 添加当前工作目录
     -- current_directory -- 将当前目录加入到路径列表中
     -- ... 添加其他路径
   }
