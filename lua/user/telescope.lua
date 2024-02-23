@@ -13,7 +13,7 @@ lvim.builtin.telescope.on_config_done = function(telescope)
   pcall(telescope.load_extension, "cder")
   pcall(telescope.load_extension, "dap")
   pcall(telescope.load_extension, "howdoi")
-  pcall(telescope.load_extension, "yank_history")
+  pcall(telescope.load_extension, "neoclip")
   pcall(telescope.load_extension, "harpoon")
   pcall(telescope.load_extension, "bookmarks")
   -- any other extensions loading

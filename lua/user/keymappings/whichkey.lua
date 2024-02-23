@@ -72,7 +72,7 @@ lvim.builtin.which_key.mappings['t\\'] = { "<cmd>tabclose<CR>", "tabblose" }
 
 lvim.builtin.which_key.mappings.s['d'] = { "<Cmd>Telescope cder theme=get_ivy<cr>", "Chage Folder" }
 lvim.builtin.which_key.mappings.s['a'] = { "<Cmd>lua require('swenv.api').pick_venv()<cr>", "Chage Python Env" }
-lvim.builtin.which_key.mappings.s['y'] = { "<Cmd>Telescope yank_history theme=get_ivy<cr>", "Yank History" }
+lvim.builtin.which_key.mappings.s['y'] = { "<Cmd>Telescope neoclip theme=get_ivy<cr>", "Yank History" }
 lvim.builtin.which_key.mappings.s['O'] = { "<Cmd>Telescope orgmode search_headings<cr>",
   "orgmode search_headings" }
 
