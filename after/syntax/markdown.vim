@@ -9,9 +9,9 @@
 " syntax match markdownHeader3 /^###\ze\s/ conceal cchar=✸
 " syntax match markdownHeader4 /^####\ze\s/ conceal cchar=✿
 syntax match placeholder /<++>\ze/
-" syntax match quote_type_list /^\s\+\zs>\ze/ conceal nextgroup=@text.quote cchar=┃
+syntax match quote_type_list /^\s\+\zs>\ze/ conceal nextgroup=@text.quote cchar=┃
 syntax match mathematical_symbol /\(^\s\s\s\)\@<![^>\s]>\ze/
-" syntax match quote_type1 />\ze/ conceal nextgroup=@text.quote cchar=┃
+syntax match quote_type1 />\ze/ conceal nextgroup=@text.quote cchar=┃
 highlight link markdownError Normal
 highlight link placeholder Keyword
 highlight link mathematical_symbol Normal
