@@ -2,7 +2,8 @@ vim.cmd(
   "autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })")
 vim.cmd('autocmd FileType dbui nmap <buffer> v <Plug>(DBUI_SelectLineVsplit)')
 
-lvim.keys.normal_mode['<leader>de'] = "<Cmd>tab DBUI<cr>"
+lvim.keys.normal_mode['<leader>de'] = "<Cmd>DBUIToggle<cr>"
+lvim.keys.normal_mode['<leader>dE'] = "<Cmd>tab DBUI<cr>"
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'dbui',
   group = vim.api.nvim_create_augroup('dbui_only_keymap', { clear = true }),
