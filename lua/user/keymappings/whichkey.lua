@@ -1,4 +1,31 @@
 lvim.builtin.which_key.setup.plugins.spelling.enabled = false
+last_nvimtree_side = 'left'
+
+function CustomNvimTreeToggle()
+  local dapui_scope_found = false
+  local current_side = lvim.builtin.nvimtree.setup.view.side
+
+  for _, win_nr in ipairs({ 1, 2 }) do
+    local buf_nr = vim.fn.winbufnr(win_nr)
+    if buf_nr ~= -1 then
+      local ft = vim.api.nvim_buf_get_option(buf_nr, "filetype")
+      if ft == "dapui_scopes" or ft == "dbui" then
+        dapui_scope_found = true
+        break
+      end
+    end
+  end
+
+  local new_side = dapui_scope_found and "right" or "left"
+  if current_side ~= new_side then
+    lvim.builtin.nvimtree.setup.view.side = new_side
+    require("nvim-tree").setup(lvim.builtin.nvimtree.setup)
+    last_nvimtree_side = new_side
+  end
+
+  vim.cmd('NvimTreeToggle')
+end
+
 local keys_to_remove
 if lvim.builtin.nvimtree.active == false then
   keys_to_remove = { "w", "f", "h", "e" }
@@ -17,7 +44,8 @@ if lvim.builtin.nvimtree.active == false then
   lvim.builtin.which_key.mappings.b['e'] = { "<Cmd>Neotree buffers toggle=true dir=/<cr>", "Neotree buffers" }
 else
   -- lvim.builtin.which_key.mappings['e'] = { "<Cmd>lua require('nvim-tree.api').tree.toggle(false, false)<cr>", "NvimTree" }
-  lvim.builtin.which_key.mappings['e'] = { "<Cmd>NvimTreeToggle<cr>", "NvimTree" }
+  -- lvim.builtin.which_key.mappings['e'] = { "<Cmd>NvimTreeToggle<cr>", "NvimTree" }
+  lvim.builtin.which_key.mappings["e"] = { "<cmd>lua CustomNvimTreeToggle()<cr>", "NvimTree" }
   lvim.keys.normal_mode["<c-k>"] = "<Cmd>NvimTreeFocus<CR>"
 end
 lvim.builtin.which_key.mappings.u = lvim.builtin.which_key.mappings.l
@@ -28,6 +56,8 @@ lvim.builtin.which_key.mappings.u.k = lvim.builtin.which_key.mappings.u.u
 lvim.builtin.which_key.mappings.u.u = nil
 lvim.builtin.which_key.mappings.u.a = { "<cmd>Lspsaga code_action<cr>", "Code Action" }
 
+lvim.builtin.which_key.mappings.U = lvim.builtin.which_key.mappings.L
+lvim.builtin.which_key.mappings.L = nil
 
 lvim.builtin.which_key.mappings.s.o = lvim.builtin.which_key.mappings.s.r
 lvim.builtin.which_key.mappings.s.r = nil
