@@ -24,6 +24,20 @@ function CustomNvimTreeToggle()
   end
 
   vim.cmd('NvimTreeToggle')
+  -- 延迟执行，确保 NvimTree 完全加载
+  vim.defer_fn(function()
+    -- 获取当前窗口的 Buffer 编号
+    local bufnr = vim.api.nvim_get_current_buf()
+    -- 获取当前 Buffer 的文件类型
+    local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+
+    -- 检查是否为 NvimTree，如果是且在右侧，则尝试更改为 NvimTreeRight
+    if filetype == "NvimTree" and lvim.builtin.nvimtree.setup.view.side == "right" then
+      -- 这里尝试设置文件类型为 NvimTreeRight
+      -- 请注意，直接更改 filetype 可能不是一个安全的操作，这里仅作示例
+      vim.api.nvim_buf_set_option(bufnr, "filetype", "")
+    end
+  end, 100) -- 100毫秒的延迟，这个值可能需要根据实际情况调整
 end
 
 local keys_to_remove
