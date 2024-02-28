@@ -1,5 +1,6 @@
 lvim.builtin.which_key.setup.plugins.spelling.enabled = false
 last_nvimtree_side = 'left'
+lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "NvimTreeRight"
 
 function CustomNvimTreeToggle()
   local dapui_scope_found = false
@@ -35,7 +36,7 @@ function CustomNvimTreeToggle()
     if filetype == "NvimTree" and lvim.builtin.nvimtree.setup.view.side == "right" then
       -- 这里尝试设置文件类型为 NvimTreeRight
       -- 请注意，直接更改 filetype 可能不是一个安全的操作，这里仅作示例
-      vim.api.nvim_buf_set_option(bufnr, "filetype", "")
+      vim.api.nvim_buf_set_option(bufnr, "filetype", "NvimTreeRight")
     end
   end, 100) -- 100毫秒的延迟，这个值可能需要根据实际情况调整
 end
