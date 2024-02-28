@@ -40,7 +40,20 @@ vim.g.PythonEnv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
 lvim.keys.normal_mode['s;'] = ":set relativenumber!<cr>"
 lvim.keys.normal_mode["<leader>n"] = "<c-w><c-p>"
 lvim.builtin.lir.active = true
+
+-- breadcrumb
 -- lvim.builtin.breadcrumbs.active = false
+lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "dbui"
+lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "undotree"
+
+-- bufferline offset
+lvim.builtin.bufferline.options.offsets[#lvim.builtin.bufferline.options.offsets + 1] = {
+  filetype = "dbui",
+  text = "DBUI",
+  highlight = "PanelHeading",
+  padding = 1
+}
+
 -- 获取用户主目录
 local home = os.getenv("HOME")
 
