@@ -1,7 +1,20 @@
+Nvim.builtin = Nvim.builtin or {}
+Nvim.builtin.refactoring = Nvim.builtin.refactoring or {}
+
+Nvim.builtin.refactoring.method = {
+  "extract",
+  "extract_to_file",
+  "extract_var",
+  "inline_var",
+  "inline_func",
+  "extract_block",
+  "extract_block_to_file"
+}
+
 function refactor_prompt()
   vim.g.dress_input = true
   vim.ui.input({ prompt = 'Refactor ', completion = 'customlist,v:lua.refactor_completion' }, function(method)
-    if method then
+    if method and method_is_valid(method) then
       vim.g.dress_input = true
       vim.ui.input({ prompt = 'Refactor ' .. method .. ' ' }, function(input)
         if input then
@@ -14,17 +27,20 @@ function refactor_prompt()
   end)
 end
 
+-- 验证方法是否存在于补全列表中
+function method_is_valid(method)
+  local completions = Nvim.builtin.refactoring.method
+  for _, option in ipairs(completions) do
+    if option == method then
+      return true
+    end
+  end
+  return false
+end
+
 -- 用于补全的函数
 function refactor_completion(ArgLead, CmdLine, CursorPos)
-  local completions = {
-    "extract",
-    "extract_to_file",
-    "extract_var",
-    "inline_var",
-    "inline_func",
-    "extract_block",
-    "extract_block_to_file"
-  }
+  local completions = Nvim.builtin.refactoring.method
 
   local matches = {}
   for _, option in ipairs(completions) do
