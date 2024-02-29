@@ -470,7 +470,6 @@ lvim.plugins = {
       "hrsh7th/nvim-cmp"
     }
   },
-  { "junegunn/vim-peekaboo" },
   { "godlygeek/tabular" },
   -- { "mbbill/undotree" },
   { "mg979/vim-visual-multi" },
@@ -491,7 +490,6 @@ lvim.plugins = {
   { "lfv89/vim-interestingwords" },
   { "Shatur/neovim-session-manager" },
   { "stevearc/dressing.nvim" },
-  -- { "ggandor/leap.nvim" },
   {
     "folke/flash.nvim",
     event = "VeryLazy",
