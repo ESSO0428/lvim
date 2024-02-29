@@ -28,7 +28,7 @@ vim.opt.spell = true
 vim.opt.spelllang = { 'en_us' }
 
 vim.opt.list = false
-vim.opt.listchars:append "space:⋅"
+vim.opt.listchars:append "space:·"
 
 vim.g.PythonEnv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
 

@@ -74,7 +74,7 @@ require('ufo').setup({
       scrollD = '<C-o>',
       jumpTop = 'gg',
       jumpBot = 'G',
-      switch = '<leader>uu'
+      switch = 'u'
     }
   },
 })
@@ -84,6 +84,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
   callback = function()
     if vim.api.nvim_buf_get_name(0):match("UfoPreviewFloatWin") then
       vim.opt_local.list = false
+      vim.cmd('UfoAttach')
+      vim.cmd('UfoEnableFold')
+      vim.cmd('normal! zX')
     end
   end
 })

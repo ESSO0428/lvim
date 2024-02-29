@@ -153,7 +153,7 @@ lvim.keys.visual_mode['<leader>Od'] = "zO"
 -- lvim.builtin.which_key.mappings['Od'] = { "zR", "Folding Code (Open All)" }
 lvim.builtin.which_key.mappings['Oa'] = { '<cmd>lua require("ufo").closeAllFolds()<cr>', "Folding Code (Close All)" }
 lvim.builtin.which_key.mappings['Od'] = { '<cmd>lua require("ufo").openAllFolds()<cr>', "Folding Code (Open All)" }
-lvim.builtin.which_key.mappings['OX'] = { 'zX', "Clear All Folds" }
+lvim.builtin.which_key.mappings['Ox'] = { 'zx', "Update All Folds" }
 
 -- lvim.keys.visual_mode['<leader>o'] = "za"
 -- lvim.keys.visual_mode['<leader>Oa'] = "zc"

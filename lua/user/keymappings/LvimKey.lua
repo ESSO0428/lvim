@@ -61,6 +61,11 @@ lvim.keys.visual_mode['<leader>o'] = "za"
 
 function peekFoldedLinesUnderCursor()
   require('ufo').peekFoldedLinesUnderCursor()
+  local winid = require('ufo.preview.floatwin').winid
+
+  if winid ~= nil then
+    vim.api.nvim_win_set_option(winid, 'list', vim.opt.list:get())
+  end
 end
 
 lvim.keys.normal_mode['<leader>uu']    = { "<cmd>lua peekFoldedLinesUnderCursor()<cr>" }
