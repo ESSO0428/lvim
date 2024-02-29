@@ -53,6 +53,16 @@ lvim.builtin.bufferline.options.offsets[#lvim.builtin.bufferline.options.offsets
   highlight = "PanelHeading",
   padding = 1
 }
+local dap_filetypes = { "dapui_scopes", "dapui_breakpoints", "dapui_stacks", "dapui_watches" }
+
+for _, filetype in ipairs(dap_filetypes) do
+  table.insert(lvim.builtin.bufferline.options.offsets, {
+    filetype = filetype,
+    text = "DAP",
+    highlight = "PanelHeading",
+    padding = 1
+  })
+end
 
 -- 获取用户主目录
 local home = os.getenv("HOME")
