@@ -407,7 +407,7 @@ lvim.plugins = {
     deprecated = { 'kevinhwang91/promise-async' }
   },
   {
-    'jghauser/fold-cycle.nvim',
+    'ESSO0428/fold-cycle.nvim',
     config = function()
       require('fold-cycle').setup()
       vim.keymap.set('n', '[f',
