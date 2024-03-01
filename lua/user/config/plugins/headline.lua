@@ -75,6 +75,7 @@ require("headlines").setup {
       "Headline1",
       "Headline2"
     },
+    bullets = {},
     dash_string = "—",
     fat_headlines = false,
     fat_headline_upper_string = "▃",
