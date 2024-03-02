@@ -235,8 +235,10 @@ vnoremap <silent> L $
 
 " Faster in-line navigation
 nnoremap W 5w
+nnoremap E 5e
 nnoremap B 5b
 vnoremap W 5w
+vnoremap E 5e
 vnoremap B 5b
 
 " set h (same as n, cursor left) to 'end of word'
