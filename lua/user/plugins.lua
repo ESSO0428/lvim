@@ -896,12 +896,15 @@ lvim.plugins = {
       vim.keymap.set('n', '<leader>tb', function() vim.cmd('NeoZoomToggle') end, { silent = true, nowait = true })
     end
   },
+  -- {
+  -- "folke/twilight.nvim",
+  -- config = function()
+  -- NOTE: dims `inactive` portions of the code you're editing
+  -- vim.keymap.set("n", "<leader>ta", "<cmd>Twilight<CR>")
+  -- end
+  -- },
   {
-    "folke/twilight.nvim",
-    config = function()
-      -- NOTE: dims `inactive` portions of the code you're editing
-      vim.keymap.set("n", "<leader>ta", "<cmd>Twilight<CR>")
-    end
+    "junegunn/limelight.vim",
   },
   {
     "princejoogie/chafa.nvim",

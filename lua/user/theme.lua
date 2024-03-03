@@ -1,8 +1,11 @@
-lvim.transparent_window = true
+lvim.transparent_window               = true
 -- vim.cmd "au ColorScheme * hi Visual cterm=reverse gui=reverse"
 ---[[
 -- lvim.colorscheme = "tokyonight-night"
 -- lvim.builtin.lualine.options.theme = "tokyonight-night"
+vim.g.limelight_conceal_guifg         = '#30333d'
+lvim.keys.visual_mode['<leader>ta']   = { "<Plug>(Limelight)" }
+lvim.builtin.which_key.mappings["ta"] = { "<cmd>Limelight!<cr>", "Limelight Close" }
 if lvim.transparent_window == true then
   vim.cmd "au ColorScheme * hi Normal ctermbg=none guibg=none"
   vim.cmd "au ColorScheme * hi SignColumn ctermbg=none guibg=none"
