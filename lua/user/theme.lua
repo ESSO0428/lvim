@@ -1,4 +1,5 @@
 lvim.transparent_window = true
+-- vim.cmd "au ColorScheme * hi Visual cterm=reverse gui=reverse"
 ---[[
 -- lvim.colorscheme = "tokyonight-night"
 -- lvim.builtin.lualine.options.theme = "tokyonight-night"
