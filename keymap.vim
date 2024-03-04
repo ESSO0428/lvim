@@ -27,7 +27,7 @@ nnoremap <c-w> :bd<CR>
 
 " Find pair
 nnoremap ,. %
-vnoremap ni $%
+vnoremap nl $%
 " Search
 " noremap <LEADER><CR> :nohlsearch<CR>
 " Adjacent duplicate words
