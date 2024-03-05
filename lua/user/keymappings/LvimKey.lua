@@ -25,7 +25,6 @@ lvim.keys.normal_mode['<leader><cr>']  = ":nohlsearch<cr>"
 -- lvim.keys.normal_mode['<leader>f']    = nil
 
 -- require vim-peekaboo
--- lvim.keys.normal_mode['<leader><leader>'] = '<Esc>/<++><CR>:nohlsearch<CR>"_c4l'
 lvim.keys.normal_mode['<c-f>']         = "<Cmd>Telescope current_buffer_fuzzy_find<cr>"
 lvim.keys.normal_mode['<leader><c-f>'] = "<Cmd>lua require('telescope.builtin').live_grep({grep_open_files=true})<cr>"
 lvim.keys.normal_mode['<c-h>']         = "<Cmd>MurenToggle<cr>"
@@ -37,10 +36,7 @@ lvim.keys.normal_mode['<c-d>']         = "\"dyy\"dp"
 
 -- lvim.keys.normal_mode['<c-u>'] = "<Plug>MoveLineUp"
 lvim.keys.normal_mode['<a-up>']        = "<Plug>MoveLineUp"
--- lvim.keys.normal_mode['<c-o>'] = "<Plug>MoveLineDown"
 lvim.keys.normal_mode['<a-down>']      = "<Plug>MoveLineDown"
--- lvim.keys.normal_mode['<c-u>']        = "<c-u>"
--- lvim.keys.normal_mode['<c-o>']        = "<c-d>"
 lvim.keys.normal_mode['<c-u>']         = "10<c-y>"
 lvim.keys.normal_mode['<c-o>']         = "10<c-e>"
 

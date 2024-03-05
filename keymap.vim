@@ -1,32 +1,20 @@
 nnoremap s; :set relativenumber!<CR>
 let mapleader = " " " map leader to Space
 
-let g:neoterm_autoscroll = 1
 tnoremap <C-N> <C-\><C-N>
 tnoremap <C-O> <C-\><C-N><C-O>
 
-" noremap <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>"_c4l
-
-" inoremap ,, <++>
-"" inoremap ,b `` <++><Left><Left><Left><Left><Left><Left>
-" inoremap ,b `` <++><esc>F`a
-"" inoremap ,c ```<++>```<cr><cr><++><Up><Up><Left><cr><Right><Right><Right><Right><cr><Up><Up><Right><Right><Right>
-" inoremap ,c ```<++>```<cr><cr><++><esc>2ki<cr><esc>f>a<cr><esc>2k$a
-" inoremap ,f <Esc>/<++><CR>:nohlsearch<CR>"_c4l
-" inoremap ,a <C-D>
-
-autocmd BufRead,BufNewFile *.md inoremap <buffer> ,, <++>
-            \| noremap <buffer><LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>"_c4l
-            \| inoremap <buffer> ,c ```<++>```<CR><CR><++><Esc>2ki<CR><Esc>f>a<CR><Esc>2k$a
-            \| inoremap <buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>"_c4l
+autocmd FileType markdown inoremap <buffer> ,, <++>
+                        \| noremap <buffer><LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>"_c4l
+                        \| inoremap <buffer> ,c ```<++>```<CR><CR><++><Esc>2ki<CR><Esc>f>a<CR><Esc>2k$a
+                        \| inoremap <buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>"_c4l
 
 
 nnoremap <c-w> :bd<CR>
-" inoremap <c-t> <ESC>pi<ESC>i
-" inoremap <c-t> <c-r>*
 
 " Find pair
 nnoremap ,. %
+vnoremap ,. %
 vnoremap nl $%
 " Search
 " noremap <LEADER><CR> :nohlsearch<CR>
