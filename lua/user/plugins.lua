@@ -375,7 +375,6 @@ lvim.plugins = {
   -- NOTE: 這裡先固定 commit 後續 nvim 大改再考慮更新
   {
     "romgrk/nvim-treesitter-context",
-    commit = "652ec51",
     config = function()
       vim.keymap.set('n', '[a', function() require("treesitter-context").go_to_context() end,
         { silent = true, nowait = true })
