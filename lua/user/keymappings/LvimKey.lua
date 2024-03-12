@@ -42,10 +42,31 @@ lvim.keys.normal_mode['<c-o>']         = "10<c-e>"
 
 -- vim.keymap.set('v', '<c-u>', "<Plug>MoveBlockUp")
 -- vim.keymap.set('v', '<c-o>', "<Plug>MoveBlockDown")
-vim.keymap.set('v', '<a-up>', "<Plug>MoveBlockUp")
-vim.keymap.set('v', '<a-down>', "<Plug>MoveBlockDown")
-vim.keymap.set('v', '<a-left>', "<Plug>MoveBlockLeft")
-vim.keymap.set('v', '<a-right>', "<Plug>MoveBlockRight")
+-- vim.keymap.set('v', '<a-up>', "<Plug>MoveBlockUp")
+-- vim.keymap.set('v', '<a-down>', "<Plug>MoveBlockDown")
+-- vim.keymap.set('v', '<a-left>', "<Plug>MoveBlockLeft")
+-- vim.keymap.set('v', '<a-right>', "<Plug>MoveBlockRight")
+vim.keymap.set('v', '<a-up>',
+  function()
+    if vim.fn.mode() == "v" then return "<Plug>MoveBlockUp" else return "<Plug>SchleppUp" end
+  end, { expr = true, silent = true }
+)
+vim.keymap.set('v', '<a-down>',
+  function()
+    if vim.fn.mode() == "v" then return "<Plug>MoveBlockDown" else return "<Plug>SchleppDown" end
+  end, { expr = true, silent = true }
+)
+vim.keymap.set('v', '<a-left>',
+  function()
+    if vim.fn.mode() == "v" then return "<Plug>MoveBlockLeft" else return "<Plug>SchleppLeft" end
+  end, { expr = true, silent = true }
+)
+vim.keymap.set('v', '<a-right>',
+  function()
+    if vim.fn.mode() == "v" then return "<Plug>MoveBlockRight" else return "<Plug>SchleppRight" end
+  end, { expr = true, silent = true }
+)
+
 
 -- <leader>o
 -- lvim.builtin.which_key.mappings['o'] = { "za", "Folding Code (Toggle)" }

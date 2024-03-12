@@ -473,6 +473,7 @@ lvim.plugins = {
   -- { "mbbill/undotree" },
   { "mg979/vim-visual-multi" },
   { "matze/vim-move" },
+  { "zirrostig/vim-schlepp" },
   { "theniceboy/antovim" },
   {
     'Wansmer/treesj',
