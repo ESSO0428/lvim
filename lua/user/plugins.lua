@@ -904,7 +904,7 @@ lvim.plugins = {
   -- end
   -- },
   {
-    "junegunn/limelight.vim",
+    "ESSO0428/limelight.vim"
   },
   {
     "princejoogie/chafa.nvim",
