@@ -13,9 +13,11 @@ autocmd FileType markdown inoremap <buffer> ,, <++>
 nnoremap <c-w> :bd<CR>
 
 " Find pair
-nnoremap ,. %
-vnoremap ,. %
-vnoremap nl $%
+nnoremap g{ %
+nnoremap g} $%
+vnoremap g{ %
+vnoremap g} $%
+
 " Search
 " noremap <LEADER><CR> :nohlsearch<CR>
 " Adjacent duplicate words
@@ -109,11 +111,6 @@ vnoremap <leader><c-x> "+d
 imap <c-p> <c-r>"p
 inoremap <c-p> <ESC><CR>
 
-
-" Find pair
-" nnoremap ,. %
-nnoremap g, %
-vnoremap ni $%
 " Search
 " noremap <LEADER><CR> :nohlsearch<CR>
 " Adjacent duplicate words
