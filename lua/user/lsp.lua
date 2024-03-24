@@ -74,27 +74,3 @@ end
 
 vim.api.nvim_create_autocmd("BufEnter", { pattern = "*.py", callback = modify_pythonpath })
 vim.api.nvim_create_autocmd("BufLeave", { pattern = "*.py", callback = reset_pythonpath })
-
-
-vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
-local pyright_opts = {
-  single_file_support = true,
-  settings = {
-    pyright = {
-      disableLanguageServices = false,
-      disableOrganizeImports = false
-    },
-    python = {
-      analysis = {
-        autoImportCompletions = true,
-        autoSearchPaths = true,
-        diagnosticMode = "workspace",  -- openFilesOnly, workspace
-        typeCheckingMode = "standard", -- off, basic, strict
-        useLibraryCodeForTypes = true
-      }
-    }
-  },
-}
-pcall(function()
-  require("lvim.lsp.manager").setup("pyright", pyright_opts)
-end)
