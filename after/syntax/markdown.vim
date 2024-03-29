@@ -19,3 +19,4 @@ highlight link mathematical_symbol Normal
 syntax match left_brackets /\\\[/ conceal cchar=[
 syntax match right_brackets /\\\]/ conceal cchar=]
 
+syn clear markdownCode
