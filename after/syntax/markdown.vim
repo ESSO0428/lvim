@@ -24,6 +24,7 @@ if has('conceal') && get(g:, 'markdown_syntax_conceal', 1) == 1
   let s:concealends = ' concealends'
 endif
 syn clear markdownCode
+syn clear markdownCodeBlock
 syn clear markdownBlockquote
 syn clear markdownItalic
 syn clear markdownBoldItalic
