@@ -23,6 +23,8 @@ lvim.lsp.buffer_mappings.normal_mode['gh'] = { "<cmd>lua lsp_or_jupyter_signatur
 
 lvim.keys.normal_mode['gs']                = ":Antovim<cr>"
 lvim.keys.normal_mode['ga']                = ":TSJToggle<cr>"
+-- lvim.keys.normal_mode['gm']                = "<cmd>lua vim.lsp.buf.signature_help()<cr>"
+lvim.keys.normal_mode['gm']                = "<cmd>lua require('lsp_signature').toggle_float_win()<cr>"
 
 -- replace to Lspsaga code action
 -- lvim.keys.normal_mode['<leader>ua']           = { "<cmd>lua vim.lsp.buf.code_action()<cr>" }
