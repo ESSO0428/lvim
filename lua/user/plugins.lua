@@ -682,6 +682,7 @@ lvim.plugins = {
       "nvim-neotest/nvim-nio"
     }
   },
+  { "stevanmilic/nvim-lspimport" },
   {
     "aca/emmet-ls",
     config = function()
