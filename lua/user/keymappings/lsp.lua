@@ -55,8 +55,8 @@ lvim.builtin.which_key.mappings['c']       = { ":Telescope lsp_references<CR>", 
 lvim.builtin.which_key.mappings['v']       = { ":Telescope lsp_document_symbols<CR>", "lsp_document_symbols" }
 
 -- lvim.lsp.buffer_mappings.normal_mode['gd'] = nil
--- lvim.keys.normal_mode['<a-o>']             = ":lua vim.lsp.buf.definition()<CR>"
-lvim.keys.normal_mode['<a-o>']             = "<cmd>Lspsaga goto_definition<CR>"
+lvim.keys.normal_mode['<a-o>']             = ":lua vim.lsp.buf.definition()<CR>"
+-- lvim.keys.normal_mode['<a-o>']             = "<cmd>Lspsaga goto_definition<CR>"
 lvim.keys.normal_mode['<leader><a-o>']     = ":lua require('goto-preview').goto_preview_definition()<CR>"
 lvim.keys.normal_mode['sL']                = ":wincmd L<CR>"
 lvim.keys.normal_mode['sK']                = ":wincmd J<CR>"
