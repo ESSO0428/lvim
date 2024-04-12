@@ -21,4 +21,15 @@ require("dressing").setup({
       sidescrolloff = 0,
     },
   },
+  select = {
+    -- enabled = false,
+    get_config = function()
+      if vim.g.dress_input ~= nil and vim.g.dress_input then
+        vim.g.dress_input = nil
+        return { enabled = true }
+      else
+        return { enabled = false }
+      end
+    end
+  }
 })

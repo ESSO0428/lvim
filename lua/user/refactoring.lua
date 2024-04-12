@@ -13,8 +13,15 @@ Nvim.builtin.refactoring.method = {
 }
 
 function refactor_prompt()
+  -- vim.ui.select exits visual mode without setting the `<` and `>` marks
+  local mode = vim.api.nvim_get_mode().mode
+  if mode == "v" or mode == "V" or mode == "vs" or mode == "Vs" then
+    vim.cmd("norm! ")
+  end
+
   vim.g.dress_input = true
-  vim.ui.input({ prompt = 'Refactor ', completion = 'customlist,v:lua.refactor_completion' }, function(method)
+  -- vim.ui.input({ prompt = 'Refactor ', completion = 'customlist,v:lua.refactor_completion' }, function(method)
+  vim.ui.select(Nvim.builtin.refactoring.method, { prompt = 'Refactor ' }, function(method)
     if method and method_is_valid(method) then
       vim.g.dress_input = true
       if method == "move_block_to_file" then
@@ -88,7 +95,12 @@ function move_block_to_file()
   end
 
   -- 删除选中的文本
-  vim.cmd('normal! gv"xd')
+  if mode == "v" or mode == "V" or mode == "vs" or mode == "Vs" then
+    vim.cmd('normal! gv"xd')
+  else
+    vim.cmd('normal! "xdd')
+  end
+
 
   -- 检查缓冲区是否存在
   local bufnr = vim.fn.bufnr(file_path)
