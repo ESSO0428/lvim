@@ -124,6 +124,24 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
   if max_width ~= 0 and #vim_item.abbr > max_width then
     vim_item.abbr = string.sub(vim_item.abbr, 1, max_width - 1) .. lvim.icons.ui.Ellipsis
   end
+
+  -- tailwindcss color preview
+  local doc = entry.completion_item.documentation
+  if vim_item.kind == "Color" and doc then
+    local utils = require("tailwind-tools.utils")
+    local content = type(doc) == "string" and doc or doc.value
+    local base, _, _, _r, _g, _b = 10, content:find("rgba?%((%d+), (%d+), (%d+)")
+
+    if not _r then
+      base, _, _, _r, _g, _b = 16, content:find("#(%x%x)(%x%x)(%x%x)")
+    end
+
+    if _r then
+      local r, g, b = tonumber(_r, base), tonumber(_g, base), tonumber(_b, base)
+      vim_item.kind_hl_group = utils.set_hl_from(r, g, b, "foreground")
+    end
+  end
+
   if lvim.use_icons then
     vim_item.kind = lvim.builtin.cmp.formatting.kind_icons[vim_item.kind]
 
