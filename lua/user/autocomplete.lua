@@ -393,7 +393,8 @@ end
 local cmp_mapping = require "cmp.config.mapping"
 lvim.builtin.cmp.mapping['<M-i>'] = cmp_mapping(function(fallback)
   if cmp.visible() then
-    cmp.select_prev_item()
+    -- cmp.select_prev_item()
+    cmp.select_prev_item({ behavior = SelectBehavior.Select })
   else
     cmp.complete()
     --fallback()
@@ -401,7 +402,8 @@ lvim.builtin.cmp.mapping['<M-i>'] = cmp_mapping(function(fallback)
 end, { "i", "c" })
 lvim.builtin.cmp.mapping['<M-k>'] = cmp_mapping(function(fallback)
   if cmp.visible() then
-    cmp.select_next_item()
+    -- cmp.select_next_item()
+    cmp.select_next_item({ behavior = SelectBehavior.Select })
   else
     cmp.complete()
     --fallback()
@@ -423,7 +425,7 @@ lvim.builtin.cmp.formatting.duplicates = {
   ['html-css'] = 1,
   buffer = 1,
   path = 1,
-  nvim_lsp = 0,
+  nvim_lsp = 1,
   luasnip = 1,
   ultisnips = 1,
   vsnip = 1,
