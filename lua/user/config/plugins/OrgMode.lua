@@ -62,8 +62,6 @@ if next(vim.fn.argv()) == nil then
 end
 
 
-
-require('orgmode').setup_ts_grammar()
 vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
 local opt_org_agenda_files = { '~/Dropbox/org/*', '~/my-orgs/**/*', ('%s/Dropbox/org/*'):format(vim.fn.getcwd()) }
