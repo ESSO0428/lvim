@@ -19,7 +19,7 @@ function refactor_prompt()
     vim.cmd("norm! ")
   end
 
-  vim.g.dress_input = true
+  -- vim.g.dress_input = true
   -- vim.ui.input({ prompt = 'Refactor ', completion = 'customlist,v:lua.refactor_completion' }, function(method)
   vim.ui.select(Nvim.builtin.refactoring.method, { prompt = 'Refactor ' }, function(method)
     if method and method_is_valid(method) then
