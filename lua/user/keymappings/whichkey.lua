@@ -81,7 +81,8 @@ lvim.builtin.which_key.mappings.L = nil
 
 lvim.builtin.which_key.mappings.s.o = lvim.builtin.which_key.mappings.s.r
 lvim.builtin.which_key.mappings.s.r = nil
-lvim.builtin.which_key.mappings.s.r = { "<cmd>RnvimrToggle<cr>", "Ranger" }
+-- lvim.builtin.which_key.mappings.s.r = { "<cmd>RnvimrToggle<cr>", "Ranger" }
+lvim.builtin.which_key.mappings.s.r = { "<cmd>Telescope file_browser path=%:p:h<cr>", "file_browser (%:p:h)" }
 
 lvim.builtin.which_key.mappings.s.g = lvim.builtin.which_key.mappings.s.t
 lvim.builtin.which_key.mappings.s.t = nil
