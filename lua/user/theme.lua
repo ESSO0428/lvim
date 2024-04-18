@@ -73,26 +73,6 @@ end
 vim.cmd "au ColorScheme * hi Todo cterm=bold gui=bold guifg=#71839b guibg=none"
 vim.cmd "au BufEnter *.md setlocal syntax=markdown"
 
-vim.g['semshi#filetypes'] = { 'python' }
-vim.g['semshi#simplify_markup'] = false
-vim.g['semshi#error_sign'] = false
--- pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#e0949e")
--- pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#ff6666")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiImported gui=bold guifg=#4ec9b0")
--- pcall(vim.cmd, "au ColorScheme * highlight! semshiGlobal gui=bold guifg=#9cdcfe")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiGlobal gui=bold")
-
-pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameter @parameter.python")
-pcall(vim.cmd, "au ColorScheme * highlight! link semshiParameterUnused @parameter.python")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiParameterUnused gui=undercurl")
--- pcall(vim.cmd, "au ColorScheme * highlight! link semshiAttribute @attribute")
-pcall(vim.cmd, "au ColorScheme * highlight! link semshiAttribute @field")
--- pcall(vim.cmd, "au ColorScheme * highlight! link semshiBuiltin @function.builtin")
-pcall(vim.cmd, "au ColorScheme * highlight! semshiBuiltin guifg=#dcdcaa")
--- pcall(vim.cmd, "au ColorScheme * highlight! link semshiBuiltin @field")
-pcall(vim.cmd, "au ColorScheme * highlight! link semshiUnresolved @text.warning")
-pcall(vim.cmd, "au ColorScheme * highlight! link semshiSelf @variable.builtin")
-
 -- vim.cmd "au ColorScheme * highlight! @variable guifg=#ba4351"
 
 vim.cmd "au ColorScheme * hi Whitespace guifg=#504945"
