@@ -197,7 +197,7 @@ lvim.plugins = {
   { "ESSO0428/calc.vim" },
   { "ESSO0428/bioSyntax-vim" },
   {
-    "numirias/semshi",
+    "wookayin/semshi",
     ft = "python",
     build = ":UpdateRemotePlugins",
     init = function()
