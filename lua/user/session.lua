@@ -1,11 +1,18 @@
 local autocmd = vim.api.nvim_create_autocmd
 local Path = require('plenary.path')
-if lvim.builtin.nvimtree.active == false then
-  autocmd({ "SessionLoadPost" }, { callback = session_open_neo_tree })
-else
-  autocmd({ "SessionLoadPost" }, { callback = session_open_nvim_tree })
-end
+local config_group = vim.api.nvim_create_augroup('MyConfigGroup', {}) -- A global group for all your config autocommands
 
+vim.api.nvim_create_autocmd({ 'User' }, {
+  pattern = "SessionLoadPost",
+  group = config_group,
+  callback = function()
+    if lvim.builtin.nvimtree.active == false then
+      session_open_neo_tree()
+    else
+      session_open_nvim_tree()
+    end
+  end,
+})
 local session_manager = require('session_manager')
 local opt = {
   sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),               -- The directory where the session files will be saved.
