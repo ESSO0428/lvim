@@ -25,7 +25,7 @@ function refactor_prompt()
     if method and method_is_valid(method) then
       vim.g.dress_input = true
       if method == "move_block_to_file" then
-        move_block_to_file()
+        move_block_to_file(mode)
         return
       end
       vim.ui.input({ prompt = 'Refactor ' .. method .. ' ' }, function(input)
@@ -63,7 +63,14 @@ function refactor_completion(ArgLead, CmdLine, CursorPos)
   return matches
 end
 
-function move_block_to_file()
+function move_block_to_file(mode)
+  if mode == nil then
+    mode = vim.api.nvim_get_mode().mode
+    if mode == "v" or mode == "V" or mode == "vs" or mode == "Vs" then
+      vim.cmd("norm! ")
+    end
+  end
+
   -- 获取当前文件的完整路径
   local current_file_path = vim.fn.expand('%:p')
   -- 获取当前文件的工作目录
