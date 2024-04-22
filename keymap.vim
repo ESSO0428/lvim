@@ -539,19 +539,22 @@ function! SendInputMethodCommandToLocal(mode)
   " 檢查~/.rssh_tunnel文件是否存在
   if filereadable(expand("~/.rssh_tunnel"))
     " 讀取文件內容以獲取端口號
-    let port = readfile(expand("~/.rssh_tunnel"))[0]
-    let nc_connect_command = "nc -z 127.0.0.1 " . port . " && echo sucess"
-    let nc_connect_results = substitute(system(nc_connect_command), '\n', '', '')
-    if nc_connect_results == 'sucess'
-      " 根據模式構建命令
-      if a:mode == "insert"
-        let command = "echo im-select.exe com.apple.keylayout.ABC | nc -w 0.01 127.0.0.1 " . port
-      else
-        let command = "echo im-select.exe 1033 | nc -w 0.01 127.0.0.1 " . port
+    let file_content = readfile(expand("~/.rssh_tunnel"))
+    if len(file_content) > 0
+      let port = file_content[0]
+      let nc_connect_command = "nc -z 127.0.0.1 " . port . " && echo sucess"
+      let nc_connect_results = substitute(system(nc_connect_command), '\n', '', '')
+      if nc_connect_results == 'sucess'
+        " 根據模式構建命令
+        if a:mode == "insert"
+          let command = "echo im-select.exe com.apple.keylayout.ABC | nc -w 0.01 127.0.0.1 " . port
+        else
+          let command = "echo im-select.exe 1033 | nc -w 0.01 127.0.0.1 " . port
+        endif
+        let command = command . " &> /dev/null"
+        " 執行命令
+        call system(command)
       endif
-      let command = command . " &> /dev/null"
-      " 執行命令
-      call system(command)
     endif
   endif
 endfunction
