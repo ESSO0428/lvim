@@ -5,13 +5,16 @@ function find_tabpage_index(tab_id)
       return index
     end
   end
-  return nil   -- 如果找不到相應的 index，返回 nil
+  return nil -- 如果找不到相應的 index，返回 nil
 end
 
 function get_current_tab_name()
   local tab_id = vim.fn.tabpagenr()
 
-  local TablineData = vim.fn.json_decode(vim.g.Tabline_session_data)
+  local status, TablineData = pcall(vim.fn.json_decode, vim.g.Tabline_session_data)
+  if not status then
+    return tab_id
+  end
 
   if TablineData[tab_id] ~= nil then
     return TablineData[tab_id].name
