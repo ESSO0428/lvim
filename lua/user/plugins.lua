@@ -275,8 +275,9 @@ lvim.plugins = {
   --   end
   -- },
   {
-    "GCBallesteros/NotebookNavigator.nvim",
+    "ESSO0428/NotebookNavigator.nvim",
     keys = {
+      { "[e", function() require("notebook-navigator").run_cells_above "" end },
       { "]e", function() require("notebook-navigator").run_cells_below "" end },
     },
     dependencies = {
@@ -307,7 +308,7 @@ lvim.plugins = {
   {
     "echasnovski/mini.ai",
     event = "VeryLazy",
-    dependencies = { "GCBallesteros/NotebookNavigator.nvim" },
+    dependencies = { "ESSO0428/NotebookNavigator.nvim" },
     opts = function()
       local nn = require "notebook-navigator"
 
@@ -318,7 +319,7 @@ lvim.plugins = {
   {
     "echasnovski/mini.hipatterns",
     event = "VeryLazy",
-    dependencies = { "GCBallesteros/NotebookNavigator.nvim" },
+    dependencies = { "ESSO0428/NotebookNavigator.nvim" },
     opts = function()
       local nn = require "notebook-navigator"
 
