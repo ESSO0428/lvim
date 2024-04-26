@@ -53,7 +53,7 @@ function toggle_syntax()
     vim.b.current_buffer_syntax = 'on'
     vim.cmd('setlocal syntax=on')
     if is_match_filetype ~= -1 then
-      vim.cmd('TSDisable highlight')
+      vim.cmd('TSBufDisable highlight')
       vim.cmd('set syntax=' .. current_filetype)
     end
     print('syntax on')
@@ -62,7 +62,7 @@ function toggle_syntax()
     vim.cmd('setlocal syntax=off')
     vim.cmd('set laststatus=3')
     if is_match_filetype ~= -1 then
-      vim.cmd('TSEnable highlight')
+      vim.cmd('TSBufEnable highlight')
     end
     print('syntax off')
   end
