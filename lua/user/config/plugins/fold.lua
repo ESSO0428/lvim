@@ -4,7 +4,7 @@ vim.wo.foldlevel = 99
 vim.wo.foldenable = true
 vim.wo.foldmethod = "manual"
 -- vim.wo.foldlevelstart = -1
-vim.opt.foldlevelstart = 99
+vim.o.foldlevelstart = 99
 
 
 -- Option 1: lsp settings

@@ -27,7 +27,7 @@ lvim.plugins = {
           --               "1" for Fcitx
           --               "xkb:us::eng" for ibus
           -- You can use `im-select` or `fcitx5-remote -n` to get the IM's name
-          default_im_select                   = "com.apple.keylayout.ABC",
+          default_im_select                   = "1033",
 
           -- Can be binary's name or binary's full path,
           -- e.g. 'im-select' or '/usr/local/bin/im-select'
