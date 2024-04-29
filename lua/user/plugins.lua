@@ -378,7 +378,10 @@ lvim.plugins = {
   },
   { "f3fora/cmp-spell" },
   { "rcarriga/cmp-dap" },
-  { "github/copilot.vim" },
+  {
+    "github/copilot.vim",
+    commit = "7097b09"
+  },
   { "hrsh7th/cmp-copilot" },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
