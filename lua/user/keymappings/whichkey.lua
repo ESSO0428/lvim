@@ -90,7 +90,7 @@ end
 
 lvim.builtin.which_key.mappings.u['ki'] = { "<cmd>lua CopilotChatQuickchat()<cr>", "CopilotChat - Quick chat" }
 lvim.builtin.which_key.mappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
-lvim.builtin.which_key.vmappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
+lvim.builtin.which_key.vmappings.u['kk'] = { ":lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
 
 lvim.builtin.which_key.mappings.U = lvim.builtin.which_key.mappings.L
 lvim.builtin.which_key.mappings.L = nil
