@@ -77,10 +77,11 @@ lvim.builtin.which_key.vmappings.l = nil
 lvim.builtin.which_key.vmappings.u.a = { "<cmd>Lspsaga code_action<cr>", "Code Action" }
 
 function CopilotChatQuickchat()
-  local input = vim.fn.input("Quick Chat: ")
-  if input ~= "" then
-    require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
-  end
+  -- local input = vim.fn.input("Quick Chat: ")
+  -- if input ~= "" then
+  --   require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+  -- end
+  require("CopilotChat").ask("", { selection = require("CopilotChat.select").buffer })
 end
 
 function CopilotChatPromptAction()
