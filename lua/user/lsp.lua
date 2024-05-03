@@ -8,9 +8,19 @@ end
 
 -- 底下 Maso.. require("lvim.lsp... 為啟用 html emmet-ls 補全功能
 -- :MasonInstall emmet-ls
+lvim.lsp.installer.setup.ensure_installed = { "html", "tailwindcss" }
 local opts = { filetypes = { "html", "htmldjango" } }
 pcall(function()
   require("lvim.lsp.manager").setup("html", opts)
+end)
+pcall(function()
+  require("lvim.lsp.manager").setup("tailwindcss", {
+    root_dir = require("lspconfig").util.root_pattern(
+      "tailwind.config.js",
+      "tailwind.config.cjs",
+      "tailwind.config.ts"
+    ),
+  })
 end)
 -- autocmd({ "FileType" }, { pattern = { "python", "html" }, command = "UltiSnipsAddFiletypes python.django.html.css" })
 -- autocmd({ "FileType" }, { pattern = { "python" }, command = "setlocal foldmethod=indent" })
