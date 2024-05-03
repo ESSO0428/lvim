@@ -2,8 +2,15 @@ vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
 
 local pyright_opts = {
   single_file_support = true,
-  root_dir = function()
-    return vim.fn.getcwd()
+  root_dir = function(fname)
+    local cwd = vim.fn.getcwd()
+    fname = fname or vim.api.nvim_buf_get_name(0)
+    local file_dir = vim.fn.fnamemodify(fname, ':h')
+    if vim.startswith(fname, cwd) then
+      return cwd
+    else
+      return file_dir -- Sets the workspace directory to the file's directory if CWD does not match
+    end
   end,
   settings = {
     pyright = {
