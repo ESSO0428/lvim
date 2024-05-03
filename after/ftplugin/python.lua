@@ -2,6 +2,9 @@ vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
 
 local pyright_opts = {
   single_file_support = true,
+  root_dir = function()
+    return vim.fn.getcwd()
+  end,
   settings = {
     pyright = {
       disableLanguageServices = false,
