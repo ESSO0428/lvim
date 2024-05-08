@@ -81,6 +81,25 @@ if lvim.transparent_window == true then
 end
 --]]
 
+-- Reference : https://github.com/sindrets/diffview.nvim/issues/241
+vim.cmd "au ColorScheme * hi DiffAdd gui=none guifg=none guibg=#2C6468"
+vim.cmd "au ColorScheme * hi DiffChange gui=none guifg=none guibg=#272D43"
+vim.cmd "au ColorScheme * hi DiffText gui=none guifg=none guibg=#4A5B80"
+vim.cmd "au ColorScheme * hi DiffDelete gui=none guifg=none guibg=#5F3D4D"
+vim.cmd "au ColorScheme * hi DiffviewDiffAddAsDelete guibg=#5F3D4D gui=none guifg=none"
+vim.cmd "au ColorScheme * hi DiffviewDiffDelete gui=none guifg=#3B4252 guibg=none"
+
+-- Left panel
+-- "DiffChange:DiffAddAsDelete",
+-- "DiffText:DiffDeleteText",
+vim.cmd "au ColorScheme * hi DiffAddAsDelete gui=none guifg=none guibg=#5F3D4D"
+vim.cmd "au ColorScheme * hi DiffDeleteText gui=none guifg=none guibg=#5A1D1D"
+
+-- Right panel
+-- "DiffChange:DiffAdd",
+-- "DiffText:DiffAddText",
+vim.cmd "au ColorScheme * hi DiffAddText gui=none guifg=none guibg=#2C6468"
+
 -- lvim.builtin.bufferline
 vim.g.vim_pid                                          = vim.fn.getpid()
 lvim.builtin.lualine.options                           = {
