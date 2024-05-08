@@ -1,4 +1,4 @@
-vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright", "ruff" })
 local function stop_pyright()
   local clients = vim.lsp.get_active_clients()
   for _, client in ipairs(clients) do
