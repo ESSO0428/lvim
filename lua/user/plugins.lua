@@ -874,6 +874,12 @@ lvim.plugins = {
     }
   },
   {
+    "roobert/hoversplit.nvim",
+    config = function()
+      require("hoversplit").setup()
+    end
+  },
+  {
     "hedyhli/outline.nvim",
     config = function()
       -- Example mapping to toggle outline

@@ -20,6 +20,8 @@ vim.api.nvim_create_user_command('LspbufRename', LspbufRename, {})
 
 lvim.keys.normal_mode['gh']                = "<cmd>lua lsp_or_jupyter_signature_help()<cr>"
 lvim.lsp.buffer_mappings.normal_mode['gh'] = { "<cmd>lua lsp_or_jupyter_signature_help()<cr>", "Show documentation" }
+lvim.keys.normal_mode['sgh']               = "<Cmd>lua require('hoversplit').split_remain_focused()<cr>"
+
 
 function filetype_specfic_antovim()
   local captures = vim.treesitter.get_captures_at_cursor(0)
@@ -97,9 +99,9 @@ lvim.builtin.which_key.mappings['c']   = { ":Telescope lsp_references<CR>", "lsp
 lvim.builtin.which_key.mappings['v']   = { ":Telescope lsp_document_symbols<CR>", "lsp_document_symbols" }
 
 -- lvim.lsp.buffer_mappings.normal_mode['gd'] = nil
--- lvim.keys.normal_mode['<a-o>']             = ":lua vim.lsp.buf.definition()<CR>"
+lvim.keys.normal_mode['<a-o>']         = ":lua vim.lsp.buf.definition()<CR>"
 -- lvim.keys.normal_mode['<a-o>']             = "<cmd>Lspsaga goto_definition<CR>"
-lvim.keys.normal_mode['<a-o>']         = ":lua require('telescope.builtin').lsp_definitions()<CR>"
+-- lvim.keys.normal_mode['<a-o>']         = ":lua require('telescope.builtin').lsp_definitions()<CR>"
 lvim.keys.normal_mode['<leader><a-o>'] = ":lua require('goto-preview').goto_preview_definition()<CR>"
 lvim.keys.normal_mode['sL']            = ":wincmd L<CR>"
 lvim.keys.normal_mode['sK']            = ":wincmd J<CR>"
