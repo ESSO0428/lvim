@@ -85,8 +85,8 @@ let g:jupytext_style = 'hydrogen'
 " Depends on the text object defined in vim-textobj-hydrogen
 " You first need to be connected to IronRepl
 " nmap ]x ctrih/^# %%<CR><CR>
-nmap [w strah<ESC><space><CR>
-nmap ]w strih<ESC><space><CR>
+nmap [w strah
+nmap ]w strih
 
 
 " ==================== Ultisnips ====================
