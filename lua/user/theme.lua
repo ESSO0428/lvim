@@ -86,7 +86,7 @@ vim.cmd "au ColorScheme * hi DiffAdd gui=none guifg=none guibg=#2C6468"
 vim.cmd "au ColorScheme * hi DiffChange gui=none guifg=none guibg=#272D43"
 vim.cmd "au ColorScheme * hi DiffText gui=none guifg=none guibg=#4A5B80"
 vim.cmd "au ColorScheme * hi DiffDelete gui=none guifg=none guibg=#5F3D4D"
-vim.cmd "au ColorScheme * hi DiffviewDiffAddAsDelete guibg=#5F3D4D gui=none guifg=none"
+vim.cmd "au ColorScheme * hi DiffviewDiffAddAsDelete gui=none guifg=none guibg=#5F3D4D"
 vim.cmd "au ColorScheme * hi DiffviewDiffDelete gui=none guifg=#3B4252 guibg=none"
 
 -- Left panel
