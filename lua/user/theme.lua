@@ -176,11 +176,28 @@ else
     notify.notify(msg, level, opts)
   end
 end
-local autocommand = {
-  "TextYankPost",      -- see `:h autocmd-events`
-  {                    -- this table is passed verbatim as `opts` to `nvim_create_autocmd`
-    pattern = { "*" }, -- see `:h autocmd-events`
-    command = "silent! lua vim.highlight.on_yank{higroup='IncSearch', timeout=200}",
+local fcs = vim.opt.fillchars:get()
+
+-- Stolen from Akinsho
+local autocommands = {
+  {
+    "TextYankPost",      -- see `:h autocmd-events`
+    {                    -- this table is passed verbatim as `opts` to `nvim_create_autocmd`
+      pattern = { "*" }, -- see `:h autocmd-events`
+      command = "silent! lua vim.highlight.on_yank{higroup='IncSearch', timeout=200}",
+    }
+  },
+  {
+    "ColorScheme",
+    {
+      pattern = { "*" },
+      callback = function()
+        vim.opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+        vim.opt.fillchars:append { diff = "╱" }
+      end
+    }
   }
 }
-table.insert(lvim.autocommands, autocommand)
+for _, autocommand in pairs(autocommands) do
+  table.insert(lvim.autocommands, autocommand)
+end

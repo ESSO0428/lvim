@@ -1,5 +1,5 @@
 -- ufo folding
--- vim.opt.foldcolumn = "1"
+vim.opt.foldcolumn = "1"
 vim.wo.foldlevel = 99
 vim.wo.foldenable = true
 vim.wo.foldmethod = "manual"
@@ -12,7 +12,7 @@ vim.o.foldlevelstart = 99
 -- Option 2: nvim lsp as LSP client
 -- Tell the server the capability of foldingRange,
 -- Neovim hasn't added foldingRange to default capabilities, users must add it manually
-vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+-- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.foldingRange = {
