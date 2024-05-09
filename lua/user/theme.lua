@@ -197,6 +197,18 @@ local autocommands = {
         vim.opt.fillchars:append { diff = "╱" }
       end
     }
+  },
+  {
+    "BufReadPost",
+    {
+      pattern = { "*" },
+      callback = function()
+        -- NOTE: fix semshi highlighting conflict with treesitter
+        if vim.bo.filetype == "python" then
+          vim.bo.syntax = "on"
+        end
+      end
+    }
   }
 }
 for _, autocommand in pairs(autocommands) do
