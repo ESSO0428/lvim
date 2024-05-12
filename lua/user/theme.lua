@@ -67,6 +67,7 @@ if lvim.transparent_window == true then
   vim.cmd "au ColorScheme * hi IlluminatedWordWrite guibg=none"
   vim.cmd "au ColorScheme * hi IlluminatedWordRead guibg=none"
   vim.cmd "au ColorScheme * hi IlluminatedWordText guibg=none"
+  vim.cmd "au ColorScheme * hi DiagnosticUnderlineError guifg=#c0caf5"
 
   vim.cmd "au ColorScheme * highlight IndentBlanklineContextChar guifg=#A184FE gui=nocombine" -- #737aa2
 end
