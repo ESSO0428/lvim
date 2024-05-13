@@ -63,6 +63,9 @@ else
   lvim.builtin.which_key.mappings["e"] = { "<cmd>lua CustomNvimTreeToggle()<cr>", "NvimTree" }
   lvim.keys.normal_mode["<c-k>"] = "<Cmd>NvimTreeFocus<CR>"
 end
+lvim.builtin.which_key.mappings['c'] = nil
+lvim.builtin.which_key.mappings['c'] = { '"_c', '"_c' }
+
 lvim.builtin.which_key.mappings.u = lvim.builtin.which_key.mappings.l
 lvim.builtin.which_key.mappings.l = nil
 lvim.builtin.which_key.mappings.u.o = lvim.builtin.which_key.mappings.u.j
