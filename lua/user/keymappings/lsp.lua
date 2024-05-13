@@ -95,7 +95,8 @@ lvim.keys.normal_mode['<leader>ue']    = { ":Telescope quickfix<cr>" }
 -- lvim.keys.normal_mode['<a-u>']             = ":LspInfo<CR>"
 -- now replace to <leader>ui
 
-lvim.builtin.which_key.mappings['c']   = { ":Telescope lsp_references<CR>", "lsp_references" }
+-- lvim.builtin.which_key.mappings['c']   = { ":Telescope lsp_references<CR>", "lsp_references" }
+lvim.builtin.which_key.mappings['gr']  = { ":Telescope lsp_references<CR>", "lsp_references" }
 lvim.builtin.which_key.mappings['v']   = { ":Telescope lsp_document_symbols<CR>", "lsp_document_symbols" }
 
 -- lvim.lsp.buffer_mappings.normal_mode['gd'] = nil
