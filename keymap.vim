@@ -34,6 +34,8 @@ nnoremap u O<ESC>
 nnoremap U ddk
 " noremap <c-y> yyp
 nnoremap <c-d> "dyyp
+nnoremap <a-i> <c-u>
+nnoremap <a-k> <c-d>
 " nmap < <<CR>
 " nmap > ><CR>
 nnoremap x "_x

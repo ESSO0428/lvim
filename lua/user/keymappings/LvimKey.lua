@@ -131,8 +131,10 @@ lvim.keys.normal_mode["<C-j>"]         = "<Cmd>BufferLineCyclePrev<CR>"
 lvim.keys.normal_mode["<C-l>"]         = "<Cmd>BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["<a-j>"]         = "<Cmd>BufferLineMovePrev<CR>"
 lvim.keys.normal_mode["<a-l>"]         = "<Cmd>BufferLineMoveNext<CR>"
-lvim.keys.normal_mode["<a-k>"]         = "<Cmd>BufferLineSortByDirectory<CR>"
-lvim.keys.normal_mode["<a-i>"]         = "<cmd>BufferLinePickClose<CR>"
+lvim.keys.normal_mode["<a-k>"]         = "<c-d>"
+lvim.builtin.which_key.mappings.b.k    = { "<cmd>BufferLineSortByDirectory<CR>", "Sort By Directory" }
+lvim.keys.normal_mode["<a-i>"]         = "<c-u>"
+lvim.builtin.which_key.mappings.b.i    = { "<cmd>BufferLinePickClose<CR>", "Close Buffer" }
 lvim.keys.normal_mode["<a-g>"]         = { ":BufferLineGroupToggle", silent = false }
 lvim.keys.normal_mode["<leader><a-g>"] = { ":BufferLineGroupClose", silent = false }
 lvim.keys.normal_mode["<leader><a-i>"] = "<cmd>BufferLineTogglePin<CR>"
