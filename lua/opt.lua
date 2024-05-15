@@ -47,6 +47,7 @@ lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winba
 lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "undotree"
 
 -- bufferline offset
+lvim.builtin.bufferline.options.always_show_bufferline = true
 lvim.builtin.bufferline.options.offsets[#lvim.builtin.bufferline.options.offsets + 1] = {
   filetype = "dbui",
   text = "DBUI",
