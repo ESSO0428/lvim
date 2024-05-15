@@ -444,6 +444,7 @@ lvim.plugins = {
   },
   {
     'luukvbaal/statuscol.nvim',
+    event = "VeryLazy",
     opts = function()
       local builtin = require('statuscol.builtin')
       return {
