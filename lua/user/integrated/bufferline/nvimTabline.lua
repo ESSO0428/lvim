@@ -39,7 +39,10 @@ local function setup_autocommands(conf)
     api.nvim_create_autocmd("SessionLoadPost", {
       pattern = "*",
       group = BUFFERLINE_GROUP,
-      callback = function() state.custom_sort = utils.restore_positions() end,
+      callback = function()
+        state.custom_sort = utils.restore_positions()
+        vim.o.tabline = "%!v:lua.nvim_bufferline() .. v:lua.require'tabline'.tabline_tabs()"
+      end,
     })
   end
   if not options.always_show_bufferline then
@@ -120,7 +123,11 @@ function M.setup(conf)
   hover.setup(preferences)
   setup_commands()
   setup_autocommands(preferences)
-  vim.o.tabline = "%!v:lua.nvim_bufferline() .. v:lua.require'tabline'.tabline_tabs()"
+  if vim.g.Tabline_session_data == nil or vim.g.Tabline_session_data == '' then
+    vim.o.tabline = "%!v:lua.nvim_bufferline() .. v:lua.require'tabline'.tabline_tabs()"
+  else
+    vim.o.tabline = "%!v:lua.nvim_bufferline()"
+  end
   toggle_bufferline()
 end
 
