@@ -1,5 +1,7 @@
 lvim.builtin.bufferline.options.show_tab_indicators = false
 if lvim.builtin.bufferline.options.show_tab_indicators == false then
+  --[[
+  -- NOW DEPRECATED : bufferline.nvim and tabline.nvim are now perfectly integrated
   -- lvim.builtin.bufferline.options.offsets = {}
   local autocommands = {
     {
@@ -20,6 +22,8 @@ if lvim.builtin.bufferline.options.show_tab_indicators == false then
   for _, autocommand in pairs(autocommands) do
     table.insert(lvim.autocommands, autocommand)
   end
+  --]]
+  -- NOTE: NEW FEATURE: bufferline.nvim and tabline.nvim are now perfectly integrated
   require "user.integrated.bufferline.nvimTabline"
 else
   require "user.integrated.bufferline.tabpages"

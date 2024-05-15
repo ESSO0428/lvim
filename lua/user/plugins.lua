@@ -117,6 +117,9 @@ lvim.plugins = {
     config = function()
       require 'tabline'.setup {
         enable = false,
+        options = {
+          show_tabs_always = true
+        }
       }
       vim.cmd [[
         set guioptions-=e " Use showtabline in gui vim

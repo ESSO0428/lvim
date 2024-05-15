@@ -1,12 +1,130 @@
 -- NOTE: 1. The primary modifications are within the 'require("bufferline.ui").tabline' function.
 -- NOTE: 2. Use 'tabline.total_tab_length' directly to obtain the tab indicator instead of the previous method.
 -- NOTE: 3. The other functions are dependent on 'require("bufferline.ui").tabline' and serve as auxiliary to the tabline function.
+-- NOTE: 4. [240515] NEW FEATURE INTEGRATION: bufferline.nvim and tabline.nvim in setup config
 local lazy = require("bufferline.lazy")
+local ui = lazy.require("bufferline.ui") ---@module "bufferline.ui"
 local utils = lazy.require("bufferline.utils") ---@module "bufferline.utils"
+local state = lazy.require("bufferline.state") ---@module "bufferline.state"
+local groups = lazy.require("bufferline.groups") ---@module "bufferline.groups"
 local config = lazy.require("bufferline.config") ---@module "bufferline.config"
 local constants = lazy.require("bufferline.constants") ---@module "bufferline.constants"
 local highlights = lazy.require("bufferline.highlights") ---@module "bufferline.highlights"
+local hover = lazy.require("bufferline.hover") ---@module "bufferline.hover"
 local api = vim.api
+
+-- NOTE: [240515] NEW FEATURE INTEGRATION: bufferline.nvim and tabline.nvim in setup config
+local M = require('bufferline')
+local function toggle_bufferline()
+  if not config.options.auto_toggle_bufferline then return end
+  local item_count = config:is_tabline() and utils.get_tab_count() or utils.get_buf_count()
+  local status = (config.options.always_show_bufferline or item_count > 1) and 2 or 0
+  if vim.o.showtabline ~= status then vim.o.showtabline = status end
+end
+
+local function setup_autocommands(conf)
+  local BUFFERLINE_GROUP = "BufferlineCmds"
+  local options = conf.options
+  api.nvim_create_augroup(BUFFERLINE_GROUP, { clear = true })
+  api.nvim_create_autocmd("ColorScheme", {
+    pattern = "*",
+    group = BUFFERLINE_GROUP,
+    callback = function()
+      highlights.reset_icon_hl_cache()
+      highlights.set_all(config.update_highlights())
+    end,
+  })
+  if not options or vim.tbl_isempty(options) then return end
+  if options.persist_buffer_sort then
+    api.nvim_create_autocmd("SessionLoadPost", {
+      pattern = "*",
+      group = BUFFERLINE_GROUP,
+      callback = function() state.custom_sort = utils.restore_positions() end,
+    })
+  end
+  if not options.always_show_bufferline then
+    -- toggle tabline
+    api.nvim_create_autocmd({ "BufAdd", "TabEnter" }, {
+      pattern = "*",
+      group = BUFFERLINE_GROUP,
+      callback = function() toggle_bufferline() end,
+    })
+  end
+
+  api.nvim_create_autocmd("BufRead", {
+    pattern = "*",
+    once = true,
+    callback = function() vim.schedule(groups.handle_group_enter) end,
+  })
+
+  api.nvim_create_autocmd("BufEnter", {
+    pattern = "*",
+    callback = function() groups.handle_group_enter() end,
+  })
+
+  api.nvim_create_autocmd("User", {
+    pattern = "BufferLineHoverOver",
+    callback = function(args) ui.on_hover_over(args.buf, args.data) end,
+  })
+
+  api.nvim_create_autocmd("User", {
+    pattern = "BufferLineHoverOut",
+    callback = ui.on_hover_out,
+  })
+end
+
+local function command(name, cmd, opts) api.nvim_create_user_command(name, cmd, opts or {}) end
+local function setup_commands()
+  command("BufferLinePick", function() M.pick() end)
+  command("BufferLinePickClose", function() M.close_with_pick() end)
+  command("BufferLineCycleNext", function() M.cycle(1) end)
+  command("BufferLineCyclePrev", function() M.cycle(-1) end)
+  command("BufferLineCloseRight", function() M.close_in_direction("right") end)
+  command("BufferLineCloseLeft", function() M.close_in_direction("left") end)
+  command("BufferLineCloseOthers", function() M.close_others() end)
+  command("BufferLineMoveNext", function() M.move(1) end)
+  command("BufferLineMovePrev", function() M.move(-1) end)
+  command("BufferLineSortByExtension", function() M.sort_by("extension") end)
+  command("BufferLineSortByDirectory", function() M.sort_by("directory") end)
+  command("BufferLineSortByRelativeDirectory", function() M.sort_by("relative_directory") end)
+  command("BufferLineSortByTabs", function() M.sort_by("tabs") end)
+  command("BufferLineGoToBuffer", function(opts) M.go_to(opts.args) end, { nargs = 1 })
+  command("BufferLineTogglePin", function() groups.toggle_pin() end, { nargs = 0 })
+  command("BufferLineTabRename", function(opts) M.rename_tab(opts.fargs) end, { nargs = "*" })
+  command("BufferLineGroupClose", function(opts) groups.action(opts.args, "close") end, {
+    nargs = 1,
+    complete = groups.complete,
+  })
+  command("BufferLineGroupToggle", function(opts) groups.action(opts.args, "toggle") end, {
+    nargs = 1,
+    complete = groups.complete,
+  })
+end
+
+function M.setup(conf)
+  -- 新的實現
+  if not utils.is_current_stable_release() then
+    utils.notify(
+      "bufferline.nvim requires Neovim 0.7 or higher, please use tag 1.* or update your neovim",
+      "error",
+      { once = true }
+    )
+    return
+  end
+  conf = conf or {}
+  config.setup(conf)
+  groups.setup(conf) -- Groups must be set up before the config is applied
+  local preferences = config.apply()
+  -- on loading (and reloading) the plugin's config reset all the highlights
+  highlights.set_all(preferences)
+  hover.setup(preferences)
+  setup_commands()
+  setup_autocommands(preferences)
+  vim.o.tabline = "%!v:lua.nvim_bufferline() .. v:lua.require'tabline'.tabline_tabs()"
+  toggle_bufferline()
+end
+
+-- NOTE: before [240515] note 1~3 features
 
 -- string.len counts number of bytes and so the unicode icons are counted
 -- larger than their display width. So we use nvim's strwidth
@@ -232,3 +350,4 @@ require("bufferline.ui").tabline = function(items, tab_indicators)
     left_offset_size = left_offset_size + left_marker_size,
   }
 end
+return M
