@@ -25,7 +25,6 @@ vim.wo.signcolumn = "auto:2-6"
 -- vim.opt.inccommand = ""
 vim.opt.inccommand = "split"
 vim.opt.spell = true
-vim.opt.spelllang = { 'en_us' }
 
 vim.opt.list = false
 vim.opt.listchars:append "space:·"
