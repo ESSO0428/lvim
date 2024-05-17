@@ -803,12 +803,6 @@ lvim.plugins = {
       custom_filetypes = {} -- see the extension section to learn how it works
     }
   },
-  {
-    'laytan/tailwind-sorter.nvim',
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim' },
-    build = 'cd formatter && npm ci && npm run build',
-    config = true
-  },
   { "nvim-lua/popup.nvim" },
   {
     "iamcco/markdown-preview.nvim",
