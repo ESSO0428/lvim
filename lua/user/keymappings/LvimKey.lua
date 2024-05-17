@@ -30,6 +30,8 @@ lvim.keys.normal_mode['<leader><c-f>'] = "<Cmd>lua require('telescope.builtin').
 lvim.keys.normal_mode['<c-h>']         = "<Cmd>MurenToggle<cr>"
 lvim.keys.normal_mode['<leader><c-h>'] = "<Cmd>MurenUnique<cr>"
 lvim.keys.normal_mode['<c-d>']         = "\"dyy\"dp"
+lvim.keys.normal_mode['<a-L>']         = "<Plug>(VM-Select-All)"
+lvim.keys.visual_mode['<a-L>']         = "<Plug>(VM-Visual-All)"
 -- <leader>h
 -- lvim.builtin.which_key.mappings['h'] = { '"fyiw:.,$s/<c-r>f//gc<Left><Left><Left>', "Repalce => empty (c)",
 --   silent = false }
