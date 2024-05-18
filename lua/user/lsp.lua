@@ -22,6 +22,31 @@ pcall(function()
     ),
   })
 end)
+pcall(function()
+  require("lvim.lsp.manager").setup("cssls", {
+    settings = {
+      css = {
+        validate = true,
+        lint = {
+          unknownAtRules = "ignore"
+        }
+      },
+      scss = {
+        validate = true,
+        lint = {
+          unknownAtRules = "ignore"
+        }
+      },
+      less = {
+        validate = true,
+        lint = {
+          unknownAtRules = "ignore"
+        }
+      }
+    }
+  })
+end
+)
 -- autocmd({ "FileType" }, { pattern = { "python", "html" }, command = "UltiSnipsAddFiletypes python.django.html.css" })
 -- autocmd({ "FileType" }, { pattern = { "python" }, command = "setlocal foldmethod=indent" })
 
