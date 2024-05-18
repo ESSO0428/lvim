@@ -324,7 +324,7 @@ function util_cmp_config(i, source)
   if source.name == "nvim_lsp" then
     lvim.builtin.cmp.sources[i] = {
       name = "nvim_lsp",
-      max_item_count = 200,
+      -- max_item_count = 200,
       entry_filter = function(entry, ctx)
         local kind = require("cmp.types.lsp").CompletionItemKind[entry:get_kind()]
         if kind == "Snippet" and ctx.prev_context.filetype == "java" then
