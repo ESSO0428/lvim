@@ -29,6 +29,7 @@ syn clear markdownBlockquote
 syn clear markdownItalic
 syn clear markdownBoldItalic
 syn clear markdownBold
+highlight @keyword.directive.markdown guifg=none
 exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="^\s*>\@!\*\S\@=" end="\S\@<=\*\|^$" skip="\\\*" contains=markdownLineStart,@Spell' . s:concealends
 exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="^\s*>\@!\w\@<!_\S\@=" end="\S\@<=_\w\@!\|^$" skip="\\_" contains=markdownLineStart,@Spell' . s:concealends
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="^\s*>\@!\*\*\*\S\@=" end="\S\@<=\*\*\*\|^$" skip="\\\*" contains=markdownLineStart,@Spell' . s:concealends
