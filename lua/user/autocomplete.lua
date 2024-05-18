@@ -51,6 +51,11 @@ lvim.builtin.cmp.snippet = {
     vim.fn["UltiSnips#Anon"](args.body)
   end,
 }
+lvim.builtin.cmp.performance = {
+  trigger_debounce_time = 500,
+  throttle = 550,
+  fetching_timeout = 80,
+}
 local function remove_copilot_if_node_version_too_low()
   -- 執行 `node --version` 並獲取輸出
   local handle = io.popen("node --version")
