@@ -7,7 +7,7 @@ local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 
 lvim.builtin.cmp.enabled = function()
   local buftype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-  if buftype == "prompt" then
+  if buftype == "prompt" or buftype == "TelescopePrompt" then
     return false or require("cmp_dap").is_dap_buffer()
   end
   return lvim.builtin.cmp.active
@@ -273,6 +273,7 @@ function BufferAllCompleteToggle()
           name = "buffer",
           option = {}
         }
+        util_cmp_config(i, source)
       end
     end
   end
@@ -313,8 +314,25 @@ function CurrentTabCompleteToggle()
           name = "buffer",
           option = {}
         }
+        util_cmp_config(i, source)
       end
     end
+  end
+end
+
+function util_cmp_config(i, source)
+  if source.name == "nvim_lsp" then
+    lvim.builtin.cmp.sources[i] = {
+      name = "nvim_lsp",
+      max_item_count = 200,
+      entry_filter = function(entry, ctx)
+        local kind = require("cmp.types.lsp").CompletionItemKind[entry:get_kind()]
+        if kind == "Snippet" and ctx.prev_context.filetype == "java" then
+          return false
+        end
+        return true
+      end
+    }
   end
 end
 
