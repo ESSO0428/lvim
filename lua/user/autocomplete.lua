@@ -259,7 +259,7 @@ function BufferAllCompleteToggle()
           option = {
             get_bufnrs = function()
               local function is_not_neotree(buf)
-                return vim.api.nvim_buf_get_option(buf, 'filetype') ~= 'neo-tree'
+                return vim.api.nvim_get_option_value("filetype", { buf = buf }) ~= 'neo-tree'
               end
 
               local buf_list = vim.api.nvim_list_bufs()
