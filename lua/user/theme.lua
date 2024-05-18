@@ -37,6 +37,8 @@ vim.cmd "let &fcs='eob: '"
 -- vim.cmd "au ColorScheme * hi BufferLineTabSeparator guifg=#000000"
 
 vim.cmd "au ColorScheme * hi @include.python guifg=#c586c0"
+vim.cmd "au ColorScheme * hi pythonInclude guifg=#c586c0"
+vim.cmd "au ColorScheme * hi @keyword.import guifg=#c586c0"
 vim.cmd "au ColorScheme * hi @variable guifg=#9cdcfe"
 vim.cmd "au ColorScheme * hi @conditional.python guifg=#c586c0"
 vim.cmd "au ColorScheme * hi @exception.python guifg=#c586c0"
