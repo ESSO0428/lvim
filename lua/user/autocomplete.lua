@@ -6,7 +6,7 @@ local luasnip = require("lvim.utils.modules").require_on_index "luasnip"
 local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 
 lvim.builtin.cmp.enabled = function()
-  local buftype = vim.api.nvim_buf_get_option(0, "buftype")
+  local buftype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
   if buftype == "prompt" then
     return false or require("cmp_dap").is_dap_buffer()
   end
@@ -28,7 +28,7 @@ require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
             -- 获取每个窗口的缓冲区编号
             local buf = vim.api.nvim_win_get_buf(win)
             -- 检查文件类型是否不是 neo-tree
-            if vim.api.nvim_buf_get_option(buf, 'filetype') ~= 'neo-tree' then
+            if vim.api.nvim_get_option_value("filetype", { buf = buf }) ~= 'neo-tree' then
               -- 检查文件大小
               local size = vim.fn.getfsize(vim.api.nvim_buf_get_name(buf))
               if size > 0 and size < max_size then
@@ -295,7 +295,7 @@ function CurrentTabCompleteToggle()
                 -- 获取每个窗口的缓冲区编号
                 local buf = vim.api.nvim_win_get_buf(win)
                 -- 检查文件类型是否不是 neo-tree
-                if vim.api.nvim_buf_get_option(buf, 'filetype') ~= 'neo-tree' then
+                if vim.api.nvim_get_option_value("filetype", { buf = buf }) ~= 'neo-tree' then
                   -- 检查文件大小
                   local size = vim.fn.getfsize(vim.api.nvim_buf_get_name(buf))
                   if size > 0 and size < max_size then
