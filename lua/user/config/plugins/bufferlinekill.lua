@@ -26,7 +26,7 @@ function BufferLineKill(opts)
   local bufnr = vim.api.nvim_get_current_buf()
   local bufname = api.nvim_buf_get_name(bufnr)
 
-  if api.nvim_buf_get_option(bufnr, "buftype") == "terminal" then
+  if api.nvim_get_option_value("buftype", { buf = bufnr }) == "terminal" then
     if force ~= true then
       vim.cmd('BufferKill')
     else
