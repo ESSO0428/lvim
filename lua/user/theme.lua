@@ -10,6 +10,7 @@ lvim.builtin.which_key.mappings["tA"] = { "<cmd>Limelight!<cr>", "Limelight Clos
 if lvim.transparent_window == true then
   vim.cmd "au ColorScheme * hi Normal ctermbg=none guibg=none"
   vim.cmd "au ColorScheme * hi SignColumn ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi WinBarNC cterm=bold guifg=NvimLightGrey4 guibg=none"
   vim.cmd "au ColorScheme * exec 'hi FoldColumn guibg=none guifg=' . synIDattr(synIDtrans(hlID('Folded')), 'fg', 'gui')"
   vim.cmd "au ColorScheme * hi NormalNC ctermbg=none guibg=none"
   vim.cmd "au ColorScheme * hi MsgArea ctermbg=none guibg=none"

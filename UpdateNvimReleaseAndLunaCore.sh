@@ -30,7 +30,10 @@ mv ~/.config/lvim/ ~/.config/lvim_stage/
 
 echo "Downloading Neovim Release ..."
 rm -rf nvim.appimage
-wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+# NOTE: Changing the download URL to 'neovim-releases/releases/download'
+# , which is an official link provided by Neovim to accommodate machines with older glibc versions
+# wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+wget https://github.com/neovim/neovim-releases/releases/download/stable/nvim.appimage
 chmod u+x nvim.appimage
 
 # Test if the release version works

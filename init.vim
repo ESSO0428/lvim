@@ -26,7 +26,7 @@ else
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
-Plug 'ojroques/vim-oscyank', {'branch': 'main'}
+" Plug 'ojroques/vim-oscyank', {'branch': 'main'}
 " Plug 'RRethy/vim-hexokinase', { 'do': 'cd ~/.config/lvim/plugged/vim-hexokinase/; make hexokinase' }
 Plug 'tpope/vim-surround'
 Plug 'mbbill/undotree'
@@ -128,38 +128,38 @@ endfunc
 "     \ endif
 " endif
 
-function! SetOsc52Clipboard()
-    let g:clipboard = {
-        \   'name': 'osc52',
-        \   'copy': {
-        \     '+': {lines, regtype -> OSCYank(join(lines, "\n"))},
-        \     '*': {lines, regtype -> OSCYank(join(lines, "\n"))},
-        \   },
-        \   'paste': {
-        \     '+': {-> [split(getreg(''), '\n'), getregtype('')]},
-        \     '*': {-> [split(getreg(''), '\n'), getregtype('')]},
-        \   },
-        \ }
-endfunction
+" function! SetOsc52Clipboard()
+"     let g:clipboard = {
+"         \   'name': 'osc52',
+"         \   'copy': {
+"         \     '+': {lines, regtype -> OSCYank(join(lines, "\n"))},
+"         \     '*': {lines, regtype -> OSCYank(join(lines, "\n"))},
+"         \   },
+"         \   'paste': {
+"         \     '+': {-> [split(getreg(''), '\n'), getregtype('')]},
+"         \     '*': {-> [split(getreg(''), '\n'), getregtype('')]},
+"         \   },
+"         \ }
+" endfunction
 
-function! SetWslClipboard()
-  let g:clipboard = {
-    \   'name': 'WslClipboard',
-    \   'copy': {
-    \      '+': 'clip.exe',
-    \      '*': 'clip.exe',
-    \    },
-    \   'paste': {
-    \      '+': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-    \      '*': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-    \   },
-    \   'cache_enabled': 0,
-    \ }
-endfunction
+" function! SetWslClipboard()
+"   let g:clipboard = {
+"     \   'name': 'WslClipboard',
+"     \   'copy': {
+"     \      '+': 'clip.exe',
+"     \      '*': 'clip.exe',
+"     \    },
+"     \   'paste': {
+"     \      '+': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+"     \      '*': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+"     \   },
+"     \   'cache_enabled': 0,
+"     \ }
+" endfunction
 
-command! SetClipboardOsc52 call SetOsc52Clipboard() | checkhealth provider
-command! SetClipboardWsl call SetWslClipboard() | checkhealth provider
-call SetOsc52Clipboard()
+" command! SetClipboardOsc52 call SetOsc52Clipboard() | checkhealth provider
+" command! SetClipboardWsl call SetWslClipboard() | checkhealth provider
+" call SetOsc52Clipboard()
 " let g:clipboard = {
 "         \   'name': 'osc52',
 "         \   'copy': {
