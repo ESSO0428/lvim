@@ -87,7 +87,7 @@ remove_copilot_if_node_version_too_low()
 lvim.builtin.cmp.experimental.ghost_text = true
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "luasnip" }
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "jupyter" }
-table.insert(lvim.builtin.cmp.sources, 2, { name = "jupyter" })
+table.insert(lvim.builtin.cmp.sources, 2, { name = "jupyter", priority = 10 })
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "cmdline_history" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "ultisnips" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vsnip" }
@@ -108,6 +108,7 @@ lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = {
 
 table.insert(lvim.builtin.cmp.sources, 1, {
   name = "html-css",
+  priority = 10,
   option = {
     max_count = {}, -- not ready yet
     enable_on = {
@@ -329,6 +330,7 @@ function util_cmp_config(i, source)
   if source.name == "nvim_lsp" then
     lvim.builtin.cmp.sources[i] = {
       name = "nvim_lsp",
+      priority = "10",
       -- max_item_count = 200,
       entry_filter = function(entry, ctx)
         local kind = require("cmp.types.lsp").CompletionItemKind[entry:get_kind()]
