@@ -156,33 +156,6 @@ lvim.builtin.telescope.defaults.layout_config          = {
   }
 }
 vim.cmd "autocmd User TelescopePreviewerLoaded setlocal number"
-local status_ok, PlugNotify = pcall(require, "notify")
-if not status_ok then
-  return
-else
-  local notify = require("notify")
-  local message_notifications = {}
-  local buffered_messages = {
-    "Client %d+ quit",
-  }
-  vim.notify = function(msg, level, opts)
-    opts = opts or {}
-    for _, pattern in ipairs(buffered_messages) do
-      if string.find(msg, pattern) then
-        if message_notifications[pattern] then
-          opts.replace = message_notifications[pattern]
-        end
-        opts.on_close = function()
-          message_notifications[pattern] = nil
-        end
-        message_notifications[pattern] = notify.notify(msg, level, opts)
-        return
-      end
-    end
-    notify.notify(msg, level, opts)
-  end
-end
-local fcs = vim.opt.fillchars:get()
 
 -- Stolen from Akinsho
 local autocommands = {
