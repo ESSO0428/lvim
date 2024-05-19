@@ -7,19 +7,17 @@ echo "Your current LunaVim configuration will be backed up to ~/.config/lvim_sta
 echo "In case of failure, manually restore it by running:"
 echo "mv ~/.config/lvim_stage/ ~/.config/lvim/"
 
-# NOTE: Use below command to update nvim release (and update lunavim core for nvim release)
-cd ~
-unlink ~/.config/lvim/snapshots/default.json > /dev/null 2>&1
-mv ~/.config/lvim/ ~/.config/lvim_stage/
-
 # NOTE: get current neovim version (if execute failed will backup current nvim)
 if sh ${current_script_dir}/UpdateNvimReleaseOnly.sh; then
   :
 else
-  mv ~/.config/lvim_stage/ ~/.config/lvim/
   exit 1
 fi
 
+# NOTE: Use below command to update nvim release (and update lunavim core for nvim release)
+cd ~
+unlink ~/.config/lvim/snapshots/default.json > /dev/null 2>&1
+mv ~/.config/lvim/ ~/.config/lvim_stage/
 
 # Function to restore the original LunarVim configuration and exit
 restore_my_lvim_config() {
