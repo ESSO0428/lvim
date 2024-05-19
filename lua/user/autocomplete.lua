@@ -279,8 +279,9 @@ function BufferAllCompleteToggle()
           name = "buffer",
           option = {}
         }
-        util_cmp_config(i, source)
       end
+    else
+      util_cmp_config(i, source)
     end
   end
 end
@@ -320,8 +321,9 @@ function CurrentTabCompleteToggle()
           name = "buffer",
           option = {}
         }
-        util_cmp_config(i, source)
       end
+    else
+      util_cmp_config(i, source)
     end
   end
 end
@@ -330,7 +332,7 @@ function util_cmp_config(i, source)
   if source.name == "nvim_lsp" then
     lvim.builtin.cmp.sources[i] = {
       name = "nvim_lsp",
-      priority = "10",
+      priority = 10,
       -- max_item_count = 200,
       entry_filter = function(entry, ctx)
         local kind = require("cmp.types.lsp").CompletionItemKind[entry:get_kind()]
