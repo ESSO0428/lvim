@@ -12,18 +12,15 @@ use neovim pre-config lunavim
 
 ### Current support neovim version
 
-NVIM v0.9.4 (release)
+NVIM v0.10.0 (release)
 
 ```bash
 $ nvim --version
-NVIM v0.9.4
+NVIM v0.10.0
 Build type: Release
-LuaJIT 2.1.1692716794
-
-   system vimrc file: "$VIM/sysinit.vim"
-  fall-back for $VIM: "/__w/neovim/neovim/build/nvim.AppDir/usr/share/nvim"
-
-Run :checkhealth for more info
+LuaJIT 2.1.1713484068
+Run "nvim -V1 -v" for more info
+Neovim Release is executable.
 ```
 
 ### Overview (use this config)
@@ -82,11 +79,11 @@ Run :checkhealth for more info
 
 some server install neovim will get below error:
 ```bash
-/lib64/libc.so.6: version `GLIBC_2.14'
+/lib64/libc.so.6: version `GLIBC_2.2X...' not found
 ```
 
-need to use `sudo compile glibc-2.14`  
-if you are only a user, suggest ask `your admin` to help you install `glbc-2.14`
+need to use `sudo compile glibc-2.31`  or `sudo compile glibc-2.27` (if you use low_glibc_support_version)
+if you are only a user, suggest ask `your admin` to help you install `glbc-2.31` or `glibc-2.27`
 
 #### Copilot
 
@@ -115,7 +112,10 @@ if you are only a user, suggest ask `your admin` to help you install `glbc-2.14`
 
 1. Can use below command to update lunavim and neovim core to Latest Release
     ```bash
+    # NOTE: Update lunavim and neovim core to Latest Release
     sh ~/.config/lvim/UpdateNvimReleaseAndLunaCore.sh
+    # NOTE: or you only want to update neovim to Latest Release
+    # sh ~/.config/lvim/UpdateNvimReleaseOnly.sh
     ```
 2. If update (or install) success (can use below command to init lunavim)
     ```bash
