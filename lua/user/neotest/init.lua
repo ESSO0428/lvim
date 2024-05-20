@@ -5,7 +5,8 @@ require("neotest").setup({
         justMyCode = false,
         console = "integratedTerminal"
       },
-      args = { "--log-level", "DEBUG" },
+      -- args = { "--log-level", "DEBUG" },
+      args = { "-vv", "-s" },
       runner = "pytest"
     })
   }
