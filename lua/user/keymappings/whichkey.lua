@@ -9,7 +9,7 @@ function CustomNvimTreeToggle()
   for _, win_nr in ipairs({ 1, 2 }) do
     local buf_nr = vim.fn.winbufnr(win_nr)
     if buf_nr ~= -1 then
-      local ft = vim.api.nvim_buf_get_option(buf_nr, "filetype")
+      local ft = vim.api.nvim_get_option_value("filetype", { buf = buf_nr })
       if ft == "dapui_scopes" or ft == "dbui" then
         dapui_scope_found = true
         break
@@ -30,13 +30,13 @@ function CustomNvimTreeToggle()
     -- 获取当前窗口的 Buffer 编号
     local bufnr = vim.api.nvim_get_current_buf()
     -- 获取当前 Buffer 的文件类型
-    local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+    local filetype = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
 
     -- 检查是否为 NvimTree，如果是且在右侧，则尝试更改为 NvimTreeRight
     if filetype == "NvimTree" and lvim.builtin.nvimtree.setup.view.side == "right" then
       -- 这里尝试设置文件类型为 NvimTreeRight
       -- 请注意，直接更改 filetype 可能不是一个安全的操作，这里仅作示例
-      vim.api.nvim_buf_set_option(bufnr, "filetype", "NvimTreeRight")
+      vim.api.nvim_set_option_value('filetype', 'NvimTreeRight', { buf = bufnr })
     end
   end, 100) -- 100毫秒的延迟，这个值可能需要根据实际情况调整
 end
@@ -94,15 +94,33 @@ lvim.builtin.which_key.mappings.s.t = nil
 lvim.builtin.which_key.mappings.s.F = { "<cmd>Telescope file_browser<cr>", "File Browser" }
 lvim.builtin.which_key.mappings.d['s'] = { "<cmd>Telescope dap configurations<cr>", "Start" }
 
-lvim.builtin.which_key.mappings["dm"] = { "<cmd>lua require('neotest').run.run()<cr>",
-  "Test Method" }
+
+lvim.builtin.which_key.mappings["dm"] = {
+  name = "neotest",
+  r = { "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<cr>", "Test Run File" },
+  R = { "<cmd>lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})<cr>", "Test Run File DAP" },
+  m = { "<cmd>lua require('neotest').run.run()<cr>", "Test Method" },
+  M = { "<cmd>lua require('neotest').run.run({strategy = 'dap'})<cr>", "Test Method DAP" },
+  c = { "<cmd>lua require('neotest').run.run({vim.fn.expand('%')})<cr>", "Test Class" },
+  C = { "<cmd>lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})<cr>", "Test Class DAP" },
+  n = { "<cmd>lua require('neotest').run.run()<cr>", "Test Run Nearest" },
+  N = { "<cmd>lua require('neotest').run.run({strategy = 'dap'})<cr>", "Test Nearest DAP" },
+  l = { "<cmd>lua require('neotest').run.run_last()<cr>", "Test Run Last" },
+  L = { "<cmd>lua require('neotest').run.run_last({ strategy = 'dap' })<cr>", "Test Run Last DAP" },
+  o = { "<cmd>lua require('neotest').output.open({ enter = true })<cr>", "Test Output" },
+  S = { "<cmd>lua require('neotest').run.stop()<cr>", "Test Stop" },
+  s = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Test Summary" },
+
+}
+-- lvim.builtin.which_key.mappings["dm"] = { "<cmd>lua require('neotest').run.run()<cr>",
+--   "Test Method" }
 lvim.builtin.which_key.mappings["dM"] = { "<cmd>lua require('neotest').run.run({strategy = 'dap'})<cr>",
   "Test Method DAP" }
-lvim.builtin.which_key.mappings["d,"] = {
-  "<cmd>lua require('neotest').run.run({vim.fn.expand('%')})<cr>", "Test Class" }
-lvim.builtin.which_key.mappings["d."] = {
-  "<cmd>lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})<cr>", "Test Class DAP" }
-lvim.builtin.which_key.mappings["dS"] = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Test Summary" }
+-- lvim.builtin.which_key.mappings["d,"] = {
+--   "<cmd>lua require('neotest').run.run({vim.fn.expand('%')})<cr>", "Test Class" }
+-- lvim.builtin.which_key.mappings["d."] = {
+--   "<cmd>lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})<cr>", "Test Class DAP" }
+-- lvim.builtin.which_key.mappings["dS"] = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Test Summary" }
 
 lvim.builtin.which_key.mappings.T['T'] = { "<Cmd>TodoTelescope theme=get_ivy<cr>", "ToDo Telescope" }
 lvim.builtin.which_key.mappings.T['w'] = { "<Cmd>TodoTrouble<cr>", "ToDo TodoTrouble (all buffers)" }
