@@ -27,6 +27,7 @@ vim.g.clipboard = {
     ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
   },
 }
+vim.opt.termguicolors = true
 
 -- signcolumn
 vim.wo.signcolumn = "auto:2-6"
