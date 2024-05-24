@@ -194,6 +194,15 @@ lvim.plugins = {
     end,
   },
   {
+    'stevearc/oil.nvim',
+    opts = {},
+    -- Optional dependencies
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    keys = {
+      { "<leader>to", "<cmd>Oil<cr>", desc = "Open parent directory" }
+    }
+  },
+  {
     "AckslD/muren.nvim",
     config = true
   },
