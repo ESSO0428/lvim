@@ -194,12 +194,27 @@ lvim.plugins = {
     end,
   },
   {
-    'stevearc/oil.nvim',
-    opts = {},
-    -- Optional dependencies
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    'echasnovski/mini.nvim',
+    version = false,
+    config = function()
+      require('mini.files').setup({
+        mappings = {
+          close       = 'q',
+          go_in       = 'l',
+          go_in_plus  = 'L',
+          go_out      = 'j',
+          go_out_plus = 'J',
+          reset       = '<BS>',
+          reveal_cwd  = '@',
+          show_help   = 'g?',
+          synchronize = 'S',
+          trim_left   = '<',
+          trim_right  = '>',
+        },
+      })
+    end,
     keys = {
-      { "<leader>to", "<cmd>Oil<cr>", desc = "Open parent directory" }
+      { "<leader>to", function() MiniFiles.open() end, desc = "Open parent directory" }
     }
   },
   {
