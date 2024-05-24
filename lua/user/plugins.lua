@@ -197,13 +197,14 @@ lvim.plugins = {
     'echasnovski/mini.nvim',
     version = false,
     config = function()
-      require('mini.files').setup({
+      local files = require('mini.files')
+      files.setup({
         mappings = {
-          close       = 'q',
+          close       = '<leader>q',
           go_in       = 'l',
-          go_in_plus  = 'L',
+          go_in_plus  = '<c-l>',
           go_out      = 'j',
-          go_out_plus = 'J',
+          go_out_plus = '<c-j>',
           reset       = '<BS>',
           reveal_cwd  = '@',
           show_help   = 'g?',
@@ -212,10 +213,8 @@ lvim.plugins = {
           trim_right  = '>',
         },
       })
-    end,
-    keys = {
-      { "<leader>to", function() MiniFiles.open() end, desc = "Open parent directory" }
-    }
+      vim.keymap.set('n', '<leader>to', files.open)
+    end
   },
   {
     "AckslD/muren.nvim",
