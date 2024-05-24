@@ -3,8 +3,8 @@ vim.opt.foldcolumn = "1"
 vim.wo.foldlevel = 99
 vim.wo.foldenable = true
 vim.wo.foldmethod = "manual"
--- vim.wo.foldlevelstart = -1
-vim.o.foldlevelstart = 99
+vim.o.foldlevelstart = -1
+-- vim.o.foldlevelstart = 99
 
 
 -- Option 1: lsp settings
@@ -87,6 +87,8 @@ vim.api.nvim_create_autocmd("BufEnter", {
       vim.cmd('UfoAttach')
       vim.cmd('UfoEnableFold')
       vim.cmd('normal! zX')
+    else
+      vim.cmd('UfoEnableFold')
     end
   end
 })
