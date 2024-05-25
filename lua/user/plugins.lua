@@ -199,6 +199,12 @@ lvim.plugins = {
     config = function()
       local files = require('mini.files')
       files.setup({
+        options = {
+          -- Whether to delete permanently or move into module-specific trash
+          permanent_delete = true,
+          -- Whether to use for editing directories
+          use_as_default_explorer = false,
+        },
         mappings = {
           close       = '<leader>q',
           go_in       = 'l',
