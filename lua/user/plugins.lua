@@ -216,10 +216,26 @@ lvim.plugins = {
       local minifiles_toggle = function(...)
         if not MiniFiles.close() then MiniFiles.open(...) end
       end
+
+      local minicurrentfiles_toggle = function(...)
+        if not MiniFiles.close() then
+          local get_parent = vim.fs.dirname
+          local exists = function(path) return vim.loop.fs_stat(path) ~= nil end
+          local path = vim.api.nvim_buf_get_name(0)
+
+          while not exists(path) do
+            path = get_parent(path)
+          end
+          MiniFiles.open(path)
+        end
+      end
       vim.api.nvim_create_user_command('MiniFilesToggle', function() minifiles_toggle() end, {})
+      vim.api.nvim_create_user_command('MiniCurrentFilesToggle', function() minicurrentfiles_toggle() end, {})
     end,
     keys = {
-      { "<leader>-", "<cmd>MiniFilesToggle<CR>", desc = "Toggle mini file explorer" }
+      { "<leader>-", "<cmd>MiniFilesToggle<CR>",        desc = "Toggle mini file explorer" },
+      { "<leader>_", "<cmd>MiniCurrentFilesToggle<CR>", desc = "Toggle mini current file explorer" },
+      { "<leader>+", "<cmd>MiniCurrentFilesToggle<CR>", desc = "Toggle mini current file explorer" }
     }
   },
   {
