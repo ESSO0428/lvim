@@ -1069,5 +1069,5 @@ lvim.plugins = {
       -- { "<leader><a-s>", "<Cmd>JupyterInspect<CR>", desc = "Inspect object in kernel" },
       { "<leader>gh", "<Cmd>JupyterInspect<CR>", desc = "Inspect object in kernel" }
     }
-  },
+  }
 }

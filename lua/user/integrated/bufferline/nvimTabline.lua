@@ -30,6 +30,7 @@ M.setup = function()
   if lvim.builtin.bufferline.on_config_done then
     lvim.builtin.bufferline.on_config_done()
   end
+  require("tabline").on_session_load_post()
   vim.o.tabline = "%!v:lua.nvim_bufferline() .. v:lua.require'tabline'.tabline_tabs()"
 end
 
