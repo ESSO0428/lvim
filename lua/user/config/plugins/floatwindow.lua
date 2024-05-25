@@ -28,8 +28,8 @@ local function open_float_window()
   })
 
   -- 設置浮動窗口的一些選項
-  vim.api.nvim_win_set_option(float_win, 'cursorline', true)
-  vim.api.nvim_win_set_option(float_win, 'winblend', 0)
+  vim.api.nvim_set_option_value('cursorline', true, { win = float_win })
+  vim.api.nvim_set_option_value('winblend', 0, { win = float_win })
 end
 
 -- 將此函數添加到 Neovim 命令
@@ -43,34 +43,6 @@ local previewers = require('telescope.previewers')
 local conf = require('telescope.config').values
 local actions = require('telescope.actions')
 local action_state = require('telescope.actions.state')
-
-local function close_select_window(prompt_bufnr, window_infos)
-  local current_picker = action_state.get_current_picker(prompt_bufnr)
-  local selection = action_state.get_selected_entry()
-  if selection and selection.value and vim.api.nvim_win_is_valid(selection.value.win) then
-    vim.api.nvim_win_close(selection.value.win, false)
-
-    -- 从 window_infos 中移除关闭的窗口并刷新选择器
-    for i, win_info in ipairs(window_infos) do
-      if win_info.win == selection.value.win then
-        table.remove(window_infos, i)
-        break
-      end
-    end
-    current_picker:refresh(finders.new_table({
-      results = window_infos,
-      entry_maker = function(entry)
-        return {
-          value = entry,
-          display = entry.name,
-          ordinal = entry.name,
-          bufnr = entry.bufnr,
-        }
-      end,
-    }), { reset_prompt = true })
-  end
-end
-
 
 local function close_selected_window(window_infos, prompt_bufnr)
   local success, err_message = pcall(function()
@@ -164,9 +136,9 @@ local function list_and_select_windows_in_tab()
         vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, content)
 
         -- 应用语法高亮
-        local filetype = vim.api.nvim_buf_get_option(entry.bufnr, 'filetype')
+        local filetype = vim.api.nvim_get_option_value("filetype", { buf = entry.bufnr })
         pcall(function()
-          vim.api.nvim_buf_set_option(self.state.bufnr, 'filetype', filetype)
+          vim.api.nvim_set_option_value('filetype', filetype, { buf = self.state.bufnr })
         end)
 
         -- 尝试手动触发 Tree-sitter 高亮

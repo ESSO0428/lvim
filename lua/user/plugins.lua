@@ -211,10 +211,13 @@ lvim.plugins = {
           synchronize = 'S',
           trim_left   = '<',
           trim_right  = '>',
-        },
+        }
       })
-      vim.keymap.set('n', '<leader>to', files.open)
-    end
+      vim.api.nvim_create_user_command('MiniFilesOpen', function() files.open() end, {})
+    end,
+    keys = {
+      { "<leader>to", "<cmd>MiniFilesOpen<CR>", desc = "Open mini file explorer" }
+    }
   },
   {
     "AckslD/muren.nvim",
