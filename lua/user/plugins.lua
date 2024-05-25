@@ -202,9 +202,9 @@ lvim.plugins = {
         mappings = {
           close       = '<leader>q',
           go_in       = 'l',
-          go_in_plus  = '<c-l>',
+          go_in_plus  = 'L',
           go_out      = 'j',
-          go_out_plus = '<c-j>',
+          go_out_plus = 'J',
           reset       = '<BS>',
           reveal_cwd  = '@',
           show_help   = 'g?',
@@ -213,10 +213,13 @@ lvim.plugins = {
           trim_right  = '>',
         }
       })
-      vim.api.nvim_create_user_command('MiniFilesOpen', function() files.open() end, {})
+      local minifiles_toggle = function(...)
+        if not MiniFiles.close() then MiniFiles.open(...) end
+      end
+      vim.api.nvim_create_user_command('MiniFilesToggle', function() minifiles_toggle() end, {})
     end,
     keys = {
-      { "<leader>to", "<cmd>MiniFilesOpen<CR>", desc = "Open mini file explorer" }
+      { "<leader>-", "<cmd>MiniFilesToggle<CR>", desc = "Toggle mini file explorer" }
     }
   },
   {

@@ -9,6 +9,8 @@ autocmd FileType markdown inoremap <buffer> ,, <++>
                         \| inoremap <buffer> ,c ```<++>```<CR><CR><++><Esc>2ki<CR><Esc>f>a<CR><Esc>2k$a
                         \| inoremap <buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>"_c4l
 
+let g:SetWrapKeymapExcludeArray = ['minifiles']
+
 
 nnoremap <c-w> :bd<CR>
 
@@ -504,6 +506,9 @@ nnoremap <silent> <a-h> :call XOpenFileOrFold('n')<CR>
 vnoremap <silent> <a-h> "fy:call XOpenFileOrFold('v')<CR>
 
 function! SetWrapKeymaps()
+  if index(g:SetWrapKeymapExcludeArray, &ft) >= 0
+    return
+  endif
   if exists('b:venn_enabled') && b:venn_enabled
     return
   endif
