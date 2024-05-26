@@ -30,10 +30,10 @@ map u <Nop>
 nnoremap o o<ESC>
 nnoremap u O<ESC>
 nnoremap O <Nop>
-nnoremap O dd
+nnoremap O "_dd
 
 nnoremap u O<ESC>
-nnoremap U ddk
+nnoremap U "_ddk
 " noremap <c-y> yyp
 nnoremap <c-d> "dyyp
 nnoremap <a-i> <c-u>
