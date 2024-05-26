@@ -16,6 +16,12 @@ vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 -- vim.g.conda_auto_activate_base = 0 -- 关闭base环境的自动激活
 -- vim.g.conda_auto_env = 1 -- 开启自动激活环境
 -- vim.g.conda_env = 'base' -- 设置自动激活的conda环境
+
+local function get_clipboard_content()
+  local content = vim.fn.getreg('')
+  local regtype = vim.fn.getregtype('')
+  return { vim.fn.split(content, '\n'), regtype }
+end
 vim.g.clipboard = {
   name = 'OSC 52',
   copy = {
@@ -23,9 +29,13 @@ vim.g.clipboard = {
     ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
   },
   paste = {
-    ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-    ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-  },
+    -- neovim official pasted method (will delay in windows terminal)
+    -- ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+    -- ['*'] = require('vim.ui.clipboard.osc52').paste('*')
+    -- my custom pasted method (will not delay in windows terminal)
+    ['+'] = get_clipboard_content,
+    ['*'] = get_clipboard_content
+  }
 }
 vim.opt.termguicolors = true
 
