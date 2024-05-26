@@ -42,6 +42,7 @@ nnoremap <a-k> <c-d>
 " nmap > ><CR>
 nnoremap x "_x
 nnoremap <leader>d "_d
+nnoremap <leader>dD "_dd
 nnoremap <leader>D "_D
 nnoremap <leader>c "_c
 nnoremap <leader>C "_C
