@@ -399,7 +399,7 @@ lvim.plugins = {
     end
   },
   { "jbyuki/venn.nvim" },
-  { "ESSO0428/bookmarks.nvim" },
+  { "tomasky/bookmarks.nvim" },
   {
     "ESSO0428/vim-dadbod-ui",
     dependencies = { "tpope/vim-dadbod", "tpope/vim-dotenv" }
