@@ -106,6 +106,38 @@ vim.cmd "au ColorScheme * hi DiffDeleteText gui=none guifg=none guibg=#5A1D1D"
 -- "DiffText:DiffAddText",
 vim.cmd "au ColorScheme * hi DiffAddText gui=none guifg=none guibg=#2C6468"
 
+-- Indent Blankline
+lvim.builtin.indentlines.options.show_current_context_start = true
+--[[
+vim.cmd "au ColorScheme * hi IndentHighlightListBlank1 guifg= #291d29 guibg=#291d29 gui=nocombine"
+vim.cmd "au ColorScheme * hi IndentHighlightListBlank2 guifg= #1f2b28 guibg=#1f2b28 gui=nocombine"
+vim.cmd "au ColorScheme * hi IndentHighlightListBlank3 guifg= #2f2a3b guibg=#2f2a3b gui=nocombine"
+vim.cmd "au ColorScheme * hi IndentHighlightListBlank4 guifg= #262933 guibg=#262933 gui=nocombine"
+-- vim.cmd "au ColorScheme * hi IndentHighlightListBlank5 guifg= #291d29 guibg=#291d29 gui=nocombine"
+vim.cmd "au ColorScheme * hi IndentBlanklineIndent1 guibg=#291d29 gui=nocombine"
+vim.cmd "au ColorScheme * hi IndentBlanklineIndent2 guibg=#1f2b28 gui=nocombine"
+vim.cmd "au ColorScheme * hi IndentBlanklineIndent3 guibg=#2f2a3b gui=nocombine"
+vim.cmd "au ColorScheme * hi IndentBlanklineIndent4 guibg=#262933 gui=nocombine"
+lvim.builtin.indentlines.options.space_char_blankline           = " "
+lvim.builtin.indentlines.options.show_trailing_blankline_indent = true
+lvim.builtin.indentlines.options.show_current_context           = true
+lvim.builtin.indentlines.options.show_current_context_start     = true
+lvim.builtin.indentlines.options.char_highlight_list            = {
+  "IndentHighlightListBlank1",
+  "IndentHighlightListBlank2",
+  "IndentHighlightListBlank3",
+  "IndentHighlightListBlank4",
+  -- "IndentHighlightListBlank5",
+  -- "IndentHighlightListBlank6",
+}
+lvim.builtin.indentlines.options.space_char_highlight_list      = {
+  "IndentBlanklineIndent1",
+  "IndentBlanklineIndent2",
+  "IndentBlanklineIndent3",
+  "IndentBlanklineIndent4",
+}
+--]]
+
 -- lvim.builtin.bufferline
 vim.g.vim_pid                                          = vim.fn.getpid()
 lvim.builtin.lualine.options                           = {
