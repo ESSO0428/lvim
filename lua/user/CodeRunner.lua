@@ -46,7 +46,7 @@ function code_runner()
     vim.cmd("silent! CocCommand flutter.dev.openDevLog")
   elseif filetype == 'javascript' then
     vim.o.splitbelow = true
-    vim.cmd("sp | term " .. term_cd_cmd .. "export DEBUG='INFO,ERROR,WARNING'; node --trace-warnings .")
+    vim.cmd("sp | term " .. term_cd_cmd .. "export DEBUG='INFO,ERROR,WARNING'; node --trace-warnings %")
   elseif filetype == 'racket' then
     vim.o.splitbelow = true
     vim.cmd("sp | res -5 | term " .. term_cd_cmd .. "racket %")
