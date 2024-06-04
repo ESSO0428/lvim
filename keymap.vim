@@ -175,9 +175,13 @@ nnoremap <silent> i k
 nnoremap <silent> j h
 nnoremap <silent> k j
 " visual keyborad
-vnoremap <silent> i k
-vnoremap <silent> j h
-vnoremap <silent> k j
+" vnoremap <silent> i k
+" vnoremap <silent> j h
+" vnoremap <silent> k j
+" nowait (solution for the delay problem when plugin conflict)
+vnoremap <silent><nowait> i k
+vnoremap <silent><nowait> j h
+vnoremap <silent><nowait> k j
 
 " noremap <silent> l l
 
@@ -266,6 +270,12 @@ noremap <C-K> 5<C-e>
 " ==================== Insert Mode Cursor Movement ====================
 inoremap <C-a> <ESC>A
 
+inoremap <a-n> <Up>
+inoremap <a-m> <Down>
+inoremap <a-,> <Left>
+inoremap <a-.> <Right>
+inoremap <a-[> <Home>
+inoremap <a-]> <End>
 
 " ==================== Command Mode Cursor Movement ====================
 cnoremap <C-a> <Home>
@@ -522,12 +532,20 @@ function! SetWrapKeymaps()
     nnoremap <buffer><silent> J g0
     nnoremap <buffer><silent> L g$
 
-    vnoremap <buffer><silent> i gk
-    vnoremap <buffer><silent> k gj
-    vnoremap <buffer><silent> I 5gk
-    vnoremap <buffer><silent> K 5gj
-    vnoremap <buffer><silent> J g0
-    vnoremap <buffer><silent> L g$
+    " vnoremap <buffer><silent> i gk
+    " vnoremap <buffer><silent> i gk
+    " vnoremap <buffer><silent> k gj
+    " vnoremap <buffer><silent> I 5gk
+    " vnoremap <buffer><silent> K 5gj
+    " vnoremap <buffer><silent> J g0
+    " vnoremap <buffer><silent> L g$
+    " nowait (solution for the delay problem when plugin conflict)
+    vnoremap <buffer><silent><nowait> i gk
+    vnoremap <buffer><silent><nowait> k gj
+    vnoremap <buffer><silent><nowait> I 5gk
+    vnoremap <buffer><silent><nowait> K 5gj
+    vnoremap <buffer><silent><nowait> J g0
+    vnoremap <buffer><silent><nowait> L g$
   else
     " 如果 wrap 為 false
     nnoremap <buffer><silent> i k
@@ -537,12 +555,19 @@ function! SetWrapKeymaps()
     nnoremap <buffer><silent> J 0
     nnoremap <buffer><silent> L $
 
-    vnoremap <buffer><silent> i k
-    vnoremap <buffer><silent> k j
-    vnoremap <buffer><silent> I 5k
-    vnoremap <buffer><silent> K 5j
-    vnoremap <buffer><silent> J 0
-    vnoremap <buffer><silent> L $
+    " vnoremap <buffer><silent> i k
+    " vnoremap <buffer><silent> k j
+    " vnoremap <buffer><silent> I 5k
+    " vnoremap <buffer><silent> K 5j
+    " vnoremap <buffer><silent> J 0
+    " vnoremap <buffer><silent> L $
+    " nowait (solution for the delay problem when plugin conflict)
+    vnoremap <buffer><silent><nowait> i k
+    vnoremap <buffer><silent><nowait> k j
+    vnoremap <buffer><silent><nowait> I 5k
+    vnoremap <buffer><silent><nowait> K 5j
+    vnoremap <buffer><silent><nowait> J 0
+    vnoremap <buffer><silent><nowait> L $
   endif
 endfunction
 

@@ -466,7 +466,7 @@ vim.g.UltiSnipsJumpBackwardTrigger = "<M-a>"
 vim.g.UltiSnipsJumpForwardTrigger = "<M-d>"
 
 -- vim.g.UltiSnipsListSnippets="<leader>l"
-vim.g.UltiSnipsListSnippets = "<M-n>"
+vim.g.UltiSnipsListSnippets = "<M-/>"
 -- vim.g.UltiSnipsSnippetDirectories = { "$HOME/.config/lvim/Ultisnips/" }
 
 -- vim.g.ultisnips_python_style="google"
