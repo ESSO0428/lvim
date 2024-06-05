@@ -180,7 +180,8 @@ lvim.format_on_save = {
     "*.lua",
     "*.html",
     "*.css",
-    "*.js"
+    "*.js",
+    "*.tsx"
   },
   timeout = 1000,
 }
