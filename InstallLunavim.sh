@@ -6,11 +6,34 @@ echo "Your current LunaVim configuration will be backed up to ~/.config/lvim_sta
 echo "In case of failure, manually restore it by running:"
 echo "mv ~/.config/lvim_stage/ ~/.config/lvim/"
 
-# NOTE: Install NeovimRelease
+echo "Downloading Neovim Release ..."
 cd ~
-rm -rf ~/nvim.appimage
-unlink ~/.config/lvim/snapshots/default.json > /dev/null 2>&1
-mv ~/.config/lvim/ ~/.config/lvim_stage/
+rm -rf nvim.appimage
+# NOTE: Install NeovimRelease
+wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+chmod u+x nvim.appimage
+
+# Test if the release version works
+if ./nvim.appimage --version; then
+  echo "Neovim Release is executable."
+else
+  echo "Neovim Release can't execute. Try LOW_GLIBC."
+  
+  # NOTE: Changing the download URL to 'neovim-releases/releases/download'
+  # , which is an official link provided by Neovim to accommodate machines with older glibc versions
+  cd ~
+  rm -rf nvim.appimage
+  wget https://github.com/neovim/neovim-releases/releases/download/stable/nvim.appimage
+  chmod u+x nvim.appimage
+  # Test if the release version (LOW_GLIBC) works
+  if ./nvim.appimage --version; then
+    echo "Neovim Release (LOW_GLIBC) is executable."
+  else
+    echo "Neovim Release (LOW_GLIBC) can't execute. Current server not support Neovim"
+    exit 1
+  fi
+fi
+
 
 # Function to display required dependency notice
 required_notice() {
@@ -32,21 +55,6 @@ restore_my_lvim_config() {
     mv "$HOME/.config/lvim_stage/" "$HOME/.config/lvim/"
   fi
 }
-
-rm -rf nvim.appimage
-wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
-chmod u+x nvim.appimage
-
-# Test if the release version works
-echo "Downloading Neovim Release ..."
-if ./nvim.appimage --version; then
-  echo "Neovim Release is executable."
-else
-  echo "Neovim can't use in this system. Please check your system."
-  mv ~/.config/lvim_stage/ ~/.config/lvim/
-  rm -rf nvim.appimage
-  exit 1
-fi
 
 # NOTE: Create symbolic link in ~/.local/bin for lunavim
 cd ~
@@ -207,29 +215,6 @@ else
   echo "A suitable version of Git is already installed."
 fi
 
-# NOTE: install go
-cd ~
-PATH=$HOME/bin/go/bin/:$PATH
-if ! command -v go > /dev/null 2>&1; then
-  required_notice "go"
-  read -p "Do you want to install go? (y/n) " answer
-  if [ "$answer" != "${answer#[Yy]}" ]; then
-    echo "Installing go... in ~/bin/go/"
-    echo "When install finished, will write PATH=$HOME/bin/go/bin/:$PATH to ~/.bashrc"
-    cd ~/bin/
-    wget https://go.dev/dl/go1.19.3.linux-amd64.tar.gz
-    tar zxvf go1.19.3.linux-amd64.tar.gz
-    echo "PATH=$HOME/bin/go/bin/:$PATH" >> ~/.bashrc
-  else
-    echo "go installation skipped."
-    restore_my_lvim_config
-    exit 1
-  fi
-else
-  cd ~
-  echo "go is already installed."
-fi
-  
 
 # NOTE: Install fd (fd-find) and rg (ripgrep)
 # Check if fd and rg are installed
@@ -334,4 +319,3 @@ echo "Some Python based plugins may need this command to be run after installati
 
 # NOTE: Remove the old lunarvim directory
 rm -rf ~/.local/share/lunarvim.old/
-
