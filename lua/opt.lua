@@ -40,7 +40,7 @@ vim.g.clipboard = {
 vim.opt.termguicolors = true
 
 -- signcolumn
-vim.wo.signcolumn = "auto:2-6"
+vim.wo.signcolumn = "auto:3-6"
 
 -- 取消預覽取代結果
 -- vim.o.fileformats = "unix"
