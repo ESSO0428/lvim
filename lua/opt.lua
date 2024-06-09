@@ -207,3 +207,6 @@ lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 
 -- git default false
 lvim.builtin.gitsigns.opts.current_line_blame       = false
+
+-- delete lvim auto resize
+vim.api.nvim_del_augroup_by_name('_auto_resize')
