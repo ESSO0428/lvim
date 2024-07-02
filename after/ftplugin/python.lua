@@ -1,4 +1,4 @@
-vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright", "ruff" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
 local function stop_pyright()
   local clients = vim.lsp.get_active_clients()
   for _, client in ipairs(clients) do
@@ -26,7 +26,7 @@ local function start_pyright()
     settings = {
       pyright = {
         disableLanguageServices = false,
-        disableOrganizeImports = false
+        disableOrganizeImports = true
       },
       basedpyright = {
         typeCheckingMode = "standard",
@@ -41,9 +41,10 @@ local function start_pyright()
         analysis = {
           autoImportCompletions = true,
           autoSearchPaths = true,
-          diagnosticMode = "workspace",  -- openFilesOnly, workspace
-          typeCheckingMode = "standard", -- off, basic, strict
-          useLibraryCodeForTypes = true
+          diagnosticMode = "workspace", -- openFilesOnly, workspace
+          typeCheckingMode = "basic",   -- off, basic, strict
+          useLibraryCodeForTypes = true,
+          ignore = { '*' },
         }
       }
     },
