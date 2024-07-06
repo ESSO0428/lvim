@@ -47,6 +47,49 @@ pcall(function()
   })
 end
 )
+pcall(function()
+  require("lvim.lsp.manager").setup("tsserver", {
+    settings = {
+      typescript = {
+        inlayHints = {
+          includeInlayParameterNameHints = "all",
+          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayVariableTypeHints = true,
+          includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayEnumMemberValueHints = true,
+        },
+      },
+      javascript = {
+        inlayHints = {
+          includeInlayParameterNameHints = "all",
+          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayVariableTypeHints = true,
+          includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayEnumMemberValueHints = true,
+        },
+      },
+    }
+  })
+end
+)
+pcall(function()
+  require("lvim.lsp.manager").setup("lua_ls", {
+    settings = {
+      Lua = {
+        hint = {
+          enable = true
+        }
+      }
+    }
+  })
+end
+)
 -- autocmd({ "FileType" }, { pattern = { "python", "html" }, command = "UltiSnipsAddFiletypes python.django.html.css" })
 -- autocmd({ "FileType" }, { pattern = { "python" }, command = "setlocal foldmethod=indent" })
 

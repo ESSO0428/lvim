@@ -50,7 +50,7 @@ local function start_pyright()
     },
   }
   pcall(function()
-    require("lvim.lsp.manager").setup("pyright", pyright_opts)
+    require("lvim.lsp.manager").setup("basedpyright", pyright_opts)
 
     -- nvim-lspconfig : 6e5c78e above
     -- require("lvim.lsp.manager").setup("basedpyright", pyright_opts)

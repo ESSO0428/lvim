@@ -74,6 +74,8 @@ lvim.builtin.which_key.mappings.u.k = lvim.builtin.which_key.mappings.u.u
 lvim.builtin.which_key.mappings.u.u = nil
 lvim.builtin.which_key.mappings.u.a = { "<cmd>Lspsaga code_action<cr>", "Code Action" }
 lvim.builtin.which_key.mappings.u.A = { "<cmd>lua require('lspimport').import()<cr>", "LSP Import Action" }
+lvim.builtin.which_key.mappings.u.h = { "<cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<cr>",
+  "LSP Inlay Hint" }
 
 lvim.builtin.which_key.vmappings.u = lvim.builtin.which_key.vmappings.l
 lvim.builtin.which_key.vmappings.l = nil
