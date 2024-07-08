@@ -2,26 +2,55 @@ vim.g.copilot_assume_mapped = true
 vim.api.nvim_set_keymap("i", "<M-l>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
 vim.g.copilot_no_tab_map = true
 
-function CopilotChatQuickchat()
-  -- local input = vim.fn.input("Quick Chat: ")
-  -- if input ~= "" then
-  --   require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
-  -- end
-  require("CopilotChat").ask("", { selection = require("CopilotChat.select").buffer })
+-- Quick chat with Copilot
+function CopilotChatQuickchat(ask)
+  if ask == true then
+    local ok, input = pcall(vim.fn.input, "Quick Chat: ")
+    if ok and input ~= "" then
+      require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+    end
+  else
+    require("CopilotChat").ask("", { selection = require("CopilotChat.select").buffer })
+  end
 end
 
+-- Quick chat (visuals) for Copilot
+function CopilotChatQuickchatVisual(ask)
+  if ask == true then
+    local ok, input = pcall(vim.fn.input, "Quick Chat: ")
+    if ok and input ~= "" then
+      require("CopilotChat").ask(input, { selection = require("CopilotChat.select").visual })
+    end
+  else
+    require("CopilotChat").ask("", { selection = require("CopilotChat.select").visual })
+  end
+end
+
+-- Triggers the Copilot chat prompt action
 function CopilotChatPromptAction()
   local actions = require("CopilotChat.actions")
   require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
 end
 
-lvim.builtin.which_key.mappings.u['ki'] = { "<cmd>lua CopilotChatQuickchat()<cr>", "CopilotChat - Quick chat" }
+lvim.builtin.which_key.mappings.u['ki'] = { "<cmd>lua CopilotChatQuickchat(false)<cr>", "CopilotChat - Quick chat panel" }
+lvim.builtin.which_key.vmappings.u['ki'] = { "<cmd>lua CopilotChatQuickchatVisual(false)<cr>",
+  "CopilotChat - Quick chat panel" }
+
+lvim.builtin.which_key.mappings.u['ka'] = { "<cmd>lua CopilotChatQuickchat(true)<cr>", "CopilotChat - Quick chat" }
+lvim.builtin.which_key.vmappings.u['ka'] = { "<cmd>lua CopilotChatQuickchatVisual(true)<cr>", "CopilotChat - Quick chat" }
+
 lvim.builtin.which_key.mappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
-lvim.builtin.which_key.vmappings.u['kk'] = { ":lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
+lvim.builtin.which_key.vmappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
 
 local select = require('CopilotChat.select')
 local buffer = require('CopilotChat.select').buffer
 
+-- This function generates a git diff for a given file. If the diff is too large,
+-- it uses a `diff --stat` instead. The function returns a buffer with the diff result.
+-- It first checks if the file directory exists, if not, it uses the current directory.
+-- Then it constructs the `git diff` command and executes it.
+-- If the diff result is too large (> 30000 characters), it uses the git diff stat command instead.
+-- Finally, it sets the filetype of the buffer to `diff` and the lines of the buffer to the diff result.
 select.gitdiff = function(source, staged)
   local select_buffer = buffer(source)
   if not select_buffer then
@@ -47,8 +76,8 @@ select.gitdiff = function(source, staged)
   local result = handle:read('*a')
   handle:close()
 
-  -- jugde if the diff is too large (> 5000 word) to handle, use diff --stat to instead
-  if #result > 5000 then
+  -- jugde if the diff is too large (> 30000 characters) to handle, use diff --stat to instead
+  if #result > 30000 then
     handle = io.popen(cmd_diff_stat)
     if not handle then
       return nil
@@ -85,8 +114,9 @@ require("CopilotChat").setup {
   -- NOTE: Chinese prompts
   prompts = {
     Explain = '/COPILOT_EXPLAIN 為選定的部分寫一段文字解釋。',
+    Ask = '/COPILOT_EXPLAIN 等待我對選定文字的提問 (請告訴我你是否準備好了)',
     Review = {
-      prompt = '/COPILOT_REVIEW 審查選定的程式碼。',
+      prompt = '/COPILOT_REVIEW 審查選定的程式碼 (並用中文說明)。',
       callback = function(response, source)
         local ns = vim.api.nvim_create_namespace('copilot_review')
         local diagnostics = {}
@@ -124,12 +154,14 @@ require("CopilotChat").setup {
         vim.diagnostic.set(ns, source.bufnr, diagnostics)
       end,
     },
-    Fix = '/COPILOT_GENERATE 這段程式碼有問題。請重寫程式碼以修復錯誤。',
-    Optimize = '/COPILOT_GENERATE 優化選定的程式碼以提高性能和可讀性。',
-    Docs = '/COPILOT_GENERATE 請為選定的部分添加文件註釋。',
-    Tests = '/COPILOT_GENERATE 請為我的程式碼生成測試。',
+    Fix = '/COPILOT_GENERATE 這段程式碼有問題。請重寫程式碼以修復錯誤 (並在修復錯誤後用中文說明修復了什麼)。',
+    Optimize = '/COPILOT_GENERATE 優化選定的程式碼以提高性能和可讀性 (並在優化完後用中文說明寫了什麼)。',
+    OneLineComment = '/COPILOT_GENERATE 為選定的部分上方添加一行英文註釋 (並在寫完註釋後用中文說明寫了什麼)。',
+    OneParagraphComment = '/COPILOT_GENERATE 為選定的部分上方添加英文註釋摘要，確保每一行不超過 50 字 (並在寫完註釋後用中文說明寫了什麼)。',
+    Docs = '/COPILOT_GENERATE 請為選定的部分添加英文的文檔註釋 (並在寫完註釋後用中文說明寫了什麼)。',
+    Tests = '/COPILOT_GENERATE 請為我的程式碼生成測試 (並在寫完測試後用中文說明寫了什麼)。',
     FixDiagnostic = {
-      prompt = '請協助處理以下檔案中的診斷問題:',
+      prompt = '請協助處理以下檔案中的診斷問題 (並用中文說明):',
       selection = select.diagnostics,
     },
     Commit = {
