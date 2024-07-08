@@ -29,16 +29,34 @@ select.gitdiff = function(source, staged)
   end
   local file_path = vim.api.nvim_buf_get_name(source.bufnr)
   local file_dir = vim.fn.fnamemodify(file_path, ':h')
+  -- check file dir is exist, or use current dir instead
+  if vim.fn.isdirectory(file_dir) == 0 then
+    file_dir = vim.fn.getcwd()
+  end
 
-  local cmd = 'git -C ' ..
+  local cmd_diff = 'git -C ' ..
       file_dir .. ' diff --no-color --no-ext-diff' .. (staged and ' --staged' or '') .. ' 2>/dev/null'
-  local handle = io.popen(cmd)
+  local cmd_diff_stat = 'git -C ' ..
+      file_dir .. ' diff --stat --no-color --no-ext-diff' .. (staged and ' --staged' or '') .. ' 2>/dev/null'
+
+  local handle = io.popen(cmd_diff)
   if not handle then
     return nil
   end
 
   local result = handle:read('*a')
   handle:close()
+
+  -- jugde if the diff is too large (> 5000 word) to handle, use diff --stat to instead
+  if #result > 5000 then
+    handle = io.popen(cmd_diff_stat)
+    if not handle then
+      return nil
+    end
+
+    result = handle:read('*a')
+    handle:close()
+  end
 
   if not result or result == '' then
     return nil
