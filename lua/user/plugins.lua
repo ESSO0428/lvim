@@ -877,6 +877,18 @@ lvim.plugins = {
     end
   },
   {
+    "aznhe21/actions-preview.nvim",
+    config = function()
+      require("actions-preview").setup {
+        diff = {
+          algorithm = "patience",
+          ignore_whitespace = true,
+        },
+        telescope = lvim.builtin.telescope.defaults,
+      }
+    end
+  },
+  {
     "glepnir/lspsaga.nvim",
     branch = "main",
     -- commit = "4f07545",
