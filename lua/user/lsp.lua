@@ -13,6 +13,28 @@ local opts = { filetypes = { "html", "htmldjango" } }
 pcall(function()
   require("lvim.lsp.manager").setup("html", opts)
 end)
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.foldingRange = {
+  dynamicRegistration = false,
+  lineFoldingOnly = true,
+}
+pcall(function()
+  require("lvim.lsp.manager").setup("yamlls", {
+    capabilities = capabilities,
+    settings = {
+      yaml = {
+        hover = true,
+        completion = true,
+        validate = true,
+        schemaStore = {
+          enable = true,
+          url = "https://www.schemastore.org/api/json/catalog.json",
+        },
+        schemas = require("schemastore").yaml.schemas(),
+      },
+    }
+  })
+end)
 pcall(function()
   require("lvim.lsp.manager").setup("tailwindcss", {
     root_dir = require("lspconfig").util.root_pattern(
