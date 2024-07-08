@@ -885,6 +885,7 @@ lvim.plugins = {
           ignore_whitespace = true,
         },
         telescope = {
+          initial_mode = "normal",
           layout_strategy = 'horizontal',
           layout_config = { width = 0.5 },
         }
