@@ -884,7 +884,10 @@ lvim.plugins = {
           algorithm = "patience",
           ignore_whitespace = true,
         },
-        telescope = lvim.builtin.telescope.defaults,
+        telescope = {
+          layout_strategy = 'horizontal',
+          layout_config = { width = 0.5 },
+        }
       }
     end
   },
