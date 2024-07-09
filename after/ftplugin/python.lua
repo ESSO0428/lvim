@@ -1,4 +1,4 @@
-vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright", "ruff" })
 local function stop_pyright()
   local clients = vim.lsp.get_active_clients()
   for _, client in ipairs(clients) do
@@ -51,7 +51,14 @@ local function start_pyright()
   }
   pcall(function()
     require("lvim.lsp.manager").setup("basedpyright", pyright_opts)
-
+    require("lvim.lsp.manager").setup("ruff_lsp", {
+      init_options = {
+        settings = {
+          -- Any extra CLI arguments for `ruff` go here.
+          args = {},
+        }
+      }
+    })
     -- nvim-lspconfig : 6e5c78e above
     -- require("lvim.lsp.manager").setup("basedpyright", pyright_opts)
   end)
