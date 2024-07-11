@@ -870,11 +870,9 @@ lvim.plugins = {
   { "nvim-lua/popup.nvim" },
   {
     "iamcco/markdown-preview.nvim",
-    build = "cd app && npm install",
-    ft = "markdown",
     config = function()
-      vim.g.mkdp_auto_start = 1
-    end
+      vim.fn["mkdp#util#install"]()
+    end,
   },
   {
     "aznhe21/actions-preview.nvim",

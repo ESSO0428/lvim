@@ -38,7 +38,8 @@ filename: {{ filename }}
       -- of lists and tables, it behaves as <CR> normally does.
       MkdnNewListItem             = { 'i', '<CR>' }, -- Use this command instead if you only want <CR> in
       -- insert mode to add a new list item (and behave as usual outside of lists).
-      MkdnFollowLink              = { 'n', '<a-o>' },
+      -- MkdnFollowLink              = { 'n', '<a-o>' },
+      MkdnFollowLink              = false, -- integrated with lsp gd (when lsp gd not work will use this)
       MkdnDestroyLink             = false,
       MkdnCreateLinkFromClipboard = false,
       MkdnNextLink                = false,
@@ -74,6 +75,26 @@ end)
 if not success then
   print("Error setting up mkdnflow")
 end
+local function markdown_go_to_definition()
+  local params = vim.lsp.util.make_position_params()
+  vim.lsp.buf_request(0, 'textDocument/definition', params, function(err, result, ctx, config)
+    if err then
+      vim.api.nvim_echo({ { "LSP error: " .. err.message, "ErrorMsg" } }, true, {})
+      return
+    end
+
+    if result and not vim.tbl_isempty(result) then
+      if vim.islist(result) then
+        vim.lsp.util.jump_to_location(result[1])
+      else
+        vim.lsp.util.jump_to_location(result)
+      end
+    else
+      vim.api.nvim_echo({ { "LSP 'go to definition' failed, using MkdnFollowLink instead", "WarningMsg" } }, true, {})
+      vim.api.nvim_command('MkdnFollowLink')
+    end
+  end)
+end
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'markdown',
   group = vim.api.nvim_create_augroup('markdown_only_keymap', { clear = true }),
@@ -81,6 +102,7 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.keymap.set('n', "<leader>uv", ':MarkdownHeadersClosest<cr>', { silent = true, buffer = true })
     vim.keymap.set('n', '<leader>o', '<Nop>', { silent = true, buffer = true })
     vim.keymap.set('n', '<leader>oo', 'za', { silent = true, buffer = true })
+    vim.keymap.set('n', '<a-o>', markdown_go_to_definition, { silent = true, buffer = true })
   end,
 })
 vim.api.nvim_create_user_command('Date', 'silent! r! date +"\\%A, \\%B, \\%d, \\%Y"', { nargs = "*" })

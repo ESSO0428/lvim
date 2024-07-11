@@ -112,6 +112,10 @@ pcall(function()
   })
 end
 )
+pcall(function()
+  require("lvim.lsp.manager").setup("marksman", {})
+end)
+
 -- autocmd({ "FileType" }, { pattern = { "python", "html" }, command = "UltiSnipsAddFiletypes python.django.html.css" })
 -- autocmd({ "FileType" }, { pattern = { "python" }, command = "setlocal foldmethod=indent" })
 
