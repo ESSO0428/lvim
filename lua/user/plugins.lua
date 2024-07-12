@@ -1098,6 +1098,12 @@ lvim.plugins = {
     -- 4. In your shell configuration file (e.g., ~/.bashrc), add the following lines to set the path and browser environment variables:
     --    export PATH=$HOME/bin/firefox:$PATH
     --    export BROWSER=$HOME/bin/firefox/firefox
+    -- NOTE: Ensure that geckodriver is installed and up-to-date, or this plugin will not work.
+    -- To check, run: geckodriver --version
+    -- If not installed or the version is outdated, you can download it with:
+    --    npm install -g geckodriver
+    -- NOTE: To avoid excessive delay in rendering Firefox via remote X11 forwarding, use ssh -Y -C instead of ssh -Y.
+    -- The -C option enables compression, which can significantly improve rendering speed.
     -- NOTE: The current package only supports up to Jupyter Notebook version 6 and does not support version 7.
     -- If `jupyter notebook --version` returns version 7, you can install the classic mode with:
     --    pip install --upgrade notebook nbclassic
@@ -1110,10 +1116,6 @@ lvim.plugins = {
     -- This will convert the .py file to Untitled.ipynb, and you can synchronously write and execute the .ipynb file in the browser from Neovim.
     -- NOTE: It is recommended to set a password using `jupyter notebook password` or `jupyter nbclassic password` to prevent unauthorized access.
     -- For root users, use `jupyter notebook --allow-root` or `jupyter nbclassic --allow-root` to open the notebook.
-    -- NOTE: Ensure that geckodriver is installed and up-to-date, or this plugin will not work.
-    -- To check, run: geckodriver --version
-    -- If not installed or the version is outdated, you can download it with:
-    --    npm install -g geckodriver
     opts = {
       default_notebook_URL = "localhost:8888/nbclassic",
       syntax_highlight = {
