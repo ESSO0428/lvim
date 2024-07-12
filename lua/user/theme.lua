@@ -154,6 +154,7 @@ lvim.builtin.lualine.sections                          = {
     components.diff,
     components.python_env,
     components.diagnostics,
+    { 'b:CURRENT_REPL' },
     { 'b:jupyter_kernel' }
   },
   lualine_x = {

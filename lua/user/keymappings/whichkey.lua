@@ -115,7 +115,6 @@ lvim.builtin.which_key.mappings["dm"] = {
   o = { "<cmd>lua require('neotest').output.open({ enter = true })<cr>", "Test Output" },
   S = { "<cmd>lua require('neotest').run.stop()<cr>", "Test Stop" },
   s = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Test Summary" },
-
 }
 -- lvim.builtin.which_key.mappings["dm"] = { "<cmd>lua require('neotest').run.run()<cr>",
 --   "Test Method" }

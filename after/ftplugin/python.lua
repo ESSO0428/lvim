@@ -66,3 +66,9 @@ end
 start_pyright()
 vim.api.nvim_create_user_command('PyrightStop', stop_pyright, {})
 vim.api.nvim_create_user_command('PyrightStart', start_pyright, {})
+
+if vim.b.CURRENT_REPL == nil then
+  vim.b.CURRENT_REPL = "REPL:default"
+  vim.keymap.set('n', '[w', ':norm strah<cr>', { buffer = true, silent = true })
+  vim.keymap.set('n', ']w', ':norm strih<cr>', { buffer = true, silent = true })
+end
