@@ -1089,21 +1089,31 @@ lvim.plugins = {
     build = "pip install --user .",
     -- NOTE: The following steps ensure the installation of the latest version of Firefox.
     -- By installing it in the user directory, we can avoid conflicts with the default Firefox version on the server.
-    -- 1. Navigate to your bin directory: cd ~/bin/
-    -- 2. Download the latest Firefox version: wget https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US -O firefox.tar.bz2
-    -- 3. Extract the downloaded file: tar xjf firefox.tar.bz2
-    -- 4. In your shell configuration file (e.g. ~/.bashrc), add the following lines to set the path and browser environment variables:
+    -- 1. Navigate to your bin directory:
+    --    cd ~/bin/
+    -- 2. Download the latest Firefox version:
+    --    wget https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US -O firefox.tar.bz2
+    -- 3. Extract the downloaded file:
+    --    tar xjf firefox.tar.bz2
+    -- 4. In your shell configuration file (e.g., ~/.bashrc), add the following lines to set the path and browser environment variables:
     --    export PATH=$HOME/bin/firefox:$PATH
     --    export BROWSER=$HOME/bin/firefox/firefox
     -- NOTE: The current package only supports up to Jupyter Notebook version 6 and does not support version 7.
-    -- If `jupyter notebook --version` returns version 7, you can install the classic mode with `pip install --upgrade notebook nbclassic`.
+    -- If `jupyter notebook --version` returns version 7, you can install the classic mode with:
+    --    pip install --upgrade notebook nbclassic
     -- To open the notebook, use `jupyter nbclassic` for version 7, or `jupyter notebook` for version 6.
+    -- Optionally, to avoid opening an additional Firefox window, you can use the `--no-browser` option:
+    --    jupyter nbclassic --no-browser  # for version 7
+    --    jupyter notebook --no-browser  # for version 6
     -- After running, execute `JupyniumStartAndAttachToServer` in the .py file you want to sync.
     -- Once the browser connection is successfully established, run `JupyniumStartSync`.
     -- This will convert the .py file to Untitled.ipynb, and you can synchronously write and execute the .ipynb file in the browser from Neovim.
-    -- NOTE: Suggest to use password to login Jupyter Notebook
-    -- It is recommended to set a password using `jupyter notebook password` or `jupyter nbclassic password` to prevent unauthorized access.
+    -- NOTE: It is recommended to set a password using `jupyter notebook password` or `jupyter nbclassic password` to prevent unauthorized access.
     -- For root users, use `jupyter notebook --allow-root` or `jupyter nbclassic --allow-root` to open the notebook.
+    -- NOTE: Ensure that geckodriver is installed and up-to-date, or this plugin will not work.
+    -- To check, run: geckodriver --version
+    -- If not installed or the version is outdated, you can download it with:
+    --    npm install -g geckodriver
     opts = {
       default_notebook_URL = "localhost:8888/nbclassic",
       syntax_highlight = {
