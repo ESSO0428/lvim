@@ -19,6 +19,22 @@
 -- Using the `repl_types` table to register REPL settings
 -- for the global function `select_repl_type` to switch between
 -- Iron.nvim (default REPL execution tool) and different filetype REPLs (special REPL execution, such as Jupynium).
+vim.keymap.set({ 'n', 'v' }, 'strj', '<cmd>JupyniumExecuteSelectedCells<CR>', { noremap = true, silent = true })
+function jupyniumRunAbove()
+  local jupynium = require('jupynium.textobj')
+  jupynium.goto_current_cell_separator()
+  vim.cmd("norm j")
+  vim.api.nvim_input("Vggstrj<ESC>")
+end
+
+function jupyniumRunBelow()
+  local jupynium = require('jupynium.textobj')
+  jupynium.goto_current_cell_separator()
+  vim.api.nvim_input("VGstrj<ESC>")
+end
+
+vim.api.nvim_create_user_command("JupyniumRunAbove", "lua jupyniumRunAbove()", { nargs = 0 })
+vim.api.nvim_create_user_command("JupyniumRunBelow", "lua jupyniumRunBelow()", { nargs = 0 })
 lvim.builtin.which_key.mappings['rj'] = {
   name = "jupynium",
   a = { "<cmd>JupyniumStartAndAttachToServer<cr>", "Jupynium Start and Attach Server" },
@@ -26,12 +42,18 @@ lvim.builtin.which_key.mappings['rj'] = {
   o = { "<cmd>JupyniumStartSync 2<cr>", "Jupynium Sync .py to current opened .ipynb (existing kernel)" },
   d = { "<cmd>JupyniumStopSync<cr>", "Jupynium Stop Sync" },
   w = { "<cmd>JupyniumExecuteSelectedCells<cr>", "Jupynium Execute Current Cell" },
+  ["["] = { "<cmd>JupyniumRunAbove<cr>", "Jupynium Run Above" },
+  ["]"] = { "<cmd>JupyniumRunBelow<cr>", "Jupynium Run Below" },
   r = { "<cmd>JupyniumKernelOpenInTerminal<cr>", "Jupynium Open Kernel in Terminal" },
   c = { "<cmd>JupyniumClearSelectedCellsOutputs<cr>", "Jupynium Clear Cell Output" },
   ["`"] = { "<cmd>JupyniumKernelRestart<cr>", "Jupynium Kernel Restart" },
   i = { "<cmd>JupyniumKernelInterrupt<cr>", "Jupynium Kernel Interrupt" },
   [":"] = { "<cmd>lua select_repl_type()<cr>", "REPL cell execute to Jupynium (remap ]w [w)" },
   [";"] = { "<cmd>lua select_repl_type()<cr>", "REPL cell execute to Jupynium (remap ]w [w)" },
+}
+lvim.builtin.which_key.vmappings['rj'] = {
+  name = "jupynium",
+  w = { "<cmd>JupyniumExecuteSelectedCells<cr>", "Jupynium Execute Current Cell" },
 }
 
 
@@ -44,6 +66,10 @@ local repl_types = {
       vim.b.CURRENT_REPL = "REPL:default"
       vim.keymap.set('n', '[w', ':norm strah<cr>', { buffer = true, silent = true })
       vim.keymap.set('n', ']w', ':norm strih<cr>', { buffer = true, silent = true })
+      vim.keymap.set('n', '[e', ':lua require("notebook-navigator").run_cells_above ""<cr>',
+        { buffer = true, silent = true })
+      vim.keymap.set('n', ']e', ':lua require("notebook-navigator").run_cells_below ""<cr>',
+        { buffer = true, silent = true })
     end
   },
   {
@@ -52,6 +78,8 @@ local repl_types = {
       vim.b.CURRENT_REPL = "REPL:jupynium"
       vim.keymap.set('n', '[w', ':JupyniumExecuteSelectedCells<CR>', { buffer = true, silent = true })
       vim.keymap.set('n', ']w', ':JupyniumExecuteSelectedCells<CR>', { buffer = true, silent = true })
+      vim.keymap.set('n', '[e', ':JupyniumRunAbove<CR>', { buffer = true, silent = true })
+      vim.keymap.set('n', ']e', ':JupyniumRunBelow<CR>', { buffer = true, silent = true })
     end
   }
   -- Add more specialized REPLs here.
