@@ -46,6 +46,7 @@ lvim.builtin.which_key.mappings['rj'] = {
   ["]"] = { "<cmd>JupyniumRunBelow<cr>", "Jupynium Run Below" },
   r = { "<cmd>JupyniumKernelOpenInTerminal<cr>", "Jupynium Open Kernel in Terminal" },
   c = { "<cmd>JupyniumClearSelectedCellsOutputs<cr>", "Jupynium Clear Cell Output" },
+  h = { "<cmd>JupyniumToggleSelectedCellsOutputsScroll<cr>", "Jupynium Toggle Cell Output Scroll" },
   ["`"] = { "<cmd>JupyniumKernelRestart<cr>", "Jupynium Kernel Restart" },
   i = { "<cmd>JupyniumKernelInterrupt<cr>", "Jupynium Kernel Interrupt" },
   [":"] = { "<cmd>lua select_repl_type()<cr>", "REPL cell execute to Jupynium (remap ]w [w)" },
