@@ -165,11 +165,11 @@ require("CopilotChat").setup {
       selection = select.diagnostics,
     },
     Commit = {
-      prompt = '按照 commitizen 習慣為更改寫提交訊息。確保標題最多有 50 個字元，訊息在 72 個字元處換行。將整個訊息用 gitcommit 語言的程式碼塊包裹起來 (最後附上中文說明)。',
+      prompt = '按照 commitizen 規範撰寫提交訊息。確保標題最多有 50 個字元，訊息在 72 個字元處換行。將整個訊息用 gitcommit 語言的程式碼塊包裹起來 (最後附上中文說明)。',
       selection = select.gitdiff,
     },
     CommitStaged = {
-      prompt = '按照 commitizen 習慣為更改寫提交訊息。確保標題最多有 50 個字元，訊息在 72 個字元處換行。將整個訊息用 gitcommit 語言的程式碼塊包裹起來 (最後附上中文說明)。',
+      prompt = '按照 commitizen 規範撰寫提交訊息。確保標題最多有 50 個字元，訊息在 72 個字元處換行。將整個訊息用 gitcommit 語言的程式碼塊包裹起來 (最後附上中文說明)。',
       selection = function(source)
         return select.gitdiff(source, true)
       end,
