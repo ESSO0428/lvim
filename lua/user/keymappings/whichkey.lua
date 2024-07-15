@@ -184,6 +184,40 @@ lvim.builtin.which_key.mappings['Oa'] = { '<cmd>lua require("ufo").closeAllFolds
 lvim.builtin.which_key.mappings['Od'] = { '<cmd>lua require("ufo").openAllFolds()<cr>', "Folding Code (Open All)" }
 lvim.builtin.which_key.mappings['Ox'] = { 'zx', "Update All Folds" }
 
+-- NOTE: This function optimizes which-key <leader>gg to open LazyGit
+-- It will open the repository based on the current file's directory.
+require 'lvim.core.terminal'.lazygit_toggle = function()
+  local function get_git_toplevel(file_dir)
+    local handle = io.popen('git -C ' .. file_dir .. ' rev-parse --show-toplevel 2>/dev/null')
+    local result = handle:read("*a")
+    handle:close()
+    return result:gsub("%s+", "")
+  end
+
+  local file_path = vim.api.nvim_buf_get_name(0)
+  local file_dir = vim.fn.fnamemodify(file_path, ':h')
+  local repo_path = get_git_toplevel(file_dir)
+  local repo_path_arg = repo_path == "" and "" or " -p " .. repo_path
+
+  local Terminal = require("toggleterm.terminal").Terminal
+  local lazygit = Terminal:new {
+    cmd = "lazygit" .. repo_path_arg,
+    hidden = true,
+    direction = "float",
+    float_opts = {
+      border = "none",
+      width = 100000,
+      height = 100000,
+    },
+    on_open = function(_)
+      vim.cmd "startinsert!"
+    end,
+    on_close = function(_) end,
+    count = 99,
+  }
+  lazygit:toggle()
+end
+
 -- lvim.keys.visual_mode['<leader>o'] = "za"
 -- lvim.keys.visual_mode['<leader>Oa'] = "zc"
 -- lvim.keys.visual_mode['<leader>Od'] = "zo"
