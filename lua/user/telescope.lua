@@ -20,6 +20,11 @@ lvim.builtin.telescope.on_config_done = function(telescope)
 end
 lvim.builtin.which_key.mappings.s.n = { "<cmd>Telescope notify<cr>", "notify (Viewing History)" }
 lvim.builtin.telescope.defaults.mappings.n = {
+  ["q"] = {
+    actions.close,
+    type = "action",
+    opts = { nowait = true, silent = true }
+  },
   ["k"] = actions.move_selection_next,
   ["i"] = actions.move_selection_previous,
   ["<C-q>"] = function(...)
