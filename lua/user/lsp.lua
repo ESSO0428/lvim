@@ -116,14 +116,9 @@ pcall(function()
   require("lvim.lsp.manager").setup("marksman", {})
 end)
 
--- autocmd({ "FileType" }, { pattern = { "python", "html" }, command = "UltiSnipsAddFiletypes python.django.html.css" })
--- autocmd({ "FileType" }, { pattern = { "python" }, command = "setlocal foldmethod=indent" })
 
 local function initializeAndDeduplicatePythonPaths()
   local custom_python_paths = {
-    "/home/Andy6/research",
-    "/home/andy6/research",
-    "/root/research",
     vim.fn.getcwd(), -- 添加当前工作目录
     -- current_directory -- 将当前目录加入到路径列表中
     -- ... 添加其他路径
