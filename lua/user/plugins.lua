@@ -1085,7 +1085,7 @@ lvim.plugins = {
   { "rbong/vim-flog" },
   { "sindrets/diffview.nvim" },
   {
-    "ESSO0428/jupynium.nvim",
+    "kiyoon/jupynium.nvim",
     build = "pip install --user .",
     -- NOTE: The following steps ensure the installation of the latest version of Firefox.
     -- By installing it in the user directory, we can avoid conflicts with the default Firefox version on the server.
