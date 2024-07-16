@@ -38,6 +38,7 @@ vim.api.nvim_create_user_command("JupyniumRunBelow", "lua jupyniumRunBelow()", {
 lvim.builtin.which_key.mappings['rj'] = {
   name = "jupynium",
   a = { "<cmd>JupyniumStartAndAttachToServer<cr>", "Jupynium Start and Attach Server" },
+  u = { "<cmd>JupyniumAttachToServer<cr>", "Jupynium Attach Server" },
   s = { "<cmd>JupyniumStartSync<cr>", "Jupynium Sync .py to notebook .ipynb" },
   o = { "<cmd>JupyniumStartSync 2<cr>", "Jupynium Sync .py to current opened .ipynb (existing kernel)" },
   d = { "<cmd>JupyniumStopSync<cr>", "Jupynium Stop Sync" },
