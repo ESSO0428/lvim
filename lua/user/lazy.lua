@@ -19,3 +19,13 @@ require("lazy.view.config").commands.install = {
   key_plugin = ">",
   plugins = true,
 }
+
+require("lazy.view.config").commands.log = {
+  button = true,
+  desc = "Show recent updates",
+  desc_plugin = "Show recent updates",
+  id = 7,
+  key = "O",
+  key_plugin = "o",
+  plugins = true,
+}
