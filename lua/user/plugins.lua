@@ -972,7 +972,16 @@ lvim.plugins = {
   {
     "roobert/hoversplit.nvim",
     config = function()
-      require("hoversplit").setup()
+      require("hoversplit").setup({
+        key_bindings = {
+          -- sgh keymap 為我常用的但在這可能無效，
+          -- 因此後面 lsp.lua 會再重設一次
+          split_remain_focused = "sgh",
+          -- 設定無效按鍵 <C-space> 以取消默認的 keymap
+          split = "<C-space>",
+          vsplit = "<C-space>",
+        }
+      })
     end
   },
   {

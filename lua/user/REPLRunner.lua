@@ -53,6 +53,8 @@ lvim.builtin.which_key.mappings['rj'] = {
   [":"] = { "<cmd>lua select_repl_type()<cr>", "REPL cell execute to Jupynium (remap ]w [w)" },
   [";"] = { "<cmd>lua select_repl_type()<cr>", "REPL cell execute to Jupynium (remap ]w [w)" },
 }
+vim.keymap.set('n', '<C-PageUp>', '<cmd>JupyniumScrollUp<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-PageDown>', '<cmd>JupyniumScrollDown<CR>', { noremap = true, silent = true })
 lvim.builtin.which_key.vmappings['rj'] = {
   name = "jupynium",
   w = { "<cmd>JupyniumExecuteSelectedCells<cr>", "Jupynium Execute Current Cell" },
