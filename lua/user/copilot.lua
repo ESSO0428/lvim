@@ -154,6 +154,46 @@ require("CopilotChat").setup {
         vim.diagnostic.set(ns, source.bufnr, diagnostics)
       end,
     },
+    ReviewClear = {
+      prompt = '/COPILOT_REVIEW 幫我清除 Review 的標記',
+      callback = function(response, source)
+        local ns = vim.api.nvim_create_namespace('copilot_review')
+        local diagnostics = {}
+
+        for line in response:gmatch('[^\r\n]+') do
+          if line:find('^line=') then
+            local start_line = nil
+            local end_line = nil
+            local message = nil
+            local single_match, message_match = line:match('^line=(%d+): (.*)$')
+            if not single_match then
+              local start_match, end_match, m_message_match = line:match('^line=(%d+)-(%d+): (.*)$')
+              if start_match and end_match then
+                start_line = tonumber(start_match)
+                end_line = tonumber(end_match)
+                message = m_message_match
+              end
+            else
+              start_line = tonumber(single_match)
+              end_line = start_line
+              message = message_match
+            end
+
+            if start_line and end_line then
+              table.insert(diagnostics, {
+                lnum = start_line - 1,
+                end_lnum = end_line - 1,
+                col = 0,
+                message = message,
+                severity = vim.diagnostic.severity.WARN,
+                source = 'Copilot Review',
+              })
+            end
+          end
+        end
+        vim.diagnostic.set(ns, source.bufnr, diagnostics)
+      end
+    },
     Fix = '/COPILOT_GENERATE 這段程式碼有問題。請重寫程式碼以修復錯誤 (並在修復錯誤後用中文說明修復了什麼)。',
     Optimize = '/COPILOT_GENERATE 優化選定的程式碼以提高性能和可讀性 (並在優化完後用中文說明寫了什麼)。',
     OneLineComment = '/COPILOT_GENERATE 為選定的部分上方添加一行英文註釋 (並在寫完註釋後用中文說明寫了什麼)。',
