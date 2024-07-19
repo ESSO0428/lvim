@@ -158,7 +158,7 @@ require("CopilotChat").setup {
     Optimize = '/COPILOT_GENERATE 優化選定的程式碼以提高性能和可讀性 (並在優化完後用中文說明寫了什麼)。',
     OneLineComment = '/COPILOT_GENERATE 為選定的部分上方添加一行英文註釋 (並在寫完註釋後用中文說明寫了什麼)。',
     OneParagraphComment = '/COPILOT_GENERATE 為選定的部分上方添加英文註釋摘要，確保每一行不超過 50 字 (並在寫完註釋後用中文說明寫了什麼)。',
-    Docs = '/COPILOT_GENERATE 請為選定的部分添加英文的文檔註釋 (並在寫完註釋後用中文說明寫了什麼)。',
+    Docs = '/COPILOT_GENERATE 請為選定的部分添加英文的文檔註釋，若檢測到文擋註釋處先前已按照其他 Annotation Conventions 撰寫，請繼續依照該 Conventions 將文檔撰寫完成 (並在寫完註釋後用中文說明寫了什麼)。',
     Tests = '/COPILOT_GENERATE 請為我的程式碼生成測試 (並在寫完測試後用中文說明寫了什麼)。',
     FixDiagnostic = {
       prompt = '請協助處理以下檔案中的診斷問題 (並用中文說明):',
