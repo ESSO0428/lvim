@@ -45,6 +45,41 @@ require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
     { name = "spell" }
   }
 })
+require("cmp").setup.filetype({ "copilot-chat" }, {
+  sources = {
+    { name = "copilot-chat" },
+    { name = "copilot" },
+    {
+      name = "buffer",
+      option = {
+        get_bufnrs = function()
+          local max_size = 100000 -- 设置文件大小限制为 100,000 字节
+          local bufs = {}
+
+          -- 获取当前 Tab 中的所有窗口
+          local windows = vim.api.nvim_tabpage_list_wins(0)
+          for _, win in ipairs(windows) do
+            -- 获取每个窗口的缓冲区编号
+            local buf = vim.api.nvim_win_get_buf(win)
+            -- 检查文件类型是否不是 neo-tree
+            if vim.api.nvim_get_option_value("filetype", { buf = buf }) ~= 'neo-tree' then
+              -- 检查文件大小
+              local size = vim.fn.getfsize(vim.api.nvim_buf_get_name(buf))
+              if size > 0 and size < max_size then
+                bufs[buf] = true
+              end
+            end
+          end
+
+          return vim.tbl_keys(bufs)
+        end
+      }
+
+    },
+    { name = "path" },
+    { name = "spell" }
+  }
+})
 lvim.builtin.cmp.snippet = {
   expand = function(args)
     -- luasnip.lsp_expand(args.body)
@@ -158,6 +193,10 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
       if vim.bo.filetype == "prompt" then
         return
       end
+      vim_item.kind = lvim.icons.git.Octoface
+      vim_item.kind_hl_group = "CmpItemKindCopilot"
+    end
+    if entry.source.name == "copilot-chat" then
       vim_item.kind = lvim.icons.git.Octoface
       vim_item.kind_hl_group = "CmpItemKindCopilot"
     end
@@ -452,6 +491,7 @@ lvim.builtin.cmp.formatting.source_names['vim-dadbod-completion'] = "(dadbod-sql
 lvim.builtin.cmp.formatting.source_names['spell'] = "(spell)"
 lvim.builtin.cmp.formatting.source_names.jupyter = "(jupyter)"
 lvim.builtin.cmp.formatting.source_names.jupynium = "(jupynium)"
+lvim.builtin.cmp.formatting.source_names["copilot-chat"] = "(copilot-chat)"
 lvim.builtin.cmp.formatting.duplicates = {
   ['html-css'] = 1,
   buffer = 1,

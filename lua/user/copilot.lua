@@ -32,9 +32,38 @@ function CopilotChatPromptAction()
   require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
 end
 
+function CopilotChatInline()
+  require("CopilotChat").ask("", {
+    selection = require('CopilotChat.select').buffer,
+    window = {
+      layout = "float",
+      relative = "cursor",
+      width = 1,
+      height = 0.4,
+      row = 1,
+    },
+  })
+end
+
+-- Initialize CopilotChat with inline arguments and custom window layout
+function CopilotChatInlineVisual()
+  require("CopilotChat").ask("", {
+    selection = require('CopilotChat.select').visual,
+    window = {
+      layout = "float",
+      relative = "cursor",
+      width = 1,
+      height = 0.4,
+      row = 1,
+    },
+  })
+end
+
 lvim.builtin.which_key.mappings.u['ki'] = { "<cmd>lua CopilotChatQuickchat(false)<cr>", "CopilotChat - Quick chat panel" }
 lvim.builtin.which_key.vmappings.u['ki'] = { "<cmd>lua CopilotChatQuickchatVisual(false)<cr>",
   "CopilotChat - Quick chat panel" }
+lvim.builtin.which_key.mappings.u['kw'] = { "<cmd>lua CopilotChatInline()<cr>", "CopilotChat Inline" }
+lvim.builtin.which_key.vmappings.u['kw'] = { "<cmd>lua CopilotChatInlineVisual()<cr>", "CopilotChat Inline" }
 
 lvim.builtin.which_key.mappings.u['ka'] = { "<cmd>lua CopilotChatQuickchat(true)<cr>", "CopilotChat - Quick chat" }
 lvim.builtin.which_key.vmappings.u['ka'] = { "<cmd>lua CopilotChatQuickchatVisual(true)<cr>", "CopilotChat - Quick chat" }
@@ -44,6 +73,7 @@ lvim.builtin.which_key.vmappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()
 
 local select = require('CopilotChat.select')
 local buffer = require('CopilotChat.select').buffer
+local chat = require("CopilotChat")
 
 -- This function generates a git diff for a given file. If the diff is too large,
 -- it uses a `diff --stat` instead. The function returns a buffer with the diff result.
@@ -96,8 +126,28 @@ select.gitdiff = function(source, staged)
   return select_buffer
 end
 
+require("CopilotChat.integrations.cmp").setup()
 require("CopilotChat").setup {
   debug = true, -- Enable debugging
+  model = "gpt-4-0125-preview",
+  window = {
+    layout = 'vertical',    -- 'vertical', 'horizontal', 'float', 'replace'
+    width = 0.5,            -- fractional width of parent, or absolute width in columns when > 1
+    height = 0.5,           -- fractional height of parent, or absolute height in rows when > 1
+    -- Options below only apply to floating windows
+    relative = 'editor',    -- 'editor', 'win', 'cursor', 'mouse'
+    border = 'single',      -- 'none', single', 'double', 'rounded', 'solid', 'shadow'
+    row = nil,              -- row position of the window, default is centered
+    col = nil,              -- column position of the window, default is centered
+    title = 'Copilot Chat', -- title of chat window
+    footer = nil,           -- footer of chat window
+    zindex = 1,             -- determines if window is on top or below other floating windows
+  },
+  mappings = {
+    complete = {
+      insert = '',
+    },
+  },
   -- See Configuration section for rest
   -- NOTE: Default prompts configuration
   -- prompts = {
@@ -116,7 +166,7 @@ require("CopilotChat").setup {
     Explain = '/COPILOT_EXPLAIN 為選定的部分寫一段文字解釋。',
     Ask = '/COPILOT_EXPLAIN 等待我對選定文字的提問 (請告訴我你是否準備好了)',
     Review = {
-      prompt = '/COPILOT_REVIEW 審查選定的程式碼 (並用中文說明)。',
+      prompt = '/COPILOT_REVIEW 審查選定的程式碼 (並用繁體中文說明)。',
       callback = function(response, source)
         local ns = vim.api.nvim_create_namespace('copilot_review')
         local diagnostics = {}
@@ -155,7 +205,7 @@ require("CopilotChat").setup {
       end,
     },
     ReviewClear = {
-      prompt = '/COPILOT_REVIEW 幫我清除 Review 的標記',
+      prompt = '/COPILOT_REVIEW 幫我清除 Review 的標記 (只要回答沒問題即可)',
       callback = function(response, source)
         local ns = vim.api.nvim_create_namespace('copilot_review')
         local diagnostics = {}
@@ -194,25 +244,32 @@ require("CopilotChat").setup {
         vim.diagnostic.set(ns, source.bufnr, diagnostics)
       end
     },
-    Fix = '/COPILOT_GENERATE 這段程式碼有問題。請重寫程式碼以修復錯誤 (並在修復錯誤後用中文說明修復了什麼)。',
-    Optimize = '/COPILOT_GENERATE 優化選定的程式碼以提高性能和可讀性 (並在優化完後用中文說明寫了什麼)。',
-    OneLineComment = '/COPILOT_GENERATE 為選定的部分上方添加一行英文註釋 (並在寫完註釋後用中文說明寫了什麼)。',
-    OneParagraphComment = '/COPILOT_GENERATE 為選定的部分上方添加英文註釋摘要，確保每一行不超過 50 字 (並在寫完註釋後用中文說明寫了什麼)。',
-    Docs = '/COPILOT_GENERATE 請為選定的部分添加英文的文檔註釋，若檢測到文擋註釋處先前已按照其他 Annotation Conventions 撰寫，請繼續依照該 Conventions 將文檔撰寫完成 (並在寫完註釋後用中文說明寫了什麼)。',
-    Tests = '/COPILOT_GENERATE 請為我的程式碼生成測試 (並在寫完測試後用中文說明寫了什麼)。',
+    Fix = '/COPILOT_GENERATE 這段程式碼有問題。請重寫程式碼以修復錯誤 (並在修復錯誤後用繁體中文說明修復了什麼)。',
+    Optimize = '/COPILOT_GENERATE 優化選定的程式碼以提高性能和可讀性 (並在優化完後用繁體中文說明寫了什麼)。',
+    OneLineComment = '/COPILOT_GENERATE 為選定的部分上方添加一行英文註釋 (並在寫完註釋後用繁體中文說明寫了什麼)。',
+    OneParagraphComment = '/COPILOT_GENERATE 為選定的部分上方添加英文註釋摘要，確保每一行不超過 50 字 (並在寫完註釋後用繁體中文說明寫了什麼)。',
+    Docs = '/COPILOT_GENERATE 請為選定的部分添加英文的文檔註釋，若檢測到文擋註釋處先前已按照其他 Annotation Conventions 撰寫，請繼續依照該 Conventions 將文檔撰寫完成 (並在寫完註釋後用繁體中文說明寫了什麼)。',
+    Tests = '/COPILOT_GENERATE 請為我的程式碼生成測試 (並在寫完測試後用繁體中文說明寫了什麼)。',
     FixDiagnostic = {
-      prompt = '請協助處理以下檔案中的診斷問題 (並用中文說明):',
+      prompt = '請協助處理以下檔案中的診斷問題 (並用繁體中文說明):',
       selection = select.diagnostics,
     },
     Commit = {
-      prompt = '按照 commitizen 規範撰寫提交訊息。確保標題最多有 50 個字元，訊息在 72 個字元處換行。將整個訊息用 gitcommit 語言的程式碼塊包裹起來 (最後附上中文說明)。',
+      prompt = '按照 commitizen 規範撰寫英文提交訊息。確保標題最多有 50 個字元，訊息在 72 個字元處換行。將整個訊息用 gitcommit 語言的程式碼塊包裹起來 (最後附上繁體中文說明)。',
       selection = select.gitdiff,
     },
     CommitStaged = {
-      prompt = '按照 commitizen 規範撰寫提交訊息。確保標題最多有 50 個字元，訊息在 72 個字元處換行。將整個訊息用 gitcommit 語言的程式碼塊包裹起來 (最後附上中文說明)。',
+      prompt = '按照 commitizen 規範撰寫英文提交訊息。確保標題最多有 50 個字元，訊息在 72 個字元處換行。將整個訊息用 gitcommit 語言的程式碼塊包裹起來 (最後附上繁體中文說明)。',
       selection = function(source)
         return select.gitdiff(source, true)
       end,
     },
   }
 }
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "copilot-*",
+  callback = function()
+    vim.opt_local.number = true
+    vim.opt_local.wrap = false
+  end,
+})
