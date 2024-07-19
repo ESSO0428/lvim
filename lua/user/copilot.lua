@@ -73,7 +73,6 @@ lvim.builtin.which_key.vmappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()
 
 local select = require('CopilotChat.select')
 local buffer = require('CopilotChat.select').buffer
-local chat = require("CopilotChat")
 
 -- This function generates a git diff for a given file. If the diff is too large,
 -- it uses a `diff --stat` instead. The function returns a buffer with the diff result.
