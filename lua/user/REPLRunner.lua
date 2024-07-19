@@ -21,16 +21,20 @@
 -- Iron.nvim (default REPL execution tool) and different filetype REPLs (special REPL execution, such as Jupynium).
 vim.keymap.set({ 'n', 'v' }, 'strj', '<cmd>JupyniumExecuteSelectedCells<CR>', { noremap = true, silent = true })
 function jupyniumRunAbove()
+  local cursor_pos = vim.api.nvim_win_get_cursor(0)
+  local row, col = cursor_pos[1], cursor_pos[2]
   local jupynium = require('jupynium.textobj')
   jupynium.goto_current_cell_separator()
   vim.cmd("norm j")
-  vim.api.nvim_input("Vggstrj<ESC>")
+  vim.api.nvim_input("Vggstrj<ESC>" .. row .. "G" .. col .. "|")
 end
 
 function jupyniumRunBelow()
+  local cursor_pos = vim.api.nvim_win_get_cursor(0)
+  local row, col = cursor_pos[1], cursor_pos[2]
   local jupynium = require('jupynium.textobj')
   jupynium.goto_current_cell_separator()
-  vim.api.nvim_input("VGstrj<ESC>")
+  vim.api.nvim_input("VGstrj<ESC>" .. row .. "G" .. col .. "|")
 end
 
 vim.api.nvim_create_user_command("JupyniumRunAbove", "lua jupyniumRunAbove()", { nargs = 0 })
