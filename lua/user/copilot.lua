@@ -250,7 +250,7 @@ require("CopilotChat").setup {
     Docs = '/COPILOT_GENERATE 請為選定的部分添加英文的文檔註釋，若檢測到文擋註釋處先前已按照其他 Annotation Conventions 撰寫，請繼續依照該 Conventions 將文檔撰寫完成 (並在寫完註釋後用繁體中文說明寫了什麼)。',
     Tests = '/COPILOT_GENERATE 請為我的程式碼生成測試 (並在寫完測試後用繁體中文說明寫了什麼)。',
     FixDiagnostic = {
-      prompt = '請協助處理以下檔案中的診斷問題 (並用繁體中文說明):',
+      prompt = '請協助修復檔案的診斷問題 (並用繁體中文說明):',
       selection = select.diagnostics,
     },
     Commit = {
@@ -269,6 +269,5 @@ vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "copilot-*",
   callback = function()
     vim.opt_local.number = true
-    vim.opt_local.wrap = false
   end,
 })
