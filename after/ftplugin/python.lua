@@ -1,41 +1,40 @@
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright", "ruff" })
 local pyright_opts = {
   single_file_support = true,
-  root_dir = function(fname)
-    local cwd = vim.fn.getcwd()
-    fname = fname or vim.api.nvim_buf_get_name(0)
-    local file_dir = vim.fn.fnamemodify(fname, ':h')
-    if vim.startswith(fname, cwd) then
-      return cwd
-    else
-      return file_dir -- Sets the workspace directory to the file's directory if CWD does not match
-    end
+  filetypes = { "python" },
+  root_dir = function(...)
+    -- local cwd = vim.fn.getcwd()
+    -- fname = fname or vim.api.nvim_buf_get_name(0)
+    -- local file_dir = vim.fn.fnamemodify(fname, ':h')
+    -- local workspace
+    -- if vim.startswith(fname, cwd) then
+    --   workspace = cwd
+    -- else
+    --   workspace = file_dir -- Sets the workspace directory to the file's directory if CWD does not match
+    -- end
+    local util = require "lspconfig.util"
+    return util.find_git_ancestor(...)
+        or util.root_pattern(unpack {
+          "pyproject.toml",
+          "setup.py",
+          "setup.cfg",
+          "requirements.txt",
+          "Pipfile",
+          "pyrightconfig.json",
+          -- workspace
+        })(...)
   end,
   settings = {
-    pyright = {
-      disableLanguageServices = false,
-      disableOrganizeImports = true
-    },
     basedpyright = {
-      typeCheckingMode = "standard",
-      enableTypeIgnoreComments = true,
       analysis = {
-        autoImportCompletions = true,
         autoSearchPaths = true,
-        diagnosticMode = "workspace", -- openFilesOnly, workspace
-        useLibraryCodeForTypes = true
-      }
-    },
-    python = {
-      analysis = {
-        autoImportCompletions = true,
-        autoSearchPaths = true,
-        diagnosticMode = "workspace", -- openFilesOnly, workspace
-        typeCheckingMode = "basic",   -- off, basic, strict
+        diagnosticMode = "openFilesOnly",
         useLibraryCodeForTypes = true,
-        ignore = { '*' },
-      }
-    }
+        reportMissingTypeStubs = false,
+        typeCheckingMode = "basic",
+        enableTypeIgnoreComments = true,
+      },
+    },
   },
 }
 pcall(function()
