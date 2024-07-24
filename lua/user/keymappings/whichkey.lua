@@ -217,6 +217,11 @@ require 'lvim.core.terminal'.lazygit_toggle = function()
   }
   lazygit:toggle()
 end
+lvim.builtin.which_key.mappings.g.i = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Toggle Current Line Blame" }
+lvim.builtin.which_key.mappings.g.j = { "<cmd>Floggit blame<cr>", "Floggit blame" }
+lvim.builtin.which_key.mappings.g.D = { "<cmd>DiffviewFileHistory %<cr>", "DiffviewFileHistory (current file)" }
+lvim.builtin.which_key.mappings.g.v = { "<cmd>DiffviewFileHistory<cr>", "DiffviewFileHistory (current branch)" }
+
 
 -- lvim.keys.visual_mode['<leader>o'] = "za"
 -- lvim.keys.visual_mode['<leader>Oa'] = "zc"
