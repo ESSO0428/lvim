@@ -10,18 +10,20 @@ local config_group = vim.api.nvim_create_augroup('MyConfigGroup', {}) -- A globa
 -- If Neovim just started, `vim.api.nvim_buf_delete(buffer, { force = true })` is not executed.
 -- After the first view load, the status is set to false.
 -- On subsequent session loads, unnecessary buffers are closed.
-utils.first_load = true -- Initialization flag variable
+utils.first_load = true       -- Initialization flag variable
+utils.session_loading = false -- Indicates the session loading status to avoid triggering other plugins during session loading
 function utils.load_session(filename, discard_current)
+  utils.session_loading = true
   if not discard_current then
     -- Ask to save files in current session before closing them.
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
-      if vim.api.nvim_buf_get_option(buffer, 'modified') then
+      if vim.api.nvim_get_option_value('modified', { buf = buffer }) then
         local choice = vim.fn.confirm('The files in the current session have changed. Save changes?',
           '&Yes\n&No\n&Cancel')
         if choice == 3 or choice == 0 then
           return -- Cancel.
         elseif choice == 1 then
-          vim.api.nvim_command('silent wall')
+          vim.api.nvim_command("silent wall")
         end
         break
       end
@@ -51,6 +53,7 @@ function utils.load_session(filename, discard_current)
 
   -- After the first call, set the flag variable to false
   utils.first_load = false
+  utils.session_loading = false
 end
 
 vim.api.nvim_create_autocmd({ 'User' }, {

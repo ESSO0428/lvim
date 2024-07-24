@@ -88,7 +88,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
       vim.cmd('UfoEnableFold')
       vim.cmd('normal! zX')
     else
-      vim.cmd('UfoEnableFold')
+      if vim.wo.foldenable then
+        vim.cmd('UfoEnableFold')
+      end
     end
   end
 })
