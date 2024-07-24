@@ -8,7 +8,7 @@ local pyright_opts = {
     if vim.startswith(fname, cwd) then
       return cwd
     else
-      return file_dir   -- Sets the workspace directory to the file's directory if CWD does not match
+      return file_dir -- Sets the workspace directory to the file's directory if CWD does not match
     end
   end,
   settings = {
@@ -18,10 +18,11 @@ local pyright_opts = {
     },
     basedpyright = {
       typeCheckingMode = "standard",
+      enableTypeIgnoreComments = true,
       analysis = {
         autoImportCompletions = true,
         autoSearchPaths = true,
-        diagnosticMode = "workspace",   -- openFilesOnly, workspace
+        diagnosticMode = "workspace", -- openFilesOnly, workspace
         useLibraryCodeForTypes = true
       }
     },
@@ -29,8 +30,8 @@ local pyright_opts = {
       analysis = {
         autoImportCompletions = true,
         autoSearchPaths = true,
-        diagnosticMode = "workspace",   -- openFilesOnly, workspace
-        typeCheckingMode = "basic",     -- off, basic, strict
+        diagnosticMode = "workspace", -- openFilesOnly, workspace
+        typeCheckingMode = "basic",   -- off, basic, strict
         useLibraryCodeForTypes = true,
         ignore = { '*' },
       }

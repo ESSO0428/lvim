@@ -35,15 +35,8 @@ pcall(function()
     }
   })
 end)
-pcall(function()
-  require("lvim.lsp.manager").setup("tailwindcss", {
-    root_dir = require("lspconfig").util.root_pattern(
-      "tailwind.config.js",
-      "tailwind.config.cjs",
-      "tailwind.config.ts"
-    ),
-  })
-end)
+-- NOTE: comment tailwindcss lsp config because it's lunarvim default config
+-- require("lvim.lsp.manager").setup("tailwindcss", { ... })
 pcall(function()
   require("lvim.lsp.manager").setup("cssls", {
     settings = {
