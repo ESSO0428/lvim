@@ -221,6 +221,7 @@ lvim.builtin.which_key.mappings.g.i = { "<cmd>Gitsigns toggle_current_line_blame
 lvim.builtin.which_key.mappings.g.j = { "<cmd>Floggit blame<cr>", "Floggit blame" }
 lvim.builtin.which_key.mappings.g.D = { "<cmd>DiffviewFileHistory %<cr>", "DiffviewFileHistory (current file)" }
 lvim.builtin.which_key.mappings.g.v = { "<cmd>DiffviewFileHistory<cr>", "DiffviewFileHistory (current branch)" }
+lvim.builtin.which_key.mappings.g.m = { "<cmd>Flogsplit<cr>", "Flogsplit(preview all commit)" }
 
 
 -- lvim.keys.visual_mode['<leader>o'] = "za"
