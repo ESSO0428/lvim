@@ -1,5 +1,5 @@
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright", "ruff" })
-local pyright_opts = {
+local opts = {
   single_file_support = true,
   filetypes = { "python" },
   root_dir = function(...)
@@ -24,10 +24,12 @@ local pyright_opts = {
           -- workspace
         })(...)
   end,
+  capabilities = Nvim.builtin.lsp.capabilities,
   settings = {
     basedpyright = {
       analysis = {
         autoSearchPaths = true,
+        autoImportCompletions = true,
         diagnosticMode = "openFilesOnly",
         useLibraryCodeForTypes = true,
         reportMissingTypeStubs = false,
@@ -37,22 +39,20 @@ local pyright_opts = {
     },
   },
 }
-pcall(function()
-  require("lvim.lsp.manager").setup("basedpyright", pyright_opts)
-  require("lvim.lsp.manager").setup("ruff_lsp", {
-    on_attach = function(client, buffer)
-      client.server_capabilities.documentFormattingProvider = false
-      client.server_capabilities.hoverProvider = false
-      client.server_capabilities.renameProvider = false
-    end,
-    init_options = {
-      settings = {
-        -- Any extra CLI arguments for `ruff` go here.
-        args = {},
-      }
+require("lvim.lsp.manager").setup("basedpyright", opts)
+require("lvim.lsp.manager").setup("ruff_lsp", {
+  on_attach = function(client, buffer)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.hoverProvider = false
+    client.server_capabilities.renameProvider = false
+  end,
+  init_options = {
+    settings = {
+      -- Any extra CLI arguments for `ruff` go here.
+      args = {},
     }
-  })
-end)
+  }
+})
 
 if vim.b.CURRENT_REPL == nil then
   vim.b.CURRENT_REPL = "REPL:default"

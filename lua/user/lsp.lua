@@ -8,108 +8,105 @@ end
 
 -- 底下 Maso.. require("lvim.lsp... 為啟用 html emmet-ls 補全功能
 -- :MasonInstall emmet-ls
-lvim.lsp.installer.setup.ensure_installed = { "html", "tailwindcss" }
+-- lvim.lsp.installer.setup.ensure_installed = { "html", "tailwindcss" }
+lvim.lsp.installer.setup.ensure_installed = { "html", "tailwindcss", "tsserver", "basedpyright", "ruff_lsp" }
 local opts = { filetypes = { "html", "htmldjango" } }
-pcall(function()
-  require("lvim.lsp.manager").setup("html", opts)
-end)
+require("lvim.lsp.manager").setup("html", opts)
+
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = vim.tbl_deep_extend(
+  "force",
+  vim.lsp.protocol.make_client_capabilities(),
+  -- returns configured operations if setup() was already called
+  -- or default operations if not
+  require 'lsp-file-operations'.default_capabilities()
+)
 capabilities.textDocument.foldingRange = {
   dynamicRegistration = false,
   lineFoldingOnly = true,
 }
-pcall(function()
-  require("lvim.lsp.manager").setup("yamlls", {
-    capabilities = capabilities,
-    settings = {
-      yaml = {
-        hover = true,
-        completion = true,
-        validate = true,
-        schemaStore = {
-          enable = true,
-          url = "https://www.schemastore.org/api/json/catalog.json",
-        },
-        schemas = require("schemastore").yaml.schemas(),
-      },
-    }
-  })
-end)
--- NOTE: comment tailwindcss lsp config because it's lunarvim default config
--- require("lvim.lsp.manager").setup("tailwindcss", { ... })
-pcall(function()
-  require("lvim.lsp.manager").setup("cssls", {
-    settings = {
-      css = {
-        validate = true,
-        lint = {
-          unknownAtRules = "ignore"
-        }
-      },
-      scss = {
-        validate = true,
-        lint = {
-          unknownAtRules = "ignore"
-        }
-      },
-      less = {
-        validate = true,
-        lint = {
-          unknownAtRules = "ignore"
-        }
+capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
+Nvim.builtin.lsp = {}
+Nvim.builtin.lsp.capabilities = capabilities
+--   require("lvim.lsp.manager").setup("yamlls", {
+--     capabilities = Nvim.builtin.lsp.capabilities,
+--     settings = {
+--       yaml = {
+--         hover = true,
+--         completion = true,
+--         validate = true,
+--         schemaStore = {
+--           enable = true,
+--           url = "https://www.schemastore.org/api/json/catalog.json",
+--         },
+--         schemas = require("schemastore").yaml.schemas(),
+--       },
+--     }
+--   })
+-- -- NOTE: comment tailwindcss lsp config because it's lunarvim default config
+-- -- require("lvim.lsp.manager").setup("tailwindcss", { ... })
+require("lvim.lsp.manager").setup("cssls", {
+  capabilities = Nvim.builtin.lsp.capabilities,
+  settings = {
+    css = {
+      validate = true,
+      lint = {
+        unknownAtRules = "ignore"
+      }
+    },
+    scss = {
+      validate = true,
+      lint = {
+        unknownAtRules = "ignore"
+      }
+    },
+    less = {
+      validate = true,
+      lint = {
+        unknownAtRules = "ignore"
       }
     }
-  })
-end
-)
-pcall(function()
-  require("lvim.lsp.manager").setup("tsserver", {
-    settings = {
-      typescript = {
-        inlayHints = {
-          includeInlayParameterNameHints = "all",
-          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-          includeInlayFunctionParameterTypeHints = true,
-          includeInlayVariableTypeHints = true,
-          includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-          includeInlayPropertyDeclarationTypeHints = true,
-          includeInlayFunctionLikeReturnTypeHints = true,
-          includeInlayEnumMemberValueHints = true,
-        },
+  }
+})
+require("lvim.lsp.manager").setup("tsserver", {
+  capabilities = Nvim.builtin.lsp.capabilities,
+  settings = {
+    typescript = {
+      inlayHints = {
+        includeInlayParameterNameHints = "all",
+        includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
       },
-      javascript = {
-        inlayHints = {
-          includeInlayParameterNameHints = "all",
-          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-          includeInlayFunctionParameterTypeHints = true,
-          includeInlayVariableTypeHints = true,
-          includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-          includeInlayPropertyDeclarationTypeHints = true,
-          includeInlayFunctionLikeReturnTypeHints = true,
-          includeInlayEnumMemberValueHints = true,
-        },
+    },
+    javascript = {
+      inlayHints = {
+        includeInlayParameterNameHints = "all",
+        includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
       },
-    }
-  })
-end
-)
-pcall(function()
-  require("lvim.lsp.manager").setup("lua_ls", {
-    settings = {
-      Lua = {
-        hint = {
-          enable = true
-        }
+    },
+  }
+})
+require("lvim.lsp.manager").setup("lua_ls", {
+  capabilities = Nvim.builtin.lsp.capabilities,
+  settings = {
+    Lua = {
+      hint = {
+        enable = true
       }
     }
-  })
-end
-)
-pcall(function()
-  require("lvim.lsp.manager").setup("marksman", {})
-end)
-
-
+  }
+})
 local function initializeAndDeduplicatePythonPaths()
   local custom_python_paths = {
     vim.fn.getcwd(), -- 添加当前工作目录
