@@ -28,21 +28,21 @@ capabilities.textDocument.foldingRange = {
 capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
 Nvim.builtin.lsp = {}
 Nvim.builtin.lsp.capabilities = capabilities
---   require("lvim.lsp.manager").setup("yamlls", {
---     capabilities = Nvim.builtin.lsp.capabilities,
---     settings = {
---       yaml = {
---         hover = true,
---         completion = true,
---         validate = true,
---         schemaStore = {
---           enable = true,
---           url = "https://www.schemastore.org/api/json/catalog.json",
---         },
---         schemas = require("schemastore").yaml.schemas(),
---       },
---     }
---   })
+require("lvim.lsp.manager").setup("yamlls", {
+  capabilities = Nvim.builtin.lsp.capabilities,
+  settings = {
+    yaml = {
+      hover = true,
+      completion = true,
+      validate = true,
+      schemaStore = {
+        enable = true,
+        url = "https://www.schemastore.org/api/json/catalog.json",
+      },
+      schemas = require("schemastore").yaml.schemas(),
+    },
+  }
+})
 -- -- NOTE: comment tailwindcss lsp config because it's lunarvim default config
 -- -- require("lvim.lsp.manager").setup("tailwindcss", { ... })
 require("lvim.lsp.manager").setup("cssls", {
@@ -126,7 +126,7 @@ local function initializeAndDeduplicatePythonPaths()
     table.insert(deduplicated_paths, path)
   end
 
-  -- 将处理后的路径列表用于更新PYTHONPATH
+  -- 将处理后的路径列表用于更新 `PYTHONPATH`
   local current_pythonpath = vim.fn.getenv("PYTHONPATH") or ""
   for _, path in ipairs(deduplicated_paths) do
     if current_pythonpath == "" or current_pythonpath == vim.NIL then
@@ -139,7 +139,7 @@ local function initializeAndDeduplicatePythonPaths()
   vim.fn.setenv("PYTHONPATH", current_pythonpath)
 end
 
--- 初始时设置PYTHONPATH
+-- 初始时设置 `PYTHONPATH`
 initializeAndDeduplicatePythonPaths()
 
 local initial_pythonpath = vim.fn.getenv("PYTHONPATH") or ""
