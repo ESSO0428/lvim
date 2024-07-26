@@ -929,7 +929,7 @@ lvim.plugins = {
         code = {
           sign = false,
           border = "thick",
-          highlight = '',
+          highlight = 'RenderMarkdownCode',
           highlight_inline = '',
         },
         bullet = {
