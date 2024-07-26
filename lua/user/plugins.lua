@@ -787,7 +787,7 @@ lvim.plugins = {
     end
   },
   { "SirVer/ultisnips" },
-  { "theniceboy/vim-snippets" },
+  { "ESSO0428/vim-snippets" },
   { "nvim-telescope/telescope-media-files.nvim" },
   {
     "Zane-/cder.nvim",
@@ -899,6 +899,46 @@ lvim.plugins = {
     ft = "markdown",
     config = function()
       vim.g.mkdp_auto_start = 1
+    end
+  },
+  {
+    'MeanderingProgrammer/markdown.nvim',
+    main = "render-markdown",
+    opts = {},
+    name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    config = function()
+      vim.g.MarkdownNvim = 1
+      require('render-markdown').setup({
+        heading = {
+          sign = false,
+          icons = { " ◉ ", " ○ ", " ✸ ", " ✿ ", " ◉ ", " ○ " },
+        },
+        quote = {
+          -- Turn on / off block quote & callout rendering
+          enabled = true,
+          -- Replaces '>' of 'block_quote'
+          icon = '▋',
+          -- Highlight for the quote icon
+          highlight = 'RenderMarkdownQuote',
+        },
+        code = {
+          sign = false,
+          border = "thick",
+          highlight_inline = ''
+        },
+        win_options = {
+          -- See :h 'conceallevel'
+          conceallevel = {
+            -- Used when not being rendered, get user setting
+            default = 0,
+            -- Used when being rendered, concealed text is completely hidden
+            rendered = 3,
+          },
+        },
+      })
     end
   },
   {

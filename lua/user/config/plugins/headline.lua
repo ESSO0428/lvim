@@ -55,10 +55,11 @@ require("headlines").setup {
             (block_quote (block_continuation) @quote)
       ]]
     ),
-    headline_highlights = {
-      "Headline1",
-      "Headline2"
-    },
+    -- headline_highlights = {
+    --   "Headline1",
+    --   "Headline2"
+    -- },
+    headline_highlights = false,
     bullet_highlights = {
       "@text.title.1.marker.markdown",
       "@text.title.2.marker.markdown",

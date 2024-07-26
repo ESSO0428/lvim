@@ -71,8 +71,6 @@ end
 
 -- NOTE: for link highlight toggle
 function toggle_conceal()
-  local buf = vim.api.nvim_get_current_buf()
-
   -- 初始化当前 buffer 的 conceal 状态，如果它还不存在
   if vim.b.current_buffer_conceal_change == nil or vim.b.current_buffer_conceal_change == '' then
     vim.b.current_buffer_conceal_change = 'off'
@@ -80,13 +78,19 @@ function toggle_conceal()
 
   -- 如果 conceallevel 已经被更改，恢复到原始状态
   if vim.b.current_buffer_conceal_change == 'on' then
+    if vim.bo.filetype == "markdown" and vim.g.MarkdownNvim ~= nil then
+      require('render-markdown').enable()
+    end
     vim.b.current_buffer_conceal_change = 'off'
     vim.o.conceallevel = vim.b.original_conceallevel
     print('conceal 0 → ' .. (vim.b.original_conceallevel) .. ' (default)')
   else
+    if vim.bo.filetype == "markdown" and vim.g.MarkdownNvim ~= nil then
+      require('render-markdown').disable()
+    end
     -- 如果还没更改过，保存当前 conceallevel 并设置为 0
-    vim.b.original_conceallevel = vim.o.conceallevel
     vim.b.current_buffer_conceal_change = 'on'
+    vim.b.original_conceallevel = vim.o.conceallevel
     vim.o.conceallevel = 0
     print('conceal ' .. (vim.b.original_conceallevel or 0) .. ' (default)' .. ' → 0')
   end
