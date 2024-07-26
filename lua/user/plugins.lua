@@ -911,7 +911,9 @@ lvim.plugins = {
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
     config = function()
       vim.g.MarkdownNvim = 1
+      vim.treesitter.language.register('markdown', 'copilot-chat')
       require('render-markdown').setup({
+        file_types = { 'markdown', 'copilot-chat' },
         heading = {
           sign = false,
           icons = { " ◉ ", " ○ ", " ✸ ", " ✿ ", " ◉ ", " ○ " },
@@ -927,7 +929,16 @@ lvim.plugins = {
         code = {
           sign = false,
           border = "thick",
-          highlight_inline = ''
+          highlight = '',
+          highlight_inline = '',
+        },
+        bullet = {
+          icons = { '●', '○', '◆', '◇' },
+          -- Padding to add to the right of bullet point
+          right_pad = 0,
+          -- Highlight for the bullet icon
+          -- highlight = 'RenderMarkdownBullet',
+          highlight = 'Identifier'
         },
         win_options = {
           -- See :h 'conceallevel'
