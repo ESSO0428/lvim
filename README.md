@@ -61,23 +61,23 @@ Neovim Release is executable.
   1. install `neovim`
     1. install nvim.appimage
     2. alias nvim.appimage to your bashrc/zshrc
-      ```bash
-      echo 'alias nvim=~/nvim.appimag' >> ~/.bashrc
-      echo 'alias nvim=~/nvim.appimag' >> ~/.zshrc
-      ```
+    ```bash
+    echo 'alias nvim=~/nvim.appimag' >> ~/.bashrc
+    echo 'alias nvim=~/nvim.appimag' >> ~/.zshrc
+    ```
     3. install `pyenv` for neovim (for plug of neovim)
-      ```bash
-      conda install pyenv
-      ```
+    ```bash
+    conda install pyenv
+    ```
     4. install `debugpy` for neovim (for debug of neovim)
-      ```bash
-      pip install debugpy
-      ```
+    ```bash
+    pip install debugpy
+    ```
   2. install `lunavim environment`
     1. link ~/nvim.appimage to ~/.local/bin/
-      ```bash
-      ln -s ~/nvim.appimage ~/.local/bin/nvim
-      ```
+    ```bash
+    ln -s ~/nvim.appimage ~/.local/bin/nvim
+    ```
     2. install nodejs, npm for lunavim (suggest use nvm)
     3. install `cargo` for lunavim
     4. install `fd` and `rg` for lunavim (can use cargo, npm, conda)
