@@ -25,8 +25,6 @@ local function find_links_with_treesitter(bufnr)
       -- local text_parts = ts_utils.get_node_text(node, bufnr)
       -- local text = table.concat(text_parts, "")
       local text = vim.treesitter.get_node_text(node, bufnr)
-      print(vim.inspect({ start_row, start_col, end_row, end_col }))
-      print(text)
       if type(text) == 'string' and not text:match('^http') then
         -- Construct the full path
         local path
