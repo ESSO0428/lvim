@@ -157,14 +157,14 @@ lvim.builtin.indentlines.options.space_char_highlight_list      = {
 --]]
 
 -- lvim.builtin.bufferline
-vim.g.vim_pid                                          = vim.fn.getpid()
-lvim.builtin.lualine.options                           = {
+vim.g.vim_pid                 = vim.fn.getpid()
+lvim.builtin.lualine.options  = {
   globalstatus = true,
   component_separators = { left = '', right = '' },
   section_separators = { left = '', right = '' }
 }
-local components                                       = require "lvim.core.lualine.components"
-lvim.builtin.lualine.sections                          = {
+local components              = require "lvim.core.lualine.components"
+lvim.builtin.lualine.sections = {
   lualine_a = { { 'mode' } },
   lualine_c = {
     components.diff,
@@ -184,6 +184,22 @@ lvim.builtin.lualine.sections                          = {
     }
   }
 }
+-- theme.lua
+local function auto_check_markdown_links_status()
+  local filetype = vim.bo.filetype
+  if filetype == 'markdown' or filetype == 'markdown' then
+    if vim.b.auto_check_markdown_links or vim.b.auto_check_markdown_links == nil then
+      return " Auto Check Link: true"
+    else
+      return " Auto Check Link: false"
+    end
+  end
+  return ""
+end
+lvim.builtin.lualine.sections.lualine_c[#lvim.builtin.lualine.sections.lualine_c + 1] = {
+  auto_check_markdown_links_status }
+
+
 lvim.builtin.telescope.pickers.find_files.find_command = { "fd", "--type", "f" }
 
 lvim.builtin.telescope.defaults.layout_strategy        = "horizontal"
