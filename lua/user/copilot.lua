@@ -128,7 +128,7 @@ end
 require("CopilotChat.integrations.cmp").setup()
 require("CopilotChat").setup {
   debug = true, -- Enable debugging
-  model = "gpt-4-0125-preview",
+  model = "gpt-4o",
   window = {
     layout = 'vertical',    -- 'vertical', 'horizontal', 'float', 'replace'
     width = 0.5,            -- fractional width of parent, or absolute width in columns when > 1
