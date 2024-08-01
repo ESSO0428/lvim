@@ -1,5 +1,5 @@
 ---
-title: My Neovim Config (lunavim)
+title: My Neovim Config (lunarvim)
 author: Andy6
 date: 2023-10-08
 ---
@@ -13,10 +13,10 @@ date: 2023-10-08
     - [Overview (use this config)](#overview-use-this-config)
     - [Some notice](#some-notice)
       - [Copilot](#copilot)
-    - [About update lunavim and neovim core to Latest Release](#about-update-lunavim-and-neovim-core-to-latest-release)
+    - [About update lunarvim and neovim core to Latest Release](#about-update-lunarvim-and-neovim-core-to-latest-release)
 <!--toc:end-->
 
-use neovim pre-config lunavim
+use neovim pre-config lunarvim
 
 ## Introduction
 
@@ -34,7 +34,7 @@ Run "nvim -V1 -v" for more info
 
 ### Overview (use this config)
 
-- Install `lunavim` and `neovim` use my script
+- Install `lunarvim` and `neovim` use my script
   1. clone this repo to `~/.config/`
     - ```bash
       # NOTE: Step1
@@ -50,13 +50,13 @@ Run "nvim -V1 -v" for more info
       # Common user
       git clone https://github.com/ESSO0428/lvim.git
       ```
-  2. install `lunavim` and `neovim` use my script
+  2. install `lunarvim` and `neovim` use my script
     - ```bash
       cd ~
-      sh ~/.config/lvim/InstallLunavim.sh
+      sh ~/.config/lvim/Installlunarvim.sh
       ```
-  3. other [reference](#about-update-lunavim-and-neovim-core-to-latest-release) after step2
-- Install `lunavim` and `neovim` manually
+  3. other [reference](#about-update-lunarvim-and-neovim-core-to-latest-release) after step2
+- Install `lunarvim` and `neovim` manually
   1. install `neovim`
     1. install nvim.appimage
     2. alias nvim.appimage to your bashrc/zshrc
@@ -72,15 +72,15 @@ Run "nvim -V1 -v" for more info
     - ```bash
       pip install debugpy
       ```
-  2. install `lunavim environment`
+  2. install `lunarvim environment`
     1. link ~/nvim.appimage to ~/.local/bin/
     - ```bash
       ln -s ~/nvim.appimage ~/.local/bin/nvim
       ```
-    2. install nodejs, npm for lunavim (suggest use nvm)
-    3. install `cargo` for lunavim
-    4. install `fd` and `rg` for lunavim (can use cargo, npm, conda)
-  4. install `lunavim`
+    2. install nodejs, npm for lunarvim (suggest use nvm)
+    3. install `cargo` for lunarvim
+    4. install `fd` and `rg` for lunarvim (can use cargo, npm, conda)
+  4. install `lunarvim`
   5. git `clone this repo` to `~/.config/`
     - and sync the config for sync new update to your worker machine
 
@@ -117,16 +117,16 @@ if you are only a user, suggest ask `your admin` to help you install `glbc-2.31`
   - **Prerequisites**: You should have registered for Copilot service and successfully logged in on GitHub.
 
 
-### About update lunavim and neovim core to Latest Release
+### About update lunarvim and neovim core to Latest Release
 
-1. Can use below command to update lunavim and neovim core to Latest Release
+1. Can use below command to update lunarvim and neovim core to Latest Release
   - ```bash
-    # NOTE: Update lunavim and neovim core to Latest Release
+    # NOTE: Update lunarvim and neovim core to Latest Release
     sh ~/.config/lvim/UpdateNvimReleaseAndLunaCore.sh
     # NOTE: or you only want to update neovim to Latest Release
     # sh ~/.config/lvim/UpdateNvimReleaseOnly.sh
     ```
-2. If update (or install) success (can use below command to init lunavim)
+2. If update (or install) success (can use below command to init lunarvim)
   - ```bash
     # NOTE: init lvim (install plugins and install treesitter parsers)
     # Maybe restart lvim two times above (because solve plugin dependency)
