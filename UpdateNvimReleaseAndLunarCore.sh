@@ -2,8 +2,8 @@
 
 current_script_dir="$(dirname "$0")"
 # NOTE: Foolproofing
-echo "This script will update Neovim Release and LunaVim core."
-echo "Your current LunaVim configuration will be backed up to ~/.config/lvim_stage/"
+echo "This script will update Neovim Release and LunarVim core."
+echo "Your current LunarVim configuration will be backed up to ~/.config/lvim_stage/"
 echo "In case of failure, manually restore it by running:"
 echo "mv ~/.config/lvim_stage/ ~/.config/lvim/"
 
@@ -14,7 +14,7 @@ else
   exit 1
 fi
 
-# NOTE: Use below command to update nvim release (and update lunavim core for nvim release)
+# NOTE: Use below command to update nvim release (and update lunarvim core for nvim release)
 cd ~
 unlink ~/.config/lvim/snapshots/default.json > /dev/null 2>&1
 mv ~/.config/lvim/ ~/.config/lvim_stage/

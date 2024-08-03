@@ -11,6 +11,39 @@ autocmd FileType markdown inoremap <buffer> ,, <++>
 
 let g:SetWrapKeymapExcludeArray = ['minifiles']
 
+" Markdown code block text object
+vnoremap <silent> hc :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
+vnoremap <silent> ,c :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
+vnoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
+onoremap <silent> hc :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
+onoremap <silent> ,c :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
+onoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
+
+vnoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<CR>
+onoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<CR>
+
+function! s:MdCodeBlockTextObj(type) abort
+  " the parameter type specify whether it is inner text objects or arround
+  " text objects.
+  let start_row = searchpos('\s*```', 'bn')[0]
+  let end_row = searchpos('\s*```', 'n')[0]
+
+  " Check if valid positions are found
+  if start_row == 0 || end_row == 0 || start_row >= end_row
+    return
+  endif
+
+  if a:type ==# 'i'
+    let start_row += 1
+    let end_row -= 1
+  endif
+  " echo a:type start_row end_row
+
+  call setpos("'<", [0, start_row, 1, 0])
+  call setpos("'>", [0, end_row, 1, 0])
+  execute 'normal! `<V`>'
+endfunction
+
 
 nnoremap <c-w> :bd<CR>
 

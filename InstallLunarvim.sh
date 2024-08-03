@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # NOTE: Foolproofing
-echo "This script will install Neovim Release and LunaVim core."
-echo "Your current LunaVim configuration will be backed up to ~/.config/lvim_stage/"
+echo "This script will install Neovim Release and LunarVim core."
+echo "Your current LunarVim configuration will be backed up to ~/.config/lvim_stage/"
 echo "In case of failure, manually restore it by running:"
 echo "mv ~/.config/lvim_stage/ ~/.config/lvim/"
 
@@ -56,7 +56,7 @@ restore_my_lvim_config() {
   fi
 }
 
-# NOTE: Create symbolic link in ~/.local/bin for lunavim
+# NOTE: Create symbolic link in ~/.local/bin for lunarvim
 cd ~
 mkdir -p ~/bin
 mkdir -p ~/.local/bin
@@ -102,7 +102,7 @@ else
 fi
 
 
-# NOTE: Install My LunaVim dependencies
+# NOTE: Install My LunarVim dependencies
 # NOTE: install nvm v0.39.3 (if not installed)
 # Check if nvm is installed
 cd ~

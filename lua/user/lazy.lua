@@ -1,5 +1,5 @@
 -- NOTE: Here is rebinded keymaps for lazy.nvim
--- use require cover, because lunavim not builtin it's keymaps
+-- use require cover, because lunarvim not builtin it's keymaps
 require("lazy.view.config").keys = {
   hover = "gh",
   diff = "d",
