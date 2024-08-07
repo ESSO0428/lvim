@@ -30,6 +30,17 @@ local function check_org_notes()
     if is_git_repo then
       return
     end
+    -- 非 Git 仓库，卻有 .gitignore 文件，且 Dropbox 被作為排除對象
+    -- 檢查 .gitignore 文件是否存在且包含 Dropbox/
+    local gitignore_file = current_dir .. "/.gitignore"
+    if vim.fn.filereadable(gitignore_file) == 1 then
+      local gitignore_content = vim.fn.readfile(gitignore_file)
+      for _, line in ipairs(gitignore_content) do
+        if line:match("Dropbox/") then
+          return
+        end
+      end
+    end
   end
 
   -- 檢查 notes.org 檔案是否存在
