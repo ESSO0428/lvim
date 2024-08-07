@@ -20,7 +20,9 @@ onoremap <silent> ,c :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
 onoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
 
 vnoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<CR>
+vnoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<CR>
 onoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<CR>
+onoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<CR>
 
 function! s:MdCodeBlockTextObj(type) abort
   " the parameter type specify whether it is inner text objects or arround
