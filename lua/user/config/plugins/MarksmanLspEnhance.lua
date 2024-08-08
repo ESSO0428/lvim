@@ -198,7 +198,7 @@ local function is_lsp_attached()
 end
 
 -- autocmd BufWinEnter,TextChanged,InsertLeave *.md lua check_markdown_links_async()
-vim.api.nvim_create_autocmd({ "BufWinEnter", "TextChanged", "InsertLeave" }, {
+vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged", "InsertLeave" }, {
   pattern = "*.md",
   callback = function()
     if vim.b[auto_check_var] == false then
