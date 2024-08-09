@@ -54,7 +54,20 @@ function _G.code(file)
   vim.cmd("!code -g " .. cwd .. " " .. table.concat(fileNames, " "))
 end
 
+-- 與 `vscode remote ssh` 集成
+-- 取得如範例的指令: `code --remote ssh-remote+LabServerDP`
+-- 通過讀取 `~/.ssh/host_names` 文件，來取得對上述 `hostname`
+-- 如果 `~/.ssh/host_names` 文件`不存在`或`格式有誤`則使用預設的 `vim.g.host`
+-- 或是最後一次使用的 hostname，這些 name 將後將寫入 `vim.g.host`
+-- ---
+-- 特別注意 `vim.g.host` 若使用範例的 `YourVscodeReomoteServerName` 會被視為排除對象
+-- ---
+-- 找不到 `hostname` 或是 `hostname` 為排除對象，則會報錯提醒如何更新 `hostname`
+---@param file string | nil
 function _G.rcode(file)
+  GetServerHostName(M.host)
+  M.host = vim.g.host
+
   local buffers = vim.api.nvim_list_bufs()
   local fileNames = {}
   if file == '' or file == nil then
@@ -97,11 +110,9 @@ function _G.rcode(file)
   -- local str = "code --remote ssh-remote+" ..
   --     host .. " `\n" .. cwd .. " `\n" .. "-g `\n" .. table.concat(fileNames, " `\n")
 
-  local is_match_exclude_hostname_bool = M.is_match_exclude_hostname(host)
+  local is_match_exclude_hostname_bool = M.is_match_exclude_hostname(M.host)
   local str
   if is_match_exclude_hostname_bool == 1 then
-    GetServerHostName(M.host)
-    M.host = vim.g.host
     is_match_exclude_hostname_bool = M.is_match_exclude_hostname(M.host)
     if is_match_exclude_hostname_bool == 1 then
       str = "Failed : Not found usefull hostname\n" ..

@@ -111,11 +111,21 @@ end
 
 
 -- 與 vscode 集成
---code --remote ssh-remote+LabServerDP
+--ex: code --remote ssh-remote+LabServerDP
 -- default hostname
-host = "YourVscodeReomoteServerName"
+vim.g.host = "YourVscodeReomoteServerName"
+local host = vim.g.host
+
+-- 與 `vscode remote ssh` 集成
+-- 取得如範例的指令: `code --remote ssh-remote+LabServerDP`
+-- 這裡用於取得 `hosname`, ex : `LabServerDP`
+-- 通過讀取 `~/.ssh/host_names` 文件，來取得對上述 `hostname`
+-- 如果 `~/.ssh/host_names` 文件不存在或格式有誤則使用預設的 `hostname`
+-- 或是最後一次使用的 `hostname`，這些 `hostname` 將會寫入 `vim.g.host`
+-- ---
+-- 特別注意範例的 `YourVscodeReomoteServerName` 再後續與 `vscode` 集成的 function `rcode` 會被視為排除對象
+---@param host string
 function GetServerHostName(host)
-  vim.g.host = host
   local ip = nil
   local command = io.popen("hostname -I | awk '{print $1}'")
   ip = command:read("*line")
