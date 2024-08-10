@@ -46,6 +46,25 @@ local function window_picker_open_vsplit(state)
   end
   state.commands.open(state)
 end
+local function window_picker_open_split(state)
+  local node = state.tree:get_node()
+  local is_file = node.type == "file"
+  local success, picker = pcall(require, "window-picker")
+  if not success then
+    print("You'll need to install window-picker to use this command: https://github.com/s1n7ax/nvim-window-picker")
+    return
+  end
+  if is_file then
+    local picked_window_id = picker.pick_window()
+    if type(picked_window_id) == "number" then
+      vim.api.nvim_set_current_win(picked_window_id)
+      vim.cmd("split " .. vim.fn.fnameescape(node.path))
+    end
+    return
+  end
+  state.commands.open(state)
+end
+
 
 local custom_mappings = {
   -- ["/"] = "telescope",
@@ -80,7 +99,7 @@ local custom_mappings = {
   ["h"] = "close_node",
   ["zh"] = "toggle_hidden",
   ["`"] = "refresh",
-  ["<a-k>"] = "open_split",
+  ["<a-k>"] = window_picker_open_split,
   ["[g"] = "prev_git_modified",
   ["]g"] = "next_git_modified",
   ["a"] = "add",
