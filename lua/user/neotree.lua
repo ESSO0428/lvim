@@ -10,20 +10,69 @@ username = username:gsub("\n", "") -- 移除換行符號
 if username == "root" then
   username = "_Andy6_"
 end
+local function window_picker_open(state)
+  local node = state.tree:get_node()
+  local is_file = node.type == "file"
+  local success, picker = pcall(require, "window-picker")
+  if not success then
+    print("You'll need to install window-picker to use this command: https://github.com/s1n7ax/nvim-window-picker")
+    return
+  end
+  if is_file then
+    local picked_window_id = picker.pick_window()
+    if type(picked_window_id) == "number" then
+      vim.api.nvim_set_current_win(picked_window_id)
+      vim.cmd("edit " .. vim.fn.fnameescape(node.path))
+    end
+    return
+  end
+  state.commands.open(state)
+end
+local function window_picker_open_vsplit(state)
+  local node = state.tree:get_node()
+  local is_file = node.type == "file"
+  local success, picker = pcall(require, "window-picker")
+  if not success then
+    print("You'll need to install window-picker to use this command: https://github.com/s1n7ax/nvim-window-picker")
+    return
+  end
+  if is_file then
+    local picked_window_id = picker.pick_window()
+    if type(picked_window_id) == "number" then
+      vim.api.nvim_set_current_win(picked_window_id)
+      vim.cmd("vsplit " .. vim.fn.fnameescape(node.path))
+    end
+    return
+  end
+  state.commands.open(state)
+end
+
 local custom_mappings = {
   -- ["/"] = "telescope",
   -- navigate_up == dir_up
+  ['e'] = function() vim.cmd('Neotree focus filesystem left') end,
+  ['b'] = function() vim.cmd('Neotree focus buffers left') end,
+  ['<leader>gg'] = function() vim.cmd('Neotree focus git_status left') end,
   ["-"] = "navigate_up",
+  ["<"] = "navigate_up",
   ["."] = "set_root",
+  [">"] = "set_root",
   -- ["g/"] = "fuzzy_finder",
   ["<2-leftmouse>"] = "open",
   ["<a-o>"] = "system_open_dir",
   ["<leader><a-o>"] = "system_open",
   ["<c-x>"] = "clear_filter",
-  ["<cr>"] = "open",
-  ["l"] = "open",
-  ["<tab>"] = { "toggle_preview", config = { use_float = true } },
-  ["<leader><tab>"] = "focus_preview",
+  -- ["<cr>"] = "open",
+  ["<cr>"] = window_picker_open,
+  -- ["l"] = "open",
+  ["l"] = window_picker_open,
+  -- ["<tab>"] = { "toggle_preview", config = { use_float = true } },
+  ["<tab>"] = function(state)
+    state.commands["open"](state)
+    vim.cmd("Neotree reveal")
+  end,
+  ["gh"] = { "toggle_preview", config = { use_float = true } },
+  ["<leader>gh"] = "focus_preview",
   -- ["h"] = "toggle_node",
   ["g?"] = "show_help",
   ["A"] = "add_directory",
@@ -41,7 +90,8 @@ local custom_mappings = {
   ["p"] = "paste_from_clipboard",
   ["q"] = "close_window",
   ["r"] = "rename",
-  ["<a-l>"] = "open_vsplit",
+  -- ["<a-l>"] = "open_vsplit",
+  ["<a-l>"] = window_picker_open_vsplit,
   -- ["t"] = "open_tabnew",
   -- ["w"] = "open_with_window_picker",
   ["x"] = "cut_to_clipboard",
@@ -173,6 +223,10 @@ neotree_source = {
   "netman.ui.neo-tree", -- The one you really care about 😉
 }
 neotree.setup({
+  source_selector = {
+    winbar = false,
+    statusline = false,
+  },
   sources = neotree_source,
   use_default_mappings = false,
   window = {
@@ -182,12 +236,23 @@ neotree.setup({
   commands = custom_commands,
   close_if_last_window = false,
   buffers = {
-    follow_current_file = { enable = true },
+    follow_current_file = {
+      enabled = true,          -- This will find and focus the file in the active buffer every time
+      --              -- the current file is changed while the tree is open.
+      leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+    },
   },
   filesystem = {
-    follow_current_file = { enable = true },
+    follow_current_file = {
+      -- WARNING: below parameters are must set, if not the function will not work
+      enabled = true,          -- This will find and focus the file in the active buffer every time
+      --               -- the current file is changed while the tree is open.
+      leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+    },
     bind_to_cwd = false,
     hijack_netrw_behavior = "open_current",
+    use_libuv_file_watcher = true, -- This will use the OS level file watchers to detect changes
+    -- instead of relying on nvim autocmd events.
     filtered_items = {
       hide_dotfiles = false,
       hide_gitignored = false,
@@ -215,12 +280,18 @@ function open_neo_tree()
   -- open the tree
   -- if vim.g.SessionLoad then return end
   if vim.bo.filetype ~= "alpha" and vim.bo.filetype ~= "lir" and next(vim.fn.argv()) ~= nil then
-    vim.cmd('Neotree toggle=true action=show dir=/')
+    local pwd = vim.fn.getcwd()
+    vim.cmd('Neotree dir=' .. pwd .. ' reveal_force_cwd')
+    vim.opt_local.number = false
+    vim.opt_local.spell = false
     -- vim.cmd('wincmd w')
   end
 end
 
 function session_open_neo_tree()
-  vim.cmd('Neotree toggle=true action=show dir=/')
+  local pwd = vim.fn.getcwd()
+  vim.cmd('Neotree dir=' .. pwd .. ' reveal_force_cwd')
+  vim.opt_local.number = false
+  vim.opt_local.spell = false
   -- vim.cmd('wincmd w')
 end

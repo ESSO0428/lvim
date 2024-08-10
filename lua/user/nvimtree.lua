@@ -68,7 +68,32 @@ vim.api.nvim_create_autocmd("WinLeave", {
   callback = handle_telescope_nvimtree_interaction
 })
 
-lvim.builtin.nvimtree.active = true -- NOTE: using neo-tree
+local function is_nfs_mount(path)
+  local handle = io.popen("df -T " .. path .. " | tail -n 1")
+  local result = handle:read("*a")
+  handle:close()
+
+  -- 检查文件系统类型是否为 nfs
+  if result:find("nfs") then
+    return true
+  else
+    return false
+  end
+end
+
+-- get current directory
+local current_dir = vim.fn.getcwd()
+
+-- NOTE: judge if current path is on
+-- NFS file system will disable nvim-tree
+-- will switch nvim-tree to neo-tree
+if is_nfs_mount(current_dir) then
+  -- NOTE: using nvim-tree or neo-tree
+  lvim.builtin.nvimtree.active = false
+else
+  lvim.builtin.nvimtree.active = true
+end
+
 require "user.integrated.TermForNvimTree"
 function open_nvim_tree()
   -- open the tree

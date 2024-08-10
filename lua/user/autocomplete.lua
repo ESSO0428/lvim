@@ -6,8 +6,8 @@ local luasnip = require("lvim.utils.modules").require_on_index "luasnip"
 local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 
 lvim.builtin.cmp.enabled = function()
-  local buftype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-  if buftype == "prompt" or buftype == "TelescopePrompt" then
+  local filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+  if filetype == "neo-tree-popup" or filetype == "prompt" or filetype == "TelescopePrompt" then
     return false or require("cmp_dap").is_dap_buffer()
   end
   return lvim.builtin.cmp.active

@@ -55,8 +55,9 @@ for _, key in ipairs(keys_to_remove) do
   end
 end
 if lvim.builtin.nvimtree.active == false then
-  lvim.builtin.which_key.mappings['e'] = { "<Cmd>Neotree toggle=true dir=/<cr>", "Neotree" }
-  lvim.builtin.which_key.mappings.b['e'] = { "<Cmd>Neotree buffers toggle=true dir=/<cr>", "Neotree buffers" }
+  lvim.builtin.which_key.mappings['e'] = { "<Cmd>Neotree toggle reveal_force_cwd<cr>", "Neotree" }
+  lvim.builtin.which_key.mappings.b['e'] = { "<Cmd>Neotree buffers toggle reveal_force_cwd<cr>", "Neotree buffers" }
+  lvim.keys.normal_mode["<c-k>"] = "<Cmd>Neotree reveal_force_cwd<CR>"
 else
   -- lvim.builtin.which_key.mappings['e'] = { "<Cmd>lua require('nvim-tree.api').tree.toggle(false, false)<cr>", "NvimTree" }
   -- lvim.builtin.which_key.mappings['e'] = { "<Cmd>NvimTreeToggle<cr>", "NvimTree" }

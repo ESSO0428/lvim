@@ -25,6 +25,10 @@ if lvim.transparent_window == true then
   -- vim.cmd "au ColorScheme * hi WinSeparator cterm=bold gui=bold guifg=#000000"
   vim.cmd "au ColorScheme * hi NvimTreeWinSeparator ctermbg=none guibg=none"
   vim.cmd "au ColorScheme * hi Navbuddy ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi WindowPickerStatusLine ctermfg=15 guifg=#ededed guibg=#e35e4f"
+  vim.cmd "au ColorScheme * hi WindowPickerStatusLineNC ctermfg=15 ctermbg=4 gui=bold guifg=#ededed guibg=#4493c8"
+  vim.cmd "au ColorScheme * hi WindowPickerWinBar ctermfg=15 guifg=#ededed guibg=#e35e4f"
+  vim.cmd "au ColorScheme * hi WindowPickerWinBarNC ctermfg=15 ctermbg=4 gui=bold guifg=#ededed guibg=#4493c8"
 end
 vim.cmd "let &fcs='eob: '"
 -- vim.cmd "au ColorScheme * hi BufferLineSeparator guifg=#504945"
