@@ -24,7 +24,7 @@ function CustomNvimTreeToggle()
     last_nvimtree_side = new_side
   end
 
-  vim.cmd('NvimTreeToggle')
+  vim.cmd('NvimTreeFindFileToggle')
   -- 延迟执行，确保 NvimTree 完全加载
   vim.defer_fn(function()
     -- 获取当前窗口的 Buffer 编号
