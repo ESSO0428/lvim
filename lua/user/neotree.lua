@@ -66,6 +66,7 @@ local custom_mappings = {
   ["<cr>"] = window_picker_open,
   -- ["l"] = "open",
   ["l"] = window_picker_open,
+  ["<c-t>"] = "open_tabnew",
   -- ["<tab>"] = { "toggle_preview", config = { use_float = true } },
   ["<tab>"] = function(state)
     state.commands["open"](state)
