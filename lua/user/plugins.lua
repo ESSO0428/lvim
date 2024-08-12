@@ -604,6 +604,13 @@ lvim.plugins = {
       })
     end
   },
+  {
+    'ESSO0428/quicker.nvim',
+    event = "FileType qf",
+    ---@module "quicker"
+    ---@type quicker.SetupOptions
+    opts = {},
+  },
   -- {
   --   "tzachar/cmp-tabnine",
   --   run = "./install.sh",
