@@ -373,6 +373,8 @@ lvim.plugins = {
   {
     "ESSO0428/NotebookNavigator.nvim",
     keys = {
+      { "gi", function() require("notebook-navigator").move_cell "u" end },
+      { "gk", function() require("notebook-navigator").move_cell "d" end },
       { "[e", function() require("notebook-navigator").run_cells_above "" end },
       { "]e", function() require("notebook-navigator").run_cells_below "" end },
     },
