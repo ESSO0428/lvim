@@ -605,7 +605,7 @@ lvim.plugins = {
     end
   },
   {
-    'ESSO0428/quicker.nvim',
+    'stevearc/quicker.nvim',
     event = "FileType qf",
     ---@module "quicker"
     ---@type quicker.SetupOptions
