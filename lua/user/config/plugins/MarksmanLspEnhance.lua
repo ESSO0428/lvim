@@ -84,32 +84,41 @@ local function check_link_definition_async(links, diagnostics, bufnr)
     position = { line = linenr, character = start_col }
   }
 
+  -- Cancel last time async job
+  if vim.b.current_async_job and vim.b.current_async_job.stop then
+    vim.b.current_async_job:stop()
+  end
+
   -- Use LSP to check if the link is valid
-  vim.lsp.buf_request(bufnr, 'textDocument/definition', params, function(err, result, ctx, config)
-    vim.schedule(function()
-      if not result then
-        -- use async file system operation
-        vim.loop.fs_stat(path, function(err, stat)
-          vim.schedule(function()
-            if not stat then
-              -- If there is no result and the path is not a valid file or directory, add a warning diagnostic to the list
-              table.insert(diagnostics, {
-                lnum = linenr,
-                col = start_col,
-                message = table.concat({ "File/Directory/Link does not exist:", path }, " "),
-                severity = vim.diagnostic.severity.WARN,
-              })
-            end
-            -- check next link definition
-            check_link_definition_async(links, diagnostics, bufnr)
+  -- vim.lsp.buf_request(bufnr, 'textDocument/definition', params, function(err, result, ctx, config)
+  vim.b.current_async_job = vim.lsp.buf_request(bufnr, 'textDocument/definition', params,
+    function(err, result, ctx, config)
+      vim.schedule(function()
+        if not result then
+          -- use async file system operation
+          vim.loop.fs_stat(path, function(err, stat)
+            vim.schedule(function()
+              if not stat then
+                -- If there is no result and the path is not a valid file or directory, add a warning diagnostic to the list
+                table.insert(diagnostics, {
+                  lnum = linenr,
+                  col = start_col,
+                  message = table.concat({ "File/Directory/Link does not exist:", path }, " "),
+                  severity = vim.diagnostic.severity.WARN,
+                })
+              end
+              -- check next link definition
+              vim.b.current_async_job = nil
+              check_link_definition_async(links, diagnostics, bufnr)
+            end)
           end)
-        end)
-      else
-        -- check next link definition
-        check_link_definition_async(links, diagnostics, bufnr)
-      end
+        else
+          -- check next link definition
+          vim.b.current_async_job = nil
+          check_link_definition_async(links, diagnostics, bufnr)
+        end
+      end)
     end)
-  end)
 end
 
 local function check_markdown_links_async()
@@ -209,6 +218,14 @@ vim.api.nvim_create_autocmd({ "BufWinEnter", "TextChanged", "InsertLeave" }, {
     end
   end,
 })
+-- Clear namespace when buffer is unloaded
+vim.api.nvim_create_autocmd("BufUnload", {
+  pattern = "*.md",
+  callback = function()
+    vim.diagnostic.reset(ns_id, vim.api.nvim_get_current_buf())
+  end,
+})
+
 
 local null_ls = require("null-ls")
 local code_actions = {
