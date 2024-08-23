@@ -95,6 +95,46 @@ require("lvim.lsp.manager").setup("tsserver", {
         includeInlayEnumMemberValueHints = true,
       },
     },
+  },
+  handlers = {
+    ["textDocument/definition"] = function(_, result, ctx)
+      if result == nil or vim.tbl_isempty(result) then
+        local _ = vim.lsp.log.info() and vim.lsp.log.info(ctx.method, "No location found")
+        return nil
+      end
+
+      local nodejs_pattern1 = "node_modules/@types/.*/index.d.ts"
+      local nodejs_pattern2 = "node_modules/%%40types/.*/index.d.ts"
+      -- get offset_encoding
+      local offset_encoding = ctx.client and ctx.client.offset_encoding or "utf-16"
+
+      if vim.islist(result) then
+        -- if result == 1, maybe user just want to jump to the type definition
+        if #result == 1 then
+          vim.lsp.util.jump_to_location(result[1], offset_encoding)
+        else
+          -- fillter out items that contain node_modules/@types/.*/index.d.ts
+          local filtered_result = {}
+          for _, value in pairs(result) do
+            if not (string.match(value.targetUri or value.uri, nodejs_pattern1) or string.match(value.targetUri or value.uri, nodejs_pattern2)) then
+              table.insert(filtered_result, value)
+            end
+          end
+
+          -- Determine actions based on filtered results
+          if #filtered_result == 1 then
+            vim.lsp.util.jump_to_location(filtered_result[1], offset_encoding)
+          elseif #filtered_result > 1 then
+            local items = vim.lsp.util.locations_to_items(filtered_result, offset_encoding)
+            vim.fn.setqflist({}, ' ', { items = items })
+            vim.api.nvim_command("copen")
+          end
+        end
+        -- If the result is empty, do nothing
+      else
+        vim.lsp.util.jump_to_location(result, offset_encoding)
+      end
+    end
   }
 })
 require("lvim.lsp.manager").setup("lua_ls", {
