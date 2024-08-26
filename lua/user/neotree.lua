@@ -81,10 +81,10 @@ local custom_mappings = {
   ["<a-o>"] = "system_open_dir",
   ["<leader><a-o>"] = "system_open",
   ["<c-x>"] = "clear_filter",
-  -- ["<cr>"] = "open",
-  ["<cr>"] = window_picker_open,
-  -- ["l"] = "open",
-  ["l"] = window_picker_open,
+  ["<cr>"] = "open",
+  -- ["<cr>"] = window_picker_open,
+  ["l"] = "open",
+  -- ["l"] = window_picker_open,
   ["<c-t>"] = "open_tabnew",
   -- ["<tab>"] = { "toggle_preview", config = { use_float = true } },
   ["<tab>"] = function(state)
@@ -256,6 +256,12 @@ neotree.setup({
   commands = custom_commands,
   close_if_last_window = false,
   buffers = {
+    window = {
+      mappings = {
+        ["<cr>"] = window_picker_open,
+        ["l"] = window_picker_open,
+      }
+    },
     follow_current_file = {
       enabled = true,          -- This will find and focus the file in the active buffer every time
       --              -- the current file is changed while the tree is open.
@@ -263,6 +269,12 @@ neotree.setup({
     },
   },
   filesystem = {
+    window = {
+      mappings = {
+        ["<cr>"] = window_picker_open,
+        ["l"] = window_picker_open,
+      }
+    },
     follow_current_file = {
       -- WARNING: below parameters are must set, if not the function will not work
       enabled = true,          -- This will find and focus the file in the active buffer every time
@@ -295,6 +307,14 @@ neotree.setup({
       },
     },
   },
+  git_status = {
+    window = {
+      mappings = {
+        ["<cr>"] = window_picker_open,
+        ["l"] = window_picker_open,
+      }
+    },
+  }
 })
 function open_neo_tree()
   -- open the tree
