@@ -194,6 +194,34 @@ lvim.plugins = {
     end,
   },
   {
+    'stevearc/oil.nvim',
+    opts = {
+      default_file_explorer = false,
+      keymaps = {
+        ["g?"] = "actions.show_help",
+        ["<CR>"] = "actions.select",
+        ["<a-l>"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
+        ["<a-k>"] = { "actions.select", opts = { horizontal = true }, desc = "Open the entry in a horizontal split" },
+        ["<C-t>"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
+        ["gh"] = "actions.preview",
+        ["q"] = "actions.close",
+        ["`"] = "actions.refresh",
+        ["<"] = "actions.parent",
+        [">"] = "actions.open_cwd",
+        ["gc"] = "actions.cd",
+        ["gC"] = { "actions.cd", opts = { scope = "tab" }, desc = ":tcd to the current oil directory" },
+        ["gs"] = "actions.change_sort",
+        ["gx"] = "actions.open_external",
+        ["g."] = "actions.toggle_hidden",
+        ["g\\"] = "actions.toggle_trash",
+      },
+      -- Set to false to disable all of the above keymaps
+      use_default_keymaps = false,
+    },
+    -- Optional dependencies
+    dependencies = { "nvim-tree/nvim-web-devicons" }
+  },
+  {
     'echasnovski/mini.nvim',
     version = false,
     config = function()
