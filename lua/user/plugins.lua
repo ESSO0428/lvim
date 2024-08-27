@@ -200,6 +200,7 @@ lvim.plugins = {
       keymaps = {
         ["g?"] = "actions.show_help",
         ["<CR>"] = "actions.select",
+        ["l"] = "actions.select",
         ["<a-l>"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
         ["<a-k>"] = { "actions.select", opts = { horizontal = true }, desc = "Open the entry in a horizontal split" },
         ["<C-t>"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
@@ -1179,7 +1180,7 @@ lvim.plugins = {
           -- filter using buffer options
           bo = {
             -- if the file type is one of following, the window will be ignored
-            filetype = { "neo-tree", "neo-tree-popup", "notify" },
+            filetype = { "NvimTree", "neo-tree", "neo-tree-popup", "notify" },
             -- if the buffer type is one of following, the window will be ignored
             buftype = { "terminal", "quickfix" },
           },
