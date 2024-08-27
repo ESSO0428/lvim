@@ -200,6 +200,7 @@ lvim.plugins = {
       keymaps = {
         ["g?"] = "actions.show_help",
         ["<CR>"] = "actions.select",
+        ["<tab>"] = "actions.select",
         ["l"] = "actions.select",
         ["<a-l>"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
         ["<a-k>"] = { "actions.select", opts = { horizontal = true }, desc = "Open the entry in a horizontal split" },

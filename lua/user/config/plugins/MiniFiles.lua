@@ -3,6 +3,13 @@ vim.api.nvim_create_autocmd("User", {
   callback = function(args)
     local buf_id = args.data.buf_id
 
+    -- Go in entry
+    local go_in_entry = function()
+      MiniFiles.go_in({
+        close_on_file = false,
+      })
+    end
+
     -- Use the function to open the file in the picked window
     local open_in_window_picker = function()
       -- Get the current file system entry under the cursor
@@ -57,6 +64,8 @@ vim.api.nvim_create_autocmd("User", {
       open_in_window_picker_split("split")
     end
 
+    -- Bind the function to the `<tab>` key in normal mode for the current buffer
+    vim.keymap.set("n", "<tab>", go_in_entry, { buffer = buf_id, desc = "Open" })
     -- Bind the function to the `l` key in normal mode for the current buffer
     vim.keymap.set("n", "l", open_in_window_picker, { buffer = buf_id, desc = "Open in target window" })
     -- Bind `<a-l>` to open with vsplit in target window
