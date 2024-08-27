@@ -23,25 +23,29 @@ vim.api.nvim_create_autocmd("User", {
       })
     end
     local open_in_window_picker_split = function(split_cmd)
-      -- first, pick a window using window-picker
-      local picked_window_id = require("window-picker").pick_window()
-      if not picked_window_id then return end
+      -- Get the current file system entry under the cursor
+      local fs_entry = MiniFiles.get_fs_entry()
+      -- Check if the cursor is on a file, if not, exit
+      if fs_entry ~= nil and fs_entry.fs_type == "file" then
+        -- first, pick a window using window-picker
+        local picked_window_id = require("window-picker").pick_window()
+        if not picked_window_id then return end
 
-      -- Set the picked window as the target window
-      MiniFiles.set_target_window(picked_window_id)
+        -- Set the picked window as the target window
+        MiniFiles.set_target_window(picked_window_id)
 
-      -- Execute the split operation in the target window
-      vim.api.nvim_win_call(picked_window_id, function()
-        vim.cmd(split_cmd .. ' split')
-        local new_target_window = vim.api.nvim_get_current_win()
-        -- Set the new target window
-        MiniFiles.set_target_window(new_target_window)
-      end)
-
-      -- Continue opening the file in the picked window
-      MiniFiles.go_in({
-        close_on_file = false,
-      })
+        -- Execute the split operation in the target window
+        vim.api.nvim_win_call(picked_window_id, function()
+          vim.cmd(split_cmd .. ' split')
+          local new_target_window = vim.api.nvim_get_current_win()
+          -- Set the new target window
+          MiniFiles.set_target_window(new_target_window)
+        end)
+        -- Continue opening the file in the picked window
+        MiniFiles.go_in({
+          close_on_file = false,
+        })
+      end
     end
     -- Bind the function to the `l` key in normal mode for the current buffer
     local open_in_vsplit = function()
