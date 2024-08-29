@@ -22,12 +22,15 @@ lvim.builtin.bigfile.config = {
         vim.cmd('setlocal cursorline')
         require "rainbow-delimiters".disable(0)
         if not require('session_manager.utils').session_loading then
+          local bufnr = vim.api.nvim_get_current_buf()
+          local fileName = vim.api.nvim_buf_get_name(0)
           local choice = vim.fn.input(
             "File is large file, Do you want to continue loading?\n[n]ot open\n[s]ecurity session save and open\n[y]es directly open\nchoice(s/y/n): ")
           if choice == "s" then
-            local fileName = vim.api.nvim_buf_get_name(0)
             vim.defer_fn(function()
-              vim.cmd("BufferLineKill")
+              -- vim.cmd("BufferLineKill")
+              vim.cmd("b#")
+              vim.cmd("bd " .. bufnr)
               vim.cmd('SessionManager save_current_session')
               vim.cmd("e " .. fileName)
             end, 50)
@@ -35,7 +38,9 @@ lvim.builtin.bigfile.config = {
             -- Continue with default settings
           else
             vim.defer_fn(function()
-              vim.cmd("BufferLineKill")
+              -- vim.cmd("BufferLineKill")
+              vim.cmd("b#")
+              vim.cmd("bd " .. bufnr)
             end, 50)
           end
         end

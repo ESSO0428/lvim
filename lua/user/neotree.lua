@@ -11,6 +11,17 @@ if username == "root" then
   username = "_Andy6_"
 end
 local function window_picker_open(state)
+  -- Get the number of windows
+  local win_count = #vim.api.nvim_tabpage_list_wins(0)
+  -- Get the filetype of the current buffer
+  local current_filetype = vim.api.nvim_buf_get_option(0, "filetype")
+
+  -- If there is only one window and the filetype is neo-tree, open directly
+  if win_count == 1 and current_filetype == "neo-tree" then
+    state.commands.open(state)
+    return
+  end
+
   local node = state.tree:get_node()
   local is_file = node.type == "file"
   local success, picker = pcall(require, "window-picker")
@@ -29,6 +40,17 @@ local function window_picker_open(state)
   state.commands.open(state)
 end
 local function window_picker_open_vsplit(state)
+  -- Get the number of windows
+  local win_count = #vim.api.nvim_tabpage_list_wins(0)
+  -- Get the filetype of the current buffer
+  local current_filetype = vim.api.nvim_buf_get_option(0, "filetype")
+
+  -- If there is only one window and the filetype is neo-tree, open directly
+  if win_count == 1 and current_filetype == "neo-tree" then
+    state.commands.open_vsplit(state)
+    return
+  end
+
   local node = state.tree:get_node()
   local is_file = node.type == "file"
   local success, picker = pcall(require, "window-picker")
@@ -47,6 +69,17 @@ local function window_picker_open_vsplit(state)
   state.commands.open(state)
 end
 local function window_picker_open_split(state)
+  -- Get the number of windows
+  local win_count = #vim.api.nvim_tabpage_list_wins(0)
+  -- Get the filetype of the current buffer
+  local current_filetype = vim.api.nvim_buf_get_option(0, "filetype")
+
+  -- If there is only one window and the filetype is neo-tree, open directly
+  if win_count == 1 and current_filetype == "neo-tree" then
+    state.commands.open_split(state)
+    return
+  end
+
   local node = state.tree:get_node()
   local is_file = node.type == "file"
   local success, picker = pcall(require, "window-picker")
@@ -99,6 +132,7 @@ local custom_mappings = {
   ["h"] = "close_node",
   ["zh"] = "toggle_hidden",
   ["`"] = "refresh",
+  -- ["<a-k>"] = 'open_split',
   ["<a-k>"] = window_picker_open_split,
   ["[g"] = "prev_git_modified",
   ["]g"] = "next_git_modified",
