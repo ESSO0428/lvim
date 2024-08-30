@@ -183,8 +183,8 @@ vnoremap <silent> <LEADER>Od zO
 
 nnoremap <silent> [{ zk
 nnoremap <silent> ]} zj
-nnoremap <silent> <c-[> zk
-nnoremap <silent> <c-]> zj
+nnoremap <silent> <a-[> zk
+nnoremap <silent> <a-]> zj
 
 " insert a pair of {} and go to the next line
 " inoremap <c-y> <ESC>A {}<ESC>i<CR><ESC>ko
