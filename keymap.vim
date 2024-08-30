@@ -183,6 +183,8 @@ vnoremap <silent> <LEADER>Od zO
 
 nnoremap <silent> [{ zk
 nnoremap <silent> ]} zj
+nnoremap <silent> <c-HOME> zk
+nnoremap <silent> <c-END> zj
 nnoremap <silent> <a-[> zk
 nnoremap <silent> <a-]> zj
 
