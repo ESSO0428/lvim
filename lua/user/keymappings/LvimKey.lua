@@ -1,7 +1,11 @@
+-- import the integrated WindowsTerminal module
+local windows_terminal = require("user.integrated.WindowsTerminal")
+
 lvim.keys.normal_mode['<leader>rc'] = ":e $HOME/.config/lvim/config.lua<cr>"
 lvim.keys.normal_mode['<leader>rb'] = ":e $HOME/.bashrc<cr>"
-lvim.keys.normal_mode['<leader>rw'] =
-":e /mnt/c/Users/Andy6/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json<cr>"
+
+-- bind the function to the <leader>rw keybinding
+lvim.keys.normal_mode['<leader>rw'] = windows_terminal.find_and_edit_terminal_settings
 
 
 lvim.keys.normal_mode['<leader>rt']    = "<Cmd>ToggleTermSendCurrentLine<cr>"
