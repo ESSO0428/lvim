@@ -520,6 +520,49 @@ lvim.plugins = {
       { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
     }
   },
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    lazy = false,
+    opts = {
+      -- add any opts here
+      provider = "copilot",
+      highlights = {
+        diff = {
+          current = "DiffText",
+          incoming = "DiffAdd",
+        },
+      },
+    },
+    -- if you want to download pre-built binary, then pass source=false. Make sure to follow instruction above.
+    -- Also note that downloading prebuilt binary is a lot faster comparing to compiling from source.
+    build = ":AvanteBuild",
+    dependencies = {
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      --- The below dependencies are optional,
+      "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+      "github/copilot.vim",          -- for providers='copilot'
+      {
+        -- support for image pasting
+        "HakonHarnes/img-clip.nvim",
+        event = "VeryLazy",
+        opts = {
+          -- recommended settings
+          default = {
+            embed_image_as_base64 = false,
+            prompt_for_file_name = false,
+            drag_and_drop = {
+              insert_mode = true,
+            },
+            -- required for Windows users
+            use_absolute_path = true,
+          },
+        },
+      },
+    },
+  },
   -- { "HiPhish/nvim-ts-rainbow2" },
   { "HiPhish/rainbow-delimiters.nvim" },
   {
@@ -953,7 +996,7 @@ lvim.plugins = {
       vim.g.MarkdownNvim = 1
       vim.treesitter.language.register('markdown', 'copilot-chat')
       require('render-markdown').setup({
-        file_types = { 'markdown', 'copilot-chat' },
+        file_types = { 'markdown', 'copilot-chat', 'Avante' },
         heading = {
           sign = false,
           icons = { " ◉ ", " ○ ", " ✸ ", " ✿ ", " ◉ ", " ○ " },
