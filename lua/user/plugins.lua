@@ -536,6 +536,7 @@ lvim.plugins = {
     },
     -- if you want to download pre-built binary, then pass source=false. Make sure to follow instruction above.
     -- Also note that downloading prebuilt binary is a lot faster comparing to compiling from source.
+    -- NOTE: Ensure that `nvim --version` >= 0.10.1
     -- NOTE: To use `avante.nvim`, ensure that `cargo --version` >= 1.80.0. You can update the version using `rustup update`.
     -- If the plugin was installed before this version, you must use the command `:Lazy` to clear `avante.nvim`.
     -- 1. Then, re-login to Linux or reload `.bashrc` or `.zshrc`, and restart nvim to reinstall the plugin.
