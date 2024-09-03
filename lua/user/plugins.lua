@@ -536,6 +536,10 @@ lvim.plugins = {
     },
     -- if you want to download pre-built binary, then pass source=false. Make sure to follow instruction above.
     -- Also note that downloading prebuilt binary is a lot faster comparing to compiling from source.
+    -- NOTE: To use `avante.nvim`, ensure that `cargo --version` >= 1.80.0. You can update the version using `rustup update`.
+    -- If the plugin was installed before this version, you must use the command `:Lazy` to clear `avante.nvim`.
+    -- 1. Then, re-login to Linux or reload `.bashrc` or `.zshrc`, and restart nvim to reinstall the plugin.
+    -- 2. Since the provider is copilot, ensure you have successfully logged in using `:Copilot auth` to avoid potential errors.
     build = ":AvanteBuild",
     dependencies = {
       "stevearc/dressing.nvim",
