@@ -13,23 +13,38 @@ set expandtab
 " syntax match markdownHeader2 /^##\ze\s/ conceal cchar=○
 " syntax match markdownHeader3 /^###\ze\s/ conceal cchar=✸
 " syntax match markdownHeader4 /^####\ze\s/ conceal cchar=✿
-syntax match placeholder /<++>\ze/
-syntax match quote_type_list /^\s\+\zs>\ze/ conceal nextgroup=@text.quote cchar=┃
-syntax match mathematical_symbol /\(^\s\s\s\)\@<![^>\s]>\ze/
-if !exists("g:MarkdownNvim")
-  syntax match quote_type1 />\ze/ conceal nextgroup=@text.quote cchar=┃
-endif
-highlight link markdownError Normal
-highlight link placeholder Keyword
-highlight link mathematical_symbol Normal
+function! SetupMarkdownUtilsSyntax()
+  syntax match placeholder /<++>\ze/
+  syntax match mathematical_symbol /\(^\s\s\s\)\@<![^>\s]>\ze/
+endfunction
 
-syntax match left_brackets /\\\[/ conceal cchar=[
-syntax match right_brackets /\\\]/ conceal cchar=]
+function! SetupMarkdownQuoteSyntax()
+  syntax match quote_type_list /^\s\+\zs>\ze/ conceal nextgroup=@text.quote cchar=┃
+  syntax match quote_type1 />\ze/ conceal nextgroup=@text.quote cchar=┃
+endfunction
+
+function! SetupMarkdownEscapedSyntax()
+  syntax match left_brackets /\\\[/ conceal cchar=[
+  syntax match right_brackets /\\\]/ conceal cchar=]
+  syntax match escaped_underscore /\\_/ conceal cchar=_
+endfunction
+
+call SetupMarkdownEscapedSyntax()
+
+if !exists("g:MarkdownNvim")
+  call SetupMarkdownUtilsSyntax()
+  call SetupMarkdownQuoteSyntax()
+endif
 
 let s:concealends = ''
 if has('conceal') && get(g:, 'markdown_syntax_conceal', 1) == 1
   let s:concealends = ' concealends'
 endif
+
+highlight Conceal guifg=None
+highlight link markdownError Normal
+highlight link placeholder Keyword
+highlight link mathematical_symbol Normal
 syn clear markdownCode
 syn clear markdownCodeBlock
 syn clear markdownBlockquote

@@ -1034,7 +1034,7 @@ lvim.plugins = {
             -- Used when not being rendered, get user setting
             default = 0,
             -- Used when being rendered, concealed text is completely hidden
-            rendered = 3,
+            rendered = 2,
           },
         },
         callout = {

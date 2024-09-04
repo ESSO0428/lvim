@@ -124,6 +124,7 @@ vim.cmd([[
   " manual setting filetype csv not autocmd
   " autocmd BufNewFile,BufRead *.csv   set filetype=csv
 
+  autocmd BufWinEnter,BufRead,BufNewFile * if &filetype == 'markdown' | setlocal syntax=on | endif
   autocmd BufNewFile,BufRead *.tsv.txt   set filetype=tsv
   autocmd BufNewFile,BufRead *.dat   set filetype=csv_pipe
   " autocmd BufLeave,WinLeave * lua ReStartNotTableFileTypeLayout()
