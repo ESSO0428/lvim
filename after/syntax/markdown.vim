@@ -29,7 +29,12 @@ function! SetupMarkdownEscapedSyntax()
   syntax match escaped_underscore /\\_/ conceal cchar=_
 endfunction
 
+function! SetupMarkdownOtherConcelSyntax()
+  syntax match nbsp_space /&nbsp;/ conceal cchar= 
+endfunction
+
 call SetupMarkdownEscapedSyntax()
+call SetupMarkdownOtherConcelSyntax()
 
 if !exists("g:MarkdownNvim")
   call SetupMarkdownUtilsSyntax()
