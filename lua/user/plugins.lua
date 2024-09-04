@@ -541,7 +541,7 @@ lvim.plugins = {
     -- If the plugin was installed before this version, you must use the command `:Lazy` to clear `avante.nvim`.
     -- 1. Then, re-login to Linux or reload `.bashrc` or `.zshrc`, and restart nvim to reinstall the plugin.
     -- 2. Since the provider is copilot, ensure you have successfully logged in using `:Copilot auth` to avoid potential errors.
-    build = ":AvanteBuild",
+    build = "make",
     dependencies = {
       "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim",
