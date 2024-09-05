@@ -524,16 +524,12 @@ lvim.plugins = {
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
-    opts = {
-      -- add any opts here
-      provider = "copilot",
-      highlights = {
-        diff = {
-          current = "DiffText",
-          incoming = "DiffAdd",
-        },
-      },
-    },
+    -- NOTE: my conifg is set in user/avante.lua
+    -- and had required by config.lua
+    --
+    -- opts = {
+    -- add any opts here
+    -- },
     -- if you want to download pre-built binary, then pass source=false. Make sure to follow instruction above.
     -- Also note that downloading prebuilt binary is a lot faster comparing to compiling from source.
     -- NOTE: Ensure that `nvim --version` >= 0.10.1
