@@ -999,6 +999,22 @@ lvim.plugins = {
       vim.treesitter.language.register('markdown', 'copilot-chat')
       require('render-markdown').setup({
         file_types = { 'markdown', 'copilot-chat', 'Avante' },
+        overrides = {
+          buftype = {
+            nofile = {
+              win_options = {
+                conceallevel = {
+                  default = 0,
+                  rendered = 2,
+                },
+                concealcursor = {
+                  default = 'nvic',
+                  rendered = 'nvic',
+                },
+              },
+            },
+          },
+        },
         heading = {
           sign = false,
           icons = { " ◉ ", " ○ ", " ✸ ", " ✿ ", " ◉ ", " ○ " },
