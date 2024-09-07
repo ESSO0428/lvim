@@ -1,4 +1,4 @@
-vim.g.interestingWordsGUIColors       = { '#aeee00', '#ff0000', '#0000ff', '#b88823', '#ffa724', '#ff2c4b' }
+-- vim.g.interestingWordsGUIColors       = { '#aeee00', '#ff0000', '#0000ff', '#b88823', '#ffa724', '#ff2c4b' }
 vim.g.interestingWordsGUIColors       = { '#aeee00', '#fa3e2d', '#2d93fa', '#b970e0', '#ffa724', '#fc7cc5' }
 vim.g.interestingWordsDefaultMappings = 0
 lvim.keys.normal_mode['<leader>m']    = "<cmd>call InterestingWords('n')<cr>"
