@@ -1,28 +1,28 @@
-nnoremap s; :set relativenumber!<CR>
+nnoremap s; :set relativenumber!<cr>
 let mapleader = " " " map leader to Space
 
 tnoremap <C-N> <C-\><C-N>
 tnoremap <C-O> <C-\><C-N><C-O>
 
 autocmd FileType markdown inoremap <buffer> ,, <++>
-                        \| noremap <buffer><LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>"_c4l
-                        \| inoremap <buffer> ,c ```<++>```<CR><CR><++><Esc>2ki<CR><Esc>f>a<CR><Esc>2k$a
-                        \| inoremap <buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>"_c4l
+                        \| noremap <buffer><leader><leader> <Esc>/<++><cr>:nohlsearch<cr>"_c4l
+                        \| inoremap <buffer> ,c ```<++>```<cr><cr><++><Esc>2ki<cr><Esc>f>a<cr><Esc>2k$a
+                        \| inoremap <buffer> ,f <Esc>/<++><cr>:nohlsearch<cr>"_c4l
 
 let g:SetWrapKeymapExcludeArray = ['minifiles']
 
 " Markdown code block text object
-vnoremap <silent> hc :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
-vnoremap <silent> ,c :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
-vnoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
-onoremap <silent> hc :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
-onoremap <silent> ,c :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
-onoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<CR>
+vnoremap <silent> hc :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
+vnoremap <silent> ,c :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
+vnoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
+onoremap <silent> hc :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
+onoremap <silent> ,c :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
+onoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
 
-vnoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<CR>
-vnoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<CR>
-onoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<CR>
-onoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<CR>
+vnoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
+vnoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
+onoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
+onoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
 
 function! s:MdCodeBlockTextObj(type) abort
   " the parameter type specify whether it is inner text objects or arround
@@ -47,7 +47,7 @@ function! s:MdCodeBlockTextObj(type) abort
 endfunction
 
 
-nnoremap <c-w> :bd<CR>
+nnoremap <c-w> :bd<cr>
 
 " Find pair
 nnoremap g{ %
@@ -56,9 +56,9 @@ vnoremap g{ %
 vnoremap g} $%
 
 " Search
-" noremap <LEADER><CR> :nohlsearch<CR>
+" noremap <leader><cr> :nohlsearch<cr>
 " Adjacent duplicate words
-" noremap <LEADER>dw /\(\<\w\+\>\)\_s*\1
+" noremap <leader>dw /\(\<\w\+\>\)\_s*\1
 
 
 map u <Nop>
@@ -73,8 +73,8 @@ nnoremap U "_ddk
 nnoremap <c-d> "dyyp
 nnoremap <a-i> <c-u>
 nnoremap <a-k> <c-d>
-" nmap < <<CR>
-" nmap > ><CR>
+" nmap < <<cr>
+" nmap > ><cr>
 nnoremap x "_x
 nnoremap <leader>d "_d
 nnoremap <leader>dD "_dd
@@ -108,17 +108,17 @@ vnoremap <S-Tab> <gv
 " ==================== Window management ====================
 " Use <space> + new arrow keys for moving the cursor around windows
 " colemak keyboard
-" noremap <LEADER>w <C-w>w
+" noremap <leader>w <C-w>w
 
 " noremap ; :
-" nnoremap Q :q<CR>
-" nnoremap Q :CocCommand explorer --no-toggle --no-focus<CR>:q<CR>:q<CR>
-nnoremap Q :qa<CR>
+" nnoremap Q :q<cr>
+" nnoremap Q :CocCommand explorer --no-toggle --no-focus<cr>:q<cr>:q<cr>
+nnoremap Q :qa<cr>
 
-nnoremap S :w<CR>
+nnoremap S :w<cr>
 " Open the vimrc file anytime
-" nnoremap <LEADER>rc :e $HOME/.config/nvim/init.vim<CR>
-" nnoremap <LEADER>rv :e .nvimrc<CR>
+" nnoremap <leader>rc :e $HOME/.config/nvim/init.vim<cr>
+" nnoremap <leader>rv :e .nvimrc<cr>
 " Undo operations
 " colemak keyboard
 " noremap l u
@@ -158,28 +158,28 @@ vnoremap Y "+y
 vnoremap <leader><c-c> "+y
 vnoremap <leader><c-x> "+d
 imap <c-p> <c-r>"p
-inoremap <c-p> <ESC><CR>
+inoremap <c-p> <ESC><cr>
 
 " Search
-" noremap <LEADER><CR> :nohlsearch<CR>
+" noremap <leader><cr> :nohlsearch<cr>
 " Adjacent duplicate words
-nnoremap <LEADER>dw /\(\<\w\+\>\)\_s*\1
+nnoremap <leader>dw /\(\<\w\+\>\)\_s*\1
 
 
 " Space to Tab
-" nnoremap <LEADER>tt :%s/    /\t/g
-" vnoremap <LEADER>tt :s/    /\t/g
-" nnoremap <LEADER>st :%s/\t/    /g
-" vnoremap <LEADER>st :s/\t/    /g
+" nnoremap <leader>tt :%s/    /\t/g
+" vnoremap <leader>tt :s/    /\t/g
+" nnoremap <leader>st :%s/\t/    /g
+" vnoremap <leader>st :s/\t/    /g
 
 " Folding
-nnoremap <silent> <LEADER>o za
-nnoremap <silent> <LEADER>Oa zM
-nnoremap <silent> <LEADER>Od zR
+nnoremap <silent> <leader>o za
+nnoremap <silent> <leader>Oa zM
+nnoremap <silent> <leader>Od zR
 
-vnoremap <silent> <LEADER>o za
-vnoremap <silent> <LEADER>Oa zC
-vnoremap <silent> <LEADER>Od zO
+vnoremap <silent> <leader>o za
+vnoremap <silent> <leader>Oa zC
+vnoremap <silent> <leader>Od zO
 
 nnoremap <silent> [{ zk
 nnoremap <silent> ]} zj
@@ -189,8 +189,8 @@ nnoremap <silent> <a-[> zk
 nnoremap <silent> <a-]> zj
 
 " insert a pair of {} and go to the next line
-" inoremap <c-y> <ESC>A {}<ESC>i<CR><ESC>ko
-" inoremap <c-y>   <ESC>pA<ESC>i<CR><ESC>
+" inoremap <c-y> <ESC>A {}<ESC>i<cr><ESC>ko
+" inoremap <c-y>   <ESC>pA<ESC>i<cr><ESC>
 
 
 nnoremap <a-v> <c-v>
@@ -327,53 +327,53 @@ cnoremap <M-w> <S-Right>
 " ==================== Window management ====================
 " Use <space> + new arrow keys for moving the cursor around windows
 " colemak keyboard
-" noremap <LEADER>w <C-w>w
-" noremap <LEADER>u <C-w>k
-" noremap <LEADER>e <C-w>j
-" noremap <LEADER>n <C-w>h
-" noremap <LEADER>i <C-w>l
+" noremap <leader>w <C-w>w
+" noremap <leader>u <C-w>k
+" noremap <leader>e <C-w>j
+" noremap <leader>n <C-w>h
+" noremap <leader>i <C-w>l
 nnoremap qf <C-w>o
 " normal keyboard
-" noremap <LEADER>i <C-w>k
-" noremap <LEADER>k <C-w>j
-" noremap <LEADER>j <C-w>h
-" noremap <LEADER>l <C-w>l
+" noremap <leader>i <C-w>k
+" noremap <leader>k <C-w>j
+" noremap <leader>j <C-w>h
+" noremap <leader>l <C-w>l
 
-nnoremap <LEADER>i <C-w>k
-nnoremap <LEADER>k <C-w>j
-nnoremap <LEADER>j <C-w>h
-nnoremap <LEADER>l <C-w>l
+nnoremap <leader>i <C-w>k
+nnoremap <leader>k <C-w>j
+nnoremap <leader>j <C-w>h
+nnoremap <leader>l <C-w>l
 
-nnoremap <LEADER>J <C-w>t
-nnoremap <LEADER>n <C-w><C-p>
+nnoremap <leader>J <C-w>t
+nnoremap <leader>n <C-w><C-p>
 
 
 " Disable the default s key
 nnoremap s <nop>
 " split the screens to up (horizontal), down (horizontal), left (vertical), right (vertical)
 " colemak keyboard
-" noremap su :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
-" noremap se :set splitbelow<CR>:split<CR>
-" noremap sn :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
-" noremap si :set splitright<CR>:vsplit<CR>
+" noremap su :set nosplitbelow<cr>:split<cr>:set splitbelow<cr>
+" noremap se :set splitbelow<cr>:split<cr>
+" noremap sn :set nosplitright<cr>:vsplit<cr>:set splitright<cr>
+" noremap si :set splitright<cr>:vsplit<cr>
 
 " normal keyboard
-nnoremap si :set nosplitbelow<CR>:split<CR>:set splitbelow<CR>
-nnoremap sk :set splitbelow<CR>:split<CR>
-nnoremap sj :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
-nnoremap sl :set splitright<CR>:vsplit<CR>
+nnoremap si :set nosplitbelow<cr>:split<cr>:set splitbelow<cr>
+nnoremap sk :set splitbelow<cr>:split<cr>
+nnoremap sj :set nosplitright<cr>:vsplit<cr>:set splitright<cr>
+nnoremap sl :set splitright<cr>:vsplit<cr>
 
 
 
 " Resize splits with arrow keys
-" noremap <up> :res +5<CR>
-" noremap <down> :res -5<CR>
-nnoremap <up> :res -5<CR>
-nnoremap <down> :res +5<CR>
+" noremap <up> :res +5<cr>
+" noremap <down> :res -5<cr>
+nnoremap <up> :res -5<cr>
+nnoremap <down> :res +5<cr>
 
 
-nnoremap <left> :vertical resize-5<CR>
-nnoremap <right> :vertical resize+5<CR>
+nnoremap <left> :vertical resize-5<cr>
+nnoremap <right> :vertical resize+5<cr>
 " Place the two screens up and down
 nnoremap sh <C-w>t<C-w>K
 " Place the two screens side by side
@@ -383,49 +383,49 @@ nnoremap srh <C-w>b<C-w>K
 nnoremap srv <C-w>b<C-w>H
 
 " Press <SPACE> + q to close the window below the current window
-" noremap <LEADER>q <C-w>j:q<CR>
+" noremap <leader>q <C-w>j:q<cr>
 " close current window only
-nnoremap <LEADER>q :q<CR>
+nnoremap <leader>q :q<cr>
  
 
 " ==================== Tab management ====================
 " Create a new tab with tu
 " colemak keyboard
-" noremap tu :tabe<CR>
-" noremap tU :tab split<CR>
+" noremap tu :tabe<cr>
+" noremap tU :tab split<cr>
 " normal keyboard
 "
-" noremap ti :tabe<CR>
-" noremap tI :tab split<CR>
-""""" noremap <a-'> :tab split<CR>
+" noremap ti :tabe<cr>
+" noremap tI :tab split<cr>
+""""" noremap <a-'> :tab split<cr>
 
 
 " Move around tabs with tn and ti
 " colemak keyboard
-" noremap tn :-tabnext<CR>
-" noremap ti :+tabnext<CR>
+" noremap tn :-tabnext<cr>
+" noremap ti :+tabnext<cr>
 " normal keyboard
 
-" noremap tj :-tabnext<CR>
-" noremap tl :+tabnext<CR>
-""""" noremap <a-,> :-tabnext<CR>
-""""" noremap <a-.> :+tabnext<CR>
+" noremap tj :-tabnext<cr>
+" noremap tl :+tabnext<cr>
+""""" noremap <a-,> :-tabnext<cr>
+""""" noremap <a-.> :+tabnext<cr>
 
 " Move the tabs with tmn and tmi
 " colemak keyboard
-" noremap tmn :-tabmove<CR>
-" noremap tmi :+tabmove<CR>
+" noremap tmn :-tabmove<cr>
+" noremap tmi :+tabmove<cr>
 " normal keyboard
 
-" noremap tmj :-tabmove<CR>
-" noremap tml :+tabmove<CR>
-""""" noremap <F6> :-tabmove<CR>
-""""" noremap <F7> :+tabmove<CR>
+" noremap tmj :-tabmove<cr>
+" noremap tml :+tabmove<cr>
+""""" noremap <F6> :-tabmove<cr>
+""""" noremap <F7> :+tabmove<cr>
 
-" nmap <LEADER>f "fyaw/<c-r>f<CR>
-" nmap <LEADER>F "fyaw/<c-r>f\C<CR>
-" nmap <LEADER>h "fyaw:.,$s/<c-r>f//gc<Left><Left><Left>
-" nmap <LEADER>H "fyaw:.,$s/<c-r>f\C//gc<Left><Left><Left>
+" nmap <leader>f "fyaw/<c-r>f<cr>
+" nmap <leader>F "fyaw/<c-r>f\C<cr>
+" nmap <leader>h "fyaw:.,$s/<c-r>f//gc<Left><Left><Left>
+" nmap <leader>H "fyaw:.,$s/<c-r>f\C//gc<Left><Left><Left>
 
 " ==================== tabular ====================
 vmap ga   :Tabularize /
@@ -478,11 +478,11 @@ function! NotNeg(number)
      return start_line
   endif
 endfunction
-" nnoremap <a-m> :let min_cur_line=NotNeg(line('.')) \| exe "!bat -r" min_cur_line.":+60" "%"<CR>
+" nnoremap <a-m> :let min_cur_line=NotNeg(line('.')) \| exe "!bat -r" min_cur_line.":+60" "%"<cr>
 "
-" nnoremap <a-m> :let min_cur_line=NotNeg(line('.')) \| exe ":w !tee \| bat -r" min_cur_line.":+60"<CR>
-" nnoremap <leader><a-m> :let min_cur_line=NotNeg(line('.')) \| exe ":w !tee \| bat"<CR>
-nnoremap <silent> <a-m> :set list!<CR>
+" nnoremap <a-m> :let min_cur_line=NotNeg(line('.')) \| exe ":w !tee \| bat -r" min_cur_line.":+60"<cr>
+" nnoremap <leader><a-m> :let min_cur_line=NotNeg(line('.')) \| exe ":w !tee \| bat"<cr>
+nnoremap <silent> <a-m> :set list!<cr>
 
 " === gf control ===
 autocmd BufEnter * if expand('%') != '' | set path=.,%:h | endif
@@ -502,26 +502,26 @@ function! OpenFileUnderCursor(window_command)
   execute 'edit ' . cfile
 endfunction
 
-nnoremap <silent> <leader>gf :call OpenFileUnderCursor("n")<CR>
-vnoremap <silent> <leader>gf "fy:call OpenFileUnderCursor("v")<CR>
+nnoremap <silent> <leader>gf :call OpenFileUnderCursor("n")<cr>
+vnoremap <silent> <leader>gf "fy:call OpenFileUnderCursor("v")<cr>
 
-nnoremap <silent> <Leader>t1 :tabn 1<CR>
-nnoremap <silent> <Leader>t2 :tabn 2<CR>
-nnoremap <silent> <Leader>t3 :tabn 3<CR>
-nnoremap <silent> <Leader>t4 :tabn 4<CR>
-nnoremap <silent> <Leader>t5 :tabn 5<CR>
-nnoremap <silent> <Leader>t6 :tabn 6<CR>
-nnoremap <silent> <Leader>t7 :tabn 7<CR>
-nnoremap <silent> <Leader>t8 :tabn 8<CR>
-nnoremap <silent> <Leader>t9 :tabn 9<CR>
-nnoremap <silent> <Leader>t0 :tablast<CR>
-nnoremap <silent> <Leader>t- g<tab> 
+nnoremap <silent> <leader>t1 :tabn 1<cr>
+nnoremap <silent> <leader>t2 :tabn 2<cr>
+nnoremap <silent> <leader>t3 :tabn 3<cr>
+nnoremap <silent> <leader>t4 :tabn 4<cr>
+nnoremap <silent> <leader>t5 :tabn 5<cr>
+nnoremap <silent> <leader>t6 :tabn 6<cr>
+nnoremap <silent> <leader>t7 :tabn 7<cr>
+nnoremap <silent> <leader>t8 :tabn 8<cr>
+nnoremap <silent> <leader>t9 :tabn 9<cr>
+nnoremap <silent> <leader>t0 :tablast<cr>
+nnoremap <silent> <leader>t- g<tab> 
 
-nnoremap <silent> <Leader>t' :tab split<CR>
-nnoremap <silent> <Leader>t/ :tabn 1<CR>
-nnoremap <silent> <Leader>t, :tabprevious<CR>
-nnoremap <silent> <Leader>t. :tabnext<CR>
-nnoremap <silent> <Leader>t\\ :tabclose<CR>
+nnoremap <silent> <leader>t' :tab split<cr>
+nnoremap <silent> <leader>t/ :tabn 1<cr>
+nnoremap <silent> <leader>t, :tabprevious<cr>
+nnoremap <silent> <leader>t. :tabnext<cr>
+nnoremap <silent> <leader>t\\ :tabclose<cr>
 
 set isfname+=32
 function! XOpenFileOrFold(mode)
@@ -550,8 +550,8 @@ function! XOpenFileOrFold(mode)
   endif
 endfunction
 
-nnoremap <silent> <a-h> :call XOpenFileOrFold('n')<CR>
-vnoremap <silent> <a-h> "fy:call XOpenFileOrFold('v')<CR>
+nnoremap <silent> <a-h> :call XOpenFileOrFold('n')<cr>
+vnoremap <silent> <a-h> "fy:call XOpenFileOrFold('v')<cr>
 
 function! SetWrapKeymaps()
   if index(g:SetWrapKeymapExcludeArray, &ft) >= 0

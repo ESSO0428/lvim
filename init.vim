@@ -52,7 +52,7 @@ endfunction
 let g:ipy_celldef = '^# %%'
 " jupyter run shortscut
 " nmap <silent>[q :RunQtConsole<Enter>
-nmap <silent>'q :RunQtConsole<CR>gg
+nmap <silent>'q :RunQtConsole<cr>gg
 " nmap <slient>[e :IPython<Space>--existing<Space>--no-window<Enter>
 " nmap <silent> <leader>jc <Plug>(IPy-RunCell)
 " nmap <silent> <leader>ja <Plug>(IPy-RunAll)
@@ -60,11 +60,11 @@ nmap <silent>'q :RunQtConsole<CR>gg
 " nmap <silent>]aq <Plug>(IPy-RunAll)
 
 " nmap <silent>]q :ipython<Space>--existing<Space>--no-window<cr><plug>(IPy-Runcell)<cr>/^# %%<cr><leader><cr>
-" nmap <silent>\x :IPython<Space>--existing<Space>--no-window<CR><Plug>(IPy-RunCell)<CR>/^# %%<CR><leader><CR>
-nmap <silent> \E :IronRepl<CR>
-nmap <silent>\w :IPython<Space>--existing<Space>--no-window<CR><Plug>(IPy-RunCell)
-" nmap <silent>]e :IPython<Space>--existing<Space>--no-window<CR><Plug>(IPy-RunAll)
-nmap <silent>\e :IPython<Space>--existing<Space>--no-window<CR><Plug>(IPy-RunAll)
+" nmap <silent>\x :IPython<Space>--existing<Space>--no-window<cr><Plug>(IPy-RunCell)<cr>/^# %%<cr><leader><cr>
+nmap <silent> \E :IronRepl<cr>
+nmap <silent>\w :IPython<Space>--existing<Space>--no-window<cr><Plug>(IPy-RunCell)
+" nmap <silent>]e :IPython<Space>--existing<Space>--no-window<cr><Plug>(IPy-RunAll)
+nmap <silent>\e :IPython<Space>--existing<Space>--no-window<cr><Plug>(IPy-RunAll)
 
 
 " Snippets
@@ -84,7 +84,7 @@ let g:jupytext_style = 'hydrogen'
 " Send cell to IronRepl and move to next cell.
 " Depends on the text object defined in vim-textobj-hydrogen
 " You first need to be connected to IronRepl
-" nmap ]x ctrih/^# %%<CR><CR>
+" nmap ]x ctrih/^# %%<cr><cr>
 nmap [w strah
 nmap ]w strih
 
@@ -98,7 +98,7 @@ nmap ]w strih
 " let g:UltiSnipsSnippetDirectories = [$HOME.'/.config/lvim/UltiSnips/']
 
 
-noremap Z :UndotreeToggle<CR>
+noremap Z :UndotreeToggle<cr>
 
 let g:undotree_DiffAutoOpen = 1
 let g:undotree_SetFocusWhenToggle = 1
