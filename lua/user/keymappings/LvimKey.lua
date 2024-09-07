@@ -1,38 +1,50 @@
 -- import the integrated WindowsTerminal module
 local windows_terminal = require("user.integrated.WindowsTerminal")
 
-lvim.keys.normal_mode['<leader>rc'] = ":e $HOME/.config/lvim/config.lua<cr>"
-lvim.keys.normal_mode['<leader>rb'] = ":e $HOME/.bashrc<cr>"
+
+lvim.keys.normal_mode["<a-q>"] = { "<cmd>copen<cr>" }
+-- lvim core command <c-q>
+--[[
+vim.cmd [[
+  function! QuickFixToggle()
+    if empty(filter(getwininfo(), 'v:val.quickfix'))
+      copen
+    else
+      cclose
+    endif
+  endfunction
+]]
+
+lvim.keys.normal_mode['<leader>rc'] = "<cmd>e $HOME/.config/lvim/config.lua<cr>"
+lvim.keys.normal_mode['<leader>rb'] = "<cmd>e $HOME/.bashrc<cr>"
 
 -- bind the function to the <leader>rw keybinding
 lvim.keys.normal_mode['<leader>rw'] = windows_terminal.find_and_edit_terminal_settings
 
 
-lvim.keys.normal_mode['<leader>rt']    = "<Cmd>ToggleTermSendCurrentLine<cr>"
+lvim.keys.normal_mode['<leader>rt']    = "<cmd>ToggleTermSendCurrentLine<cr>"
 lvim.keys.visual_mode['<leader>rt']    = { ":ToggleTermSendVisualLines", silent = false }
 
 lvim.keys.normal_mode["<leader>w"]     = "viw"
 lvim.keys.normal_mode["<leader>y"]     = "yiw"
 
-lvim.keys.normal_mode['<F9>']          = nil
-lvim.keys.normal_mode['<F9>']          = ":LvimCacheReset<cr>"
-lvim.keys.normal_mode['<leader>i']     = "<Cmd>wincmd k<cr>"
-lvim.keys.normal_mode['<leader>k']     = "<Cmd>wincmd j<cr>"
-lvim.keys.normal_mode['<leader>j']     = "<Cmd>wincmd h<cr>"
-lvim.keys.normal_mode['<leader>l']     = "<Cmd>wincmd l<cr>"
-lvim.keys.normal_mode['<leader>J']     = "<Cmd>wincmd t<cr>"
+lvim.keys.normal_mode['<leader>i']     = "<cmd>wincmd k<cr>"
+lvim.keys.normal_mode['<leader>k']     = "<cmd>wincmd j<cr>"
+lvim.keys.normal_mode['<leader>j']     = "<cmd>wincmd h<cr>"
+lvim.keys.normal_mode['<leader>l']     = "<cmd>wincmd l<cr>"
+lvim.keys.normal_mode['<leader>J']     = "<cmd>wincmd t<cr>"
 lvim.keys.normal_mode["<leader>L"]     = "<cmd>wincmd b<cr>"
 -- lvim.keys.normal_mode['`']         = "~"
 -- lvim.keys.normal_mode['Z']         = ":UndotreeToggle<cr>"
 
-lvim.keys.normal_mode['<leader><cr>']  = ":nohlsearch<cr>"
+lvim.keys.normal_mode['<leader><cr>']  = "<cmd>nohlsearch<cr>"
 -- lvim.keys.normal_mode['<leader>f']    = nil
 
 -- require vim-peekaboo
-lvim.keys.normal_mode['<c-f>']         = "<Cmd>Telescope current_buffer_fuzzy_find<cr>"
-lvim.keys.normal_mode['<leader><c-f>'] = "<Cmd>lua require('telescope.builtin').live_grep({grep_open_files=true})<cr>"
-lvim.keys.normal_mode['<c-h>']         = "<Cmd>MurenToggle<cr>"
-lvim.keys.normal_mode['<leader><c-h>'] = "<Cmd>MurenUnique<cr>"
+lvim.keys.normal_mode['<c-f>']         = "<cmd>Telescope current_buffer_fuzzy_find<cr>"
+lvim.keys.normal_mode['<leader><c-f>'] = "<cmd>lua require('telescope.builtin').live_grep({grep_open_files=true})<cr>"
+lvim.keys.normal_mode['<c-h>']         = "<cmd>MurenToggle<cr>"
+lvim.keys.normal_mode['<leader><c-h>'] = "<cmd>MurenUnique<cr>"
 lvim.keys.normal_mode['<c-d>']         = "\"dyy\"dp"
 lvim.keys.normal_mode['<a-L>']         = "<Plug>(VM-Select-All)"
 lvim.keys.visual_mode['<a-L>']         = "<Plug>(VM-Visual-All)"
@@ -104,88 +116,86 @@ function vscode_like_foldLevel_enhance(n)
   end
 end
 
-lvim.keys.normal_mode[']1'] = { '<cmd>lua vscode_like_foldLevel_enhance(1)<cr>' }
-lvim.keys.normal_mode[']2'] = { '<cmd>lua vscode_like_foldLevel_enhance(2)<cr>' }
-lvim.keys.normal_mode[']3'] = { '<cmd>lua vscode_like_foldLevel_enhance(3)<cr>' }
-lvim.keys.normal_mode[']4'] = { '<cmd>lua vscode_like_foldLevel_enhance(4)<cr>' }
-lvim.keys.normal_mode[']5'] = { '<cmd>lua vscode_like_foldLevel_enhance(5)<cr>' }
-lvim.keys.normal_mode[']6'] = { '<cmd>lua vscode_like_foldLevel_enhance(6)<cr>' }
-lvim.keys.normal_mode[']7'] = { '<cmd>lua vscode_like_foldLevel_enhance(7)<cr>' }
-lvim.keys.normal_mode[']8'] = { '<cmd>lua vscode_like_foldLevel_enhance(8)<cr>' }
-lvim.keys.normal_mode[']9'] = { '<cmd>lua vscode_like_foldLevel_enhance(9)<cr>' }
+lvim.keys.normal_mode[']1'] = { "<cmd>lua vscode_like_foldLevel_enhance(1)<cr>" }
+lvim.keys.normal_mode[']2'] = { "<cmd>lua vscode_like_foldLevel_enhance(2)<cr>" }
+lvim.keys.normal_mode[']3'] = { "<cmd>lua vscode_like_foldLevel_enhance(3)<cr>" }
+lvim.keys.normal_mode[']4'] = { "<cmd>lua vscode_like_foldLevel_enhance(4)<cr>" }
+lvim.keys.normal_mode[']5'] = { "<cmd>lua vscode_like_foldLevel_enhance(5)<cr>" }
+lvim.keys.normal_mode[']6'] = { "<cmd>lua vscode_like_foldLevel_enhance(6)<cr>" }
+lvim.keys.normal_mode[']7'] = { "<cmd>lua vscode_like_foldLevel_enhance(7)<cr>" }
+lvim.keys.normal_mode[']8'] = { "<cmd>lua vscode_like_foldLevel_enhance(8)<cr>" }
+lvim.keys.normal_mode[']9'] = { "<cmd>lua vscode_like_foldLevel_enhance(9)<cr>" }
 
 
 -- lvim.keys.visual_mode['<leader>Od'] = "zo"
 
-lvim.keys.normal_mode["<F10>"]         = { ":SessionManager save_current_session<CR>", silent = false }
-lvim.keys.normal_mode["<leader>S"]     = { ":SessionManager save_current_session<CR>", silent = false }
+lvim.keys.normal_mode["<leader>S"]     = { ":SessionManager save_current_session<cr>", silent = false }
 
-lvim.keys.normal_mode["<a-'>"]         = "<Cmd>tab split<CR>"
-lvim.keys.normal_mode["<a-/>"]         = "<Cmd>tabn 1<CR>"
-lvim.keys.normal_mode["<a-,>"]         = "<Cmd>tabprevious<CR>"
-lvim.keys.normal_mode["<a-.>"]         = "<Cmd>tabnext<CR>"
--- lvim.keys.normal_mode["<F6>"]          = "<Cmd>tabmove -1<CR>"
--- lvim.keys.normal_mode["<F7>"]          = "<Cmd>tabmove +1<CR>"
-lvim.keys.normal_mode["<C-Left>"]      = "<Cmd>tabmove -1<CR>"
-lvim.keys.normal_mode["<C-Right>"]     = "<Cmd>tabmove +1<CR>"
-lvim.keys.normal_mode["<a-\\>"]        = "<Cmd>tabclose<CR>"
+lvim.keys.normal_mode["<a-'>"]         = "<cmd>tab split<cr>"
+lvim.keys.normal_mode["<a-/>"]         = "<cmd>tabn 1<cr>"
+lvim.keys.normal_mode["<a-,>"]         = "<cmd>tabprevious<cr>"
+lvim.keys.normal_mode["<a-.>"]         = "<cmd>tabnext<cr>"
 
-lvim.keys.normal_mode["<leader>["]     = "<Cmd>cprevious<CR>"
-lvim.keys.normal_mode["<leader>]"]     = "<Cmd>cnext<CR>"
+lvim.keys.normal_mode["<C-Left>"]      = "<cmd>tabmove -1<cr>"
+lvim.keys.normal_mode["<C-Right>"]     = "<cmd>tabmove +1<cr>"
+lvim.keys.normal_mode["<a-\\>"]        = "<cmd>tabclose<cr>"
 
-lvim.keys.normal_mode["<C-j>"]         = "<Cmd>BufferLineCyclePrev<CR>"
-lvim.keys.normal_mode["<C-l>"]         = "<Cmd>BufferLineCycleNext<CR>"
-lvim.keys.normal_mode["<a-j>"]         = "<Cmd>BufferLineMovePrev<CR>"
-lvim.keys.normal_mode["<a-l>"]         = "<Cmd>BufferLineMoveNext<CR>"
+lvim.keys.normal_mode["<leader>["]     = "<cmd>cprevious<cr>"
+lvim.keys.normal_mode["<leader>]"]     = "<cmd>cnext<cr>"
+
+lvim.keys.normal_mode["<C-j>"]         = "<cmd>BufferLineCyclePrev<cr>"
+lvim.keys.normal_mode["<C-l>"]         = "<cmd>BufferLineCycleNext<cr>"
+lvim.keys.normal_mode["<a-j>"]         = "<cmd>BufferLineMovePrev<cr>"
+lvim.keys.normal_mode["<a-l>"]         = "<cmd>BufferLineMoveNext<cr>"
 lvim.keys.normal_mode["<a-k>"]         = "<c-d>"
-lvim.builtin.which_key.mappings.b.k    = { "<cmd>BufferLineSortByDirectory<CR>", "Sort By Directory" }
+lvim.builtin.which_key.mappings.b.k    = { "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directory" }
 lvim.keys.normal_mode["<a-i>"]         = "<c-u>"
-lvim.builtin.which_key.mappings.b.i    = { "<cmd>BufferLinePickClose<CR>", "Close Buffer" }
-lvim.keys.normal_mode["<a-g>"]         = { ":BufferLineGroupToggle", silent = false }
-lvim.keys.normal_mode["<leader><a-g>"] = { ":BufferLineGroupClose", silent = false }
-lvim.keys.normal_mode["<leader><a-i>"] = "<cmd>BufferLineTogglePin<CR>"
--- lvim.keys.normal_mode["<c-w>"]         = "<cmd>BufferKill<CR>"
-lvim.keys.normal_mode["<c-w>"]         = "<cmd>BufferLineKill<CR>"
+lvim.builtin.which_key.mappings.b.i    = { "<cmd>BufferLinePickClose<cr>", "Close Buffer" }
+lvim.keys.normal_mode["<a-g>"]         = { "<cmd>BufferLineGroupToggle", silent = false }
+lvim.keys.normal_mode["<leader><a-g>"] = { "<cmd>BufferLineGroupClose", silent = false }
+lvim.keys.normal_mode["<leader><a-i>"] = "<cmd>BufferLineTogglePin<cr>"
+-- lvim.keys.normal_mode["<c-w>"]         = "<cmd>BufferKill<cr>"
+lvim.keys.normal_mode["<c-w>"]         = "<cmd>BufferLineKill<cr>"
 -- NOTE: 利用 BufferKill 強制關閉緩衝區
 function forceBufferKill(_)
   require("lvim.core.bufferline").buf_kill("bd", 0, true)
 end
 
--- lvim.keys.normal_mode["<leader><c-w>"]  = "<cmd>lua forceBufferKill()<CR>"
-lvim.keys.normal_mode["<leader><c-w>"]  = "<cmd>ForceBufferLineKill<CR>"
+-- lvim.keys.normal_mode["<leader><c-w>"]  = "<cmd>lua forceBufferKill()<cr>"
+lvim.keys.normal_mode["<leader><c-w>"]  = "<cmd>ForceBufferLineKill<cr>"
 -- NOTE: 直接使用 bd! 強制關閉緩衝區
-lvim.keys.normal_mode["<leader>d<c-w>"] = "<cmd>bd!<CR>"
+lvim.keys.normal_mode["<leader>d<c-w>"] = "<cmd>bd!<cr>"
 
 -- lvim.keys.normal_mode["<a-1>"] = nil
 -- lvim.keys.normal_mode["<a-2>"] = nil
 -- lvim.keys.normal_mode["<a-3>"] = nil
 
-lvim.keys.normal_mode["gy"]             = "<cmd>let @+ = expand('%:p')<CR>"
-lvim.keys.normal_mode["<a-1>"]          = "<Cmd>BufferLineGoToBuffer 1<CR>"
-lvim.keys.normal_mode["<a-2>"]          = "<Cmd>BufferLineGoToBuffer 2<CR>"
-lvim.keys.normal_mode["<a-3>"]          = "<Cmd>BufferLineGoToBuffer 3<CR>"
-lvim.keys.normal_mode["<a-4>"]          = "<Cmd>BufferLineGoToBuffer 4<CR>"
-lvim.keys.normal_mode["<a-5>"]          = "<Cmd>BufferLineGoTOBuffer 5<CR>"
-lvim.keys.normal_mode["<a-6>"]          = "<Cmd>BufferLineGoToBuffer 6<CR>"
-lvim.keys.normal_mode["<a-7>"]          = "<Cmd>BufferLineGoToBuffer 7<CR>"
-lvim.keys.normal_mode["<a-8>"]          = "<Cmd>BufferLineGoToBuffer 8<CR>"
-lvim.keys.normal_mode["<a-9>"]          = "<Cmd>BufferLineGoToBuffer 9<CR>"
-lvim.keys.normal_mode["<a-0>"]          = "<Cmd>BufferLineGoToBuffer -1<CR>"
-lvim.keys.normal_mode["<a-->"]          = "<Cmd>b#<CR>"
+lvim.keys.normal_mode["gy"]             = "<cmd>let @+ = expand('%:p')<cr>"
+lvim.keys.normal_mode["<a-1>"]          = "<cmd>BufferLineGoToBuffer 1<cr>"
+lvim.keys.normal_mode["<a-2>"]          = "<cmd>BufferLineGoToBuffer 2<cr>"
+lvim.keys.normal_mode["<a-3>"]          = "<cmd>BufferLineGoToBuffer 3<cr>"
+lvim.keys.normal_mode["<a-4>"]          = "<cmd>BufferLineGoToBuffer 4<cr>"
+lvim.keys.normal_mode["<a-5>"]          = "<cmd>BufferLineGoTOBuffer 5<cr>"
+lvim.keys.normal_mode["<a-6>"]          = "<cmd>BufferLineGoToBuffer 6<cr>"
+lvim.keys.normal_mode["<a-7>"]          = "<cmd>BufferLineGoToBuffer 7<cr>"
+lvim.keys.normal_mode["<a-8>"]          = "<cmd>BufferLineGoToBuffer 8<cr>"
+lvim.keys.normal_mode["<a-9>"]          = "<cmd>BufferLineGoToBuffer 9<cr>"
+lvim.keys.normal_mode["<a-0>"]          = "<cmd>BufferLineGoToBuffer -1<cr>"
+lvim.keys.normal_mode["<a-->"]          = "<cmd>b#<cr>"
 -- -- Use which-key to add extra bindings with the leader-key prefix
 -- lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without formatting" }
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
+-- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<cr>", "Projects" }
 -- nvim notebook (Andy6)
 -- vim.keymap.set('n', '<leader>es', '<cmd>IronRepl<cr>')
 -- vim.keymap.set('n', '<leader>er', '<cmd>IronRestart<cr>')
 -- vim.keymap.set('n', '<leader>ef', '<cmd>IronFocus<cr>')
 -- vim.keymap.set('n', '<leader>eh', '<cmd>IronHide<cr>')
 
--- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
--- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
+-- lvim.keys.normal_mode["<S-l>"] = "<cmd>BufferLineCycleNext<cr>"
+-- lvim.keys.normal_mode["<S-h>"] = "<cmd>BufferLineCyclePrev<cr>"
 
-lvim.keys.normal_mode["<A-BS>"]         = ":cd ../<cr>"
-lvim.keys.normal_mode["<leader><A-BS>"] = ":cd %:p:h <cr>"
+lvim.keys.normal_mode["<A-BS>"]         = "<cmd>cd ../<cr>"
+lvim.keys.normal_mode["<leader><A-BS>"] = "<cmd>cd %:p:h <cr>"
 lvim.keys.normal_mode['<leader>se']     = { '<cmd>SessionManager load_session<cr>' }
 -- lvim.keys.normal_mode['<leader>f']      = { '<Plug>(leap-forward)' }
 -- lvim.keys.normal_mode['<leader>F']      = { '<Plug>(leap-backward)' }
@@ -202,21 +212,21 @@ lvim.keys.normal_mode['<leader>\\']     = { "<cmd>lua require('persistent-breakp
 lvim.builtin.which_key.mappings.d['\\'] = { "<cmd>lua require('persistent-breakpoints.api').clear_breakpoints()<cr>",
   'Clear All Breakpoint' }
 -- lvim.builtin.which_key.mappings.d['lc'] = {
---   "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), nil)<CR>",
+--   "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), nil)<cr>",
 --   'Breakpoint Condition' }
 lvim.builtin.which_key.mappings.d['lc'] = {
-  "<cmd>lua require('persistent-breakpoints.api').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), nil)<CR>",
+  "<cmd>lua require('persistent-breakpoints.api').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), nil)<cr>",
   'Breakpoint Condition' }
 -- lvim.builtin.which_key.mappings.d['ll'] = {
---   "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), vim.fn.input('Log point message: '))<CR>",
+--   "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), vim.fn.input('Log point message: '))<cr>",
 --   'Condition Logponit Message' }
 lvim.builtin.which_key.mappings.d['ll'] = {
-  "<cmd>lua require('persistent-breakpoints.api').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), vim.fn.input('Log point message: '))<CR>",
+  "<cmd>lua require('persistent-breakpoints.api').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), vim.fn.input('Log point message: '))<cr>",
   'Condition Logponit Message' }
-lvim.keys.normal_mode["<M-s>"]          = { '<cmd>lua require("dapui").eval()<cr>' }
+lvim.keys.normal_mode["<M-s>"]          = { "<cmd>lua require('dapui').eval()<cr>" }
 lvim.keys.normal_mode["<F5>"]           = { "<cmd>lua require('dap').continue()<cr>" }
 lvim.keys.normal_mode["<F17>"]          = { "<cmd>lua require('dap').close()<cr>" }
 
 vim.cmd('noremap <a-p> <Nop>')
-vim.keymap.set('i', '<a-u>', "<Esc>:m .-2<CR>==gi")
-vim.keymap.set('i', '<a-o>', "<Esc>:m .+1<CR>==gi")
+vim.keymap.set('i', '<a-u>', "<Esc>:m .-2<cr>==gi")
+vim.keymap.set('i', '<a-o>', "<Esc>:m .+1<cr>==gi")

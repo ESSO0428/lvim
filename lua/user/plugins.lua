@@ -3,7 +3,6 @@ lvim.plugins = {
     "folke/trouble.nvim",
     cmd = "TroubleToggle"
   },
-  { "skywind3000/asyncrun.vim" },
   { "kevinhwang91/rnvimr" },
   {
     "kevinhwang91/nvim-hlslens",
@@ -164,7 +163,7 @@ lvim.plugins = {
           print('CellularAutomaton : folding and wrapping is not supported')
         end
       end
-      vim.keymap.set("n", "<leader>Tc", "<cmd>lua CellularAutomaton_make_it_rain()<CR>")
+      vim.keymap.set("n", "<leader>Tc", "<cmd>lua CellularAutomaton_make_it_rain()<cr>")
     end
   },
   -- WARNING: 這會造成 Nvim-tree 上運行 Telescope 出錯 (可能要壞成其他替代的套件)
@@ -199,7 +198,7 @@ lvim.plugins = {
       default_file_explorer = false,
       keymaps = {
         ["g?"] = "actions.show_help",
-        ["<CR>"] = "actions.select",
+        ["<cr>"] = "actions.select",
         ["<tab>"] = "actions.select",
         ["l"] = "actions.select",
         ["<a-l>"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
@@ -270,9 +269,9 @@ lvim.plugins = {
       vim.api.nvim_create_user_command('MiniCurrentFilesToggle', function() minicurrentfiles_toggle() end, {})
     end,
     keys = {
-      { "<leader>-", "<cmd>MiniFilesToggle<CR>",        desc = "Toggle mini file explorer" },
-      { "<leader>_", "<cmd>MiniCurrentFilesToggle<CR>", desc = "Toggle mini current file explorer" },
-      { "<leader>+", "<cmd>MiniCurrentFilesToggle<CR>", desc = "Toggle mini current file explorer" }
+      { "<leader>-", "<cmd>MiniFilesToggle<cr>",        desc = "Toggle mini file explorer" },
+      { "<leader>_", "<cmd>MiniCurrentFilesToggle<cr>", desc = "Toggle mini current file explorer" },
+      { "<leader>+", "<cmd>MiniCurrentFilesToggle<cr>", desc = "Toggle mini current file explorer" }
     }
   },
   {
@@ -391,7 +390,7 @@ lvim.plugins = {
         position = "bottom",
         width = 60,
       }
-      vim.keymap.set("n", "<leader>th", "<cmd>DocsViewToggle<CR>")
+      vim.keymap.set("n", "<leader>th", "<cmd>DocsViewToggle<cr>")
     end
   },
   -- WARNING: 這會造成大量讀檔 (process too many files) lsof -p neovim_pid | wc -l 的問題，導致後續各種套件和 neovim 本身的功能失效 (待解決前先禁用)
@@ -997,8 +996,9 @@ lvim.plugins = {
     config = function()
       vim.g.MarkdownNvim = 1
       vim.treesitter.language.register('markdown', 'copilot-chat')
+      vim.treesitter.language.register('markdown', 'AvanteInput')
       require('render-markdown').setup({
-        file_types = { 'markdown', 'copilot-chat', 'Avante' },
+        file_types = { 'markdown', 'copilot-chat', 'Avante', 'AvanteInput' },
         overrides = {
           buftype = {
             nofile = {
@@ -1193,7 +1193,7 @@ lvim.plugins = {
     "hedyhli/outline.nvim",
     config = function()
       -- Example mapping to toggle outline
-      vim.keymap.set("n", "<leader>o", "<cmd>Outline<CR>",
+      vim.keymap.set("n", "<leader>o", "<cmd>Outline<cr>",
         { desc = "Toggle Outline" })
 
       require("outline").setup {
@@ -1308,7 +1308,7 @@ lvim.plugins = {
   -- "folke/twilight.nvim",
   -- config = function()
   -- NOTE: dims `inactive` portions of the code you're editing
-  -- vim.keymap.set("n", "<leader>ta", "<cmd>Twilight<CR>")
+  -- vim.keymap.set("n", "<leader>ta", "<cmd>Twilight<cr>")
   -- end
   -- },
   {
@@ -1383,8 +1383,8 @@ lvim.plugins = {
     cmd = { "JupyterAttach", "JupyterInspect", "JupyterExecute" },
     build = { "pip install -U pynvim jupyter_client", ":UpdateRemotePlugins" },
     keys = {
-      -- { "<leader><a-s>", "<Cmd>JupyterInspect<CR>", desc = "Inspect object in kernel" },
-      { "<leader>gh", "<Cmd>JupyterInspect<CR>", desc = "Inspect object in kernel" }
+      -- { "<leader><a-s>", "<Cmd>JupyterInspect<cr>", desc = "Inspect object in kernel" },
+      { "<leader>gh", "<Cmd>JupyterInspect<cr>", desc = "Inspect object in kernel" }
     }
   }
 }

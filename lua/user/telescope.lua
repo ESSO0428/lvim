@@ -48,15 +48,15 @@ lvim.builtin.telescope.defaults.mappings.n = {
   ['<a-d>'] = action_layout.toggle_preview,
   ['<c-p>'] = action_layout.cycle_layout_next
 }
--- NOTE: 自訂 Telescope 在 nvim-tree 中的 insert 模式下的 <CR> 行為。
+-- NOTE: 自訂 Telescope 在 nvim-tree 中的 insert 模式下的 <cr> 行為。
 --       由於 im-select 插件在退出插入模式時可能導致 Telescope 無法正確跳轉到指定窗口並產生錯誤，
---       這裡通過先發送 <Esc> 退出插入模式，然後經過 200~300 毫秒的延遲後再發送 <CR>，
+--       這裡通過先發送 <Esc> 退出插入模式，然後經過 200~300 毫秒的延遲後再發送 <cr>，
 --       以規避 im-select 的干擾，確保 Telescope 能夠正確處理文件跳轉。
 lvim.builtin.telescope.defaults.mappings.i = {
-  -- ['<CR>'] = function()
+  -- ['<cr>'] = function()
   --   vim.api.nvim_input('<Esc>')
   --   vim.defer_fn(function()
-  --     vim.api.nvim_input('<CR>')
+  --     vim.api.nvim_input('<cr>')
   --   end, 100)
   -- end,
   ['<C-q>'] = function(...)
@@ -81,7 +81,7 @@ lvim.builtin.telescope.defaults.mappings.i = {
   ['<c-p>'] = action_layout.cycle_layout_next
 }
 -- lvim.builtin.telescope.pickers.buffers.mappings.i = {
---   ["<CR>"] = actions.select_default,
+--   ["<cr>"] = actions.select_default,
 --   ["<C-d>"] = actions.delete_buffer
 -- }
 
@@ -322,7 +322,7 @@ lvim.builtin.telescope.extensions.howdoi       = vim.tbl_deep_extend(
 )
 vim.cmd('cnoreabbrev howdo Telescope howdoi')
 
--- lvim.keys.normal_mode['<a-b>'] = { "<Cmd>Telescope buffers<cr>" }
+-- lvim.keys.normal_mode['<a-b>'] = { "<cmd>Telescope buffers<cr>" }
 lvim.builtin.which_key.mappings.s.s    = { "<cmd>Telescope buffers<cr>", "Find" }
 lvim.builtin.which_key.mappings.s['`'] = { "<cmd>Telescope marks<cr>", "Marks" }
 lvim.builtin.which_key.mappings.s.j    = { "<cmd>Telescope jumplist<cr>", "jumplist" }
@@ -339,7 +339,7 @@ lvim.keys.normal_mode["+"]             = "<cmd>lua require('harpoon.ui').nav_nex
 
 lvim.builtin.which_key.mappings.b["["]              = { "<cmd>BufferLineCloseLeft<cr>", "Close all to the left" }
 lvim.builtin.which_key.mappings.b["]"]              = { "<cmd>BufferLineCloseRight<cr>", "Close all to the Right" }
--- lvim.keys.normal_mode["<c-p>"] = ':lua require("lvim.core.telescope.custom-finders").find_project_files { previewer = true }<CR>'
+-- lvim.keys.normal_mode["<c-p>"] = '<cmd>lua require("lvim.core.telescope.custom-finders").find_project_files { previewer = true }<cr>'
 
 -- install chafa for img preview
 lvim.builtin.which_key.mappings.s["m"]              = {

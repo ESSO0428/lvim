@@ -30,7 +30,7 @@ require('avante').setup({
       prev = "[[",
     },
     submit = {
-      normal = "<CR>",
+      normal = "<cr>",
       insert = "<C-s>",
     },
   },

@@ -55,14 +55,14 @@ for _, key in ipairs(keys_to_remove) do
   end
 end
 if lvim.builtin.nvimtree.active == false then
-  lvim.builtin.which_key.mappings['e'] = { "<Cmd>Neotree toggle reveal_force_cwd<cr>", "Neotree" }
-  lvim.builtin.which_key.mappings.b['e'] = { "<Cmd>Neotree buffers toggle reveal_force_cwd<cr>", "Neotree buffers" }
-  lvim.keys.normal_mode["<c-k>"] = "<Cmd>Neotree reveal_force_cwd<CR>"
+  lvim.builtin.which_key.mappings['e'] = { "<cmd>Neotree toggle reveal_force_cwd<cr>", "Neotree" }
+  lvim.builtin.which_key.mappings.b['e'] = { "<cmd>Neotree buffers toggle reveal_force_cwd<cr>", "Neotree buffers" }
+  lvim.keys.normal_mode["<c-k>"] = "<cmd>Neotree reveal_force_cwd<CR>"
 else
-  -- lvim.builtin.which_key.mappings['e'] = { "<Cmd>lua require('nvim-tree.api').tree.toggle(false, false)<cr>", "NvimTree" }
-  -- lvim.builtin.which_key.mappings['e'] = { "<Cmd>NvimTreeToggle<cr>", "NvimTree" }
+  -- lvim.builtin.which_key.mappings['e'] = { "<cmd>lua require('nvim-tree.api').tree.toggle(false, false)<cr>", "NvimTree" }
+  -- lvim.builtin.which_key.mappings['e'] = { "<cmd>NvimTreeToggle<cr>", "NvimTree" }
   lvim.builtin.which_key.mappings["e"] = { "<cmd>lua CustomNvimTreeToggle()<cr>", "NvimTree" }
-  lvim.keys.normal_mode["<c-k>"] = "<Cmd>NvimTreeFocus<CR>"
+  lvim.keys.normal_mode["<c-k>"] = "<cmd>NvimTreeFocus<CR>"
 end
 lvim.builtin.which_key.mappings['c'] = nil
 lvim.builtin.which_key.mappings['c'] = { '"_c', '"_c' }
@@ -127,15 +127,15 @@ lvim.builtin.which_key.mappings["dM"] = { "<cmd>lua require('neotest').run.run({
 --   "<cmd>lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})<cr>", "Test Class DAP" }
 -- lvim.builtin.which_key.mappings["dS"] = { "<cmd>lua require('neotest').summary.toggle()<cr>", "Test Summary" }
 
-lvim.builtin.which_key.mappings.T['T'] = { "<Cmd>TodoTelescope theme=get_ivy<cr>", "ToDo Telescope" }
-lvim.builtin.which_key.mappings.T['w'] = { "<Cmd>TodoTrouble<cr>", "ToDo TodoTrouble (all buffers)" }
+lvim.builtin.which_key.mappings.T['T'] = { "<cmd>TodoTelescope theme=get_ivy<cr>", "ToDo Telescope" }
+lvim.builtin.which_key.mappings.T['w'] = { "<cmd>TodoTrouble<cr>", "ToDo TodoTrouble (all buffers)" }
 
 function TodoTrubleCurrentFile()
   local command = "TodoTrouble cwd=" .. vim.fn.expand("%:p")
   vim.api.nvim_command(command)
 end
 
-lvim.builtin.which_key.mappings.T['d'] = { "<Cmd>lua TodoTrubleCurrentFile()<cr>", "ToDo TodoTrouble (current buffers)" }
+lvim.builtin.which_key.mappings.T['d'] = { "<cmd>lua TodoTrubleCurrentFile()<cr>", "ToDo TodoTrouble (current buffers)" }
 
 lvim.builtin.which_key.mappings['t1'] = { "<cmd>tabn 1<CR>", "tabn 1" }
 lvim.builtin.which_key.mappings['t2'] = { "<cmd>tabn 2<CR>", "tabn 2" }
@@ -155,10 +155,10 @@ lvim.builtin.which_key.mappings['t,'] = { "<cmd>tabprevious<CR>", "tabprevious" 
 lvim.builtin.which_key.mappings['t.'] = { "<cmd>tabnext<CR>", "tabnext" }
 lvim.builtin.which_key.mappings['t\\'] = { "<cmd>tabclose<CR>", "tabblose" }
 
-lvim.builtin.which_key.mappings.s['d'] = { "<Cmd>Telescope cder theme=get_ivy<cr>", "Chage Folder" }
-lvim.builtin.which_key.mappings.s['a'] = { "<Cmd>lua require('swenv.api').pick_venv()<cr>", "Chage Python Env" }
-lvim.builtin.which_key.mappings.s['y'] = { "<Cmd>Telescope neoclip theme=get_ivy<cr>", "Yank History" }
-lvim.builtin.which_key.mappings.s['O'] = { "<Cmd>Telescope orgmode search_headings<cr>",
+lvim.builtin.which_key.mappings.s['d'] = { "<cmd>Telescope cder theme=get_ivy<cr>", "Chage Folder" }
+lvim.builtin.which_key.mappings.s['a'] = { "<cmd>lua require('swenv.api').pick_venv()<cr>", "Chage Python Env" }
+lvim.builtin.which_key.mappings.s['y'] = { "<cmd>Telescope neoclip theme=get_ivy<cr>", "Yank History" }
+lvim.builtin.which_key.mappings.s['O'] = { "<cmd>Telescope orgmode search_headings<cr>",
   "orgmode search_headings" }
 
 
@@ -170,7 +170,7 @@ lvim.builtin.which_key.mappings.d['fe'] = { "<cmd>windo set noscrollbind<cr>",
   "wind_scrollsync_all_not (windo set noscrollbind)" }
 
 
--- lvim.builtin.which_key.mappings['B'] = { "<Cmd>Telescope bookmarks<cr>", "Bookmarks" }
+-- lvim.builtin.which_key.mappings['B'] = { "<cmd>Telescope bookmarks<cr>", "Bookmarks" }
 
 
 -- <leader>o

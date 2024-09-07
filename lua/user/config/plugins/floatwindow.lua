@@ -34,7 +34,7 @@ end
 
 -- 將此函數添加到 Neovim 命令
 vim.api.nvim_create_user_command('OpenFloat', open_float_window, {})
-lvim.keys.normal_mode['sw'] = "<Cmd>OpenFloat<CR>"
+lvim.keys.normal_mode['sw'] = "<cmd>OpenFloat<CR>"
 
 
 local pickers = require('telescope.pickers')

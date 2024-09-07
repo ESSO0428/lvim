@@ -180,7 +180,7 @@ M.exec_toggleBatOrMore = function(opts)
     close_on_exit = true,
     on_open = function(term)
       vim.cmd "startinsert!"
-      vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<c-\\>", "<cmd>close<CR>", { noremap = true, silent = true })
+      vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<c-\\>", "<cmd>close<cr>", { noremap = true, silent = true })
     end,
     count = opts.count
   }

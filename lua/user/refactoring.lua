@@ -155,5 +155,5 @@ vim.api.nvim_create_user_command('MoveBlockToFile', move_block_to_file, { range 
 lvim.builtin.which_key.mappings.u["="] = { "<cmd>lua require('lvim.lsp.utils').format()<cr>", "Format" }
 -- lvim.builtin.which_key.mappings.u.r = { "<cmd>LspLensToggle<cr>", "Like IDEA : definition info" }
 
-lvim.keys.visual_mode['<leader>rf'] = "<cmd>lua refactor_prompt()<CR>"
-lvim.keys.normal_mode['<leader>rf'] = "<cmd>lua refactor_prompt()<CR>"
+lvim.keys.visual_mode['<leader>rf'] = "<cmd>lua refactor_prompt()<cr>"
+lvim.keys.normal_mode['<leader>rf'] = "<cmd>lua refactor_prompt()<cr>"

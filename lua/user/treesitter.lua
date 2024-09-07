@@ -66,9 +66,16 @@ lvim.builtin.treesitter.rainbow = {
 -- 启用增量选择
 lvim.builtin.treesitter.incremental_selection = {
   enable = true,
+  disable = function(_, bufnr)
+    local filetype = vim.bo[bufnr].filetype
+    local disable_filetypes = {
+      AvanteInput = true,
+    }
+    return disable_filetypes[filetype] or false
+  end,
   keymaps = {
-    init_selection = '<CR>',
-    node_incremental = '<CR>',
+    init_selection = '<cr>',
+    node_incremental = '<cr>',
     node_decremental = '<BS>',
     -- scope_incremental = '.',
   }

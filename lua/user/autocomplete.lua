@@ -435,7 +435,7 @@ for k, v in pairs(lvim.builtin.cmp.mapping) do
   if k == "<C-E>" then
     lvim.builtin.cmp.mapping[k] = nil
   end
-  if k == "<CR>" then
+  if k == "<cr>" then
     lvim.builtin.cmp.mapping[k] = cmp_mapping(function(fallback)
       if cmp.visible() then
         local confirm_opts = vim.deepcopy(lvim.builtin.cmp.confirm_opts) -- avoid mutating the original opts below

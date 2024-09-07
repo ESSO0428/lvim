@@ -19,7 +19,7 @@
 -- Using the `repl_types` table to register REPL settings
 -- for the global function `select_repl_type` to switch between
 -- Iron.nvim (default REPL execution tool) and different filetype REPLs (special REPL execution, such as Jupynium).
-vim.keymap.set({ 'n', 'v' }, 'strj', '<cmd>JupyniumExecuteSelectedCells<CR>', { noremap = true, silent = true })
+vim.keymap.set({ 'n', 'v' }, 'strj', '<cmd>JupyniumExecuteSelectedCells<cr>', { noremap = true, silent = true })
 function jupyniumRunAbove()
   local cursor_pos = vim.api.nvim_win_get_cursor(0)
   local row, col = cursor_pos[1], cursor_pos[2]
@@ -57,8 +57,8 @@ lvim.builtin.which_key.mappings['rj'] = {
   [":"] = { "<cmd>lua select_repl_type()<cr>", "REPL cell execute to Jupynium (remap ]w [w)" },
   [";"] = { "<cmd>lua select_repl_type()<cr>", "REPL cell execute to Jupynium (remap ]w [w)" },
 }
-vim.keymap.set('n', '<C-PageUp>', '<cmd>JupyniumScrollUp<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<C-PageDown>', '<cmd>JupyniumScrollDown<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-PageUp>', '<cmd>JupyniumScrollUp<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-PageDown>', '<cmd>JupyniumScrollDown<cr>', { noremap = true, silent = true })
 lvim.builtin.which_key.vmappings['rj'] = {
   name = "jupynium",
   w = { "<cmd>JupyniumExecuteSelectedCells<cr>", "Jupynium Execute Current Cell" },
@@ -84,10 +84,10 @@ local repl_types = {
     name = "jupynium",
     remap_setting = function()
       vim.b.CURRENT_REPL = "REPL:jupynium"
-      vim.keymap.set('n', '[w', ':JupyniumExecuteSelectedCells<CR>', { buffer = true, silent = true })
-      vim.keymap.set('n', ']w', ':JupyniumExecuteSelectedCells<CR>', { buffer = true, silent = true })
-      vim.keymap.set('n', '[e', ':JupyniumRunAbove<CR>', { buffer = true, silent = true })
-      vim.keymap.set('n', ']e', ':JupyniumRunBelow<CR>', { buffer = true, silent = true })
+      vim.keymap.set('n', '[w', ':JupyniumExecuteSelectedCells<cr>', { buffer = true, silent = true })
+      vim.keymap.set('n', ']w', ':JupyniumExecuteSelectedCells<cr>', { buffer = true, silent = true })
+      vim.keymap.set('n', '[e', ':JupyniumRunAbove<cr>', { buffer = true, silent = true })
+      vim.keymap.set('n', ']e', ':JupyniumRunBelow<cr>', { buffer = true, silent = true })
     end
   }
   -- Add more specialized REPLs here.

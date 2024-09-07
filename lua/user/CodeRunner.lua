@@ -151,4 +151,4 @@ lvim.builtin.lualine.sections.lualine_c[#lvim.builtin.lualine.sections.lualine_c
 
 -- 创建一个 Neovim 命令来调用这个函数
 vim.api.nvim_create_user_command('CodeRunner', code_runner, {})
-lvim.keys.normal_mode["<leader>rr"] = "<cmd>CodeRunner<CR>"
+lvim.keys.normal_mode["<leader>rr"] = "<cmd>CodeRunner<cr>"

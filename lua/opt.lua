@@ -57,8 +57,7 @@ vim.g.PythonEnv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
 -- 更新 core plug 的 nvim-navic
 -- (到該目錄下先執行) git fetch; git pull
 
--- lvim.keys.normal_mode['<F1>'] = ":set relativenumber!<cr>"
-lvim.keys.normal_mode['s;'] = ":set relativenumber!<cr>"
+lvim.keys.normal_mode['s;'] = "<cmd>set relativenumber!<cr>"
 lvim.keys.normal_mode["<leader>n"] = "<c-w><c-p>"
 lvim.builtin.lir.active = true
 
@@ -204,7 +203,7 @@ vim.g.move_key_modifier                             = 'C'
 
 -- keymappings <https://www.lunarvim.org/docs/configuration/keybindings>
 lvim.leader                                         = "space"
-lvim.keys.normal_mode["S"]                          = ":w<cr>"
+lvim.keys.normal_mode["S"]                          = "<cmd>w<cr>"
 
 -- -- Change theme settings
 -- lvim.colorscheme = "lunar"

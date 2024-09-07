@@ -21,4 +21,4 @@ require("bookmarks").setup {
     ann = { hl = "BookMarksAnn", text = "🔖", numhl = "BookMarksAnnNr", linehl = "BookMarksAnnLn" },
   }
 }
-lvim.keys.normal_mode['-'] = "<Cmd>Telescope bookmarks list<cr>"
+lvim.keys.normal_mode['-'] = "<cmd>Telescope bookmarks list<cr>"

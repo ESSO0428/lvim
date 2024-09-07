@@ -1,7 +1,7 @@
 -- NOTE: Here is rebinded keymaps for mason.nvim
 -- use lunavim builtin keymaps
 lvim.builtin.mason.ui.keymaps = {
-  toggle_package_expand = "<CR>",
+  toggle_package_expand = "<cr>",
   install_package = ">",
   update_package = "u",
   check_package_version = "c",

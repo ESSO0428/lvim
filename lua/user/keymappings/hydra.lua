@@ -15,7 +15,7 @@ local hydra_config = {
   },
   body = "<leader>hq",
   heads = {
-    { ')', ':cnext<CR>',     { desc = 'cnext' } },
+    { ')', ':cnext<cr>',     { desc = 'cnext' } },
     { '(', ':cprevious<CR>', { desc = 'cprevious' } }
   }
 }
