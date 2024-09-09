@@ -327,8 +327,10 @@ lvim.plugins = {
           -- vim.cmd "au ColorScheme * highlight! link semshiBuiltin @function.builtin"
           -- vim.cmd "au ColorScheme * highlight! link semshiBuiltin @field"
           vim.cmd([[
-            highlight! semshiImported gui=bold guifg=#4ec9b0
-            highlight! semshiGlobal gui=bold
+            " highlight! semshiImported gui=bold guifg=#4ec9b0
+            " highlight! semshiGlobal gui=bold
+            highlight! semshiImported guifg=#4ec9b0
+            highlight! link semshiGlobal cleared
             highlight! link semshiParameter @parameter.python
             highlight! link semshiParameterUnused @parameter.python
             highlight! semshiParameterUnused gui=undercurl
