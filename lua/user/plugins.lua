@@ -403,6 +403,20 @@ lvim.plugins = {
   --   end
   -- },
   {
+    'Wansmer/symbol-usage.nvim',
+    -- NOTE: default event is BufReadPre
+    -- But config is written in another lua file, so set event to VeryLazy
+    event = 'VeryLazy',
+  },
+  {
+    "soulis-1256/eagle.nvim",
+    config = function()
+      require("eagle").setup({
+        -- override the default values found in config.lua
+      })
+    end
+  },
+  {
     "ESSO0428/NotebookNavigator.nvim",
     keys = {
       { "gi", function() require("notebook-navigator").move_cell "u" end },

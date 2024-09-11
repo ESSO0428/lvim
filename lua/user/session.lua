@@ -14,6 +14,7 @@ utils.first_load = true       -- Initialization flag variable
 utils.session_loading = false -- Indicates the session loading status to avoid triggering other plugins during session loading
 function utils.load_session(filename, discard_current)
   utils.session_loading = true
+  pcall((require 'symbol-usage').toggle_globally)
   if not discard_current then
     -- Ask to save files in current session before closing them.
     for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
@@ -65,6 +66,7 @@ vim.api.nvim_create_autocmd({ 'User' }, {
     else
       session_open_nvim_tree()
     end
+    pcall((require 'symbol-usage').toggle_globally)
   end,
 })
 local session_manager = require('session_manager')
