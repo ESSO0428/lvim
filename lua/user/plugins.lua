@@ -57,6 +57,29 @@ lvim.plugins = {
     end
   },
   {
+    "nvim-treesitter/nvim-treesitter",
+    -- run = ":TSUpdate",
+    -- NOTE: cover the default config of lunarvim
+    -- Current Update Time: 2024-09-12
+    commit = "b6a6d89",
+    config = function()
+      local utils = require "lvim.utils"
+      local path = utils.join_paths(get_runtime_dir(), "site", "pack", "lazy", "opt", "nvim-treesitter")
+      vim.opt.rtp:prepend(path) -- treesitter needs to be before nvim's runtime in rtp
+      require("lvim.core.treesitter").setup()
+    end,
+    cmd = {
+      "TSInstall",
+      "TSUninstall",
+      "TSUpdate",
+      "TSUpdateSync",
+      "TSInstallInfo",
+      "TSInstallSync",
+      "TSInstallFromGrammar",
+    },
+    event = "User FileOpened",
+  },
+  {
     "ESSO0428/telescope-tabs",
     config = function()
       require("telescope-tabs").setup {
