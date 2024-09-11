@@ -516,6 +516,14 @@ lvim.plugins = {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     branch = "canary",
+    -- NOTE: If you can't activate the plugin, please check the following:
+    -- 1. Check if the $XDG_RUNTIME_DIR directory exists.
+    -- 2. Verify the permissions of $XDG_RUNTIME_DIR:
+    --    - Use the command `ls -ld $XDG_RUNTIME_DIR` to check its existence and permissions.
+    -- 3. If the directory does not exist, create it with: `mkdir -p $XDG_RUNTIME_DIR`.
+    -- 4. Set appropriate permissions:
+    --    - For example, you can use `chmod 755 $XDG_RUNTIME_DIR`
+    --    - Alternatively, use `chmod 777 $XDG_RUNTIME_DIR`
     dependencies = {
       { "github/copilot.vim" },    -- or github/copilot.vim
       { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
@@ -525,6 +533,14 @@ lvim.plugins = {
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
+    -- NOTE: If you can't activate the plugin, please check the following (same as CopilotChat.nvim):
+    -- 1. Check if the $XDG_RUNTIME_DIR directory exists.
+    -- 2. Verify the permissions of $XDG_RUNTIME_DIR:
+    --    - Use the command `ls -ld $XDG_RUNTIME_DIR` to check its existence and permissions.
+    -- 3. If the directory does not exist, create it with: `mkdir -p $XDG_RUNTIME_DIR`.
+    -- 4. Set appropriate permissions:
+    --    - For example, you can use `chmod 755 $XDG_RUNTIME_DIR`
+    --    - Alternatively, use `chmod 777 $XDG_RUNTIME_DIR`
     -- NOTE: my conifg is set in user/avante.lua
     -- and had required by config.lua
     --
