@@ -413,6 +413,7 @@ lvim.plugins = {
     config = function()
       require("eagle").setup({
         -- override the default values found in config.lua
+        border_color = "#3d59a1",
       })
     end
   },
