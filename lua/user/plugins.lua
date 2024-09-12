@@ -436,6 +436,9 @@ lvim.plugins = {
     config = function()
       require("eagle").setup({
         -- override the default values found in config.lua
+        render_delay = 200, -- default is 500
+        detect_idle_timer = 50,
+        border = "single",
         border_color = "#3d59a1",
       })
     end
