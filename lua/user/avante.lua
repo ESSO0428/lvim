@@ -1,3 +1,11 @@
+vim.cmd "au ColorScheme * hi link AvanteSuggestion Comment"
+vim.cmd "au ColorScheme * hi link AvanteAnnotation Comment"
+vim.cmd "au ColorScheme * hi link AvantePopupHint NormalFloat"
+vim.cmd "au ColorScheme * hi link AvanteInlineHint Keyword"
+vim.cmd "au ColorScheme * hi AvanteConflictCurrentLabel guibg=#2C374D"
+vim.cmd "au ColorScheme * hi link AvanteConflictCurrent DiffText"
+vim.cmd "au ColorScheme * hi AvanteConflictIncomingLabel guibg=#1a3c3e"
+vim.cmd "au ColorScheme * hi link AvanteConflictIncoming DiffAdd"
 require('avante').setup({
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
   provider = "copilot",       -- Recommend using Claude

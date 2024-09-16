@@ -29,10 +29,6 @@ if lvim.transparent_window == true then
   vim.cmd "au ColorScheme * hi WindowPickerStatusLineNC ctermfg=15 ctermbg=4 gui=bold guifg=#ededed guibg=#4493c8"
   vim.cmd "au ColorScheme * hi WindowPickerWinBar ctermfg=15 guifg=#ededed guibg=#e35e4f"
   vim.cmd "au ColorScheme * hi WindowPickerWinBarNC ctermfg=15 ctermbg=4 gui=bold guifg=#ededed guibg=#4493c8"
-  vim.cmd "au ColorScheme * hi AvanteConflictCurrentLabel guibg=#2C374D"
-  vim.cmd "au ColorScheme * hi link AvanteConflictCurrent DiffText"
-  vim.cmd "au ColorScheme * hi AvanteConflictIncomingLabel guibg=#1a3c3e"
-  vim.cmd "au ColorScheme * hi link AvanteConflictIncoming DiffAdd"
 end
 vim.cmd "let &fcs='eob: '"
 -- vim.cmd "au ColorScheme * hi BufferLineSeparator guifg=#504945"
