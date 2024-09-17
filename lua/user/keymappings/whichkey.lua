@@ -130,12 +130,7 @@ lvim.builtin.which_key.mappings["dM"] = { "<cmd>lua require('neotest').run.run({
 lvim.builtin.which_key.mappings.T['T'] = { "<cmd>TodoTelescope theme=get_ivy<cr>", "ToDo Telescope" }
 lvim.builtin.which_key.mappings.T['w'] = { "<cmd>TodoTrouble<cr>", "ToDo TodoTrouble (all buffers)" }
 
-function TodoTrubleCurrentFile()
-  local command = "TodoTrouble cwd=" .. vim.fn.expand("%:p")
-  vim.api.nvim_command(command)
-end
-
-lvim.builtin.which_key.mappings.T['d'] = { "<cmd>lua TodoTrubleCurrentFile()<cr>", "ToDo TodoTrouble (current buffers)" }
+lvim.builtin.which_key.mappings.T['d'] = { "<cmd>Trouble todo filter.buf=0<cr>", "ToDo TodoTrouble (current buffers)" }
 
 lvim.builtin.which_key.mappings['t1'] = { "<cmd>tabn 1<CR>", "tabn 1" }
 lvim.builtin.which_key.mappings['t2'] = { "<cmd>tabn 2<CR>", "tabn 2" }
