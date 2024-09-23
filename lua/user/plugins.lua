@@ -426,12 +426,6 @@ lvim.plugins = {
   --   end
   -- },
   {
-    'Wansmer/symbol-usage.nvim',
-    -- NOTE: default event is BufReadPre
-    -- But config is written in another lua file, so set event to VeryLazy
-    event = 'VeryLazy',
-  },
-  {
     "soulis-1256/eagle.nvim",
     config = function()
       require("eagle").setup({
