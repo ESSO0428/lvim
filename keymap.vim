@@ -628,13 +628,15 @@ function! SendInputMethodCommandToLocal(mode)
       if nc_connect_results == 'sucess'
         " 根據模式構建命令
         if a:mode == "insert"
-          let command = "echo im-select.exe com.apple.keylayout.ABC | nc -w 0.01 127.0.0.1 " . port
+          " NOTE: 修改原先的 -w 0.01 版本為 -w 1，最多等待一秒
+          let command = "echo im-select.exe com.apple.keylayout.ABC | nc -w 1 127.0.0.1 " . port
         else
-          let command = "echo im-select.exe 1033 | nc -w 0.01 127.0.0.1 " . port
+          let command = "echo im-select.exe 1033 | nc -w 1 127.0.0.1 " . port
         endif
         let command = command . " &> /dev/null"
         " 執行命令
-        call system(command)
+        " NOTE: 修改原先的 system 成 jobstart，以避免阻塞 vim (這樣即使是 1 秒的 nc 也不會影響 vim 的使用體驗
+        call jobstart([&shell, &shellcmdflag, command . " &> /dev/null &"])
       endif
     endif
   endif
