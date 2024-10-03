@@ -950,10 +950,10 @@ lvim.plugins = {
   { "theHamsta/nvim-dap-virtual-text" },
   { "LiadOz/nvim-dap-repl-highlights" },
   {
-    'ESSO0428/persistent-breakpoints.nvim',
+    'Weissle/persistent-breakpoints.nvim',
     config = function()
       require('persistent-breakpoints').setup {
-        load_breakpoints_event = { "BufReadPost" }
+        load_breakpoints_event = { "SessionLoadPost" }
       }
     end
   },
