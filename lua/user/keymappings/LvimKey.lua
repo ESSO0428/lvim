@@ -209,7 +209,7 @@ lvim.keys.normal_mode["]S"]             = { "<cmd>lua require('goto-breakpoints'
 -- lvim.keys.normal_mode['<leader>\\']     = { "<cmd>lua require('dap').toggle_breakpoint()<cr>" }
 lvim.keys.normal_mode['<leader>\\']     = { "<cmd>lua require('persistent-breakpoints.api').toggle_breakpoint()<cr>" }
 -- lvim.builtin.which_key.mappings.d['\\'] = { "<cmd>lua require('dap').clear_breakpoints()<cr>", 'Clear All Breakpoint' }
-lvim.builtin.which_key.mappings.d['\\'] = { "<cmd>lua require('persistent-breakpoints.api').clear_breakpoints()<cr>",
+lvim.builtin.which_key.mappings.d['\\'] = { "<cmd>lua require('persistent-breakpoints.api').clear_all_breakpoints()<cr>",
   'Clear All Breakpoint' }
 -- lvim.builtin.which_key.mappings.d['lc'] = {
 --   "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), nil)<cr>",
