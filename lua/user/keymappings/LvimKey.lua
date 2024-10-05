@@ -226,6 +226,10 @@ lvim.builtin.which_key.mappings.d['ll'] = {
 lvim.keys.normal_mode["<M-s>"]          = { "<cmd>lua require('dapui').eval()<cr>" }
 lvim.keys.normal_mode["<F5>"]           = { "<cmd>lua require('dap').continue()<cr>" }
 lvim.keys.normal_mode["<F17>"]          = { "<cmd>lua require('dap').close()<cr>" }
+lvim.keys.normal_mode["<F8>"]           = { "<cmd>lua require'dap'.step_into()<cr>" }
+-- Shift + F8
+lvim.keys.normal_mode["<F20>"]          = { "<cmd>lua require'dap'.step_over()<cr>" }
+lvim.keys.normal_mode["<F6>"]           = { "<cmd>lua require'dap'.step_out()<cr>" }
 
 vim.cmd('noremap <a-p> <Nop>')
 vim.keymap.set('i', '<a-u>', "<Esc>:m .-2<cr>==gi")
