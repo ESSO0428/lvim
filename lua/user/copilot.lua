@@ -246,12 +246,12 @@ require("CopilotChat").setup {
         vim.diagnostic.set(ns, source.bufnr, diagnostics)
       end
     },
-    Fix = '/COPILOT_GENERATE 這段程式碼有問題。請重寫程式碼以修復錯誤 (並在修復錯誤後用繁體中文說明修復了什麼)。',
-    Optimize = '/COPILOT_GENERATE 優化選定的程式碼以提高性能和可讀性 (並在優化完後用繁體中文說明寫了什麼)。',
-    OneLineComment = '/COPILOT_GENERATE 為選定的部分上方添加一行英文註釋 (並在寫完註釋後用繁體中文說明寫了什麼)。',
-    OneParagraphComment = '/COPILOT_GENERATE 為選定的部分上方添加英文註釋摘要，確保每一行不超過 50 字 (並在寫完註釋後用繁體中文說明寫了什麼)。',
-    Docs = '/COPILOT_GENERATE 請為選定的部分添加英文的文檔註釋，若檢測到文擋註釋處先前已按照其他 Annotation Conventions 撰寫，請繼續依照該 Conventions 將文檔撰寫完成 (並在寫完註釋後用繁體中文說明寫了什麼)。',
-    Tests = '/COPILOT_GENERATE 請為我的程式碼生成測試 (並在寫完測試後用繁體中文說明寫了什麼)。',
+    Fix = '/COPILOT_GENERATE 1. 這段程式碼有問題。請重寫程式碼以修復錯誤 (並在修復錯誤後用繁體中文說明修復了什麼) 2. 注意產生的代碼塊不能包含行號',
+    Optimize = '/COPILOT_GENERATE 1. 優化選定的程式碼以提高性能和可讀性 (並在優化完後用繁體中文說明寫了什麼) 2. 注意產生的代碼塊不能包含行號',
+    OneLineComment = '/COPILOT_GENERATE 1. 為選定的部分上方添加一行英文註釋 2. 在寫完註釋後，用繁體中文完整說明生成的註釋內容 3. 如果生成的註解為英文，最後說明的部分必須提供對應的繁體中文翻譯 4. 注意產生的代碼塊不能包含行號',
+    OneParagraphComment = '/COPILOT_GENERATE 1. 為選定的部分上方添加英文註釋摘要，確保每一行不超過 50 字 2. 在寫完註釋後，用繁體中文完整說明生成的註釋內容 3. 如果生成的註解為英文，最後說明的部分必須提供對應的繁體中文翻譯 4. 注意產生的代碼塊不能包含行號',
+    Docs = '/COPILOT_GENERATE 1. 請為選定的部分添加英文的文檔註釋 2. 若檢測到文檔註釋處先前已按照其他 Annotation Conventions 撰寫，請繼續依照該 Conventions 將文檔撰寫完成 3. 在寫完註釋後，請用繁體中文完整說明生成的文檔註釋的內容 4. 如果生成的註解為英文，最後說明的部分必須提供對應的繁體中文翻譯 5. 注意產生的代碼塊不能包含行號',
+    Tests = '/COPILOT_GENERATE 1. 請為我的程式碼生成測試 (並在寫完測試後用繁體中文說明寫了什麼) 2. 注意產生的代碼塊不能包含行號',
     FixDiagnostic = {
       prompt = '請協助修復檔案的診斷問題 (並用繁體中文說明):',
       selection = select.diagnostics,
