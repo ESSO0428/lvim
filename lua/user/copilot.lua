@@ -92,6 +92,9 @@ select.gitdiff = function(source, staged)
     file_dir = vim.fn.getcwd()
   end
 
+  -- NOTE: Fix vulnerability #417 in CopilotC-Nvim/CopilotChat.nvim
+  file_dir = file_dir:gsub('.git$', '')
+
   local cmd_diff = 'git -C ' ..
       file_dir .. ' diff --no-color --no-ext-diff' .. (staged and ' --staged' or '') .. ' 2>/dev/null'
   local cmd_diff_stat = 'git -C ' ..
