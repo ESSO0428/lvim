@@ -8,6 +8,16 @@ require('persistent-breakpoints.api').set_breakpoint = function(condition, logMe
   require('persistent-breakpoints.api').breakpoints_changed_in_current_buffer()
 end
 
+-- NOTE: 根據 `lvim.builtin.dap.ui.auto_open` 的值設定是否自動開啟 DAP UI
+-- 並且可以動態調整 true/false 不須關閉 neovim
+-- 實踐方式為覆蓋 lunarvim 的 setup_ui 函數
+require "user.debug.ui_config"
+
+-- NOTE: toggle `lvim.builtin.dap.ui.auto_open`
+lvim.builtin.which_key.mappings.d.L = {
+  function() lvim.builtin.dap.ui.auto_open = not lvim.builtin.dap.ui.auto_open end,
+  "Toggle UI Auto-Open"
+}
 
 lvim.builtin.which_key.mappings.s.b = { "<cmd>lua require'telescope'.extensions.dap.list_breakpoints()<cr>",
   "List breakpoints" }
