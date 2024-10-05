@@ -333,6 +333,8 @@ cnoremap <M-w> <S-Right>
 " noremap <leader>n <C-w>h
 " noremap <leader>i <C-w>l
 nnoremap qf <C-w>o
+" NOTE: feat: fixed buffer to windows of neovim-0.10
+nnoremap qw :setlocal winfixbuf!<cr>
 " normal keyboard
 " noremap <leader>i <C-w>k
 " noremap <leader>k <C-w>j
