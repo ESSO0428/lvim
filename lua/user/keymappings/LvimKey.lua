@@ -223,7 +223,8 @@ lvim.builtin.which_key.mappings.d['lc'] = {
 lvim.builtin.which_key.mappings.d['ll'] = {
   "<cmd>lua require('persistent-breakpoints.api').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), vim.fn.input('Log point message: '))<cr>",
   'Condition Logponit Message' }
-lvim.keys.normal_mode["<M-s>"]          = { "<cmd>lua require('dapui').eval()<cr>" }
+lvim.builtin.which_key.mappings.d.v     = { "<cmd>lua require('dapui').eval()<cr>", "Evaluate Expression" }
+lvim.keys.visual_mode["<leader>dv"]     = { "<cmd>lua require('dapui').eval()<cr>" }
 lvim.keys.normal_mode["<F5>"]           = { "<cmd>lua require('dap').continue()<cr>" }
 lvim.keys.normal_mode["<F17>"]          = { "<cmd>lua require('dap').close()<cr>" }
 lvim.keys.normal_mode["<F8>"]           = { "<cmd>lua require'dap'.step_into()<cr>" }
