@@ -7,9 +7,7 @@ vim.cmd [[:amenu 10.150 PopUp.Condition\ Breakpoint <cmd>:popup Condition Breakp
 vim.cmd [[:amenu 10.160 Condition\ Breakpoint.Condition\ \+\ Breakpoint <cmd>:lua require('persistent-breakpoints.api').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), nil)<CR>]]
 vim.cmd [[:amenu 10.170 Condition\ Breakpoint.Condition\ \+\ Logpoint <cmd>:lua require('persistent-breakpoints.api').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), vim.fn.input('Log point message: '))<CR>]]
 vim.cmd [[:amenu 10.180 Condition\ Breakpoint.-sep2_1- *]]
-vim.cmd [[:amenu 10.190 Condition\ Breakpoint.Edit\ \+\ Breakpoint <cmd>:lua DAP_edit_breakpoint(false)<CR>]]
-vim.cmd [[:amenu 10.195 Condition\ Breakpoint.Edit\ \+\ Breakpoint\ (Force\ Remove\ Logpoint) <cmd>:lua DAP_edit_breakpoint(nil)<CR>]]
-vim.cmd [[:amenu 10.196 Condition\ Breakpoint.Edit\ \+\ Breakpoint\ (Force\ Add\ Logpoint) <cmd>:lua DAP_edit_breakpoint(true)<CR>]]
+vim.cmd [[:amenu 10.190 Condition\ Breakpoint.Edit\ Breakpoint <cmd>:lua DAP_edit_breakpoint()<CR>]]
 vim.cmd [[:amenu 10.200 PopUp.Clear\ All\ Breakpoints <cmd>:lua require('persistent-breakpoints.api').clear_all_breakpoints()<CR>]]
 vim.cmd [[:amenu 10.210 PopUp.-sep3- *]]
 vim.cmd [[:amenu 10.220 PopUp.Color\ Picker <cmd>:lua require("minty.huefy").open()<CR>]]
@@ -82,21 +80,7 @@ vim.api.nvim_create_autocmd("FileType", {
                     DAP_edit_breakpoint(false)
                   end,
                   rtxt = "<leader>dle",
-                },
-                {
-                  name = "Edit Breakpoint (Force Remove Logpoint)",
-                  cmd = function()
-                    DAP_edit_breakpoint(nil)
-                  end,
-                  rtxt = "<leader>dlE",
-                },
-                {
-                  name = "Edit Breakpoint (Force Add Logpoint)",
-                  cmd = function()
-                    DAP_edit_breakpoint(true)
-                  end,
-                  rtxt = "<leader>dlL",
-                },
+                }
               }
             },
             { name = "separator" },

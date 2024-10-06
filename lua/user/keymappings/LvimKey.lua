@@ -235,14 +235,15 @@ lvim.keys.normal_mode["<F6>"]           = { "<cmd>lua require'dap'.step_out()<cr
 vim.cmd('noremap <a-p> <Nop>')
 vim.keymap.set('i', '<a-u>', "<Esc>:m .-2<cr>==gi")
 vim.keymap.set('i', '<a-o>', "<Esc>:m .+1<cr>==gi")
-function DAP_edit_breakpoint(LogMessage)
+function DAP_edit_breakpoint()
+  local function get_input_with_default(prompt, default)
+    local input = vim.fn.input(prompt, default or ''):gsub("^%s*(.-)%s*$", "%1")
+    return input ~= "" and input or nil
+  end
   local Breakpoint_Condition = function()
-    local condition_input = vim.fn.input('Breakpoint condition: ')
-    local hitCondition_input = vim.fn.input('Hit condition: ')
-    local logMessage_input = nil
-    if LogMessage then
-      logMessage_input = vim.fn.input('Log point message: ')
-    end
+    local condition_input = get_input_with_default('Breakpoint condition: ')
+    local hitCondition_input = get_input_with_default('Hit condition: ')
+    local logMessage_input = get_input_with_default('Log point message: ')
     require('persistent-breakpoints.api').set_breakpoint(
       condition_input,
       hitCondition_input,
@@ -273,9 +274,9 @@ function DAP_edit_breakpoint(LogMessage)
         -- If the current line corresponds to the line of the breakpoint
         if bp_line == current_line then
           -- Check if there is condition, hitCondition or logMessage
-          local condition_exists = bp.condition ~= nil
-          local hitCondition_exists = bp.hitCondition ~= nil
-          local logMessage_exists = bp.logMessage ~= nil
+          local condition_exists = bp.condition ~= nil and bp.condition:gsub("^%s*(.-)%s*$", "%1") ~= ""
+          local hitCondition_exists = bp.hitCondition ~= nil and bp.hitCondition:gsub("^%s*(.-)%s*$", "%1") ~= ""
+          local logMessage_exists = bp.logMessage ~= nil and bp.logMessage:gsub("^%s*(.-)%s*$", "%1") ~= ""
 
           -- If none exists, return
           if not (condition_exists or hitCondition_exists or logMessage_exists) then
@@ -284,20 +285,9 @@ function DAP_edit_breakpoint(LogMessage)
           end
 
           -- Set input default value
-          local condition_input = nil
-          if condition_exists then
-            condition_input = vim.fn.input('Breakpoint condition: ', bp.condition)
-          end
-          local hitCondition_input = nil
-          if hitCondition_exists then
-            hitCondition_input = vim.fn.input('Hit condition: ', bp.hitCondition)
-          end
-          local logMessage_input = nil
-          if logMessage_exists and LogMessage ~= nil then
-            logMessage_input = vim.fn.input('Log point message: ', bp.logMessage)
-          elseif LogMessage then
-            logMessage_input = vim.fn.input('Log point message: ')
-          end
+          local condition_input = get_input_with_default('Breakpoint condition: ', bp.condition)
+          local hitCondition_input = get_input_with_default('Hit condition: ', bp.hitCondition)
+          local logMessage_input = get_input_with_default('Log point message: ', bp.logMessage)
           -- Set breakpoint
           require('persistent-breakpoints.api').set_breakpoint(
             condition_input,
@@ -314,11 +304,5 @@ function DAP_edit_breakpoint(LogMessage)
 end
 
 lvim.builtin.which_key.mappings.d['le'] = {
-  "<cmd>lua DAP_edit_breakpoint(false)<cr>",
+  "<cmd>lua DAP_edit_breakpoint()<cr>",
   'Edit Breakpoint' }
-lvim.builtin.which_key.mappings.d['lE'] = {
-  "<cmd>lua DAP_edit_breakpoint(nil)<cr>",
-  'Edit Breakpoint (Force Remove Log)' }
-lvim.builtin.which_key.mappings.d['lL'] = {
-  "<cmd>lua DAP_edit_breakpoint(true)<cr>",
-  'Edit Breakpoint (Force Add Log)' }
