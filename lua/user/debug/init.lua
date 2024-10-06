@@ -19,6 +19,9 @@ lvim.builtin.which_key.mappings.d.L = {
   "Toggle UI Auto-Open"
 }
 
+-- NOTE: 顯示 DAP UI 的快捷鍵
+require "user.debug.ui_helper"
+
 lvim.builtin.which_key.mappings.s.b = { "<cmd>lua require'telescope'.extensions.dap.list_breakpoints()<cr>",
   "List breakpoints" }
 lvim.builtin.which_key.mappings.s.B = { "<cmd>Telescope git_branches<cr>", "Checkout branch" }
