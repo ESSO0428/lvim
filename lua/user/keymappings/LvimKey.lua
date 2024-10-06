@@ -235,3 +235,57 @@ lvim.keys.normal_mode["<F6>"]           = { "<cmd>lua require'dap'.step_out()<cr
 vim.cmd('noremap <a-p> <Nop>')
 vim.keymap.set('i', '<a-u>', "<Esc>:m .-2<cr>==gi")
 vim.keymap.set('i', '<a-o>', "<Esc>:m .+1<cr>==gi")
+
+function DAP_edit_breakpoint()
+  local Breakpoint_Condition = function()
+    require('persistent-breakpoints.api').set_breakpoint(
+      vim.fn.input('Breakpoint condition: '),
+      vim.fn.input('Hit condition: '),
+      vim.fn.input('Log point message: ')
+    )
+  end
+  -- Get all breakpoints
+  local breakpoints = require('dap.breakpoints').get()
+
+  -- Check if breakpoints is empty or nil, if so return
+  if breakpoints == nil or vim.tbl_isempty(breakpoints) then
+    Breakpoint_Condition()
+    return
+  end
+
+  -- Get current line and current buffer
+  local current_line = vim.fn.line('.')
+  local current_buffer = vim.fn.bufnr()
+
+  -- If there are breakpoints in the current buffer
+  if breakpoints[current_buffer] then
+    -- Traverse all breakpoints in the current buffer
+    for _, bp in pairs(breakpoints[current_buffer]) do
+      if bp.line then
+        local bp_line = bp.line
+
+        -- If the current line corresponds to the line of the breakpoint
+        if bp_line == current_line then
+          -- Directly input default value for condition, hitCondition, and logMessage
+          local condition_input = vim.fn.input('Breakpoint condition: ', bp.condition or "")
+          local hitCondition_input = vim.fn.input('Hit condition: ', bp.hitCondition or "")
+          local logMessage_input = vim.fn.input('Log point message: ', bp.logMessage or "")
+
+          -- Set breakpoint
+          require('persistent-breakpoints.api').set_breakpoint(
+            condition_input,
+            hitCondition_input,
+            logMessage_input
+          )
+          return
+        end
+      end
+    end
+  end
+  -- If no matching breakpoint, create a new one
+  Breakpoint_Condition()
+end
+
+lvim.builtin.which_key.mappings.d['le'] = {
+  "<cmd>lua DAP_edit_breakpoint()<cr>",
+  'Edit Breakpoint' }
