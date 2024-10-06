@@ -12,3 +12,148 @@ vim.cmd [[:amenu 10.195 Condition\ Breakpoint.Edit\ \+\ Breakpoint\ (Force\ Remo
 vim.cmd [[:amenu 10.196 Condition\ Breakpoint.Edit\ \+\ Breakpoint\ (Force\ Add\ Logpoint) <cmd>:lua DAP_edit_breakpoint(true)<CR>]]
 vim.cmd [[:amenu 10.200 PopUp.Clear\ All\ Breakpoints <cmd>:lua require('persistent-breakpoints.api').clear_all_breakpoints()<CR>]]
 vim.cmd [[:amenu 10.210 PopUp.-sep3- *]]
+vim.cmd [[:amenu 10.220 PopUp.Color\ Picker <cmd>:lua require("minty.huefy").open()<CR>]]
+vim.cmd [[:amenu 10.230 PopUp.-sep4- *]]
+
+-- NOTE: Plugin of Developmenting, so only use in NvimTree
+-- mouse users + nvimtree users!
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "NvimTree",
+  callback = function()
+    vim.keymap.set("n", "<RightMouse>",
+      function()
+        vim.cmd.exec '"normal! \\<RightMouse>"'
+
+        local options = vim.bo.ft == "NvimTree" and "nvimtree" or "default"
+        if options == "default" then
+          options = {
+            {
+              name = "Code Actions",
+              cmd = function()
+                require('actions-preview').code_actions()
+              end,
+              rtxt = "<leader>ua",
+            },
+            {
+              name = "Toggle Breakpoint",
+              cmd = function()
+                require('persistent-breakpoints.api').toggle_breakpoint()
+              end,
+              rtxt = "<leader>\\",
+            },
+            { name = "separator" },
+            {
+              name = "List Breakpoints",
+              cmd = function()
+                require 'telescope'.extensions.dap.list_breakpoints()
+              end,
+              rtxt = "<leader>sb",
+            },
+            { name = "separator" },
+            {
+              name = "Condition Breakpoint",
+              items = {
+                {
+                  name = "Condition + Breakpoint",
+                  cmd = function()
+                    require('persistent-breakpoints.api').set_breakpoint(
+                      vim.fn.input('Breakpoint condition: '),
+                      vim.fn.input('Hit condition: '),
+                      nil
+                    )
+                  end,
+                  rtxt = "<leader>dlc",
+                },
+                {
+                  name = "Condition + Logpoint",
+                  cmd = function()
+                    require('persistent-breakpoints.api').set_breakpoint(
+                      vim.fn.input('Breakpoint condition: '),
+                      vim.fn.input('Hit condition: '),
+                      vim.fn.input('Log point message: ')
+                    )
+                  end,
+                  rtxt = "<leader>dll",
+                },
+                { name = "separator" }, -- 加入分隔線，保持原有結構
+                {
+                  name = "Edit Breakpoint",
+                  cmd = function()
+                    DAP_edit_breakpoint(false)
+                  end,
+                  rtxt = "<leader>dle",
+                },
+                {
+                  name = "Edit Breakpoint (Force Remove Logpoint)",
+                  cmd = function()
+                    DAP_edit_breakpoint(nil)
+                  end,
+                  rtxt = "<leader>dlE",
+                },
+                {
+                  name = "Edit Breakpoint (Force Add Logpoint)",
+                  cmd = function()
+                    DAP_edit_breakpoint(true)
+                  end,
+                  rtxt = "<leader>dlL",
+                },
+              }
+            },
+            { name = "separator" },
+            {
+              name = "Clear All Breakpoints",
+              cmd = function()
+                require('persistent-breakpoints.api').clear_all_breakpoints()
+              end,
+              rtxt = "<leader>d\\",
+            },
+            { name = "separator" },
+            {
+              name = "  Lsp Actions",
+              hl = "Exblue",
+              items = "lsp",
+            },
+            { name = "separator" },
+            {
+              name = "  Open in terminal",
+              hl = "ExRed",
+              cmd = function()
+                local old_buf = require("menu.state").old_data.buf
+                local old_bufname = vim.api.nvim_buf_get_name(old_buf)
+                local old_buf_dir = vim.fn.fnamemodify(old_bufname, ":h")
+
+                local cmd = "cd " .. old_buf_dir
+
+                -- base46_cache var is an indicator of nvui user!
+                if vim.g.base46_cache then
+                  require("nvchad.term").new { cmd = cmd, pos = "sp" }
+                else
+                  vim.cmd "enew"
+                  vim.fn.termopen { vim.o.shell, "-c", cmd .. " ; " .. vim.o.shell }
+                end
+              end,
+            },
+            { name = "separator" },
+            {
+              name = "Copy Content",
+              cmd = "%y+",
+              rtxt = "<C-c>",
+            },
+            {
+              name = "Delete Content",
+              cmd = "%d",
+              rtxt = "dc",
+            },
+            { name = "separator" },
+            {
+              name = "  Color Picker",
+              cmd = function()
+                require("minty.huefy").open()
+              end,
+            },
+          }
+        end
+        require("menu").open(options, { mouse = true })
+      end, { buffer = true, silent = true, noremap = true })
+  end
+})

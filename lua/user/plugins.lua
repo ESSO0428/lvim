@@ -1343,8 +1343,16 @@ lvim.plugins = {
   },
   { "ESSO0428/mkdnflow.nvim", },
   {
-    "DougBeney/pickachu",
-    build = 'pip install Zenity'
+    "nvchad/volt",
+    lazy = true,
+  },
+  {
+    "nvchad/minty",
+    lazy = true,
+  },
+  {
+    "nvchad/menu",
+    lazy = true,
   },
   { "dhruvasagar/vim-table-mode" },
   {

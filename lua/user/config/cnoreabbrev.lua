@@ -3,7 +3,6 @@ vim.cmd([[
   command! Bro silent! exec "!/mnt/c/Program\\ Files\\ \\(x86\\)/Google/Chrome/Application/chrome.exe http://localhost:8000  --incognito"
   " command! Rcode exec "lua rcode()"
   " command! Code silent! exec "lua code()"
-  command! ColorPicker silent! exec "Pickachu"
   " command! -nargs=1 Open call OpenExplorer(<q-args>)
   command! -nargs=* -complete=customlist,OpenComplete Open call OpenExplorer(<q-args>)
   " command! Code silent! exec "lua require('export-to-vscode').launch()"
@@ -31,3 +30,8 @@ endfunction
 
 vim.api.nvim_create_user_command('Code', 'silent! lua code(<q-args>)', { nargs = "*" })
 vim.api.nvim_create_user_command('Rcode', 'silent! lua rcode(<q-args>)', { nargs = "*" })
+
+vim.api.nvim_create_user_command(
+  'ColorPicker',
+  'silent! lua require("minty.huefy").open( { border = true } )', { nargs = "*" }
+)
