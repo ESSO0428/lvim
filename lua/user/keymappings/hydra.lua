@@ -22,7 +22,7 @@ local hydra_config = {
 hydra(hydra_config)
 
 hint = [[
-_[_/_]_: nreakpint prev/next _S_: go to brreakpint stop
+_[_/_]_: breakpint prev/next _S_: go to breakpint stop
 ]]
 hydra_config = {
   name = "debug",
@@ -61,4 +61,24 @@ hydra_config = {
   }
 }
 
+hydra(hydra_config)
+
+hint = [[
+_[_/_]_: spell prev/next
+]]
+hydra_config = {
+  name = "spell",
+  mode = { "n" },
+  hint = hint,
+  config = {
+    invoke_on_body = true,
+    color = "pink",
+    hint = { border = "rounded" },
+  },
+  body = "sp",
+  heads = {
+    { ']', "]s",    { desc = 'next spell' } },
+    { '[', "[s",    { desc = 'prev spell' } },
+  }
+}
 hydra(hydra_config)

@@ -148,7 +148,7 @@ lvim.builtin.which_key.mappings["t'"] = { "<cmd>tab split<CR>", "tabn split" }
 lvim.builtin.which_key.mappings['t/'] = { "<cmd>tabn 1<CR>", "tabn 1" }
 lvim.builtin.which_key.mappings['t,'] = { "<cmd>tabprevious<CR>", "tabprevious" }
 lvim.builtin.which_key.mappings['t.'] = { "<cmd>tabnext<CR>", "tabnext" }
-lvim.builtin.which_key.mappings['t\\'] = { "<cmd>tabclose<CR>", "tabblose" }
+lvim.builtin.which_key.mappings['t\\'] = { "<cmd>tabclose<CR>", "tabclose" }
 
 lvim.builtin.which_key.mappings.s['d'] = { "<cmd>Telescope cder theme=get_ivy<cr>", "Chage Folder" }
 lvim.builtin.which_key.mappings.s['a'] = { "<cmd>lua require('swenv.api').pick_venv()<cr>", "Chage Python Env" }
