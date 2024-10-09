@@ -1,7 +1,7 @@
 ---
 title: My Neovim Config (lunarvim)
 author: Andy6
-date: 2023-10-08
+date: Sunday, October, 08, 2023
 ---
 
 # My Neovim Config
@@ -13,6 +13,7 @@ date: 2023-10-08
     - [Overview (use this config)](#overview-use-this-config)
     - [Some notice](#some-notice)
       - [Copilot](#copilot)
+        - [CopilotChat](#copilotchat)
     - [About update lunarvim and neovim core to Latest Release](#about-update-lunarvim-and-neovim-core-to-latest-release)
 <!--toc:end-->
 
@@ -22,11 +23,11 @@ use neovim pre-config lunarvim
 
 ### Current support neovim version
 
-NVIM v0.10.1 (release)
+NVIM v0.10.2 (release)
 
 ```bash
 $ nvim --version
-NVIM v0.10.1
+NVIM v0.10.2
 Build type: Release
 LuaJIT 2.1.1713484068
 Run "nvim -V1 -v" for more info
@@ -115,6 +116,41 @@ if you are only a user, suggest ask `your admin` to help you install `glbc-2.31`
   - If your Node.js version is 18.x or above:
   - You can use the `:Copilot auth` command (in cmd of nvim) to register Copilot service on this Neovim server.
   - **Prerequisites**: You should have registered for Copilot service and successfully logged in on GitHub.
+
+##### CopilotChat
+
+Through the [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim) plugin, an interactive interface with Copilot is provided, allowing you to open a chat interface to interactively modify code.
+- **Configuration**:
+  - The main settings are located in the [lua/user/copilot.lua](./lua/user/copilot.lua) file, and the prompts are read from `.md` files in the `CopilotChatPrompts` directory.
+  - The corresponding prompts are managed in `.md` files located in the [docs/CopilotChatPrompts](./docs/CopilotChatPrompts) directory.
+    - Each prompt's corresponding file and its purpose can be found in [docs/CopilotChatPrompts/Index.md](./docs/CopilotChatPrompts/Index.md).
+    - <details>
+        <summary><b>Usage</b></summary>
+
+        - Open the chat interface (use the following commands or set the commands in the keymap to activate)
+          - `:CopilotChatOpen`
+        - Open the **CopilotChat sub-command list** (activate in the same way as above)
+          - `:lua CopilotChatPromptAction()`
+        - **CopilotChat sub-command list**
+          - Core commands:
+            - `Explain`: Explain the selected code.
+            - `Review`: Review the selected code.
+            - `Fix`: Fix issues in the selected code.
+            - `Optimize`: Optimize the selected code for better performance and readability.
+            - `Docs`: Generate documentation comments for the selected code.
+            - `Tests`: Generate tests for the selected code.
+            - `FixDiagnostic`: Assist in fixing diagnostic issues in the file.
+            - `Commit`: Generate a commit message for the changes, following the commitizen convention.
+            - `CommitStaged`: Generate a commit message for the staged changes, following the commitizen convention.
+          - Custom commands (For example):
+            - `Ask`: Ask a question.
+            - `ReviewClear`: Clear code review marks.
+            - `OneLineComment`: Generate a one-line comment for the selected code.
+            - `OneParagraphComment`: Generate a paragraph comment for the selected code.
+          - As mentioned earlier:
+            - The core commands are managed through `.md` files, based on the official templates with some adjustments.
+            - Custom commands are also managed through `.md` files.
+      </details> 
 
 
 ### About update lunarvim and neovim core to Latest Release
