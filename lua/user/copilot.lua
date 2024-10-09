@@ -128,7 +128,31 @@ select.gitdiff = function(source, staged)
   return select_buffer
 end
 
+local function read_copilot_prompt(file)
+  -- Get the current Neovim configuration directory
+  local config_dir = vim.fn.stdpath('config')
+
+  -- Directory containing the .md files
+  local prompt_directory = config_dir .. '/docs/CopilotChatPrompts'
+  local prompt_file = prompt_directory .. '/' .. file
+  local f = io.open(prompt_file, 'r')
+  local prompts = ""
+  if f then
+    local content = f:read('*all')
+    prompts = content
+    f:close()
+  else
+    prompts = ""
+  end
+  return prompts
+end
+
+-- NOTE: Use cmp for CopilotChat prompt completion of CopilotChat commands
 require("CopilotChat.integrations.cmp").setup()
+-- NOTE: CopilotChat 主要配置
+-- prompts 另外配置於 : `~/.config/lvim/docs/CopilotChatPrompts/`
+-- Prompts are configured separately at: `~/.config/lvim/docs/CopilotChatPrompts/`
+-- For detailed information, see: `~/.config/lvim/docs/CopilotChatPrompts/Index.md`
 require("CopilotChat").setup {
   debug = true, -- Enable debugging
   model = "gpt-4o",
@@ -165,10 +189,10 @@ require("CopilotChat").setup {
   -- },
   -- NOTE: Chinese prompts
   prompts = {
-    Explain = '/COPILOT_EXPLAIN 為選定的部分寫一段文字解釋。',
-    Ask = '/COPILOT_EXPLAIN 等待我對選定文字的提問 (請告訴我你是否準備好了)',
+    Explain = '/COPILOT_EXPLAIN ' .. read_copilot_prompt('Explain.md'),
+    Ask = '/COPILOT_EXPLAIN ' .. read_copilot_prompt('Ask.md'),
     Review = {
-      prompt = '/COPILOT_REVIEW 審查選定的程式碼 (並用繁體中文說明)。',
+      prompt = '/COPILOT_REVIEW ' .. read_copilot_prompt('Review.md'),
       callback = function(response, source)
         local ns = vim.api.nvim_create_namespace('copilot_review')
         local diagnostics = {}
@@ -207,7 +231,7 @@ require("CopilotChat").setup {
       end,
     },
     ReviewClear = {
-      prompt = '/COPILOT_REVIEW 幫我清除 Review 的標記 (只要回答沒問題即可)',
+      prompt = '/COPILOT_REVIEW ' .. read_copilot_prompt('ReviewClear.md'),
       callback = function(response, source)
         local ns = vim.api.nvim_create_namespace('copilot_review')
         local diagnostics = {}
@@ -246,22 +270,22 @@ require("CopilotChat").setup {
         vim.diagnostic.set(ns, source.bufnr, diagnostics)
       end
     },
-    Fix = '/COPILOT_GENERATE 1. 這段程式碼有問題。請重寫程式碼以修復錯誤 (並在修復錯誤後用繁體中文說明修復了什麼) 2. 注意產生的代碼塊不能包含行號',
-    Optimize = '/COPILOT_GENERATE 1. 優化選定的程式碼以提高性能和可讀性 (並在優化完後用繁體中文說明寫了什麼) 2. 注意產生的代碼塊不能包含行號',
-    OneLineComment = '/COPILOT_GENERATE 1. 為選定的部分上方添加一行英文註釋 2. 在寫完註釋後，用繁體中文完整說明生成的註釋內容 3. 如果生成的註解為英文，最後說明的部分必須提供對應的繁體中文翻譯 4. 注意產生的代碼塊不能包含行號',
-    OneParagraphComment = '/COPILOT_GENERATE 1. 為選定的部分上方添加英文註釋摘要，確保每一行不超過 50 字 2. 在寫完註釋後，用繁體中文完整說明生成的註釋內容 3. 如果生成的註解為英文，最後說明的部分必須提供對應的繁體中文翻譯 4. 注意產生的代碼塊不能包含行號',
-    Docs = '/COPILOT_GENERATE 1. 請為選定的部分添加英文的文檔註釋 2. 若檢測到文檔註釋處先前已按照其他 Annotation Conventions 撰寫，請繼續依照該 Conventions 將文檔撰寫完成 3. 在寫完註釋後，請用繁體中文完整說明生成的文檔註釋的內容 4. 如果生成的註解為英文，最後說明的部分必須提供對應的繁體中文翻譯 5. 注意產生的代碼塊不能包含行號',
-    Tests = '/COPILOT_GENERATE 1. 請為我的程式碼生成測試 (並在寫完測試後用繁體中文說明寫了什麼) 2. 注意產生的代碼塊不能包含行號',
+    Fix = '/COPILOT_GENERATE ' .. read_copilot_prompt('Fix.md'),
+    Optimize = '/COPILOT_GENERATE ' .. read_copilot_prompt('Optimize.md'),
+    OneLineComment = '/COPILOT_GENERATE ' .. read_copilot_prompt('OneLineComment.md'),
+    OneParagraphComment = '/COPILOT_GENERATE ' .. read_copilot_prompt('OneParagraphComment.md'),
+    Docs = '/COPILOT_GENERATE ' .. read_copilot_prompt('Docs.md'),
+    Tests = '/COPILOT_GENERATE ' .. read_copilot_prompt('Tests.md'),
     FixDiagnostic = {
-      prompt = '請協助修復檔案的診斷問題 (並用繁體中文說明):',
+      prompt = read_copilot_prompt('FixDiagnostic.md'),
       selection = select.diagnostics,
     },
     Commit = {
-      prompt = '按照 commitizen 規範撰寫英文提交訊息。確保標題最多有 50 個字元，訊息在 72 個字元處換行。將整個訊息用 gitcommit 語言的程式碼塊包裹起來 (隨後提供一個不包含語法高亮標籤的對應的繁體中文版本)。',
+      prompt = read_copilot_prompt('Commit.md'),
       selection = select.gitdiff,
     },
     CommitStaged = {
-      prompt = '按照 commitizen 規範撰寫英文提交訊息。確保標題最多有 50 個字元，訊息在 72 個字元處換行。將整個訊息用 gitcommit 語言的程式碼塊包裹起來 (隨後提供一個不包含語法高亮標籤的對應的繁體中文版本)。',
+      prompt = read_copilot_prompt('CommitStaged.md'),
       selection = function(source)
         return select.gitdiff(source, true)
       end,
