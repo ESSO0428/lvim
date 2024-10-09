@@ -54,7 +54,7 @@ Run "nvim -V1 -v" for more info
   2. install `lunarvim` and `neovim` use my script
     - ```bash
       cd ~
-      sh ~/.config/lvim/Installlunarvim.sh
+      sh ~/.config/lvim/InstallLunarvim.sh
       ```
   3. other [reference](#about-update-lunarvim-and-neovim-core-to-latest-release) after step2
 - Install `lunarvim` and `neovim` manually
@@ -158,7 +158,7 @@ Through the [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim
 1. Can use below command to update lunarvim and neovim core to Latest Release
   - ```bash
     # NOTE: Update lunarvim and neovim core to Latest Release
-    sh ~/.config/lvim/UpdateNvimReleaseAndLunaCore.sh
+    sh ~/.config/lvim/UpdateNvimReleaseAndLunarCore.sh
     # NOTE: or you only want to update neovim to Latest Release
     # sh ~/.config/lvim/UpdateNvimReleaseOnly.sh
     ```
