@@ -225,6 +225,8 @@ lvim.builtin.which_key.mappings.d['ll'] = {
   'Condition Logponit Message' }
 lvim.builtin.which_key.mappings.d.v     = { "<cmd>lua require('dapui').eval()<cr>", "Evaluate Expression" }
 lvim.keys.visual_mode["<leader>dv"]     = { "<cmd>lua require('dapui').eval()<cr>" }
+lvim.keys.normal_mode["gH"]             = { "<cmd>lua require('dapui').eval()<cr>" }
+lvim.keys.visual_mode["gH"]             = { "<cmd>lua require('dapui').eval()<cr>" }
 lvim.keys.normal_mode["<F5>"]           = { "<cmd>lua require('dap').continue()<cr>" }
 lvim.keys.normal_mode["<F17>"]          = { "<cmd>lua require('dap').close()<cr>" }
 lvim.keys.normal_mode["<F8>"]           = { "<cmd>lua require'dap'.step_into()<cr>" }
