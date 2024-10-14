@@ -1348,7 +1348,7 @@ lvim.plugins = {
   },
   {
     "nvchad/minty",
-    lazy = true,
+    cmd = { "Shades", "Huefy" },
   },
   {
     "nvchad/menu",

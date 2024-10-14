@@ -33,5 +33,5 @@ vim.api.nvim_create_user_command('Rcode', 'silent! lua rcode(<q-args>)', { nargs
 
 vim.api.nvim_create_user_command(
   'ColorPicker',
-  'silent! lua require("minty.huefy").open( { border = true } )', { nargs = "*" }
+  'silent! Huefy', { nargs = "*" }
 )
