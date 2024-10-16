@@ -51,8 +51,14 @@ require('avante').setup({
       prev = "[[",
     },
     submit = {
-      normal = "<cr>",
+      normal = "<CR>",
       insert = "<C-s>",
+    },
+    sidebar = {
+      apply_all = "A",
+      apply_cursor = "a",
+      switch_windows = "<Tab>",
+      reverse_switch_windows = "<S-Tab>",
     },
   },
   hints = { enabled = true },
@@ -64,6 +70,18 @@ require('avante').setup({
     sidebar_header = {
       align = "center", -- left, center, right for title
       rounded = true,
+    },
+    input = {
+      prefix = "> ",
+    },
+    edit = {
+      border = "rounded",
+      start_insert = true, -- Start insert mode when opening the edit window
+    },
+    ask = {
+      floating = false,    -- Open the 'AvanteAsk' prompt in a floating window
+      start_insert = true, -- Start insert mode when opening the ask window, only effective if floating = true.
+      border = "rounded",
     },
   },
   highlights = {
