@@ -543,7 +543,6 @@ lvim.plugins = {
     build = ":UpdateRemotePlugins",
     event = "CmdlineEnter"
   },
-  { "f3fora/cmp-spell" },
   { "rcarriga/cmp-dap" },
   {
     "github/copilot.vim",

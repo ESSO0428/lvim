@@ -41,8 +41,7 @@ require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
         end
       }
 
-    },
-    { name = "spell" }
+    }
   }
 })
 require("cmp").setup.filetype({ "copilot-chat" }, {
@@ -76,8 +75,7 @@ require("cmp").setup.filetype({ "copilot-chat" }, {
       }
 
     },
-    { name = "path" },
-    { name = "spell" }
+    { name = "path" }
   }
 })
 lvim.builtin.cmp.snippet = {
@@ -130,17 +128,6 @@ lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vsnip" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "orgmode" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "dap" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vim-dadbod-completion" }
-lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = {
-  name = "spell",
-  max_item_count = 3,
-  option = {
-    keep_all_entries = true,
-    enable_in_context = function()
-      return true
-      -- return require('cmp.config.context').in_treesitter_capture('spell')
-    end,
-  },
-}
 
 table.insert(lvim.builtin.cmp.sources, 1, {
   name = "html-css",
@@ -236,10 +223,6 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
     if entry.source.name == "vim-dadbod-completion" then
       vim_item.kind = ""
       vim_item.kind_hl_group = "CmpItemKindEmoji"
-    end
-    if entry.source.name == "spell" then
-      vim_item.kind = "󰉿"
-      vim_item.kind_hl_group = "CmpItemKindConstant"
     end
   end
   vim_item.menu = lvim.builtin.cmp.formatting.source_names[entry.source.name]
@@ -488,7 +471,6 @@ lvim.builtin.cmp.formatting.source_names.ultisnips = "(U-Snippet)"
 lvim.builtin.cmp.formatting.source_names.orgmode = "(orgmode)"
 lvim.builtin.cmp.formatting.source_names.dap = "(dap)"
 lvim.builtin.cmp.formatting.source_names['vim-dadbod-completion'] = "(dadbod-sql)"
-lvim.builtin.cmp.formatting.source_names['spell'] = "(spell)"
 lvim.builtin.cmp.formatting.source_names.jupyter = "(jupyter)"
 lvim.builtin.cmp.formatting.source_names.jupynium = "(jupynium)"
 lvim.builtin.cmp.formatting.source_names["copilot-chat"] = "(copilot-chat)"
