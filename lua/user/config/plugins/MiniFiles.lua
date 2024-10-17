@@ -66,8 +66,9 @@ vim.api.nvim_create_autocmd("User", {
 
     -- Bind the function to the `<tab>` key in normal mode for the current buffer
     vim.keymap.set("n", "<tab>", go_in_entry, { buffer = buf_id, desc = "Open" })
-    -- Bind the function to the `l` key in normal mode for the current buffer
+    -- Bind the function to the `l` and `<cr>` key in normal mode for the current buffer
     vim.keymap.set("n", "l", open_in_window_picker, { buffer = buf_id, desc = "Open in target window" })
+    vim.keymap.set("n", "<cr>", open_in_window_picker, { buffer = buf_id, desc = "Open in target window" })
     -- Bind `<a-l>` to open with vsplit in target window
     vim.keymap.set("n", "<a-l>", open_in_vsplit, { buffer = buf_id, desc = "Open with vertical split" })
     -- Bind "<a-k>" to open with split in target window
