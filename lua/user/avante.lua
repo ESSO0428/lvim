@@ -19,6 +19,7 @@ vim.cmd "au ColorScheme * hi link AvanteConflictIncoming DiffAdd"
 vim.api.nvim_create_user_command('AvanteCacheReset', function() require("avante.path").setup() end, {})
 
 -- NOTE: Avante config
+require('avante_lib').load()
 require('avante').setup({
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
   provider = "copilot",       -- Recommend using Claude
