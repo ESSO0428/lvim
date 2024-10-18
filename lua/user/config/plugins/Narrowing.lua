@@ -11,7 +11,7 @@ function narrow_except_selection(visual_mode)
     vim.cmd('split')
     require("ufo").detach()
     vim.cmd('setlocal foldtext=')
-    pcall(function() vim.cmd('normal! zO') end)
+    pcall(function() vim.cmd('normal! zR') end)
   else
     local ok, err = pcall(function()
       vim.cmd('normal! zaza')
