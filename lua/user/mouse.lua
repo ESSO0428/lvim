@@ -74,7 +74,7 @@ vim.keymap.set("n", "<RightMouse>",
             {
               name = "Edit Breakpoint",
               cmd = function()
-                DAP_edit_breakpoint(false)
+                DAP_edit_breakpoint()
               end,
               rtxt = "<leader>dle",
             }
