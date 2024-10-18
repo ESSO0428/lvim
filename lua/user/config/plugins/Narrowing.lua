@@ -9,7 +9,6 @@ function narrow_except_selection(visual_mode)
     vim.cmd('split')
     vim.cmd('UfoDisable')
   else
-    vim.cmd('normal! zR')
     local ok, err = pcall(function()
       vim.cmd('normal! zaza')
     end)
