@@ -8,6 +8,7 @@ function narrow_except_selection(visual_mode)
     _, end_line, _, _ = unpack(vim.fn.getpos("'>"))
     vim.cmd('split')
     require("ufo").detach()
+    vim.cmd('setlocal foldtext=')
     pcall(function() vim.cmd('normal! zO') end)
   else
     local ok, err = pcall(function()
@@ -20,6 +21,7 @@ function narrow_except_selection(visual_mode)
 
     vim.cmd('split')
     require("ufo").detach()
+    vim.cmd('setlocal foldtext=')
     pcall(function() vim.cmd('normal! zO') end)
     start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
