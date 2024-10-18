@@ -7,7 +7,7 @@ function narrow_except_selection(visual_mode)
     _, start_line, _, _ = unpack(vim.fn.getpos("'<"))
     _, end_line, _, _ = unpack(vim.fn.getpos("'>"))
     vim.cmd('split')
-    vim.cmd('UfoDisable')
+    vim.cmd('UfoDetach')
   else
     local ok, err = pcall(function()
       vim.cmd('normal! zaza')
@@ -18,7 +18,7 @@ function narrow_except_selection(visual_mode)
     end
 
     vim.cmd('split')
-    vim.cmd('UfoDisable')
+    vim.cmd('UfoDetach')
     start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
     vim.cmd('normal! ]z')
