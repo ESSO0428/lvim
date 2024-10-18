@@ -1,11 +1,13 @@
 -- Custom function to implement the Narrow effect outside the selected area
 function narrow_except_selection(visual_mode)
   -- 保存當前視窗位置
-  local start_line, end_line
+  local start_line, start_col, fold_start_line, end_line
   if visual_mode then
     -- Get the currently selected area (visual mode)
     _, start_line, _, _ = unpack(vim.fn.getpos("'<"))
     _, end_line, _, _ = unpack(vim.fn.getpos("'>"))
+    fold_start_line = start_line
+    start_col = 0
     vim.cmd('split')
     require("ufo").detach()
     vim.cmd('setlocal foldtext=')
@@ -22,25 +24,24 @@ function narrow_except_selection(visual_mode)
     vim.cmd('split')
     require("ufo").detach()
     vim.cmd('setlocal foldtext=')
+    start_line, start_col = unpack(vim.api.nvim_win_get_cursor(0))
     vim.cmd('normal! [z')
     pcall(function() vim.cmd('normal! zO') end)
-    start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
+    fold_start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
     vim.cmd('normal! ]z')
     end_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
   end
-  vim.fn.cursor(start_line, 0)
+  vim.fn.cursor(fold_start_line, 0)
 
-  if vim.tbl_contains({ 'markdown', 'org' }, vim.bo.filetype) then
-    vim.opt_local.foldmethod = "manual"
-    vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
-  end
+  vim.opt_local.foldmethod = "manual"
+  vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
 
   -- Handle the part above the selection
-  if start_line > 1 then
+  if fold_start_line > 1 then
     -- Move to the first line, select to the line before the start line, unfold and fold
     pcall(function() vim.cmd('1,.-1normal! zd') end)
-    vim.fn.cursor(start_line - 1, 0)
+    vim.fn.cursor(fold_start_line - 1, 0)
     pcall(function() vim.cmd('normal! VggzDgvzf') end)
   end
 
@@ -52,7 +53,7 @@ function narrow_except_selection(visual_mode)
     pcall(function() vim.cmd('normal! VGzDgvzf') end)
   end
 
-  vim.fn.cursor(start_line, 0)
+  vim.fn.cursor(start_line, start_col)
 
   local win_id = vim.api.nvim_get_current_win()
   -- set an autocmd to re-attach UFO when this window closes, and only run once
