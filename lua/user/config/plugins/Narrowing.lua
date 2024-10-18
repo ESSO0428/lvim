@@ -6,6 +6,8 @@ function narrow_except_selection(visual_mode)
     -- Get the currently selected area (visual mode)
     _, start_line, _, _ = unpack(vim.fn.getpos("'<"))
     _, end_line, _, _ = unpack(vim.fn.getpos("'>"))
+    vim.cmd('split')
+    vim.cmd('UfoDisable')
   else
     vim.cmd('normal! zR')
     local ok, err = pcall(function()
@@ -15,16 +17,15 @@ function narrow_except_selection(visual_mode)
       print("Not Found Fold")
       return
     end
+
+    vim.cmd('split')
+    vim.cmd('UfoDisable')
     start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
     vim.cmd('normal! ]z')
     end_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
   end
   vim.fn.cursor(start_line, 0)
-
-  vim.cmd('split')
-  vim.cmd('UfoDisable')
-
   pcall(function() vim.cmd('normal! zo') end)
 
   -- Handle the part above the selection
