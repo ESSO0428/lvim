@@ -30,7 +30,7 @@ function narrow_except_selection(visual_mode)
   end
   vim.fn.cursor(start_line, 0)
 
-  if vim.bo.filetype == 'markdown' then
+  if vim.tbl_contains({ 'markdown', 'org' }, vim.bo.filetype) then
     vim.opt_local.foldmethod = "manual"
     vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
   end
