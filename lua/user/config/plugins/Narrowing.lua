@@ -31,7 +31,7 @@ function narrow_except_selection(visual_mode)
   if start_line > 1 then
     -- Move to the first line, select to the line before the start line, unfold and fold
     vim.fn.cursor(start_line - 1, 0)
-    pcall(function() vim.cmd('normal! Vggzdgvzf') end)
+    pcall(function() vim.cmd('normal! VggzDgvzf') end)
   end
 
   -- Handle the part below the selection
@@ -39,7 +39,7 @@ function narrow_except_selection(visual_mode)
   if end_line < last_line then
     -- Move to the line after the end line, select to the last line, unfold and fold
     vim.fn.cursor(end_line + 1, 0)
-    pcall(function() vim.cmd('normal! VGzdgvzf') end)
+    pcall(function() vim.cmd('normal! VGzDgvzf') end)
   end
 end
 
