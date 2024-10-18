@@ -22,6 +22,7 @@ function narrow_except_selection(visual_mode)
     vim.cmd('split')
     require("ufo").detach()
     vim.cmd('setlocal foldtext=')
+    vim.cmd('normal! [z')
     pcall(function() vim.cmd('normal! zO') end)
     start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
