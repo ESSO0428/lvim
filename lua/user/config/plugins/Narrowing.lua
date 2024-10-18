@@ -8,6 +8,7 @@ function narrow_except_selection(visual_mode)
     _, end_line, _, _ = unpack(vim.fn.getpos("'>"))
     vim.cmd('split')
     vim.cmd('UfoDetach')
+    pcall(function() vim.cmd('normal! zo') end)
   else
     local ok, err = pcall(function()
       vim.cmd('normal! zaza')
@@ -19,13 +20,13 @@ function narrow_except_selection(visual_mode)
 
     vim.cmd('split')
     vim.cmd('UfoDetach')
+    pcall(function() vim.cmd('normal! zo') end)
     start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
     vim.cmd('normal! ]z')
     end_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
   end
   vim.fn.cursor(start_line, 0)
-  pcall(function() vim.cmd('normal! zo') end)
 
   -- Handle the part above the selection
   if start_line > 1 then
