@@ -7,7 +7,7 @@ function narrow_except_selection(visual_mode)
     _, start_line, _, _ = unpack(vim.fn.getpos("'<"))
     _, end_line, _, _ = unpack(vim.fn.getpos("'>"))
     vim.cmd('split')
-    vim.cmd('UfoDetach')
+    require("ufo").detach()
     pcall(function() vim.cmd('normal! zO') end)
   else
     local ok, err = pcall(function()
@@ -19,7 +19,7 @@ function narrow_except_selection(visual_mode)
     end
 
     vim.cmd('split')
-    vim.cmd('UfoDetach')
+    require("ufo").detach()
     pcall(function() vim.cmd('normal! zO') end)
     start_line, _ = unpack(vim.api.nvim_win_get_cursor(0))
 
@@ -43,6 +43,19 @@ function narrow_except_selection(visual_mode)
     vim.fn.cursor(end_line + 1, 0)
     pcall(function() vim.cmd('normal! VGzDgvzf') end)
   end
+
+  local win_id = vim.api.nvim_get_current_win()
+  -- set an autocmd to re-attach UFO when this window closes, and only run once
+  vim.api.nvim_create_autocmd("WinClosed", {
+    callback = function(args)
+      if tonumber(args.match) == win_id then
+        require("ufo").attach()
+      end
+    end,
+    desc = "Automatically re-attach UFO when this specific window closes",
+    pattern = tostring(win_id),
+    once = true,
+  })
 end
 
 -- Bind the function to the shortcut key <leader>On in visual mode
