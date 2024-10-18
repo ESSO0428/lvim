@@ -9,7 +9,8 @@ function narrow_except_selection(visual_mode)
   else
     vim.cmd('normal! zR')
     local ok, err = pcall(function()
-      vim.cmd('normal! zo')
+      vim.cmd('normal! za')
+      vim.cmd('normal! za')
     end)
     if not ok then
       print("Not Found Fold")
