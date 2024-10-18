@@ -30,6 +30,11 @@ function narrow_except_selection(visual_mode)
   end
   vim.fn.cursor(start_line, 0)
 
+  if vim.bo.filetype == 'markdown' then
+    vim.opt_local.foldmethod = "manual"
+    vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
+  end
+
   -- Handle the part above the selection
   if start_line > 1 then
     -- Move to the first line, select to the line before the start line, unfold and fold
