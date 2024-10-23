@@ -311,8 +311,6 @@ inoremap <a-n> <Up>
 inoremap <a-m> <Down>
 inoremap <a-,> <Left>
 inoremap <a-.> <Right>
-inoremap <a-[> <Home>
-inoremap <a-]> <End>
 
 " ==================== Command Mode Cursor Movement ====================
 cnoremap <C-a> <Home>

@@ -40,7 +40,6 @@ require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
           return vim.tbl_keys(bufs)
         end
       }
-
     }
   }
 })
@@ -73,7 +72,6 @@ require("cmp").setup.filetype({ "copilot-chat" }, {
           return vim.tbl_keys(bufs)
         end
       }
-
     },
     { name = "path" }
   }
