@@ -66,6 +66,8 @@ lvim.builtin.lir.active = true
 -- lvim.builtin.breadcrumbs.active = false
 lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "dbui"
 lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "undotree"
+lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "Avante"
+lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "AvanteInput"
 
 -- bufferline offset
 lvim.builtin.bufferline.options.always_show_bufferline = true
