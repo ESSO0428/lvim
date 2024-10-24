@@ -286,6 +286,7 @@ else
       ["l"] = { api.node.open.edit, opts "Open" },
       ["u"] = { float_termMore, opts "lvim_FloatTermMore" },
       ["o"] = { api.node.open.no_window_picker, opts "Open: No Window Picker" },
+      ["<Tab>"] = { api.node.open.preview_no_picker, opts "Open Preview" },
       ["<cr>"] = { api.node.open.edit, opts "Open" },
       ["b"] = { api.tree.toggle_no_buffer_filter, opts "Toggle No Buffer" },
       ["gi"] = { api.node.navigate.sibling.first, opts "First Sibling" },
