@@ -68,6 +68,32 @@ lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winba
 lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "undotree"
 lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "Avante"
 lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "AvanteInput"
+---@diagnostic disable-next-line: duplicate-set-field
+require("lvim.core.breadcrumbs").create_winbar = function()
+  vim.api.nvim_create_augroup("_winbar", {})
+  vim.api.nvim_create_autocmd({
+    "CursorHoldI",
+    "CursorHold",
+    "BufWinEnter",
+    "BufFilePost",
+    "InsertEnter",
+    "BufWritePost",
+    "TabClosed",
+    "TabEnter",
+  }, {
+    group = "_winbar",
+    callback = function()
+      if lvim.builtin.breadcrumbs.active then
+        local status_ok, _ = pcall(vim.api.nvim_buf_get_var, 0, "lsp_floating_window")
+        if not status_ok then
+          if vim.bo.buftype == "nofile" then return end
+          require("lvim.core.breadcrumbs").get_winbar()
+        end
+      end
+    end,
+  })
+end
+
 
 -- bufferline offset
 lvim.builtin.bufferline.options.always_show_bufferline = true
