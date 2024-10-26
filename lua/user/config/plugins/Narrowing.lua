@@ -55,11 +55,14 @@ function narrow_except_selection(visual_mode)
   vim.fn.cursor(start_line, start_col)
 
   local win_id = vim.api.nvim_get_current_win()
+  vim.b.narrow_mode = true
+
   -- set an autocmd to re-attach UFO when this window closes, and only run once
   vim.api.nvim_create_autocmd("WinClosed", {
     callback = function(args)
       if tonumber(args.match) == win_id then
         require("ufo").attach()
+        vim.b.narrow_mode = false
       end
     end,
     desc = "Automatically re-attach UFO when this specific window closes",

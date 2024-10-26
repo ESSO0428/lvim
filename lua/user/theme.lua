@@ -208,6 +208,15 @@ lvim.builtin.lualine.sections.lualine_c[#lvim.builtin.lualine.sections.lualine_c
   auto_check_markdown_links_status }
 
 
+local function narrow_status()
+  if vim.b.narrow_mode == true then
+    return " Narrowing: true"
+  end
+  return ""
+end
+lvim.builtin.lualine.sections.lualine_c[#lvim.builtin.lualine.sections.lualine_c + 1] = { narrow_status }
+
+
 lvim.builtin.telescope.pickers.find_files.find_command = { "fd", "--type", "f" }
 
 lvim.builtin.telescope.defaults.layout_strategy        = "horizontal"
