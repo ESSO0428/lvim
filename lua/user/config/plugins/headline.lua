@@ -35,24 +35,16 @@ require("headlines").setup {
     query = vim.treesitter.query.parse(
       "markdown",
       [[
-            (atx_heading [
-                (atx_h1_marker)
-                (atx_h2_marker)
-                (atx_h3_marker)
-                (atx_h4_marker)
-                (atx_h5_marker)
-                (atx_h6_marker)
-            ] @headline)
+        (atx_heading [
+            (atx_h1_marker)
+            (atx_h2_marker)
+            (atx_h3_marker)
+            (atx_h4_marker)
+            (atx_h5_marker)
+            (atx_h6_marker)
+        ] @headline)
 
-            (thematic_break) @dash
-
-            (fenced_code_block) @codeblock
-
-            (block_quote_marker) @quote
-
-            (block_quote (paragraph (inline (block_continuation) @quote)))
-            (block_quote (paragraph (block_continuation) @quote))
-            (block_quote (block_continuation) @quote)
+        (fenced_code_block) @codeblock
       ]]
     ),
     -- headline_highlights = {
@@ -69,8 +61,6 @@ require("headlines").setup {
       "@text.title.6.marker.markdown",
     },
     bullets = { "◉", "○", "✸", "✿" },
-    dash_highlight = "Dash",
-    dash_string = "—",
     fat_headlines = false,
     codeblock_highlight = "CodeBlock",
     fat_headline_upper_string = "▃",
