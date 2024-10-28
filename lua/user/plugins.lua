@@ -130,7 +130,9 @@ lvim.plugins = {
           local entry_string = table.concat(file_names, ', ')
           return string.format('%d %s %s', tabpage_id, TablineData[tabpage_id].name, entry_string)
           -- require("tabby.feature.tab_name").get(tab_id)
-        end
+        end,
+        close_tab_shortcut_i = '<C-d>', -- if you're in insert mode
+        close_tab_shortcut_n = 'dd',    -- if you're in normal mode
       }
     end
   },
