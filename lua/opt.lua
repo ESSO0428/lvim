@@ -7,6 +7,7 @@ vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
 -- vim.opt.relativenumber = true
 vim.opt.number = true
+vim.opt.equalalways = false
 vim.opt.mousemoveevent = true
 lvim.builtin.project.manual_mode = true
 -- 摺疊代碼
@@ -210,6 +211,9 @@ lvim.builtin.nvimtree.setup.actions.change_dir = {
 }
 -- nvimtree tab sync default is false
 lvim.builtin.nvimtree.setup.tab.sync.open = false
+
+-- when nvimtree open weather disable auto resize all windows of current tab
+lvim.builtin.nvimtree.setup.view.preserve_window_proportions = true
 -- general
 lvim.log.level = "info"
 lvim.format_on_save = {
