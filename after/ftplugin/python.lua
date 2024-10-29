@@ -40,7 +40,7 @@ local opts = {
   },
 }
 require("lvim.lsp.manager").setup("basedpyright", opts)
-require("lvim.lsp.manager").setup("ruff_lsp", {
+require("lvim.lsp.manager").setup("ruff", {
   on_attach = function(client, buffer)
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.hoverProvider = false
