@@ -7,99 +7,6 @@ local f = ls.function_node
 local d = ls.dynamic_node
 local c = ls.choice_node
 
-local isn = ls.indent_snippet_node
-local fmt = require("luasnip.extras.fmt").fmt
-local types = require("luasnip.util.types")
-local events = require("luasnip.util.events")
-local r = ls.restore_node
-
-local function node_with_virtual_text(pos, node, text)
-  local nodes
-  if node.type == types.textNode then
-    node.pos = 2
-    nodes = { i(1), node }
-  else
-    node.pos = 1
-    nodes = { node }
-  end
-  return sn(pos, nodes, {
-    callbacks = {
-      -- node has pos 1 inside the snippetNode.
-      [1] = {
-        [events.enter] = function(nd)
-          -- node_pos: {line, column}
-          local node_pos = nd.mark:pos_begin()
-          -- reuse luasnips namespace, column doesn't matter, just 0 it.
-          nd.virt_text_id = vim.api.nvim_buf_set_extmark(0, ls.session.ns_id, node_pos[1], 0, {
-            virt_text = { { text, "GruvboxOrange" } },
-          })
-        end,
-        [events.leave] = function(nd)
-          vim.api.nvim_buf_del_extmark(0, ls.session.ns_id, nd.virt_text_id)
-        end,
-      },
-    },
-  })
-end
-
-local function nodes_with_virtual_text(nodes, opts)
-  if opts == nil then
-    opts = {}
-  end
-  local new_nodes = {}
-  for pos, node in ipairs(nodes) do
-    if opts.texts[pos] ~= nil then
-      node = node_with_virtual_text(pos, node, opts.texts[pos])
-    end
-    table.insert(new_nodes, node)
-  end
-  return new_nodes
-end
-
-local function choice_text_node(pos, choices, opts)
-  choices = nodes_with_virtual_text(choices, opts)
-  return c(pos, choices, opts)
-end
-
-local ct = choice_text_node
-
-local function py_init()
-  return c(1, {
-    t "",
-    sn(1, {
-      t ", ",
-      i(1),
-      d(2, py_init),
-    }),
-  })
-end
-
--- splits the string of the comma separated argument list into the arguments
--- and returns the text-/insert- or restore-nodes
-local function to_init_assign(args)
-  local tab = {}
-  local a = args[1][1]
-  if #a == 0 then
-    table.insert(tab, t { "", "\tpass" })
-  else
-    local cnt = 1
-    for e in string.gmatch(a, " ?([^,]*) ?") do
-      if #e > 0 then
-        table.insert(tab, t { "", "\tself." })
-        -- use a restore-node to be able to keep the possibly changed attribute name
-        -- (otherwise this function would always restore the default, even if the user
-        -- changed the name)
-        table.insert(tab, r(cnt, tostring(cnt), i(nil, e)))
-        table.insert(tab, t " = ")
-        table.insert(tab, t(e))
-        cnt = cnt + 1
-      end
-    end
-  end
-  return sn(nil, tab)
-end
-
-
 local function generic_pdoc(ilevel, args)
   local nodes = { t({ "'''", string.rep('\t', ilevel) }) }
   nodes[#nodes + 1] = i(1, 'Small Description.')
@@ -148,11 +55,33 @@ local function pycdoc(args, ostate)
   return snip
 end
 
+-- Function to get current date and time
+local function current_datetime()
+  return os.date("%a %b %d %H:%M:%S %Y")
+end
+
+-- Function to get current system user
+local function current_user()
+  return os.getenv("USER") or "unknown"
+end
+
+-- Function to get current file encoding, defaults to "ascii" if unknown
+local function file_encoding()
+  return vim.bo.fileencoding ~= '' and vim.bo.fileencoding or "ascii"
+end
+
 -- create the actual snippet
 local snippets = {
   s("#!", {
     t { "#!/usr/bin/env python", "" },
     i(0),
+  }),
+  s("spyder_header", {
+    t("# -*- coding: "), f(file_encoding, {}), t(" -*-"),
+    t({ "", '"""' }),
+    t({ "", "Created on " }), f(current_datetime, {}), t({ "", "" }),
+    t({ "", "@author: " }), f(current_user, {}), t({ "", '"""', "" }),
+    i(0) -- Jump here after filling header
   }),
   s({ trig = 'class', dscr = 'Documented Class Structure' }, {
     t('class '),
