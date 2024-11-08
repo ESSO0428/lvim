@@ -1,8 +1,8 @@
 -- lvim.lsp.
 lvim.lsp.buffer_mappings.normal_mode['K']  = nil
 lvim.lsp.buffer_mappings.normal_mode['gs'] = nil
--- lvim.keys.normal_mode['gh']                = "<cmd>lua vim.lsp.buf.signature_help()<cr>"
-function lsp_or_jupyter_signature_help()
+-- lvim.keys.normal_mode['gh']                = "<cmd>lua vim.lsp.buf.hover()<cr>"
+function lsp_or_jupyter_hover()
   local is_jupyter_attached = vim.b.jupyter_attached or false
 
   if is_jupyter_attached then
@@ -18,8 +18,8 @@ local function LspbufRename()
 end
 vim.api.nvim_create_user_command('LspbufRename', LspbufRename, {})
 
-lvim.keys.normal_mode['gh']                = "<cmd>lua lsp_or_jupyter_signature_help()<cr>"
-lvim.lsp.buffer_mappings.normal_mode['gh'] = { "<cmd>lua lsp_or_jupyter_signature_help()<cr>", "Show documentation" }
+lvim.keys.normal_mode['gh']                = "<cmd>lua lsp_or_jupyter_hover()<cr>"
+lvim.lsp.buffer_mappings.normal_mode['gh'] = { "<cmd>lua lsp_or_jupyter_hover()<cr>", "Show documentation" }
 lvim.keys.normal_mode['sgh']               = "<cmd>lua require('hoversplit').split_remain_focused()<cr>"
 
 

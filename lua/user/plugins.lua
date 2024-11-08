@@ -924,7 +924,7 @@ lvim.plugins = {
   { "quangnguyen30192/cmp-nvim-ultisnips" },
   {
     "ray-x/lsp_signature.nvim",
-    event = "BufRead",
+    event = "InsertEnter",
     config = function()
       require "lsp_signature".on_attach()
       require "lsp_signature".setup({
