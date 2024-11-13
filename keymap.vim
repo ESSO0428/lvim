@@ -451,24 +451,24 @@ nnoremap <a-d> <c-a>
 
 
 " ==================== spell ====================
-nnoremap ,G zG
-nnoremap ,g zg
-nnoremap ,w zw
-nnoremap ,W zW
-nnoremap ,uw zuw
-nnoremap ,ug zug
-nnoremap ,uW zuW
-nnoremap ,uG zuG
-nnoremap ,= z=
-vnoremap ,G zG
-vnoremap ,g zg
-vnoremap ,w zw
-vnoremap ,W zW
-vnoremap ,uw zuw
-vnoremap ,ug zug
-vnoremap ,uW zuW
-vnoremap ,uG zuG
-vnoremap ,= z=
+nnoremap s,G zG
+nnoremap s,g zg
+nnoremap s,w zw
+nnoremap s,W zW
+nnoremap s,uw zuw
+nnoremap s,ug zug
+nnoremap s,uW zuW
+nnoremap s,uG zuG
+nnoremap s,= z=
+vnoremap s,G zG
+vnoremap s,g zg
+vnoremap s,w zw
+vnoremap s,W zW
+vnoremap s,uw zuw
+vnoremap s,ug zug
+vnoremap s,uW zuW
+vnoremap s,uG zuG
+vnoremap s,= z=
 
 
 function! NotNeg(number)
