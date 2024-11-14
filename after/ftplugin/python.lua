@@ -21,6 +21,7 @@ local opts = {
           "requirements.txt",
           "Pipfile",
           "pyrightconfig.json",
+          "README.md",
           -- workspace
         })(...)
   end,
