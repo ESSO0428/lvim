@@ -276,6 +276,7 @@ require("CopilotChat").setup {
     OneParagraphComment = '/COPILOT_GENERATE ' .. read_copilot_prompt('OneParagraphComment.md'),
     Docs = '/COPILOT_GENERATE ' .. read_copilot_prompt('Docs.md'),
     Tests = '/COPILOT_GENERATE ' .. read_copilot_prompt('Tests.md'),
+    CodeGraph = '/COPILOT_EXPLAIN ' .. read_copilot_prompt('CodeGraph.md'),
     FixDiagnostic = {
       prompt = read_copilot_prompt('FixDiagnostic.md'),
       selection = select.diagnostics,

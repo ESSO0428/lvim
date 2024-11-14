@@ -18,6 +18,7 @@ date: Thursday, October, 10, 2024
   - [OneParagraphComment](#oneparagraphcomment)
   - [Docs](#docs)
   - [Tests](#tests)
+  - [CodeGraph](#codegraph)
   - [FixDiagnostic](#fixdiagnostic)
   - [Commit](#commit)
   - [CommitStaged](#commitstaged)
@@ -86,6 +87,15 @@ date: Thursday, October, 10, 2024
 概述: 用於生成測試代碼的提示。
 
 見: [Tests.md](./Tests.md)
+
+## CodeGraph
+
+概述: 
+1. 類似 callgraph，但主要專注於當前檔案中變數和函數之間的關係，使用 mermaid 呈現結果。
+2. 目前僅適用於 `Python`，用於其他語言效果未知。
+3. 提示詞仍非完美，仍有改善 的空間。
+
+見: [CodeGraph.md](./CodeGraph.md)
 
 ## FixDiagnostic
 
