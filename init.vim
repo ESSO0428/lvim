@@ -87,7 +87,14 @@ let g:jupytext_style = 'hydrogen'
 " nmap ]x ctrih/^# %%<cr><cr>
 nmap [w strah
 nmap ]w strih
-
+nmap [r stR
+nmap ]r stR
+nmap [R stR
+nmap ]R stR
+vmap [w str
+vmap ]w str
+vmap [r str
+vmap ]r str
 
 " ==================== Ultisnips ====================
 " let g:tex_flavor = "latex"
@@ -195,7 +202,9 @@ iron.setup({
   },
   keymaps = {
     send_motion = "str",
+    send_line = "stR",
     visual_send = "str",
+    send_file = "stf",
   },
 })
 EOF
