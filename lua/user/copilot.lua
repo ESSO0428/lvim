@@ -123,9 +123,11 @@ select.gitdiff = function(source, staged)
     return nil
   end
 
-  select_buffer.filetype = 'diff'
-  select_buffer.lines = result
-  return select_buffer
+  return {
+    content = result,
+    filename = 'git_diff_' .. (staged and 'staged' or 'unstaged'),
+    filetype = 'diff',
+  }
 end
 
 local function read_copilot_prompt(file)
@@ -146,32 +148,62 @@ local function read_copilot_prompt(file)
   end
   return prompts
 end
-
--- NOTE: Use cmp for CopilotChat prompt completion of CopilotChat commands
-require("CopilotChat.integrations.cmp").setup()
 -- NOTE: CopilotChat 主要配置
 -- prompts 另外配置於 : `~/.config/lvim/docs/CopilotChatPrompts/`
 -- Prompts are configured separately at: `~/.config/lvim/docs/CopilotChatPrompts/`
 -- For detailed information, see: `~/.config/lvim/docs/CopilotChatPrompts/Index.md`
 require("CopilotChat").setup {
-  debug = true, -- Enable debugging
-  model = "gpt-4o",
-  window = {
-    layout = 'vertical',    -- 'vertical', 'horizontal', 'float', 'replace'
-    width = 0.5,            -- fractional width of parent, or absolute width in columns when > 1
-    height = 0.5,           -- fractional height of parent, or absolute height in rows when > 1
-    -- Options below only apply to floating windows
-    relative = 'editor',    -- 'editor', 'win', 'cursor', 'mouse'
-    border = 'single',      -- 'none', single', 'double', 'rounded', 'solid', 'shadow'
-    row = nil,              -- row position of the window, default is centered
-    col = nil,              -- column position of the window, default is centered
-    title = 'Copilot Chat', -- title of chat window
-    footer = nil,           -- footer of chat window
-    zindex = 1,             -- determines if window is on top or below other floating windows
-  },
-  mappings = {
-    complete = {
-      insert = '',
+  debug = false,          -- Enable debug logging (same as 'log_level = 'debug')
+  log_level = 'info',     -- Log level to use, 'trace', 'debug', 'info', 'warn', 'error', 'fatal'
+  proxy = nil,            -- [protocol://]host[:port] Use this proxy
+  allow_insecure = false, -- Allow insecure server connections
+
+  -- system_prompt = require("CopilotChat").prompts().COPILOT_INSTRUCTIONS, -- System prompt to use (can be specified manually in prompt via /).
+  model = 'gpt-4o', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
+  agent = 'copilot', -- Default agent to use, see ':CopilotChatAgents' for available agents (can be specified manually in prompt via @).
+  context = nil, -- Default context to use (can be specified manually in prompt via #).
+  temperature = 0.1, -- GPT result temperature
+
+  question_header = '## User ', -- Header to use for user questions
+  answer_header = '## Copilot ', -- Header to use for AI answers
+  error_header = '> [!ERROR] Error', -- Header to use for errors (default is '## Error ')
+  separator = '───', -- Separator to use in chat
+
+  chat_autocomplete = true, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
+  show_folds = true, -- Shows folds for sections in chat
+  show_help = true, -- Shows help message as virtual lines when waiting for user input
+  auto_follow_cursor = true, -- Auto-follow cursor in chat
+  auto_insert_mode = false, -- Automatically enter insert mode when opening window and on new prompt
+  insert_at_end = false, -- Move cursor to end of buffer when inserting text
+  clear_chat_on_new_prompt = false, -- Clears chat on every new prompt
+  highlight_selection = true, -- Highlight selection in the source buffer when in the chat window
+  highlight_headers = true, -- Highlight headers in chat, disable if using markdown renderers (like render-markdown.nvim)
+
+  history_path = vim.fn.stdpath('data') .. '/copilotchat_history', -- Default path to stored history
+  callback = nil, -- Callback to use when ask response is received
+  no_chat = false, -- Do not write to chat buffer and use chat history (useful for using callback for custom processing)
+
+  -- default selection
+  selection = function(source)
+    return select.visual(source) or select.buffer(source)
+  end,
+
+  -- default contexts
+  contexts = {
+    buffer = {
+      -- see config.lua for implementation
+    },
+    buffers = {
+      -- see config.lua for implementation
+    },
+    file = {
+      -- see config.lua for implementation
+    },
+    files = {
+      -- see config.lua for implementation
+    },
+    git = {
+      -- see config.lua for implementation
     },
   },
   -- See Configuration section for rest
@@ -189,10 +221,10 @@ require("CopilotChat").setup {
   -- },
   -- NOTE: Chinese prompts
   prompts = {
-    Explain = '/COPILOT_EXPLAIN ' .. read_copilot_prompt('Explain.md'),
-    Ask = '/COPILOT_EXPLAIN ' .. read_copilot_prompt('Ask.md'),
+    Explain = '> /COPILOT_EXPLAIN\n\n' .. read_copilot_prompt('Explain.md'),
+    Ask = '> /COPILOT_EXPLAIN\n\n' .. read_copilot_prompt('Ask.md'),
     Review = {
-      prompt = '/COPILOT_REVIEW ' .. read_copilot_prompt('Review.md'),
+      prompt = '> /COPILOT_REVIEW\n\n' .. read_copilot_prompt('Review.md'),
       callback = function(response, source)
         local ns = vim.api.nvim_create_namespace('copilot_review')
         local diagnostics = {}
@@ -231,7 +263,7 @@ require("CopilotChat").setup {
       end,
     },
     ReviewClear = {
-      prompt = '/COPILOT_REVIEW ' .. read_copilot_prompt('ReviewClear.md'),
+      prompt = '> /COPILOT_REVIEW\n\n' .. read_copilot_prompt('ReviewClear.md'),
       callback = function(response, source)
         local ns = vim.api.nvim_create_namespace('copilot_review')
         local diagnostics = {}
@@ -270,17 +302,20 @@ require("CopilotChat").setup {
         vim.diagnostic.set(ns, source.bufnr, diagnostics)
       end
     },
-    Fix = '/COPILOT_GENERATE ' .. read_copilot_prompt('Fix.md'),
-    Optimize = '/COPILOT_GENERATE ' .. read_copilot_prompt('Optimize.md'),
-    OneLineComment = '/COPILOT_GENERATE ' .. read_copilot_prompt('OneLineComment.md'),
-    OneParagraphComment = '/COPILOT_GENERATE ' .. read_copilot_prompt('OneParagraphComment.md'),
-    Docs = '/COPILOT_GENERATE ' .. read_copilot_prompt('Docs.md'),
-    Tests = '/COPILOT_GENERATE ' .. read_copilot_prompt('Tests.md'),
-    CodeGraph = '/COPILOT_EXPLAIN ' .. read_copilot_prompt('CodeGraph.md'),
+    Fix = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('Fix.md'),
+    Optimize = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('Optimize.md'),
+    OneLineComment = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('OneLineComment.md'),
+    OneParagraphComment = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('OneParagraphComment.md'),
+    Docs = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('Docs.md'),
+    Tests = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('Tests.md'),
+    CodeGraph = '> /COPILOT_EXPLAIN\n\n' .. read_copilot_prompt('CodeGraph.md'),
     FixDiagnostic = {
       prompt = read_copilot_prompt('FixDiagnostic.md'),
       selection = select.diagnostics,
     },
+    -- Commit = {
+    --   prompt = '> #git:staged\n\nWrite commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.',
+    -- },
     Commit = {
       prompt = read_copilot_prompt('Commit.md'),
       selection = select.gitdiff,
@@ -291,7 +326,65 @@ require("CopilotChat").setup {
         return select.gitdiff(source, true)
       end,
     },
-  }
+  },
+  window = {
+    layout = 'vertical',    -- 'vertical', 'horizontal', 'float', 'replace'
+    width = 0.5,            -- fractional width of parent, or absolute width in columns when > 1
+    height = 0.5,           -- fractional height of parent, or absolute height in rows when > 1
+    -- Options below only apply to floating windows
+    relative = 'editor',    -- 'editor', 'win', 'cursor', 'mouse'
+    border = 'single',      -- 'none', single', 'double', 'rounded', 'solid', 'shadow'
+    row = nil,              -- row position of the window, default is centered
+    col = nil,              -- column position of the window, default is centered
+    title = 'Copilot Chat', -- title of chat window
+    footer = nil,           -- footer of chat window
+    zindex = 1,             -- determines if window is on top or below other floating windows
+  },
+  -- default mappings
+  mappings = {
+    complete = {
+      insert = '<Tab>',
+    },
+    close = {
+      normal = 'q',
+      insert = '<C-c>'
+    },
+    reset = {
+      normal = '<C-l>',
+      insert = '<C-l>'
+    },
+    submit_prompt = {
+      normal = '<CR>',
+      insert = '<C-s>'
+    },
+    toggle_sticky = {
+      detail = 'Makes line under cursor sticky or deletes sticky line.',
+      normal = 'gr',
+    },
+    accept_diff = {
+      normal = '<C-y>',
+      insert = '<C-y>'
+    },
+    jump_to_diff = {
+      normal = 'gD',
+    },
+    quickfix_diffs = {
+      normal = 'gq',
+    },
+    yank_diff = {
+      normal = 'gy',
+      register = '"',
+    },
+    show_diff = {
+      normal = 'gd'
+    },
+    show_system_prompt = {
+      normal = 'gp'
+    },
+    show_user_selection = {
+      normal = 'gs'
+    },
+  },
 }
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "copilot-*",
