@@ -65,31 +65,31 @@ Run "nvim -V1 -v" for more info
   3. other [reference](#about-update-lunarvim-and-neovim-core-to-latest-release) after step2
 - Install `lunarvim` and `neovim` manually
   1. install `neovim`
-    1. install nvim.appimage
-    2. alias nvim.appimage to your bashrc/zshrc
-       ```bash
-       echo 'alias nvim=~/nvim.appimag' >> ~/.bashrc
-       echo 'alias nvim=~/nvim.appimag' >> ~/.zshrc
-       ```
-    3. install `pyenv` for neovim (for plug of neovim)
-       ```bash
-       conda install pyenv
-       ```
-    4. install `debugpy` for neovim (for debug of neovim)
-       ```bash
-       pip install debugpy
-       ```
+     1. install nvim.appimage
+     2. alias nvim.appimage to your bashrc/zshrc
+        ```bash
+        echo 'alias nvim=~/nvim.appimag' >> ~/.bashrc
+        echo 'alias nvim=~/nvim.appimag' >> ~/.zshrc
+        ```
+     3. install `pyenv` for neovim (for plug of neovim)
+        ```bash
+        conda install pyenv
+        ```
+     4. install `debugpy` for neovim (for debug of neovim)
+        ```bash
+        pip install debugpy
+        ```
   2. install `lunarvim environment`
-    1. link ~/nvim.appimage to ~/.local/bin/
-       ```bash
-       ln -s ~/nvim.appimage ~/.local/bin/nvim
-       ```
-    2. install nodejs, npm for lunarvim (suggest use nvm)
-    3. install `cargo` for lunarvim
-    4. install `fd` and `rg` for lunarvim (can use cargo, npm, conda)
+     1. link ~/nvim.appimage to ~/.local/bin/
+        ```bash
+        ln -s ~/nvim.appimage ~/.local/bin/nvim
+        ```
+     2. install nodejs, npm for lunarvim (suggest use nvm)
+     3. install `cargo` for lunarvim
+     4. install `fd` and `rg` for lunarvim (can use cargo, npm, conda)
   4. install `lunarvim`
   5. git `clone this repo` to `~/.config/`
-    - and sync the config for sync new update to your worker machine
+     - and sync the config for sync new update to your worker machine
 
 ## Some notice
 
@@ -178,4 +178,3 @@ Through the [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim
    " NOTE: Some Python based plugins may need this command to be run after installation.
    :UpdateRemotePlugins
    ```
-
