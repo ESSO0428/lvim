@@ -19,6 +19,8 @@ date: Thursday, October, 10, 2024
   - [Docs](#docs)
   - [Tests](#tests)
   - [CodeGraph](#codegraph)
+  - [MermaidUml](#mermaiduml)
+  - [MermaidSequence](#mermaidsequence)
   - [FixDiagnostic](#fixdiagnostic)
   - [Commit](#commit)
   - [CommitStaged](#commitstaged)
@@ -96,6 +98,24 @@ date: Thursday, October, 10, 2024
 3. 提示詞仍非完美，仍有改善 的空間。
 
 見: [CodeGraph.md](./CodeGraph.md)
+
+## MermaidUml
+
+概述: 
+1. 用於生成 UML 圖表，包括類圖、繼承關係、實現和依賴。
+2. 使用 Mermaid 的 `classDiagram` 呈現結果。
+3. 適用於展示靜態結構，側重於類之間的靜態關係。
+
+見: [MermaidUml.md](./MermaidUml.md)
+
+## MermaidSequence
+
+概述: 
+1. 用於生成序列圖，展示參與者之間的動態交互。
+2. 使用 Mermaid 的 `sequenceDiagram` 呈現結果。
+3. 適用於描述函數調用、消息流或用戶操作的執行過程。
+
+見: [MermaidSequence.md](./MermaidSequence.md)
 
 ## FixDiagnostic
 
