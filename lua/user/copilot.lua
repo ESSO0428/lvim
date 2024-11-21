@@ -429,6 +429,8 @@ require("CopilotChat").setup {
     Docs = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('Docs.md'),
     Tests = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('Tests.md'),
     CodeGraph = '> /COPILOT_EXPLAIN\n\n' .. read_copilot_prompt('CodeGraph.md'),
+    MermaidUml = '> /COPILOT_EXPLAIN\n\n' .. read_copilot_prompt('MermaidUml.md'),
+    MermaidSequence = '> /COPILOT_EXPLAIN\n\n' .. read_copilot_prompt('MermaidSequence.md'),
     FixDiagnostic = {
       prompt = read_copilot_prompt('FixDiagnostic.md'),
       selection = select.diagnostics,
