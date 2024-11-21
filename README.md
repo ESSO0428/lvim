@@ -9,19 +9,26 @@ date: Sunday, October, 08, 2023
 <!--toc:start-->
 - [My Neovim Config](#my-neovim-config)
   - [Introduction](#introduction)
-    - [Current support neovim version](#current-support-neovim-version)
-    - [Overview (use this config)](#overview-use-this-config)
-    - [Some notice](#some-notice)
-      - [Copilot](#copilot)
-        - [CopilotChat](#copilotchat)
-    - [About update lunarvim and neovim core to Latest Release](#about-update-lunarvim-and-neovim-core-to-latest-release)
+  - [Current support neovim version](#current-support-neovim-version)
+  - [Overview (use this config)](#overview-use-this-config)
+  - [Some notice](#some-notice)
+    - [Copilot](#copilot)
+      - [CopilotChat](#copilotchat)
+  - [About update lunarvim and neovim core to Latest Release](#about-update-lunarvim-and-neovim-core-to-latest-release)
 <!--toc:end-->
-
-use neovim pre-config lunarvim
 
 ## Introduction
 
-### Current support neovim version
+> [!NOTE]
+> 
+> This is my `lunarvim` config, use `lunarvim` and `neovim` to build my `neovim` environment.
+>   - `lunarvim` is a `neovim` config framework, it's easy to use and easy to extend.
+>   - What is `neoivm` ?
+>     - Hyperextensible Vim-based text editor
+>     - Project that seeks to aggressively refactor Vim
+
+
+## Current support neovim version
 
 NVIM v0.10.2 (release)
 
@@ -33,7 +40,7 @@ LuaJIT 2.1.1713484068
 Run "nvim -V1 -v" for more info
 ```
 
-### Overview (use this config)
+## Overview (use this config)
 
 - Install `lunarvim` and `neovim` use my script
   1. clone this repo to `~/.config/`
@@ -85,7 +92,7 @@ Run "nvim -V1 -v" for more info
   5. git `clone this repo` to `~/.config/`
     - and sync the config for sync new update to your worker machine
 
-### Some notice
+## Some notice
 
 some server install neovim will get below error:
 ```bash
@@ -95,7 +102,7 @@ some server install neovim will get below error:
 need to use `sudo compile glibc-2.31`  or `sudo compile glibc-2.27` (if you use low_glibc_support_version)
 if you are only a user, suggest ask `your admin` to help you install `glbc-2.31` or `glibc-2.27`
 
-#### Copilot
+### Copilot
 
 - **Automatic Activation**: Copilot will automatically start when you open Neovim, regardless of whether you have registered it or not.
 - **Version Requirements**:
@@ -117,7 +124,7 @@ if you are only a user, suggest ask `your admin` to help you install `glbc-2.31`
   - You can use the `:Copilot auth` command (in cmd of nvim) to register Copilot service on this Neovim server.
   - **Prerequisites**: You should have registered for Copilot service and successfully logged in on GitHub.
 
-##### CopilotChat
+#### CopilotChat
 
 Through the [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim) plugin, an interactive interface with Copilot is provided, allowing you to open a chat interface to interactively modify code.
 - **Configuration**:
@@ -153,16 +160,16 @@ Through the [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim
       </details> 
 
 
-### About update lunarvim and neovim core to Latest Release
+## About update lunarvim and neovim core to Latest Release
 
-1. Can use below command to update lunarvim and neovim core to Latest Release
+1. Can use below command to update `lunarvim` and `neovim` core to Latest Release
   - ```bash
     # NOTE: Update lunarvim and neovim core to Latest Release
     sh ~/.config/lvim/UpdateNvimReleaseAndLunarCore.sh
     # NOTE: or you only want to update neovim to Latest Release
     # sh ~/.config/lvim/UpdateNvimReleaseOnly.sh
     ```
-2. If update (or install) success (can use below command to init lunarvim)
+2. If update (or install) success (can use below command to init `lunarvim`)
   - ```bash
     # NOTE: init lvim (install plugins and install treesitter parsers)
     # Maybe restart lvim two times above (because solve plugin dependency)
@@ -172,15 +179,3 @@ Through the [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim
     " NOTE: Some Python based plugins may need this command to be run after installation.
     :UpdateRemotePlugins
     ```
-3. below is some maybe error and how to solve
-  - vim-hexokinase
-    - ```vim
-      " erro
-      vim-hexokinase needs updating. Run `make hexokinase` in project root. See `:h hexokinase-installation` for more info.
-      " solve in vim cmd
-      :!export PATH=$HOME/bin/go/bin/:$PATH && cd ~/.config/lvim/plugged/vim-hexokinase/ && git submodule init && git submodule update && cd hexokinase/ && go build
-      ```
-    - ```bash
-      # or solve in terminal
-      export PATH=$HOME/bin/go/bin/:$PATH && cd ~/.config/lvim/plugged/vim-hexokinase/ && git submodule init && git submodule update && cd hexokinase/ && go build && cd ~
-      ```
