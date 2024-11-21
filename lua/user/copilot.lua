@@ -86,7 +86,6 @@ select.diagnostics = function(source)
   end
 
   local cursor = vim.api.nvim_win_get_cursor(winnr)
-  local line = vim.api.nvim_buf_get_lines(bufnr, cursor[1] - 1, cursor[1], false)[1]
 
   local line_diagnostics = vim.lsp.diagnostic.get_line_diagnostics(bufnr, cursor[1] - 1)
 
