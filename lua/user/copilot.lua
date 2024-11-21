@@ -71,8 +71,51 @@ lvim.builtin.which_key.vmappings.u['ka'] = { "<cmd>lua CopilotChatQuickchatVisua
 lvim.builtin.which_key.mappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
 lvim.builtin.which_key.vmappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
 
+local context = require('CopilotChat.context')
 local select = require('CopilotChat.select')
 local buffer = require('CopilotChat.select').buffer
+local utils = require('CopilotChat.utils')
+
+
+select.diagnostics = function(source)
+  local bufnr = source.bufnr
+  local winnr = source.winnr
+  local select_buffer = buffer(source)
+  if not select_buffer then
+    return nil
+  end
+
+  local cursor = vim.api.nvim_win_get_cursor(winnr)
+  local line = vim.api.nvim_buf_get_lines(bufnr, cursor[1] - 1, cursor[1], false)[1]
+
+  local line_diagnostics = vim.lsp.diagnostic.get_line_diagnostics(bufnr, cursor[1] - 1)
+
+  if #line_diagnostics == 0 then
+    return nil
+  end
+
+  local diagnostics = {}
+  for _, diagnostic in ipairs(line_diagnostics) do
+    table.insert(diagnostics, diagnostic.message)
+  end
+
+  local result = table.concat(diagnostics, '. ')
+  result = result:gsub('^%s*(.-)%s*$', '%1'):gsub('\n', ' ')
+
+  local file_name = vim.api.nvim_buf_get_name(bufnr)
+
+  local out = {
+    content = file_name .. ':' .. cursor[1] .. '. ' .. result,
+    filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(bufnr), ':p:.'),
+    filetype = vim.bo[bufnr].filetype,
+    start_line = cursor[1],
+    end_line = cursor[1],
+    bufnr = bufnr,
+  }
+
+  return out
+end
+
 
 -- This function generates a git diff for a given file. If the diff is too large,
 -- it uses a `diff --stat` instead. The function returns a buffer with the diff result.
@@ -191,19 +234,94 @@ require("CopilotChat").setup {
   -- default contexts
   contexts = {
     buffer = {
-      -- see config.lua for implementation
+      description = 'Includes specified buffer in chat context (default current). Supports input.',
+      input = function(callback)
+        vim.ui.select(
+          vim.tbl_map(
+            function(buf)
+              return { id = buf, name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ':p:.') }
+            end,
+            vim.tbl_filter(function(buf)
+              return utils.buf_valid(buf) and vim.fn.buflisted(buf) == 1
+            end, vim.api.nvim_list_bufs())
+          ),
+          {
+            prompt = 'Select a buffer> ',
+            format_item = function(item)
+              return item.name
+            end,
+          },
+          function(choice)
+            callback(choice and choice.id)
+          end
+        )
+      end,
+      resolve = function(input, source)
+        return {
+          context.buffer(input and tonumber(input) or source.bufnr),
+        }
+      end,
     },
     buffers = {
-      -- see config.lua for implementation
+      description = 'Includes all buffers in chat context (default listed). Supports input.',
+      input = function(callback)
+        vim.ui.select({ 'listed', 'visible' }, {
+          prompt = 'Select buffer scope> ',
+        }, callback)
+      end,
+      resolve = function(input)
+        input = input or 'listed'
+        return vim.tbl_map(
+          context.buffer,
+          vim.tbl_filter(function(b)
+            return utils.buf_valid(b)
+                and vim.fn.buflisted(b) == 1
+                and (input == 'listed' or #vim.fn.win_findbuf(b) > 0)
+          end, vim.api.nvim_list_bufs())
+        )
+      end,
     },
     file = {
-      -- see config.lua for implementation
+      description = 'Includes content of provided file in chat context. Supports input.',
+      input = function(callback)
+        local files = vim.tbl_filter(function(file)
+          return vim.fn.isdirectory(file) == 0
+        end, vim.fn.glob('**/*', false, true))
+
+        vim.ui.select(files, {
+          prompt = 'Select a file> ',
+        }, callback)
+      end,
+      resolve = function(input)
+        return {
+          context.file(input),
+        }
+      end,
     },
     files = {
-      -- see config.lua for implementation
+      description = 'Includes all non-hidden filenames in the current workspace in chat context. Supports input.',
+      input = function(callback)
+        vim.ui.input({
+          prompt = 'Enter a file pattern> ',
+          default = '**/*',
+        }, callback)
+      end,
+      resolve = function(input)
+        return context.files(input)
+      end,
     },
     git = {
-      -- see config.lua for implementation
+      description = 'Includes current git diff in chat context (default unstaged). Supports input.',
+      input = function(callback)
+        vim.ui.select({ 'unstaged', 'staged' }, {
+          prompt = 'Select diff type> ',
+        }, callback)
+      end,
+      resolve = function(input, source)
+        return {
+          context.gitdiff(input, source.bufnr),
+        }
+      end,
     },
   },
   -- See Configuration section for rest
@@ -226,7 +344,6 @@ require("CopilotChat").setup {
     Review = {
       prompt = '> /COPILOT_REVIEW\n\n' .. read_copilot_prompt('Review.md'),
       callback = function(response, source)
-        local ns = vim.api.nvim_create_namespace('copilot_review')
         local diagnostics = {}
         for line in response:gmatch('[^\r\n]+') do
           if line:find('^line=') then
@@ -259,7 +376,11 @@ require("CopilotChat").setup {
             end
           end
         end
-        vim.diagnostic.set(ns, source.bufnr, diagnostics)
+        vim.diagnostic.set(
+          vim.api.nvim_create_namespace('copilot_diagnostics'),
+          source.bufnr,
+          diagnostics
+        )
       end,
     },
     ReviewClear = {
