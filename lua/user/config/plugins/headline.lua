@@ -10,6 +10,7 @@ vim.cmd "au ColorScheme * highlight Dash guifg=#D19A66 gui=bold"
 -- orgmode link
 vim.cmd "au ColorScheme * highlight @org.hyperlink guifg=#3794FF gui=underline"
 vim.cmd "au ColorScheme * highlight link @markup.list.markdown Identifier"
+vim.cmd "au ColorScheme * highlight! link markdownOrderedListMarker Identifier"
 vim.cmd "au ColorScheme * highlight @markup.link.label.markdown_inline guifg=#3794FF gui=underline"
 vim.cmd "au ColorScheme * highlight markdownLinkText guifg=#3794FF gui=underline"
 vim.cmd "au ColorScheme * highlight link @org.bullet @markup.list.markdown"
