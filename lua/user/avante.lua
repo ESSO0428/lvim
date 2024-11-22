@@ -29,6 +29,15 @@ require('avante.config').support_paste_image = function()
     return false
   end
 end
+require("avante.config").defaults.copilot = {
+  endpoint = "https://api.githubcopilot.com",
+  model = "claude-3.5-sonnet",
+  proxy = nil,            -- [protocol://]host[:port] Use this proxy
+  allow_insecure = false, -- Allow insecure server connections
+  timeout = 30000,        -- Timeout in milliseconds
+  temperature = 0,
+  max_tokens = 4096,
+}
 require('avante').setup({
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
   provider = "copilot",       -- Recommend using Claude
