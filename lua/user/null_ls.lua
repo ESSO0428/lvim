@@ -55,7 +55,7 @@ null_ls.register({
     fn = function(params)
       return {
         {
-          title = "Ruff Format",
+          title = "Ruff: Format",
           action = Nvim.null_ls.create_cli_format_action({
             name = "ruff_format",
             command = "ruff",
