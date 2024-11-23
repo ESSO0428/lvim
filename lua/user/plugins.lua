@@ -1,5 +1,48 @@
 lvim.plugins = {
   {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+  {                                        -- optional cmp completion source for require statements and module annotations
+    "hrsh7th/nvim-cmp",
+    opts = function(_, opts)
+      opts.sources = opts.sources or {}
+      table.insert(opts.sources, {
+        name = "lazydev",
+        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+      })
+    end,
+  },
+  { -- optional blink completion source for require statements and module annotations
+    "saghen/blink.cmp",
+    opts = {
+      sources = {
+        -- add lazydev to your completion providers
+        completion = {
+          enabled_providers = { "lsp", "path", "snippets", "buffer", "lazydev" },
+        },
+        providers = {
+          -- dont show LuaLS require statements when lazydev has items
+          lsp = { fallback_for = { "lazydev" } },
+          lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
+        },
+      },
+    },
+  },
+  -- NOTE: make sure to uninstall or disable neodev.nvim for lazydev to work
+  {
+    "folke/neodev.nvim",
+    enabled = false,
+  },
+  {
     "folke/trouble.nvim",
     cmd = "TroubleToggle"
   },
@@ -592,9 +635,7 @@ lvim.plugins = {
     -- NOTE: my conifg is set in user/avante.lua
     -- and had required by config.lua
     --
-    -- opts = {
-    -- add any opts here
-    -- },
+    opts = require("user.avante").opts,
     -- if you want to download pre-built binary, then pass source=false. Make sure to follow instruction above.
     -- Also note that downloading prebuilt binary is a lot faster comparing to compiling from source.
     -- NOTE: Ensure that `nvim --version` >= 0.10.1

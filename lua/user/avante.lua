@@ -1,3 +1,5 @@
+local M = {}
+
 -- NOTE: Avante ColorScheme
 vim.cmd "au ColorScheme * hi link AvanteSuggestion Comment"
 vim.cmd "au ColorScheme * hi link AvanteAnnotation Comment"
@@ -29,18 +31,20 @@ require('avante.config').support_paste_image = function()
     return false
   end
 end
-require("avante.config").defaults.copilot = {
-  endpoint = "https://api.githubcopilot.com",
-  model = "claude-3.5-sonnet",
-  proxy = nil,            -- [protocol://]host[:port] Use this proxy
-  allow_insecure = false, -- Allow insecure server connections
-  timeout = 30000,        -- Timeout in milliseconds
-  temperature = 0,
-  max_tokens = 4096,
-}
-require('avante').setup({
+
+---@class avante.Config
+M.opts = {
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
-  provider = "copilot",       -- Recommend using Claude
+  provider = "copilot", -- Recommend using Claude
+  copilot = {
+    endpoint = "https://api.githubcopilot.com",
+    model = "claude-3.5-sonnet",
+    proxy = nil,            -- [protocol://]host[:port] Use this proxy
+    allow_insecure = false, -- Allow insecure server connections
+    timeout = 30000,        -- Timeout in milliseconds
+    temperature = 0,
+    max_tokens = 4096,
+  },
   behaviour = {
     auto_suggestions = false, -- Experimental stage
     auto_set_highlight_group = true,
@@ -124,4 +128,6 @@ require('avante').setup({
     --- Disable by setting to -1.
     override_timeoutlen = 500,
   },
-})
+}
+
+return M
