@@ -13,7 +13,7 @@ local opts = {
     --   workspace = file_dir -- Sets the workspace directory to the file's directory if CWD does not match
     -- end
     local util = require "lspconfig.util"
-    return util.find_git_ancestor(...)
+    local root = util.find_git_ancestor(...)
         or util.root_pattern(unpack {
           "pyproject.toml",
           "setup.py",
@@ -24,6 +24,22 @@ local opts = {
           "README.md",
           -- workspace
         })(...)
+    local excluded_paths = {
+      vim.loop.os_homedir(),
+      "/",
+      "/tmp",
+    }
+    local function is_excluded(dir, excluded_paths)
+      for _, excluded in ipairs(excluded_paths) do
+        if dir == excluded or dir:match(excluded) then
+          return true
+        end
+      end
+      return false
+    end
+    if not root and is_excluded(vim.fn.getcwd(), excluded_paths) then
+      return root
+    end
   end,
   capabilities = Nvim.builtin.lsp.capabilities,
   settings = {
