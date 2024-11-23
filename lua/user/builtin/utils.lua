@@ -4,7 +4,7 @@ function Nvim.nvim_create_user_commands(command_names, command_function)
   end
 end
 
--- 比较两个表的内容
+-- compare two tables content
 function Nvim.tables_equal(table1, table2)
   for key, value in pairs(table1) do
     if table2[key] ~= value then
@@ -48,20 +48,32 @@ function Nvim.null_ls.create_cli_format_action(opts)
     -- prepare command arguments
     local formatted_args = get_formatted_args(file_path)
     local full_command = command .. " " .. table.concat(formatted_args, " ")
-    print(full_command)
 
     -- execute command
     local result = vim.fn.system(full_command)
 
     -- if format failed, print error message
     if vim.v.shell_error ~= 0 then
-      print(name .. " format failed: " .. result)
+      vim.notify(name .. " format failed: " .. result, vim.log.levels.WARN)
       return
     end
 
-    -- refresh buffer
-    vim.api.nvim_command("e")
-    print("File formatted and buffer refreshed.")
+    -- refresh buffer content without breaking undo tree
+    local bufnr = vim.api.nvim_get_current_buf()
+    -- load formatted file
+    local new_lines = vim.fn.readfile(file_path)
+    -- save current content
+    local old_lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+    -- update only if content changed
+    if not Nvim.tables_equal(old_lines, new_lines) then
+      -- update buffer
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, new_lines)
+      -- save file
+      vim.cmd('write!')
+      vim.notify("File formatted and saved.", vim.log.levels.INFO)
+    else
+      vim.notify("No changes needed.", vim.log.levels.INFO)
+    end
   end
 
   -- Return the action function
@@ -87,7 +99,7 @@ function Nvim.null_ls.create_cli_format_action(opts)
       return
     end
 
-    -- 直接執行格式化
+    -- directly format file
     format_file()
   end
 end

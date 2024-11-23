@@ -21,22 +21,6 @@ lvim.plugins = {
       })
     end,
   },
-  { -- optional blink completion source for require statements and module annotations
-    "saghen/blink.cmp",
-    opts = {
-      sources = {
-        -- add lazydev to your completion providers
-        completion = {
-          enabled_providers = { "lsp", "path", "snippets", "buffer", "lazydev" },
-        },
-        providers = {
-          -- dont show LuaLS require statements when lazydev has items
-          lsp = { fallback_for = { "lazydev" } },
-          lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
-        },
-      },
-    },
-  },
   -- NOTE: make sure to uninstall or disable neodev.nvim for lazydev to work
   {
     "folke/neodev.nvim",
@@ -226,7 +210,7 @@ lvim.plugins = {
             return
           end
         end
-        return notify
+        notify(msg, ...)
       end
     end
   },
