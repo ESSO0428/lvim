@@ -44,4 +44,27 @@ for _, action in ipairs(tailwind_code_actions) do
     },
   })
 end
+
+
+-- Register Ruff formatter
+null_ls.register({
+  name = "ruff_format",
+  method = null_ls.methods.CODE_ACTION,
+  filetypes = { "python" },
+  generator = {
+    fn = function(params)
+      return {
+        {
+          title = "Ruff Format",
+          action = Nvim.null_ls.create_cli_format_action({
+            name = "ruff_format",
+            command = "ruff",
+            args = { "format", "$FILENAME" },
+          }),
+        },
+      }
+    end,
+  },
+})
+
 null_ls.setup()
