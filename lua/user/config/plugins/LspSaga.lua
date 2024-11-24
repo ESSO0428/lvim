@@ -1,5 +1,4 @@
 -- lvim.keys.normal_mode['<leader><a-u>'] = "<cmd>Lspsaga lsp_finder<cr>"
 -- lvim.keys.normal_mode['<a-u>'] = "<cmd>Lspsaga lsp_finder<cr>"
 lvim.keys.normal_mode['<a-u>'] = "<cmd>Lspsaga finder<cr>"
-lvim.keys.normal_mode['gp'] = "<cmd>Lspsaga peek_type_definition<cr>"
 -- lvim.keys.normal_mode['<c-t>'] = "<cmd>Lspsaga outline<cr>"

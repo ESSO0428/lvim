@@ -22,6 +22,7 @@ lvim.keys.normal_mode['gh']                = "<cmd>lua lsp_or_jupyter_hover()<cr
 lvim.lsp.buffer_mappings.normal_mode['gh'] = { "<cmd>lua lsp_or_jupyter_hover()<cr>", "Show documentation" }
 lvim.keys.normal_mode['sgh']               = "<cmd>lua require('hoversplit').split_remain_focused()<cr>"
 lvim.keys.normal_mode['g;']                = "<cmd>lua vim.lsp.buf.type_definition()<cr>"
+lvim.keys.normal_mode['gp']                = "<cmd>lua require('goto-preview').goto_preview_type_definition()<cr>"
 
 function filetype_specfic_antovim()
   local captures = vim.treesitter.get_captures_at_cursor(0)
