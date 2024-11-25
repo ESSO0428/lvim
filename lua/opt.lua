@@ -256,6 +256,10 @@ vim.api.nvim_del_augroup_by_name('_auto_resize')
 
 -- relationship with gx
 vim.ui.open = function(url)
+  local function is_url(text)
+    local pattern = "^(https?://[%w-_%.%?%.:/%+=&]+)$"
+    return text:match(pattern) ~= nil
+  end
   local function check_rssh_tunnel()
     local rssh_tunnel_path = os.getenv("HOME") .. "/.rssh_tunnel"
     local file = io.open(rssh_tunnel_path, "r")
@@ -282,7 +286,7 @@ vim.ui.open = function(url)
   end
 
   local open_cmd
-  if is_wsl() then
+  if is_wsl() and is_url(url) then
     open_cmd = string.format('explorer.exe "%s"', url)
   else
     open_cmd = string.format('xdg-open "%s"', url)
@@ -290,7 +294,7 @@ vim.ui.open = function(url)
 
   -- try to check if nc channel is available
   local port = check_rssh_tunnel()
-  if port and is_nc_connection_valid(port) then
+  if is_url(url) and port and is_nc_connection_valid(port) then
     local nc_command = string.format("echo 'explorer.exe \"%s\"' | nc -w 1 127.0.0.1 %s", url, port)
     -- use jobstart to run command non-blocking
     vim.fn.jobstart({ vim.o.shell, vim.o.shellcmdflag, nc_command }, { detach = true })
