@@ -77,6 +77,41 @@ if not success then
 end
 local function markdown_go_to_definition()
   local params = vim.lsp.util.make_position_params()
+  local function is_url(text)
+    local pattern = "^(https?://[%w-_%.%?%.:/%+=&]+)$"
+    return text:match(pattern) ~= nil
+  end
+  -- Treesitter check if current node is a link
+  local ts_utils = require('nvim-treesitter.ts_utils')
+  local node = ts_utils.get_node_at_cursor()
+  local function get_node_text(node)
+    local bufnr = vim.api.nvim_get_current_buf()
+    return vim.treesitter.get_node_text(node, bufnr)
+  end
+
+  -- Check node type
+  local link_text
+  local link_url
+  if node and node:type() == "link_text" then
+    -- Get the next node
+    local next_node = node:next_named_sibling()
+    if next_node and next_node:type() == "link_destination" then
+      link_text = get_node_text(next_node)
+      if is_url(link_text) then
+        link_url = link_text
+      end
+    end
+  elseif node and node:type() == "link_destination" then
+    link_text = get_node_text(node)
+    if is_url(link_text) then
+      link_url = link_text
+    end
+  end
+  if link_url then
+    vim.ui.open(link_url)
+    return
+  end
+
   vim.lsp.buf_request(0, 'textDocument/definition', params, function(err, result, ctx, config)
     if err then
       vim.api.nvim_echo({ { "LSP error: " .. err.message, "ErrorMsg" } }, true, {})
