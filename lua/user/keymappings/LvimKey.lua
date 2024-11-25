@@ -162,26 +162,26 @@ function forceBufferKill(_)
 end
 
 -- lvim.keys.normal_mode["<leader><c-w>"]  = "<cmd>lua forceBufferKill()<cr>"
-lvim.keys.normal_mode["<leader><c-w>"]  = "<cmd>ForceBufferLineKill<cr>"
+lvim.keys.normal_mode["<leader><c-w>"]   = "<cmd>ForceBufferLineKill<cr>"
 -- NOTE: 直接使用 bd! 強制關閉緩衝區
-lvim.keys.normal_mode["<leader>d<c-w>"] = "<cmd>bd!<cr>"
+lvim.keys.normal_mode["<leader>d<c-w>"]  = "<cmd>bd!<cr>"
 
 -- lvim.keys.normal_mode["<a-1>"] = nil
 -- lvim.keys.normal_mode["<a-2>"] = nil
 -- lvim.keys.normal_mode["<a-3>"] = nil
 
-lvim.keys.normal_mode["gy"]             = "<cmd>let @+ = expand('%:p')<cr>"
-lvim.keys.normal_mode["<a-1>"]          = "<cmd>BufferLineGoToBuffer 1<cr>"
-lvim.keys.normal_mode["<a-2>"]          = "<cmd>BufferLineGoToBuffer 2<cr>"
-lvim.keys.normal_mode["<a-3>"]          = "<cmd>BufferLineGoToBuffer 3<cr>"
-lvim.keys.normal_mode["<a-4>"]          = "<cmd>BufferLineGoToBuffer 4<cr>"
-lvim.keys.normal_mode["<a-5>"]          = "<cmd>BufferLineGoTOBuffer 5<cr>"
-lvim.keys.normal_mode["<a-6>"]          = "<cmd>BufferLineGoToBuffer 6<cr>"
-lvim.keys.normal_mode["<a-7>"]          = "<cmd>BufferLineGoToBuffer 7<cr>"
-lvim.keys.normal_mode["<a-8>"]          = "<cmd>BufferLineGoToBuffer 8<cr>"
-lvim.keys.normal_mode["<a-9>"]          = "<cmd>BufferLineGoToBuffer 9<cr>"
-lvim.keys.normal_mode["<a-0>"]          = "<cmd>BufferLineGoToBuffer -1<cr>"
-lvim.keys.normal_mode["<a-->"]          = "<cmd>b#<cr>"
+lvim.keys.normal_mode["gy"]              = "<cmd>let @+ = expand('%:p')<cr>"
+lvim.keys.normal_mode["<a-1>"]           = "<cmd>BufferLineGoToBuffer 1<cr>"
+lvim.keys.normal_mode["<a-2>"]           = "<cmd>BufferLineGoToBuffer 2<cr>"
+lvim.keys.normal_mode["<a-3>"]           = "<cmd>BufferLineGoToBuffer 3<cr>"
+lvim.keys.normal_mode["<a-4>"]           = "<cmd>BufferLineGoToBuffer 4<cr>"
+lvim.keys.normal_mode["<a-5>"]           = "<cmd>BufferLineGoTOBuffer 5<cr>"
+lvim.keys.normal_mode["<a-6>"]           = "<cmd>BufferLineGoToBuffer 6<cr>"
+lvim.keys.normal_mode["<a-7>"]           = "<cmd>BufferLineGoToBuffer 7<cr>"
+lvim.keys.normal_mode["<a-8>"]           = "<cmd>BufferLineGoToBuffer 8<cr>"
+lvim.keys.normal_mode["<a-9>"]           = "<cmd>BufferLineGoToBuffer 9<cr>"
+lvim.keys.normal_mode["<a-0>"]           = "<cmd>BufferLineGoToBuffer -1<cr>"
+lvim.keys.normal_mode["<a-->"]           = "<cmd>b#<cr>"
 -- -- Use which-key to add extra bindings with the leader-key prefix
 -- lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without formatting" }
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<cr>", "Projects" }
@@ -194,45 +194,46 @@ lvim.keys.normal_mode["<a-->"]          = "<cmd>b#<cr>"
 -- lvim.keys.normal_mode["<S-l>"] = "<cmd>BufferLineCycleNext<cr>"
 -- lvim.keys.normal_mode["<S-h>"] = "<cmd>BufferLineCyclePrev<cr>"
 
-lvim.keys.normal_mode["<A-BS>"]         = "<cmd>cd ../<cr>"
-lvim.keys.normal_mode["<leader><A-BS>"] = "<cmd>cd %:p:h <cr>"
-lvim.keys.normal_mode['<leader>se']     = { '<cmd>SessionManager load_session<cr>' }
+lvim.keys.normal_mode["<A-BS>"]          = "<cmd>cd ../<cr>"
+lvim.keys.normal_mode["<leader><A-BS>"]  = "<cmd>cd %:p:h <cr>"
+lvim.keys.normal_mode["<leader>r<A-BS>"] = "<cmd>execute ':cd ' . g:WorkDirectoryPath<cr>"
+lvim.keys.normal_mode['<leader>se']      = { '<cmd>SessionManager load_session<cr>' }
 -- lvim.keys.normal_mode['<leader>f']      = { '<Plug>(leap-forward)' }
 -- lvim.keys.normal_mode['<leader>F']      = { '<Plug>(leap-backward)' }
-lvim.keys.normal_mode["<M-n>"]          = { "<cmd>lua require('illuminate').goto_next_reference(wrap)<cr>" }
-lvim.keys.normal_mode["<M-N>"]          = { "<cmd>lua require('illuminate').goto_prev_reference(wrap)<cr>" }
+lvim.keys.normal_mode["<M-n>"]           = { "<cmd>lua require('illuminate').goto_next_reference(wrap)<cr>" }
+lvim.keys.normal_mode["<M-N>"]           = { "<cmd>lua require('illuminate').goto_prev_reference(wrap)<cr>" }
 
 -- debug
-lvim.keys.normal_mode["]d"]             = { "<cmd>lua require('goto-breakpoints').next()<cr>" }
-lvim.keys.normal_mode["[d"]             = { "<cmd>lua require('goto-breakpoints').prev()<cr>" }
-lvim.keys.normal_mode["]S"]             = { "<cmd>lua require('goto-breakpoints').stopped()<cr>" }
+lvim.keys.normal_mode["]d"]              = { "<cmd>lua require('goto-breakpoints').next()<cr>" }
+lvim.keys.normal_mode["[d"]              = { "<cmd>lua require('goto-breakpoints').prev()<cr>" }
+lvim.keys.normal_mode["]S"]              = { "<cmd>lua require('goto-breakpoints').stopped()<cr>" }
 -- lvim.keys.normal_mode['<leader>\\']     = { "<cmd>lua require('dap').toggle_breakpoint()<cr>" }
-lvim.keys.normal_mode['<leader>\\']     = { "<cmd>lua require('persistent-breakpoints.api').toggle_breakpoint()<cr>" }
+lvim.keys.normal_mode['<leader>\\']      = { "<cmd>lua require('persistent-breakpoints.api').toggle_breakpoint()<cr>" }
 -- lvim.builtin.which_key.mappings.d['\\'] = { "<cmd>lua require('dap').clear_breakpoints()<cr>", 'Clear All Breakpoint' }
-lvim.builtin.which_key.mappings.d['\\'] = { "<cmd>lua require('persistent-breakpoints.api').clear_all_breakpoints()<cr>",
+lvim.builtin.which_key.mappings.d['\\']  = { "<cmd>lua require('persistent-breakpoints.api').clear_all_breakpoints()<cr>",
   'Clear All Breakpoint' }
 -- lvim.builtin.which_key.mappings.d['lc'] = {
 --   "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), nil)<cr>",
 --   'Breakpoint Condition' }
-lvim.builtin.which_key.mappings.d['lc'] = {
+lvim.builtin.which_key.mappings.d['lc']  = {
   "<cmd>lua require('persistent-breakpoints.api').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), nil)<cr>",
   'Breakpoint Condition' }
 -- lvim.builtin.which_key.mappings.d['ll'] = {
 --   "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), vim.fn.input('Log point message: '))<cr>",
 --   'Condition Logponit Message' }
-lvim.builtin.which_key.mappings.d['ll'] = {
+lvim.builtin.which_key.mappings.d['ll']  = {
   "<cmd>lua require('persistent-breakpoints.api').set_breakpoint(vim.fn.input('Breakpoint condition: '), vim.fn.input('Hit condition: '), vim.fn.input('Log point message: '))<cr>",
   'Condition Logponit Message' }
-lvim.builtin.which_key.mappings.d.v     = { "<cmd>lua require('dapui').eval()<cr>", "Evaluate Expression" }
-lvim.keys.visual_mode["<leader>dv"]     = { "<cmd>lua require('dapui').eval()<cr>" }
-lvim.keys.normal_mode["gH"]             = { "<cmd>lua require('dapui').eval()<cr>" }
-lvim.keys.visual_mode["gH"]             = { "<cmd>lua require('dapui').eval()<cr>" }
-lvim.keys.normal_mode["<F5>"]           = { "<cmd>lua require('dap').continue()<cr>" }
-lvim.keys.normal_mode["<F17>"]          = { "<cmd>lua require('dap').close()<cr>" }
-lvim.keys.normal_mode["<F8>"]           = { "<cmd>lua require'dap'.step_into()<cr>" }
+lvim.builtin.which_key.mappings.d.v      = { "<cmd>lua require('dapui').eval()<cr>", "Evaluate Expression" }
+lvim.keys.visual_mode["<leader>dv"]      = { "<cmd>lua require('dapui').eval()<cr>" }
+lvim.keys.normal_mode["gH"]              = { "<cmd>lua require('dapui').eval()<cr>" }
+lvim.keys.visual_mode["gH"]              = { "<cmd>lua require('dapui').eval()<cr>" }
+lvim.keys.normal_mode["<F5>"]            = { "<cmd>lua require('dap').continue()<cr>" }
+lvim.keys.normal_mode["<F17>"]           = { "<cmd>lua require('dap').close()<cr>" }
+lvim.keys.normal_mode["<F8>"]            = { "<cmd>lua require'dap'.step_into()<cr>" }
 -- Shift + F8
-lvim.keys.normal_mode["<F20>"]          = { "<cmd>lua require'dap'.step_over()<cr>" }
-lvim.keys.normal_mode["<F6>"]           = { "<cmd>lua require'dap'.step_out()<cr>" }
+lvim.keys.normal_mode["<F20>"]           = { "<cmd>lua require'dap'.step_over()<cr>" }
+lvim.keys.normal_mode["<F6>"]            = { "<cmd>lua require'dap'.step_out()<cr>" }
 
 vim.cmd('noremap <a-p> <Nop>')
 vim.keymap.set('i', '<a-u>', "<Esc>:m .-2<cr>==gi")
