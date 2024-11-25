@@ -525,7 +525,7 @@ nnoremap <silent> <leader>t, :tabprevious<cr>
 nnoremap <silent> <leader>t. :tabnext<cr>
 nnoremap <silent> <leader>t\\ :tabclose<cr>
 
-set isfname+=32
+" set isfname+=32
 function! XOpenFileOrFold(mode)
   let cfile = ''
   if a:mode == 'v'
