@@ -67,4 +67,14 @@ null_ls.register({
   },
 })
 
-null_ls.setup()
+-- NOTE: for format tailwind css, and then install "prettier-plugin-tailwindcss"
+-- And set .prettierrc.js
+-- If not install or set .prettierrc.js, it will not support tailwind css format (just become normal css format)
+-- Reference: https://github.com/tailwindlabs/prettier-plugin-tailwindcss
+local formatters = require("lvim.lsp.null-ls.formatters")
+formatters.setup({
+  {
+    command = "prettier",
+    filetypes = { "css" },
+  },
+})
