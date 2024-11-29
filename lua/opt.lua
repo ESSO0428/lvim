@@ -257,7 +257,7 @@ vim.api.nvim_del_augroup_by_name('_auto_resize')
 -- relationship with gx
 vim.ui.open = function(url)
   local function is_url(text)
-    local pattern = "^(https?://[%w-_%.%?%.:/%+=&]+)$"
+    local pattern = "^(https?://.+)$"
     return text:match(pattern) ~= nil
   end
   local function check_rssh_tunnel()

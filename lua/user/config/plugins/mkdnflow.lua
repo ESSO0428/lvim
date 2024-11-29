@@ -78,7 +78,7 @@ end
 local function markdown_go_to_definition()
   local params = vim.lsp.util.make_position_params()
   local function is_url(text)
-    local pattern = "^(https?://[%w-_%.%?%.:/%+=&]+)$"
+    local pattern = "^(https?://.+)$"
     return text:match(pattern) ~= nil
   end
   -- Treesitter check if current node is a link
