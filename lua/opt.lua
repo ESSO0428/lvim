@@ -226,7 +226,7 @@ lvim.format_on_save = {
     "*.js",
     "*.tsx"
   },
-  timeout = 1000,
+  timeout = 10000, -- default 1000 ms
 }
 
 
