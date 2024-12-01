@@ -78,3 +78,9 @@ formatters.setup({
     filetypes = { "css", "javascript", "typescript", "typescriptreact" },
   },
 })
+local code_actions = require "lvim.lsp.null-ls.code_actions"
+code_actions.setup {
+  {
+    name = "gitsigns",
+  },
+}
