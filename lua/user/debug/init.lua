@@ -66,3 +66,10 @@ lvim.builtin.dap.ui.config.layouts = {
     position = "bottom",
   },
 }
+dap.adapters.php = {
+  type = "executable",
+  command = "node",
+  args = {
+    vim.loop.os_homedir() .. "/.local/share/lvim/mason/packages/php-debug-adapter/extension/out/phpDebug.js",
+  },
+}
