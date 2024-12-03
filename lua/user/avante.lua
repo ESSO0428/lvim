@@ -51,6 +51,7 @@ M.opts = {
     auto_set_keymaps = true,
     auto_apply_diff_after_generation = false,
     support_paste_from_clipboard = false,
+    minimize_diff = true, -- Whether to remove unchanged lines when applying a code block
   },
   mappings = {
     --- @class AvanteConflictMappings

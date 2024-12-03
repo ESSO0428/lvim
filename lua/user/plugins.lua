@@ -602,7 +602,6 @@ lvim.plugins = {
   { "hrsh7th/cmp-copilot" },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "canary",
     -- NOTE: If you can't activate the plugin, please check the following:
     -- 1. Check if the $XDG_RUNTIME_DIR directory exists.
     -- 2. Verify the permissions of $XDG_RUNTIME_DIR:
@@ -645,6 +644,7 @@ lvim.plugins = {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
       --- The below dependencies are optional,
+      "hrsh7th/nvim-cmp",            -- autocompletion for avante commands and mentions
       "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
       "github/copilot.vim",          -- for providers='copilot'
       {

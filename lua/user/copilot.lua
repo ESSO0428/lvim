@@ -195,40 +195,58 @@ end
 -- Prompts are configured separately at: `~/.config/lvim/docs/CopilotChatPrompts/`
 -- For detailed information, see: `~/.config/lvim/docs/CopilotChatPrompts/Index.md`
 require("CopilotChat").setup {
-  debug = false,          -- Enable debug logging (same as 'log_level = 'debug')
-  log_level = 'info',     -- Log level to use, 'trace', 'debug', 'info', 'warn', 'error', 'fatal'
-  proxy = nil,            -- [protocol://]host[:port] Use this proxy
-  allow_insecure = false, -- Allow insecure server connections
-
   -- system_prompt = require("CopilotChat").prompts().COPILOT_INSTRUCTIONS, -- System prompt to use (can be specified manually in prompt via /).
-  model = 'gpt-4o', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
+  model = 'gpt-4o',  -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
   agent = 'copilot', -- Default agent to use, see ':CopilotChatAgents' for available agents (can be specified manually in prompt via @).
-  context = nil, -- Default context to use (can be specified manually in prompt via #).
+  context = nil,     -- Default context to use (can be specified manually in prompt via #).
   temperature = 0.1, -- GPT result temperature
 
-  question_header = '## User ', -- Header to use for user questions
-  answer_header = '## Copilot ', -- Header to use for AI answers
-  error_header = '> [!ERROR] Error', -- Header to use for errors (default is '## Error ')
-  separator = '───', -- Separator to use in chat
-
-  chat_autocomplete = true, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
-  show_folds = true, -- Shows folds for sections in chat
-  show_help = true, -- Shows help message as virtual lines when waiting for user input
-  auto_follow_cursor = true, -- Auto-follow cursor in chat
-  auto_insert_mode = false, -- Automatically enter insert mode when opening window and on new prompt
-  insert_at_end = false, -- Move cursor to end of buffer when inserting text
-  clear_chat_on_new_prompt = false, -- Clears chat on every new prompt
-  highlight_selection = true, -- Highlight selection in the source buffer when in the chat window
-  highlight_headers = true, -- Highlight headers in chat, disable if using markdown renderers (like render-markdown.nvim)
-
-  history_path = vim.fn.stdpath('data') .. '/copilotchat_history', -- Default path to stored history
-  callback = nil, -- Callback to use when ask response is received
-  no_chat = false, -- Do not write to chat buffer and use chat history (useful for using callback for custom processing)
+  headless = false,  -- Do not write to chat buffer and use history(useful for using callback for custom processing)
+  callback = nil,    -- Callback to use when ask response is received
 
   -- default selection
   selection = function(source)
     return select.visual(source) or select.buffer(source)
   end,
+
+  -- default window options
+  window = {
+    layout = 'vertical',    -- 'vertical', 'horizontal', 'float', 'replace'
+    width = 0.5,            -- fractional width of parent, or absolute width in columns when > 1
+    height = 0.5,           -- fractional height of parent, or absolute height in rows when > 1
+    -- Options below only apply to floating windows
+    relative = 'editor',    -- 'editor', 'win', 'cursor', 'mouse'
+    border = 'single',      -- 'none', single', 'double', 'rounded', 'solid', 'shadow'
+    row = nil,              -- row position of the window, default is centered
+    col = nil,              -- column position of the window, default is centered
+    title = 'Copilot Chat', -- title of chat window
+    footer = nil,           -- footer of chat window
+    zindex = 1,             -- determines if window is on top or below other floating windows
+  },
+
+  show_help = true,                 -- Shows help message as virtual lines when waiting for user input
+  show_folds = true,                -- Shows folds for sections in chat
+  highlight_selection = true,       -- Highlight selection in the source buffer when in the chat window
+  highlight_headers = true,         -- Highlight headers in chat, disable if using markdown renderers (like render-markdown.nvim)
+  auto_follow_cursor = true,        -- Auto-follow cursor in chat
+  auto_insert_mode = false,         -- Automatically enter insert mode when opening window and on new prompt
+  insert_at_end = false,            -- Move cursor to end of buffer when inserting text
+  clear_chat_on_new_prompt = false, -- Clears chat on every new prompt
+
+  -- Static config starts here (can be configured only via setup function)
+
+  debug = false, -- Enable debug logging (same as 'log_level = 'debug')
+  log_level = 'info', -- Log level to use, 'trace', 'debug', 'info', 'warn', 'error', 'fatal'
+  proxy = nil, -- [protocol://]host[:port] Use this proxy
+  allow_insecure = false, -- Allow insecure server connections
+
+  chat_autocomplete = true, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
+  history_path = vim.fn.stdpath('data') .. '/copilotchat_history', -- Default path to stored history
+
+  question_header = '## User ', -- Header to use for user questions
+  answer_header = '## Copilot ', -- Header to use for AI answers
+  error_header = '> [!ERROR] Error', -- Header to use for errors (default is '## Error ')
+  separator = '───', -- Separator to use in chat
 
   -- default contexts
   contexts = {
@@ -449,19 +467,7 @@ require("CopilotChat").setup {
       end,
     },
   },
-  window = {
-    layout = 'vertical',    -- 'vertical', 'horizontal', 'float', 'replace'
-    width = 0.5,            -- fractional width of parent, or absolute width in columns when > 1
-    height = 0.5,           -- fractional height of parent, or absolute height in rows when > 1
-    -- Options below only apply to floating windows
-    relative = 'editor',    -- 'editor', 'win', 'cursor', 'mouse'
-    border = 'single',      -- 'none', single', 'double', 'rounded', 'solid', 'shadow'
-    row = nil,              -- row position of the window, default is centered
-    col = nil,              -- column position of the window, default is centered
-    title = 'Copilot Chat', -- title of chat window
-    footer = nil,           -- footer of chat window
-    zindex = 1,             -- determines if window is on top or below other floating windows
-  },
+
   -- default mappings
   mappings = {
     complete = {
@@ -469,15 +475,15 @@ require("CopilotChat").setup {
     },
     close = {
       normal = 'q',
-      insert = '<C-c>'
+      insert = '<C-c>',
     },
     reset = {
       normal = '<C-l>',
-      insert = '<C-l>'
+      insert = '<C-l>',
     },
     submit_prompt = {
       normal = '<CR>',
-      insert = '<C-s>'
+      insert = '<C-s>',
     },
     toggle_sticky = {
       detail = 'Makes line under cursor sticky or deletes sticky line.',
@@ -485,7 +491,7 @@ require("CopilotChat").setup {
     },
     accept_diff = {
       normal = '<C-y>',
-      insert = '<C-y>'
+      insert = '<C-y>',
     },
     jump_to_diff = {
       normal = 'gD',
@@ -498,13 +504,16 @@ require("CopilotChat").setup {
       register = '"',
     },
     show_diff = {
-      normal = 'gd'
+      normal = 'gd',
     },
-    show_system_prompt = {
-      normal = 'gp'
+    show_info = {
+      normal = 'gp',
     },
-    show_user_selection = {
-      normal = 'gs'
+    show_context = {
+      normal = 'gs',
+    },
+    show_help = {
+      normal = 'gh',
     },
   },
 }
