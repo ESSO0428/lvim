@@ -1,4 +1,5 @@
 local dap = require('dap')
+require('dap.ext.vscode').json_decode = require('json5').parse
 dap.defaults.fallback.switchbuf = 'useopen,uselast'
 
 -- NOTE: 由於 Weissle/persistent-breakpoints.nvim 不包含 set_breakpoint 因此自行新增了如下函數
@@ -30,6 +31,8 @@ lvim.builtin.which_key.mappings.d['`'] = { "<cmd>lua require'dap'.restart()<cr>"
 
 
 require "user.debug.python"
+require "user.debug.php"
+
 require "nvim-dap-virtual-text".setup()
 local function reloadLaunchJson()
   local status, err = pcall(function()
@@ -64,12 +67,5 @@ lvim.builtin.dap.ui.config.layouts = {
     },
     size = 0.27,
     position = "bottom",
-  },
-}
-dap.adapters.php = {
-  type = "executable",
-  command = "node",
-  args = {
-    vim.loop.os_homedir() .. "/.local/share/lvim/mason/packages/php-debug-adapter/extension/out/phpDebug.js",
   },
 }

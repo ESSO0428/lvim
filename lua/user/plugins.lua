@@ -991,6 +991,12 @@ lvim.plugins = {
       })
     end
   },
+  {
+    'Joakker/lua-json5',
+    -- if you're on windows
+    -- run = 'powershell ./install.ps1'
+    build = './install.sh'
+  },
   { "nvim-telescope/telescope-dap.nvim" },
   { "ofirgall/goto-breakpoints.nvim" },
   {
