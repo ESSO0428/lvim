@@ -199,31 +199,90 @@ function modify_calendar_keymaps()
   local max_attempts = 3
   local attempts = 0
 
+  -- Check if all keys are mapped
+  local is_all_keys_mapped = true
+  local function are_keys_mapped()
+    local keys_to_check = { "h", "j", "k", "l", "i" }
+
+    for _, key in ipairs(keys_to_check) do
+      local mappings = vim.tbl_filter(function(map)
+        return map.lhs == key and map.callback
+      end, vim.api.nvim_buf_get_keymap(0, "n"))
+
+      if not mappings then
+        is_all_keys_mapped = false
+      end
+    end
+
+    return is_all_keys_mapped
+  end
+  local function get_key_mappings()
+    local keys = { "h", "j", "k", "l", "i" }
+    local mappings = {}
+
+    for _, key in ipairs(keys) do
+      -- Use vim.api.nvim_buf_get_keymap to get key mappings for the current buffer
+      -- For extracting only mappings with a callback
+      local key_mapping = vim.tbl_filter(function(map)
+        return map.lhs == key and map.callback
+      end, vim.api.nvim_buf_get_keymap(0, "n"))
+
+      -- Extract the first callback, or nil if no mappings or no callback
+      if #key_mapping > 0 then
+        mappings[key] = key_mapping[1].callback
+      else
+        mappings[key] = nil
+      end
+    end
+
+    return mappings
+  end
+
+  -- 設置鍵位映射
   local function setup_keymaps()
+    -- Get function of default key mappings for calendar
+    local mappings = get_key_mappings()
     -- unbind default keys
+    -- for calendar read_data (i), cursor_up (k), ..._down (j), ..._left (h) and ..._right (l)
+    --     ^
+    --     k
+    -- < h   l >
+    --     j
+    --     v
+    vim.api.nvim_buf_del_keymap(0, "n", "h")
     vim.api.nvim_buf_del_keymap(0, "n", "j")
     vim.api.nvim_buf_del_keymap(0, "n", "k")
-    vim.api.nvim_buf_del_keymap(0, "n", "h")
     vim.api.nvim_buf_del_keymap(0, "n", "l")
+    vim.api.nvim_buf_del_keymap(0, "n", "i")
 
-    -- bind new keys
-    vim.api.nvim_buf_set_keymap(0, "n", "e", '<cmd>lua require("orgmode.objects.calendar").read_date()<CR>', {})
-    vim.api.nvim_buf_set_keymap(0, "n", "i", '<cmd>lua require("orgmode.objects.calendar").cursor_up()<cr>', {})
-    vim.api.nvim_buf_set_keymap(0, "n", "k", '<cmd>lua require("orgmode.objects.calendar").cursor_down()<cr>', {})
-    vim.api.nvim_buf_set_keymap(0, "n", "j", '<cmd>lua require("orgmode.objects.calendar").cursor_left()<cr>', {})
-    vim.api.nvim_buf_set_keymap(0, "n", "l", '<cmd>lua require("orgmode.objects.calendar").cursor_right()<cr>', {})
+    -- bind new keys for calendar read_data (e), cursor_up (i), ..._down (k), ..._left (j) and ..._right (l)
+    --     ^
+    --     i
+    -- < j   l >
+    --     k
+    --     v
+    vim.api.nvim_buf_set_keymap(0, "n", "e", "", { callback = mappings["i"], noremap = true, silent = true })
+    vim.api.nvim_buf_set_keymap(0, 'n', 'i', "", { callback = mappings["k"], noremap = true, silent = true })
+    vim.api.nvim_buf_set_keymap(0, 'n', 'k', "", { callback = mappings["j"], noremap = true, silent = true })
+    vim.api.nvim_buf_set_keymap(0, 'n', 'j', "", { callback = mappings["h"], noremap = true, silent = true })
+    vim.api.nvim_buf_set_keymap(0, 'n', 'l', "", { callback = mappings["l"], noremap = true, silent = true })
+    print("Keymaps successfully set up!")
   end
 
   vim.defer_fn(function()
+    -- 1. Try to extract function of key mappings for the current buffer of calendar
+    --  - Will retry 500ms later if not all keys are mapped
+    -- 2. And then set up new key mappings, unbinding the default keys
     while attempts < max_attempts do
-      local success, err = pcall(setup_keymaps)
-
-      if success then
+      if are_keys_mapped() then
+        print("All calendar default keymaps are mapped, setting up custom keymaps...")
+        setup_keymaps()
         return
       else
+        print("Some Calendar keymaps are not set up. Retrying... (Attempt " ..
+          (attempts + 1) .. " of " .. max_attempts .. ")")
         attempts = attempts + 1
-        print("An error occurred:", err, "- Retrying in 0.5 seconds.")
-        vim.defer_fn(setup_keymaps, 500)
+        vim.defer_fn(function() end, 500)
       end
     end
     print("Failed to modify keymaps after " .. max_attempts .. " attempts.")
