@@ -546,10 +546,7 @@ lvim.plugins = {
     end
   },
   { "jbyuki/venn.nvim" },
-  {
-    "tomasky/bookmarks.nvim",
-    event = "VimEnter"
-  },
+  { "tomasky/bookmarks.nvim" },
   {
     "ESSO0428/vim-dadbod-ui",
     dependencies = { "tpope/vim-dadbod", "tpope/vim-dotenv" }
