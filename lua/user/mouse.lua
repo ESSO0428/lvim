@@ -15,6 +15,14 @@ vim.cmd [[:amenu 10.230 PopUp.-sep4- *]]
 
 -- NOTE: Plugin of Developmenting, so only use in NvimTree
 -- mouse users + nvimtree users!
+local nvimtree_memu_options = require("menus.nvimtree")
+-- Search and replace the cmd of "Open in terminal" in nvimtree_memu_options
+for i, item in ipairs(nvimtree_memu_options) do
+  if item.name == "  Open in terminal" then
+    require("menus.nvimtree")[i].cmd = function() horizontal_term() end
+    break
+  end
+end
 vim.keymap.set("n", "<RightMouse>",
   function()
     vim.cmd.exec '"normal! \\<RightMouse>"'
@@ -109,8 +117,7 @@ vim.keymap.set("n", "<RightMouse>",
             if vim.g.base46_cache then
               require("nvchad.term").new { cmd = cmd, pos = "sp" }
             else
-              vim.cmd "enew"
-              vim.fn.termopen { vim.o.shell, "-c", cmd .. " ; " .. vim.o.shell }
+              ToggleTermExec('horizontal')
             end
           end,
         },
