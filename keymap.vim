@@ -199,16 +199,10 @@ nnoremap <a-v> <c-v>
 " ==================== Cursor Movement ====================
 " New cursor movement (the default arrow keys are used for resizing windows)
 "     ^
-"     u
-" < n   i >
-"     e
+"     i
+" < j   l >
+"     k
 "     v
-" colemak keyborad
-" noremap <silent> u k
-" noremap <silent> n h
-" noremap <silent> e j
-" noremap <silent> i l
-
 " normal keyborad
 nnoremap <silent> i k
 nnoremap <silent> j h
