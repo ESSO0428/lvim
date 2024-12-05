@@ -1,4 +1,6 @@
 local null_ls = require("null-ls")
+local formatters = require("lvim.lsp.null-ls.formatters")
+local code_actions = require "lvim.lsp.null-ls.code_actions"
 
 -- define support filetypes for TailwindCSS
 local tailwind_support_filetypes = {
@@ -71,16 +73,14 @@ null_ls.register({
 -- And set .prettierrc.js
 -- If not install or set .prettierrc.js, it will not support tailwind css format (just become normal css format)
 -- Reference: https://github.com/tailwindlabs/prettier-plugin-tailwindcss
-local formatters = require("lvim.lsp.null-ls.formatters")
 formatters.setup({
   {
     command = "prettier",
     filetypes = { "css", "javascript", "typescript", "typescriptreact" },
   },
 })
-local code_actions = require "lvim.lsp.null-ls.code_actions"
-code_actions.setup {
+code_actions.setup({
   {
     name = "gitsigns",
   },
-}
+})
