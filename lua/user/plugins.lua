@@ -262,7 +262,6 @@ lvim.plugins = {
         ["g?"] = { "actions.show_help", mode = "n" },
         ["<cr>"] = { "actions.select", mode = "n" },
         ["<tab>"] = { "actions.select", mode = "n" },
-        ["l"] = { "actions.select", mode = "n" },
         ["<a-l>"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split", mode = "n" },
         ["<a-k>"] = { "actions.select", opts = { horizontal = true }, desc = "Open the entry in a horizontal split", mode = "n" },
         ["<C-t>"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab", mode = "n" },
