@@ -1,3 +1,12 @@
+local function remove_lunarvim_default_language_ftplugins_in_rtp(languages)
+  for _, lang in ipairs(languages) do
+    local file_name = lang .. ".lua"
+    vim.opt.rtp:remove(join_paths(get_runtime_dir(), "site", "after", "ftplugin", file_name))
+    vim.opt.rtp:remove(join_paths(get_runtime_dir(), "after", "ftplugin", file_name))
+  end
+end
+
+remove_lunarvim_default_language_ftplugins_in_rtp({ "lua", "python", "php" })
 local navbuddy = require("nvim-navbuddy")
 
 lvim.lsp.on_attach_callback = function(client, bufnr)
@@ -9,7 +18,7 @@ end
 -- 底下 Maso.. require("lvim.lsp... 為啟用 html emmet-ls 補全功能
 -- :MasonInstall emmet-ls
 -- lvim.lsp.installer.setup.ensure_installed = { "html", "tailwindcss" }
-lvim.lsp.installer.setup.ensure_installed = { "html", "tailwindcss", "tsserver", "basedpyright", "ruff_lsp" }
+lvim.lsp.installer.setup.ensure_installed = { "html", "tailwindcss", "tsserver", "basedpyright", "ruff", "intelephense" }
 local opts = { filetypes = { "html", "htmldjango" } }
 require("lvim.lsp.manager").setup("html", opts)
 
@@ -135,16 +144,6 @@ require("lvim.lsp.manager").setup("tsserver", {
         vim.lsp.util.jump_to_location(result, offset_encoding)
       end
     end
-  }
-})
-require("lvim.lsp.manager").setup("lua_ls", {
-  capabilities = Nvim.builtin.lsp.capabilities,
-  settings = {
-    Lua = {
-      hint = {
-        enable = true
-      }
-    }
   }
 })
 local function initializeAndDeduplicatePythonPaths()
