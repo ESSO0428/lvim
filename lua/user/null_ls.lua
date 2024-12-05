@@ -1,6 +1,6 @@
 local null_ls = require("null-ls")
 local formatters = require("lvim.lsp.null-ls.formatters")
-local code_actions = require "lvim.lsp.null-ls.code_actions"
+local code_actions = require("lvim.lsp.null-ls.code_actions")
 
 -- define support filetypes for TailwindCSS
 local tailwind_support_filetypes = {
