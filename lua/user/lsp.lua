@@ -6,7 +6,16 @@ local function remove_lunarvim_default_language_ftplugins_in_rtp(languages)
   end
 end
 
+-- NOTE: The code below is used to *prevent* LunarVim's default ftplugin configuration from being loaded.
+-- [Use When]:
+--   - You want to disable configurations like LSP settings in LunarVim's default ftplugin.
+--   - This is because LunarVim's default LSP configurations are loaded first, making it impossible
+--     to override them with user-defined ftplugin settings.
+-- [Do Not Use When]:
+--   - You are simply setting up a new LSP or adding entirely new configurations. In such cases,
+--     there's no need to remove LunarVim's default ftplugin configurations.
 remove_lunarvim_default_language_ftplugins_in_rtp({ "lua", "python", "php" })
+
 local navbuddy = require("nvim-navbuddy")
 
 lvim.lsp.on_attach_callback = function(client, bufnr)
@@ -52,8 +61,21 @@ require("lvim.lsp.manager").setup("yamlls", {
     },
   }
 })
--- -- NOTE: comment tailwindcss lsp config because it's lunarvim default config
--- -- require("lvim.lsp.manager").setup("tailwindcss", { ... })
+
+-- NOTE: The TailwindCSS LSP configuration is commented out because it is already included in
+--       LunarVim's default ftplugin settings for html, php, css, and other web-related filetypes.
+-- See:
+--   ~/.local/share/lunarvim/after/ftplugin/
+--   ~/.local/share/lunarvim/site/after/ftplugin/
+-- 1. If you need TailwindCSS LSP for additional filetypes, create and configure an ftplugin file
+--    in your user configuration directory (e.g., after/ftplugin/...lua), and add
+--    `require("lvim.lsp.manager").setup("tailwindcss")` to that file.
+-- 2. If you want to use TailwindCSS but need to *override LunarVim's default ftplugin settings*
+--    (e.g., if the default LSP configuration does not meet your needs):
+--    First, create your own ftplugin file as described in step 1.
+--    Then, use `vim.opt.rtp:remove` or `remove_lunarvim_default_language_ftplugins_in_rtp`.
+--    This will prevent LunarVim's default ftplugin settings from interfering with
+--    your custom LSP or other configurations.
 require("lvim.lsp.manager").setup("cssls", {
   capabilities = Nvim.builtin.lsp.capabilities,
   settings = {

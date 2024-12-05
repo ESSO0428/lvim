@@ -14,5 +14,5 @@ local opts = {
   end,
   capabilities = Nvim.builtin.lsp.capabilities,
 }
-
+require("lvim.lsp.manager").setup("tailwindcss")
 require("lvim.lsp.manager").setup("intelephense", opts)
