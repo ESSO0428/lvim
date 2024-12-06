@@ -27,6 +27,14 @@ lvim.plugins = {
     enabled = false,
   },
   {
+    "folke/edgy.nvim",
+    event = "VeryLazy",
+    init = function()
+      vim.opt.laststatus = 3
+      vim.opt.splitkeep = "screen"
+    end,
+  },
+  {
     "folke/trouble.nvim",
     cmd = "TroubleToggle"
   },
@@ -1407,6 +1415,11 @@ lvim.plugins = {
         -- Your setup opts here (leave empty to use defaults)
         preview_window = {
           auto_preview = true,
+        },
+        focus_on_open = false,
+        keymaps = {
+          close = { '<Esc>', 'q' },
+          hover_symbol = 'gh',
         }
       }
     end,

@@ -1,10 +1,11 @@
 lvim.builtin.which_key.setup.plugins.spelling.enabled = false
-last_nvimtree_side = 'left'
 lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "NvimTreeRight"
 
-function CustomNvimTreeToggle()
+function CustomFileTreeToggle()
   local dapui_scope_found = false
-  local current_side = lvim.builtin.nvimtree.setup.view.side
+  local current_side
+  -- current_side = vim.builtin.nvimtree.setup.view.side
+  current_side = require("user.edgy").view_side
 
   for _, win_nr in ipairs({ 1, 2 }) do
     local buf_nr = vim.fn.winbufnr(win_nr)
@@ -19,26 +20,22 @@ function CustomNvimTreeToggle()
 
   local new_side = dapui_scope_found and "right" or "left"
   if current_side ~= new_side then
-    lvim.builtin.nvimtree.setup.view.side = new_side
-    require("nvim-tree").setup(lvim.builtin.nvimtree.setup)
-    last_nvimtree_side = new_side
-  end
-
-  vim.cmd('NvimTreeFindFileToggle')
-  -- 延迟执行，确保 NvimTree 完全加载
-  vim.defer_fn(function()
-    -- 获取当前窗口的 Buffer 编号
-    local bufnr = vim.api.nvim_get_current_buf()
-    -- 获取当前 Buffer 的文件类型
-    local filetype = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
-
-    -- 检查是否为 NvimTree，如果是且在右侧，则尝试更改为 NvimTreeRight
-    if filetype == "NvimTree" and lvim.builtin.nvimtree.setup.view.side == "right" then
-      -- 这里尝试设置文件类型为 NvimTreeRight
-      -- 请注意，直接更改 filetype 可能不是一个安全的操作，这里仅作示例
-      vim.api.nvim_set_option_value('filetype', 'NvimTreeRight', { buf = bufnr })
+    require("user.edgy").view_side = new_side
+    require("user.edgy").swap_layouts()
+    if lvim.builtin.nvimtree.active then
+      lvim.builtin.nvimtree.setup.view.side = new_side
+      require("nvim-tree").setup(lvim.builtin.nvimtree.setup)
     end
-  end, 100) -- 100毫秒的延迟，这个值可能需要根据实际情况调整
+  end
+  if lvim.builtin.nvimtree.active then
+    vim.cmd("NvimTreeFindFileToggle")
+  else
+    vim.cmd("Neotree toggle reveal_force_cwd")
+  end
+  if dapui_scope_found then
+    require("dapui").close()
+    require("dapui").open({ reset = true })
+  end
 end
 
 local keys_to_remove
@@ -55,13 +52,13 @@ for _, key in ipairs(keys_to_remove) do
   end
 end
 if lvim.builtin.nvimtree.active == false then
-  lvim.builtin.which_key.mappings['e'] = { "<cmd>Neotree toggle reveal_force_cwd<cr>", "Neotree" }
+  lvim.builtin.which_key.mappings['e'] = { "<cmd>lua CustomFileTreeToggle()<cr>", "Neotree" }
   lvim.builtin.which_key.mappings.b['e'] = { "<cmd>Neotree buffers toggle reveal_force_cwd<cr>", "Neotree buffers" }
   lvim.keys.normal_mode["<c-k>"] = "<cmd>Neotree reveal_force_cwd<CR>"
 else
   -- lvim.builtin.which_key.mappings['e'] = { "<cmd>lua require('nvim-tree.api').tree.toggle(false, false)<cr>", "NvimTree" }
   -- lvim.builtin.which_key.mappings['e'] = { "<cmd>NvimTreeToggle<cr>", "NvimTree" }
-  lvim.builtin.which_key.mappings["e"] = { "<cmd>lua CustomNvimTreeToggle()<cr>", "NvimTree" }
+  lvim.builtin.which_key.mappings["e"] = { "<cmd>lua CustomFileTreeToggle()<cr>", "NvimTree" }
   lvim.keys.normal_mode["<c-k>"] = "<cmd>NvimTreeFocus<CR>"
 end
 lvim.builtin.which_key.mappings['c'] = nil
