@@ -11,7 +11,7 @@ function CustomFileTreeToggle()
     local buf_nr = vim.fn.winbufnr(win_nr)
     if buf_nr ~= -1 then
       local ft = vim.api.nvim_get_option_value("filetype", { buf = buf_nr })
-      if ft == "dapui_scopes" or ft == "dbui" then
+      if ft == "dapui_scopes" then
         dapui_scope_found = true
         break
       end
