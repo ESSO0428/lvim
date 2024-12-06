@@ -1301,6 +1301,10 @@ lvim.plugins = {
     end
   },
   {
+    'kosayoda/nvim-lightbulb',
+    opts = require("user.config.plugins.nvim_lightbulb").opt,
+  },
+  {
     "glepnir/lspsaga.nvim",
     branch = "main",
     -- commit = "4f07545",
@@ -1350,7 +1354,7 @@ lvim.plugins = {
         color_mode = true
       },
       lightbulb = {
-        enable = true,
+        enable = false,
         enable_in_insert = true,
         sign = true,
         sign_priority = 40,
