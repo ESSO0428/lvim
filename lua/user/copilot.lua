@@ -194,15 +194,20 @@ end
 -- prompts 另外配置於 : `~/.config/lvim/docs/CopilotChatPrompts/`
 -- Prompts are configured separately at: `~/.config/lvim/docs/CopilotChatPrompts/`
 -- For detailed information, see: `~/.config/lvim/docs/CopilotChatPrompts/Index.md`
+local user = vim.env.USER or "User"
+user = user:sub(1, 1):upper() .. user:sub(2)
+
+local question_header = "  " .. user .. " "
+local answer_header = "  Copilot "
 require("CopilotChat").setup {
   -- system_prompt = require("CopilotChat").prompts().COPILOT_INSTRUCTIONS, -- System prompt to use (can be specified manually in prompt via /).
-  model = 'gpt-4o',  -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
-  agent = 'copilot', -- Default agent to use, see ':CopilotChatAgents' for available agents (can be specified manually in prompt via @).
-  context = nil,     -- Default context to use (can be specified manually in prompt via #).
-  temperature = 0.1, -- GPT result temperature
+  model = 'claude-3.5-sonnet', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
+  agent = 'copilot',           -- Default agent to use, see ':CopilotChatAgents' for available agents (can be specified manually in prompt via @).
+  context = nil,               -- Default context to use (can be specified manually in prompt via #).
+  temperature = 0.1,           -- GPT result temperature
 
-  headless = false,  -- Do not write to chat buffer and use history(useful for using callback for custom processing)
-  callback = nil,    -- Callback to use when ask response is received
+  headless = false,            -- Do not write to chat buffer and use history(useful for using callback for custom processing)
+  callback = nil,              -- Callback to use when ask response is received
 
   -- default selection
   selection = function(source)
@@ -243,8 +248,8 @@ require("CopilotChat").setup {
   chat_autocomplete = true, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
   history_path = vim.fn.stdpath('data') .. '/copilotchat_history', -- Default path to stored history
 
-  question_header = '## User ', -- Header to use for user questions
-  answer_header = '## Copilot ', -- Header to use for AI answers
+  question_header = question_header, -- Header to use for user questions
+  answer_header = answer_header, -- Header to use for AI answers
   error_header = '> [!ERROR] Error', -- Header to use for errors (default is '## Error ')
   separator = '───', -- Separator to use in chat
 
