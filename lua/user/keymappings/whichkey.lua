@@ -33,7 +33,6 @@ function CustomFileTreeToggle()
     vim.cmd("Neotree toggle reveal_force_cwd")
   end
   if dapui_scope_found then
-    require("dapui").close()
     require("dapui").open({ reset = true })
   end
 end
