@@ -1,3 +1,7 @@
+Nvim.null_ls = {}
+Nvim.Buffer_check = {}
+Nvim.DAPUI = {}
+
 function Nvim.nvim_create_user_commands(command_names, command_function)
   for _, cmd_name in ipairs(command_names) do
     vim.api.nvim_create_user_command(cmd_name, command_function, {})
@@ -18,8 +22,6 @@ function Nvim.tables_equal(table1, table2)
   end
   return true
 end
-
-Nvim.null_ls = {}
 
 -- Create a function to generate CLI format action
 function Nvim.null_ls.create_cli_format_action(opts)
@@ -101,5 +103,43 @@ function Nvim.null_ls.create_cli_format_action(opts)
 
     -- directly format file
     format_file()
+  end
+end
+
+--- Check if filetype window exists
+--- @return boolean true if filetype window is found, false otherwise
+function Nvim.Buffer_check.is_current_tab_filetype_win_exists(filetype)
+  for _, win_nr in ipairs({ 1, 2 }) do
+    local buf_nr = vim.fn.winbufnr(win_nr)
+    if buf_nr ~= -1 then
+      local ft = vim.api.nvim_get_option_value("filetype", { buf = buf_nr })
+      if ft == filetype then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+function Nvim.DAPUI.with_layout_handling_when_dapui_open(fn)
+  return function(...)
+    local dapui_scope_found = Nvim.Buffer_check.is_current_tab_filetype_win_exists("dapui_scopes")
+    local current_side = require("user.edgy").view_side
+    -- local current_side = vim.builtin.nvimtree.setup.view.side
+    local new_side = dapui_scope_found and "right" or "left"
+
+    -- Pre-execution layout handling
+    if current_side ~= new_side then
+      require("user.edgy").view_side = new_side
+      require("user.edgy").swap_layouts()
+    end
+
+    -- Execute the wrapped function
+    fn(current_side, new_side, ...)
+
+    -- Post-execution dapui handling
+    if dapui_scope_found then
+      require("dapui").open({ reset = true })
+    end
   end
 end

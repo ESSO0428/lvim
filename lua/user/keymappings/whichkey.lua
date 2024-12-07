@@ -1,27 +1,8 @@
 lvim.builtin.which_key.setup.plugins.spelling.enabled = false
 lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "NvimTreeRight"
 
-function CustomFileTreeToggle()
-  local dapui_scope_found = false
-  local current_side
-  -- current_side = vim.builtin.nvimtree.setup.view.side
-  current_side = require("user.edgy").view_side
-
-  for _, win_nr in ipairs({ 1, 2 }) do
-    local buf_nr = vim.fn.winbufnr(win_nr)
-    if buf_nr ~= -1 then
-      local ft = vim.api.nvim_get_option_value("filetype", { buf = buf_nr })
-      if ft == "dapui_scopes" then
-        dapui_scope_found = true
-        break
-      end
-    end
-  end
-
-  local new_side = dapui_scope_found and "right" or "left"
+function FileTreeToggleCore(current_side, new_side)
   if current_side ~= new_side then
-    require("user.edgy").view_side = new_side
-    require("user.edgy").swap_layouts()
     if lvim.builtin.nvimtree.active then
       lvim.builtin.nvimtree.setup.view.side = new_side
       require("nvim-tree").setup(lvim.builtin.nvimtree.setup)
@@ -32,9 +13,11 @@ function CustomFileTreeToggle()
   else
     vim.cmd("Neotree toggle reveal_force_cwd")
   end
-  if dapui_scope_found then
-    require("dapui").open({ reset = true })
-  end
+end
+
+function CustomFileTreeToggle()
+  local wrapped_fn = Nvim.DAPUI.with_layout_handling_when_dapui_open(FileTreeToggleCore)
+  wrapped_fn()
 end
 
 local keys_to_remove

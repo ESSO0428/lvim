@@ -3,7 +3,7 @@ vim.api.nvim_set_keymap("i", "<M-l>", 'copilot#Accept("<cr>")', { silent = true,
 vim.g.copilot_no_tab_map = true
 
 -- Quick chat with Copilot
-function CopilotChatQuickchat(ask)
+function CopilotChatQuickchatCore(ask)
   if ask == true then
     local ok, input = pcall(vim.fn.input, "Quick Chat: ")
     if ok and input ~= "" then
@@ -14,8 +14,13 @@ function CopilotChatQuickchat(ask)
   end
 end
 
+function CopilotChatQuickchat(ask)
+  local wrapped_fn = Nvim.DAPUI.with_layout_handling_when_dapui_open(CopilotChatQuickchatCore)
+  wrapped_fn(ask)
+end
+
 -- Quick chat (visuals) for Copilot
-function CopilotChatQuickchatVisual(ask)
+function CopilotChatQuickchatVisualCore(ask)
   if ask == true then
     local ok, input = pcall(vim.fn.input, "Quick Chat: ")
     if ok and input ~= "" then
@@ -26,10 +31,20 @@ function CopilotChatQuickchatVisual(ask)
   end
 end
 
+function CopilotChatQuickchatVisual(ask)
+  local wrapped_fn = Nvim.DAPUI.with_layout_handling_when_dapui_open(CopilotChatQuickchatVisualCore)
+  wrapped_fn(ask)
+end
+
 -- Triggers the Copilot chat prompt action
-function CopilotChatPromptAction()
+function CopilotChatPromptActionCore()
   local actions = require("CopilotChat.actions")
   require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
+end
+
+function CopilotChatPromptAction()
+  local wrapped_fn = Nvim.DAPUI.with_layout_handling_when_dapui_open(CopilotChatPromptActionCore)
+  wrapped_fn()
 end
 
 function CopilotChatInline()
