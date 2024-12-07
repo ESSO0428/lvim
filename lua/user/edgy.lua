@@ -11,7 +11,7 @@ M.config = {
   options = {
     left = { size = 30 },
     bottom = { size = 10 },
-    right = { size = 30 },
+    right = { size = 70 },
     top = { size = 10 },
   },
   -- edgebar animations
@@ -201,7 +201,14 @@ M.config = {
             collapsed = false,
           },
         }
-      )
+      ),
+  right = {
+    {
+      title = "CopilotChat",
+      ft = "copilot-chat",
+      open = "CopilotChatOpen",
+    }
+  }
 }
 require("edgy").setup(M.config)
 
