@@ -57,48 +57,48 @@ Run "nvim -V1 -v" for more info
      # Common user
      git clone https://github.com/ESSO0428/lvim.git
      ```
-  2. install `lunarvim` and `neovim` use my script
+  2. Install `lunarvim` and `neovim` use my script
      ```bash
      cd ~
      sh ~/.config/lvim/InstallLunarvim.sh
      ```
-  3. other [reference](#about-update-lunarvim-and-neovim-core-to-latest-release) after step2
+  3. Other [reference](#about-update-lunarvim-and-neovim-core-to-latest-release) after step2
 - Install `lunarvim` and `neovim` manually
-  1. install `neovim`
-     1. install nvim.appimage
-     2. alias nvim.appimage to your bashrc/zshrc
+  1. Install `neovim`
+     1. Install nvim.appimage
+     2. Alias nvim.appimage to your .bashrc/.zshrc
         ```bash
         echo 'alias nvim=~/nvim.appimag' >> ~/.bashrc
         echo 'alias nvim=~/nvim.appimag' >> ~/.zshrc
         ```
-     3. install `pyenv` for neovim (for plug of neovim)
+     3. Install `pyenv` for neovim (for plug of neovim)
         ```bash
         conda install pyenv
         ```
-     4. install `debugpy` for neovim (for debug of neovim)
+     4. Install `debugpy` for neovim (for debug of neovim)
         ```bash
         pip install debugpy
         ```
-  2. install `lunarvim environment`
-     1. link ~/nvim.appimage to ~/.local/bin/
+  2. Install `lunarvim environment`
+     1. Link ~/nvim.appimage to ~/.local/bin/
         ```bash
         ln -s ~/nvim.appimage ~/.local/bin/nvim
         ```
-     2. install nodejs, npm for lunarvim (suggest use nvm)
-     3. install `cargo` for lunarvim
-     4. install `fd` and `rg` for lunarvim (can use cargo, npm, conda)
-  4. install `lunarvim`
+     2. Install nodejs, npm for lunarvim (suggest use nvm)
+     3. Install `cargo` for lunarvim
+     4. Install `fd` and `rg` for lunarvim (can use cargo, npm, conda)
+  4. Install `lunarvim`
   5. git `clone this repo` to `~/.config/`
-     - and sync the config for sync new update to your worker machine
+     - And sync the config for sync new update to your worker machine
 
 ## Some notice
 
-some server install neovim will get below error:
+Some server install neovim will get below error:
 ```bash
 /lib64/libc.so.6: version `GLIBC_2.2X...' not found
 ```
 
-need to use `sudo compile glibc-2.31`  or `sudo compile glibc-2.27` (if you use low_glibc_support_version)
+Need to use `sudo compile glibc-2.31`  or `sudo compile glibc-2.27` (if you use low_glibc_support_version)
 if you are only a user, suggest ask `your admin` to help you install `glbc-2.31` or `glibc-2.27`
 
 ### Copilot
