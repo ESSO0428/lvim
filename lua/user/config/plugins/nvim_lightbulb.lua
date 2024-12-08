@@ -136,7 +136,7 @@ M.opt = {
   ignore = {
     -- LSP client names to ignore.
     -- Example: {"null-ls", "lua_ls"}
-    clients = {},
+    clients = { "null-ls" },
     -- Filetypes to ignore.
     -- Example: {"neo-tree", "lua"}
     ft = {},
