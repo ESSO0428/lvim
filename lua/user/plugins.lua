@@ -1031,7 +1031,7 @@ lvim.plugins = {
       "nvim-neotest/nvim-nio"
     }
   },
-  { "stevanmilic/nvim-lspimport" },
+  { "Davidyz/inlayhint-filler.nvim" },
   {
     "alexpasmantier/pymple.nvim",
     dependencies = {
