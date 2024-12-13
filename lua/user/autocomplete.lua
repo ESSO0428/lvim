@@ -120,6 +120,7 @@ lvim.builtin.cmp.experimental.ghost_text = true
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "jupyter" }
 table.insert(lvim.builtin.cmp.sources, 2, { name = "jupyter", priority = 10 })
 table.insert(lvim.builtin.cmp.sources, 3, { name = "jupynium", priority = 10 })
+lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "lazydev", group_index = 0 }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "cmdline_history" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "ultisnips" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vsnip" }
@@ -463,6 +464,7 @@ end, { "i", "c" })
 vim.keymap.set('i', '<a-j>', "<ESC>")
 lvim.builtin.cmp.mapping["<M-j>"] = cmp.mapping(cmp_mapping.abort(), { "i", "c" })
 
+lvim.builtin.cmp.formatting.source_names.lazydev = "(lazydev)"
 lvim.builtin.cmp.formatting.source_names.vsnip = "(V-Snippet)"
 lvim.builtin.cmp.formatting.source_names.luasnip = "(L-Snippet)"
 lvim.builtin.cmp.formatting.source_names.ultisnips = "(U-Snippet)"

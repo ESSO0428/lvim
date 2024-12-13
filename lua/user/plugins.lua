@@ -11,7 +11,7 @@ lvim.plugins = {
     },
   },
   { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
-  {                                        -- optional cmp completion source for require statements and module annotations
+  --[[{                                        -- optional cmp completion source for require statements and module annotations
     "hrsh7th/nvim-cmp",
     opts = function(_, opts)
       opts.sources = opts.sources or {}
@@ -20,7 +20,7 @@ lvim.plugins = {
         group_index = 0, -- set group index to 0 to skip loading LuaLS completions
       })
     end,
-  },
+  },--]]
   -- NOTE: make sure to uninstall or disable neodev.nvim for lazydev to work
   {
     "folke/neodev.nvim",
