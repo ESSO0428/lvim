@@ -31,13 +31,13 @@ local opts = {
     }
     local function is_excluded(dir, excluded_paths)
       for _, excluded in ipairs(excluded_paths) do
-        if dir == excluded or dir:match(excluded) then
+        if dir == excluded then
           return true
         end
       end
       return false
     end
-    if not root and is_excluded(vim.fn.getcwd(), excluded_paths) then
+    if root and not is_excluded(vim.fn.getcwd(), excluded_paths) then
       return root
     end
   end,
