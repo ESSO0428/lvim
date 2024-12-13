@@ -63,6 +63,7 @@ lvim.builtin.which_key.vmappings.u = lvim.builtin.which_key.vmappings.l
 lvim.builtin.which_key.vmappings.l = nil
 -- lvim.builtin.which_key.vmappings.u.a = { "<cmd>Lspsaga code_action<cr>", "Code Action" }
 lvim.builtin.which_key.vmappings.u.a = { "<cmd>lua require('actions-preview').code_actions()<cr>", "Code Action" }
+lvim.builtin.which_key.vmappings.u.A = { "<cmd>lua require('inlayhint-filler').fill()<cr>", "Inlayhint Filler" }
 
 lvim.builtin.which_key.mappings.U = lvim.builtin.which_key.mappings.L
 lvim.builtin.which_key.mappings.L = nil
