@@ -34,6 +34,12 @@ lvim.keys.normal_mode['<leader>j']     = "<cmd>wincmd h<cr>"
 lvim.keys.normal_mode['<leader>l']     = "<cmd>wincmd l<cr>"
 lvim.keys.normal_mode['<leader>J']     = "<cmd>wincmd t<cr>"
 lvim.keys.normal_mode["<leader>L"]     = "<cmd>wincmd b<cr>"
+lvim.keys.normal_mode['sJ']            = "<cmd>wincmd H<cr>"
+lvim.keys.normal_mode['sL']            = "<cmd>wincmd L<cr>"
+lvim.keys.normal_mode['sI']            = "<cmd>wincmd K<cr>"
+lvim.keys.normal_mode['sK']            = "<cmd>wincmd J<cr>"
+lvim.keys.normal_mode['sT']            = "<cmd>wincmd T<cr>"
+
 -- lvim.keys.normal_mode['`']         = "~"
 -- lvim.keys.normal_mode['Z']         = ":UndotreeToggle<cr>"
 

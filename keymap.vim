@@ -359,6 +359,12 @@ nnoremap sk :set splitbelow<cr>:split<cr>
 nnoremap sj :set nosplitright<cr>:vsplit<cr>:set splitright<cr>
 nnoremap sl :set splitright<cr>:vsplit<cr>
 
+nnoremap sI :wincmd K<cr>
+nnoremap sK :wincmd J<cr>
+nnoremap sJ :wincmd H<cr>
+nnoremap sL :wincmd L<cr>
+nnoremap sT :wincmd T<cr>
+
 
 
 " Resize splits with arrow keys
