@@ -1,5 +1,6 @@
 Nvim.null_ls = {}
 Nvim.Buffer_check = {}
+Nvim.Quickfix = {}
 Nvim.DAPUI = {}
 
 function Nvim.nvim_create_user_commands(command_names, command_function)
@@ -119,6 +120,51 @@ function Nvim.Buffer_check.is_current_tab_filetype_win_exists(filetype)
     end
   end
   return false
+end
+
+-- HACK: Avoid edgy.nvim layout conflict
+function Nvim.Quickfix.open_quickfix_safety()
+  vim.cmd("rightbelow copen")
+  vim.cmd("wincmd J")
+end
+
+function Nvim.Quickfix.open_loclist_safety()
+  vim.cmd("rightbelow lopen")
+  vim.cmd("wincmd J")
+end
+
+function Nvim.Quickfix.toggle_quickfix_safety()
+  local quickfix_open = false
+
+  for _, win in ipairs(vim.fn.getwininfo()) do
+    if win.quickfix == 1 then
+      quickfix_open = true
+      break
+    end
+  end
+
+  if quickfix_open then
+    vim.cmd("cclose")
+  else
+    Nvim.Quickfix.open_quickfix_safety()
+  end
+end
+
+function Nvim.Quickfix.toggle_loclist_safety()
+  local quickfix_open = false
+
+  for _, win in ipairs(vim.fn.getwininfo()) do
+    if win.quickfix == 1 then
+      quickfix_open = true
+      break
+    end
+  end
+
+  if quickfix_open then
+    vim.cmd("lclose")
+  else
+    Nvim.Quickfix.open_loclist_safety()
+  end
 end
 
 function Nvim.DAPUI.with_layout_handling_when_dapui_open(fn)

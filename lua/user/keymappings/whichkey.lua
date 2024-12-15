@@ -78,6 +78,12 @@ lvim.builtin.which_key.mappings.s.g = lvim.builtin.which_key.mappings.s.t
 lvim.builtin.which_key.mappings.s.t = nil
 
 lvim.builtin.which_key.mappings.s.F = { "<cmd>Telescope file_browser<cr>", "File Browser" }
+lvim.builtin.which_key.mappings.s["."] = {
+  "<cmd>lua require('lvim.core.telescope.custom-finders').find_project_files { previewer = true }<cr>",
+  "Find File (Project)",
+}
+
+-- NOTE: DAP or Unit Test
 lvim.builtin.which_key.mappings.d['s'] = { "<cmd>Telescope dap configurations<cr>", "Start" }
 
 
@@ -233,3 +239,13 @@ lvim.builtin.which_key.mappings.b['c'] = { "<cmd>BDelete hidden<cr>", "close hid
 
 -- NOTE: neogen for write program document
 lvim.builtin.which_key.mappings.u.o = { "<cmd>Neogen<cr>", "Document Generate" }
+
+-- NOTE: telescope custom finders
+lvim.builtin.which_key.mappings.U.F = {
+  "<cmd>lua require('lvim.core.telescope.custom-finders').find_Lazy_pack_files()<cr>",
+  "Find Lazy pack files",
+}
+lvim.builtin.which_key.mappings.U.G = {
+  "<cmd>lua require('lvim.core.telescope.custom-finders').grep_Lazy_pack_files()<cr>",
+  "Grep Lazy pack files",
+}

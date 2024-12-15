@@ -1,3 +1,5 @@
+local _, themes = pcall(require, "telescope.themes")
+local _, builtin = pcall(require, "telescope.builtin")
 local actions = require("lvim.utils.modules").require_on_exported_call "telescope.actions"
 local action_layout = require("lvim.utils.modules").require_on_exported_call "telescope.actions.layout"
 lvim.builtin.telescope.defaults.layout_config.scroll_speed = 1
@@ -18,6 +20,34 @@ lvim.builtin.telescope.on_config_done = function(telescope)
   pcall(telescope.load_extension, "bookmarks")
   -- any other extensions loading
 end
+require("lvim.core.telescope.custom-finders").find_Lazy_pack_files = function(opts)
+  opts = opts or {}
+  local theme_opts = themes.get_ivy {
+    sorting_strategy = "ascending",
+    layout_strategy = "bottom_pane",
+    prompt_prefix = ">> ",
+    prompt_title = "~ Lazy pack files ~",
+    cwd = get_runtime_dir(),
+    search_dirs = { lvim.lazy.opts.root },
+  }
+  opts = vim.tbl_deep_extend("force", theme_opts, opts)
+  builtin.find_files(opts)
+end
+
+require("lvim.core.telescope.custom-finders").grep_Lazy_pack_files = function(opts)
+  opts = opts or {}
+  local theme_opts = themes.get_ivy {
+    sorting_strategy = "ascending",
+    layout_strategy = "bottom_pane",
+    prompt_prefix = ">> ",
+    prompt_title = "~ search Lazy pack ~",
+    cwd = get_runtime_dir(),
+    search_dirs = { lvim.lazy.opts.root },
+  }
+  opts = vim.tbl_deep_extend("force", theme_opts, opts)
+  builtin.live_grep(opts)
+end
+
 lvim.builtin.which_key.mappings.s.n = { "<cmd>Telescope notify<cr>", "notify (Viewing History)" }
 lvim.builtin.telescope.defaults.mappings.n = {
   ["q"] = {

@@ -2,7 +2,9 @@
 local windows_terminal = require("user.integrated.WindowsTerminal")
 
 
-lvim.keys.normal_mode["<a-q>"] = { "<cmd>copen<cr>" }
+-- lvim.keys.normal_mode["<a-q>"] = { "<cmd>copen<cr>" }
+lvim.keys.normal_mode["<a-q>"] = { Nvim.Quickfix.open_quickfix_safety, desc = "Open Quickfix at bottom-right" }
+lvim.keys.normal_mode["<c-q>"] = { Nvim.Quickfix.toggle_quickfix_safety, desc = "Toggle Quickfix at bottom-right" }
 -- lvim core command <c-q>
 --[[
 vim.cmd [[
