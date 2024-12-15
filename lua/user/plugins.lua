@@ -1229,6 +1229,18 @@ lvim.plugins = {
           -- highlight = 'RenderMarkdownBullet',
           highlight = 'Identifier'
         },
+        html = {
+          -- Turn on / off all HTML rendering
+          enabled = true,
+          comment = {
+            -- Turn on / off HTML comment concealing
+            conceal = false,
+            -- Optional text to inline before the concealed comment
+            text = nil,
+            -- Highlight for the inlined text
+            highlight = 'RenderMarkdownHtmlComment',
+          },
+        },
         win_options = {
           -- See :h 'conceallevel'
           conceallevel = {
