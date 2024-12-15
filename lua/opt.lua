@@ -66,6 +66,7 @@ lvim.builtin.lir.active = true
 
 -- breadcrumb
 -- lvim.builtin.breadcrumbs.active = false
+lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "quickfix"
 lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "dbui"
 lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "undotree"
 lvim.builtin.breadcrumbs.winbar_filetype_exclude[#lvim.builtin.breadcrumbs.winbar_filetype_exclude + 1] = "Avante"
@@ -88,7 +89,7 @@ require("lvim.core.breadcrumbs").create_winbar = function()
       if lvim.builtin.breadcrumbs.active then
         local status_ok, _ = pcall(vim.api.nvim_buf_get_var, 0, "lsp_floating_window")
         if not status_ok then
-          if vim.bo.buftype == "nofile" then return end
+          if vim.bo.buftype ~= "" then return end
           require("lvim.core.breadcrumbs").get_winbar()
         end
       end
