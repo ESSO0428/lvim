@@ -126,11 +126,17 @@ end
 function Nvim.Quickfix.open_quickfix_safety()
   vim.cmd("rightbelow copen")
   vim.cmd("wincmd J")
+  vim.schedule(function()
+    vim.cmd("resize 10")
+  end)
 end
 
 function Nvim.Quickfix.open_loclist_safety()
   vim.cmd("rightbelow lopen")
   vim.cmd("wincmd J")
+  vim.schedule(function()
+    vim.cmd("resize 10")
+  end)
 end
 
 function Nvim.Quickfix.toggle_quickfix_safety()

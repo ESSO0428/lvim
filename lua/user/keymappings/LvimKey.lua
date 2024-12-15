@@ -16,6 +16,17 @@ vim.cmd [[
     endif
   endfunction
 ]]
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'qf',
+  callback = function()
+    vim.keymap.set('n', 'zc', function()
+      vim.cmd("cclose")
+      vim.fn.setqflist({}, "r")
+      Nvim.Quickfix.open_quickfix_safety()
+    end, { buffer = true, silent = true })
+  end
+})
+
 
 lvim.keys.normal_mode['<leader>rc'] = "<cmd>e $HOME/.config/lvim/config.lua<cr>"
 lvim.keys.normal_mode['<leader>rb'] = "<cmd>e $HOME/.bashrc<cr>"
