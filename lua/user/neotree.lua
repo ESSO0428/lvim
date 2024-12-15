@@ -277,6 +277,7 @@ neotree_source = {
   "netman.ui.neo-tree", -- The one you really care about 😉
 }
 neotree.setup({
+  open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "Outline", "trouble", "edgy" },
   source_selector = {
     winbar = false,
     statusline = false,
