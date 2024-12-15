@@ -1,6 +1,21 @@
 local M = {}
 M.view_side = "left"
 
+-- HACK: This is used instead of the suggested configuration for edgy.nvim
+-- We aren't using the qf as an edgy bottom because it would break the layout
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'qf',
+  callback = function()
+    local win_info = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1]
+    local is_quickfix = win_info and win_info.quickfix == 1
+    local is_loclist = win_info and win_info.loclist == 1
+    local title = "QuickFix"
+    if is_quickfix and is_loclist then
+      title = "LocList"
+    end
+    vim.wo.winbar = string.format("%%#EdgyIconActive# %%#EdgyWinBar# %s", title)
+  end
+})
 M.config = {
   left = {}, ---@type (Edgy.View.Opts|string)[]
   bottom = {}, ---@type (Edgy.View.Opts|string)[]
@@ -134,7 +149,8 @@ M.config = {
       end,
     },
     "Trouble",
-    { ft = "qf",            title = "QuickFix" },
+    -- WARNING: This will break the layout if the qf is used as an edgy bottom
+    -- { ft = "qf",            title = "QuickFix" },
     {
       ft = "help",
       size = { height = 20 },
@@ -190,10 +206,13 @@ M.config = {
               local pattern = table.concat(special_windows, "\\|")
               local outline_file_name = vim.g.outline_laset_focuse_file_name or buf_name
               outline_file_name = outline_file_name or "[No Name]"
-              if not vim.regex(pattern):match_str(buf_name) then
+              if not vim.regex(pattern):match_str(buf_name) and vim.bo[0].buftype == "" then
                 vim.g.outline_laset_focuse_file_name = buf_name
               end
-              return "Outline " .. "(" .. vim.fn.fnamemodify(outline_file_name, ":t") .. ")"
+              if outline_file_name ~= "" then
+                return "Outline " .. "(" .. vim.fn.fnamemodify(outline_file_name, ":t") .. ")"
+              end
+              return "Outline"
             end,
             ft = "Outline",
             open = "OutlineOpen",

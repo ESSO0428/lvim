@@ -763,7 +763,7 @@ lvim.plugins = {
   },
   {
     "kevinhwang91/nvim-bqf",
-    event = { "BufRead", "BufNew" },
+    ft = 'qf',
     config = function()
       require("bqf").setup({
         auto_enable = true,
@@ -797,13 +797,55 @@ lvim.plugins = {
     ---@module "quicker"
     ---@type quicker.SetupOptions
     opts = {},
+    config = function()
+      require("quicker").setup({
+        opts = {
+          buflisted = false,
+          number = false,
+          relativenumber = false,
+          signcolumn = "auto",
+          winfixheight = true,
+          wrap = false,
+        },
+        keys = {
+          {
+            ">",
+            function()
+              local win_info = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1]
+              local is_quickfix = win_info and win_info.quickfix == 1
+              local is_loclist = win_info and win_info.loclist == 1
+              if is_quickfix and not is_loclist then
+                vim.cmd("cclose")
+                require("quicker").collapse()
+                require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+                Nvim.Quickfix.open_quickfix_safety()
+              else
+                require("quicker").collapse()
+                require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+              end
+            end,
+            desc = "Expand quickfix context",
+          },
+          {
+            "<",
+            function()
+              local win_info = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1]
+              local is_quickfix = win_info and win_info.quickfix == 1
+              local is_loclist = win_info and win_info.loclist == 1
+              if is_quickfix and not is_loclist then
+                vim.cmd("cclose")
+                require("quicker").collapse()
+                Nvim.Quickfix.open_quickfix_safety()
+              else
+                require("quicker").collapse()
+              end
+            end,
+            desc = "Collapse quickfix context",
+          },
+        },
+      })
+    end
   },
-  -- {
-  --   "tzachar/cmp-tabnine",
-  --   run = "./install.sh",
-  --   requires = "hrsh7th/nvim-cmp",
-  --   event = "InsertEnter",
-  -- },
   {
     'ESSO0428/nvim-html-css',
     dependencies = {
@@ -1419,23 +1461,22 @@ lvim.plugins = {
   },
   {
     "hedyhli/outline.nvim",
-    config = function()
-      -- Example mapping to toggle outline
-      vim.keymap.set("n", "<leader>o", "<cmd>Outline<cr>",
-        { desc = "Toggle Outline" })
-
-      require("outline").setup {
-        -- Your setup opts here (leave empty to use defaults)
-        preview_window = {
-          auto_preview = true,
-        },
-        focus_on_open = false,
-        keymaps = {
-          close = { '<Esc>', 'q' },
-          hover_symbol = 'gh',
-        }
+    opts = {
+      -- Your setup opts here (leave empty to use defaults)
+      preview_window = {
+        auto_preview = true,
+      },
+      focus_on_open = false,
+      keymaps = {
+        close = { '<Esc>', 'q', '<leader>q' },
+        fold = { 'h', '[f' },
+        unfold = { 'l', ']f' },
+        fold_toggle = { '<Tab>', '<leader>o' },
+        fold_all = { 'W', '<leader>Oa', '[g' },
+        unfold_all = { 'E', '<leader>Od', ']g' },
+        hover_symbol = 'gh',
       }
-    end,
+    }
   },
   {
     "danymat/neogen",
