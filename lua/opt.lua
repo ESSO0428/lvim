@@ -211,6 +211,10 @@ lvim.builtin.nvimtree.setup.actions.change_dir = {
   global = true,
   restrict_above_cwd = false,
 }
+lvim.builtin.nvimtree.setup.actions.open_file.window_picker.exclude = {
+  filetype = { "notify", "lazy", "qf", "diff", "fugitive", "fugitiveblame", "terminal", "Outline", "edgy" },
+  buftype = { "nofile", "terminal", "help", "Outline", "quickfix" },
+}
 -- nvimtree tab sync default is false
 lvim.builtin.nvimtree.setup.tab.sync.open = false
 
