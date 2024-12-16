@@ -16,6 +16,33 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.wo.winbar = string.format("%%#EdgyIconActive# %%#EdgyWinBar# %s", title)
   end
 })
+function M.reload_edgy_if_error()
+  -- Check edgy.nvim had an error or not (last)
+  -- If it had an error, reload the plugin
+  local history = require("notify").history()
+  if not history or #history == 0 then
+    return
+  end
+
+  local last_entry = history[#history]
+  local last_message = table.concat(last_entry.message, "\n")
+
+  if last_message:match("Edgy: Failed to layout windows") then
+    require("notify")("Detected Edgebar layout error. Attempting to reload the plugin...", vim.log.levels.WARN)
+
+    local plugin = require("lazy.core.config").plugins["edgy.nvim"]
+    require("lazy.core.loader").reload(plugin)
+
+    local success, config = pcall(require, "user.edgy")
+    if success and config.config then
+      require("edgy").setup(config.config)
+      require("notify")("Edgebar plugin reloaded successfully.", vim.log.levels.INFO)
+    else
+      require("notify")("Failed to reload Edgebar plugin configuration.", vim.log.levels.ERROR)
+    end
+  end
+end
+
 M.config = {
   left = {}, ---@type (Edgy.View.Opts|string)[]
   bottom = {}, ---@type (Edgy.View.Opts|string)[]
@@ -85,6 +112,8 @@ M.config = {
       vim.cmd('OutlineClose')
       require("edgy").close()
       require("edgy").goto_main()
+
+      M.reload_edgy_if_error()
     end,
     -- next open window
     ["]]"] = function(win)
