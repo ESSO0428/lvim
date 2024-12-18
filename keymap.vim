@@ -118,6 +118,7 @@ vnoremap <S-Tab> <gv
 nnoremap Q :qa<cr>
 
 nnoremap S :w<cr>
+nnoremap sa :wa<cr>
 " Open the vimrc file anytime
 " nnoremap <leader>rc :e $HOME/.config/nvim/init.vim<cr>
 " nnoremap <leader>rv :e .nvimrc<cr>
