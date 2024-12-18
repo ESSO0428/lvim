@@ -48,7 +48,7 @@
   "im-select.nvim": { "branch": "master", "commit": "d52a2704eaadc22c96f42895c11ee17dd4d8a4c3" },
   "img-clip.nvim": { "branch": "main", "commit": "5ff183655ad98b5fc50c55c66540375bbd62438c" },
   "indent-blankline.nvim": { "branch": "master", "commit": "9637670896b68805430e2f72cf5d16be5b97a22a" },
-  "inlayhint-filler.nvim": { "branch": "main", "commit": "0a5a0b48378495b6365d524e040c1c30be5de237" },
+  "inlayhint-filler.nvim": { "branch": "main", "commit": "db67ddfa546380912f0b7ccadccffd949a7a2331" },
   "jupynium.nvim": { "branch": "master", "commit": "b0b71577c6e4a613b6a4180068dd0b2de0659e52" },
   "jupyter-kernel.nvim": { "branch": "main", "commit": "70017aacdb519265e2f6235a0e69016199873a1d" },
   "lazy.nvim": { "branch": "main", "commit": "8f19915175395680808de529e4220da8dafc0759" },
