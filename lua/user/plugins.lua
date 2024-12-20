@@ -926,16 +926,14 @@ lvim.plugins = {
     end,
   },
   { "MunifTanjim/nui.nvim" },
-  -- core plug : but too old (so change me control)
-  {
+  --[[{ -- core plugin
     "SmiteshP/nvim-navic",
-    commit = "27124a7",
     config = function()
       require("lvim.core.breadcrumbs").setup()
     end,
     event = "User FileOpened",
     enabled = lvim.builtin.breadcrumbs.active
-  },
+  },--]]
   {
     "SmiteshP/nvim-navbuddy",
     commit = "0db1d62",

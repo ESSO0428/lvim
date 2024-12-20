@@ -7,6 +7,7 @@
 require "opt"
 require "user.mason"
 require "user.lazy"
+require "user.core_plugins"
 require "user.plugins"
 require "user.builtin"
 require "user.bufferline"

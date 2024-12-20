@@ -120,27 +120,6 @@ end
 -- 获取用户主目录
 local home = os.getenv("HOME")
 
--- 构建源和目标路径
-local sourcePath = home .. "/.local/share/lunarvim/lvim/snapshots/default.json"
-local targetPath = home .. "/.config/lvim/snapshots/default.json"
-local targetCopyDefaultSetting = home .. "/.config/lvim/snapshots/backup_default.json"
-local targetCopyLastSetting = home .. "/.config/lvim/snapshots/backup_last.json"
-
--- 检查目标路径是否存在
-local file = io.open(targetPath, "r")
-if file then
-  -- 目标路径已存在，关闭文件句柄
-  os.execute("cp -f " .. sourcePath .. " " .. targetCopyLastSetting)
-  file:close()
-else
-  -- 目标路径不存在，创建目录并创建符号链接
-  os.execute("mkdir -p " .. home .. "/.config/lvim/snapshots")
-  os.execute("ln -s " .. sourcePath .. " " .. targetPath)
-  os.execute("cp -f " .. sourcePath .. " " .. targetCopyDefaultSetting)
-  os.execute("cp -f " .. sourcePath .. " " .. targetCopyLastSetting)
-end
-
-
 -- 與 vscode 集成
 --ex: code --remote ssh-remote+LabServerDP
 -- default hostname

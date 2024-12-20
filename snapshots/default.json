@@ -1,0 +1,17 @@
+{
+  "nvim-navic": {
+    "commit": "27124a7"
+  },
+  "nvim-lspconfig": {
+    "commit": "056f569"
+  },
+  "cmp-nvim-lsp": {
+    "commit": "99290b3"
+  },
+  "cmp_luasnip": {
+    "commit": "98d9cb5"
+  },
+  "nvim-cmp": {
+    "commit": "b555203"
+  }
+}

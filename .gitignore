@@ -1,6 +1,5 @@
 !.gitignore
 autoload/
 plugged/
-snapshots/
 **/.luarc.json
 gitlog.log

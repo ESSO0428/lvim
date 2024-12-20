@@ -16,7 +16,6 @@ fi
 
 # NOTE: Use below command to update nvim release (and update lunarvim core for nvim release)
 cd ~
-unlink ~/.config/lvim/snapshots/default.json > /dev/null 2>&1
 mv ~/.config/lvim/ ~/.config/lvim_stage/
 
 # Function to restore the original LunarVim configuration and exit
