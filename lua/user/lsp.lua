@@ -125,7 +125,7 @@ require("lvim.lsp.manager").setup("cssls", {
     }
   }
 })
-require("lvim.lsp.manager").setup("tsserver", {
+require("lvim.lsp.manager").setup("ts_ls", {
   capabilities = Nvim.builtin.lsp.capabilities,
   settings = {
     typescript = {
