@@ -27,8 +27,9 @@ end
 -- HACK: Temporary fix for `_str_utfindex_enc` (reverted to `0.10.1 behavior`).
 -- `Neovim 0.10.2` introduced stricter boundary checks, causing LSP completion
 -- issues (e.g., `marksman`) with CJK characters. This override removes these
--- stricter checks. When `Neovim 0.11` or a patched version (e.g., `0.10.3`) is
--- available, comment out this override to test native behavior.
+-- stricter checks. The issue remains unfixed in 0.10.3. When `Neovim 0.11` or
+-- a patched version (e.g., `0.10.4`) is available, comment out this override
+-- to test native behavior.
 require("vim.lsp.util")._str_utfindex_enc = function(line, index, encoding)
   if not encoding then
     encoding = 'utf-16'
