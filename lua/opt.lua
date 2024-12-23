@@ -117,9 +117,6 @@ for _, filetype in ipairs(dap_filetypes) do
   })
 end
 
--- 获取用户主目录
-local home = os.getenv("HOME")
-
 -- 與 vscode 集成
 --ex: code --remote ssh-remote+LabServerDP
 -- default hostname
@@ -239,6 +236,7 @@ lvim.builtin.gitsigns.opts.current_line_blame       = false
 vim.api.nvim_del_augroup_by_name('_auto_resize')
 
 -- relationship with gx
+---@diagnostic disable-next-line: duplicate-set-field
 vim.ui.open = function(url)
   local function is_url(text)
     local pattern = "^(https?://.+)$"

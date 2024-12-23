@@ -58,10 +58,7 @@ vnoremap g{ %
 vnoremap g} $%
 
 " Search
-" noremap <leader><cr> :nohlsearch<cr>
-" Adjacent duplicate words
-" noremap <leader>dw /\(\<\w\+\>\)\_s*\1
-
+" nnoremap <leader><cr> :nohlsearch<cr>
 
 map u <Nop>
 nnoremap o o<ESC>
@@ -71,12 +68,11 @@ nnoremap O "_dd
 
 nnoremap u O<ESC>
 nnoremap U "_ddk
-" noremap <c-y> yyp
+
 nnoremap <c-d> "dyyp
 nnoremap <a-i> <c-u>
 nnoremap <a-k> <c-d>
-" nmap < <<cr>
-" nmap > ><cr>
+
 nnoremap x "_x
 nnoremap <leader>d "_d
 nnoremap <leader>dD "_dd
@@ -96,84 +92,24 @@ inoremap <S-Tab> <C-D>
 vnoremap <Tab> >gv
 vnoremap <S-Tab> <gv
 
-" cw is delete + insert (now add <>)
-" nmap <silent> cw cw<ESC>
-" dw is just delete
-
-
-" nmap <a-y> yaw
-" nmap <a-w> vaw
-" nmap <leader>y yaw
-" nmap <leader>w vaw
-
-" comment below code
+" nnoremap <leader>y yaw
+" nnoremap <leader>w vaw
 " ==================== Window management ====================
-" Use <space> + new arrow keys for moving the cursor around windows
-" colemak keyboard
-" noremap <leader>w <C-w>w
-
-" noremap ; :
-" nnoremap Q :q<cr>
-" nnoremap Q :CocCommand explorer --no-toggle --no-focus<cr>:q<cr>:q<cr>
 nnoremap Q :qa<cr>
 
 nnoremap S :w<cr>
 nnoremap sa :wa<cr>
 " Open the vimrc file anytime
 " nnoremap <leader>rc :e $HOME/.config/nvim/init.vim<cr>
-" nnoremap <leader>rv :e .nvimrc<cr>
 " Undo operations
-" colemak keyboard
-" noremap l u
 " normal keyboard
 nnoremap z u
-" Insert Key
-" noremap m a
-" noremap M A
-" noremap h a
-" noremap H A
+" Append Key
 noremap h i
 noremap H I
 
-
-" noremap <a-[> i
-" noremap <a-{> I
-" noremap <a-]> a
-" noremap <a-}> A
-
-
-" noremap <a-a> i
-" noremap <a-A> I
-" noremap <a-d> a
-" noremap <a-D}> A
-
-" noremap <a-a> a
-" noremap <a-A> A
-inoremap <a-c> <ESC>
-
-snoremap <BS> <C-O>s
-snoremap <a-c> <C-O>s
-
-" noremap a i
-" noremap A I
-" Copy to system clipboard
-vnoremap Y "+y
-vnoremap <leader><c-c> "+y
-vnoremap <leader><c-x> "+d
-imap <c-p> <c-r>"p
-inoremap <c-p> <ESC><cr>
-
 " Search
-" noremap <leader><cr> :nohlsearch<cr>
-" Adjacent duplicate words
-nnoremap <leader>dw /\(\<\w\+\>\)\_s*\1
-
-
-" Space to Tab
-" nnoremap <leader>tt :%s/    /\t/g
-" vnoremap <leader>tt :s/    /\t/g
-" nnoremap <leader>st :%s/\t/    /g
-" vnoremap <leader>st :s/\t/    /g
+" nnoremap <leader><cr> :nohlsearch<cr>
 
 " Folding
 nnoremap <silent> <leader>o za
@@ -191,11 +127,6 @@ nnoremap <silent> <c-END> zj
 nnoremap <silent> <a-[> zk
 nnoremap <silent> <a-]> zj
 
-" insert a pair of {} and go to the next line
-" inoremap <c-y> <ESC>A {}<ESC>i<cr><ESC>ko
-" inoremap <c-y>   <ESC>pA<ESC>i<cr><ESC>
-
-
 nnoremap <a-v> <c-v>
 " ==================== Cursor Movement ====================
 " New cursor movement (the default arrow keys are used for resizing windows)
@@ -209,64 +140,35 @@ nnoremap <silent> i k
 nnoremap <silent> j h
 nnoremap <silent> k j
 " visual keyborad
-" vnoremap <silent> i k
-" vnoremap <silent> j h
-" vnoremap <silent> k j
 " nowait (solution for the delay problem when plugin conflict)
 vnoremap <silent><nowait> i k
 vnoremap <silent><nowait> j h
 vnoremap <silent><nowait> k j
 
-" noremap <silent> l l
-
-" colemak keyborad
-" noremap <silent> gu gk
-" noremap <silent> ge gj
-nnoremap <silent> \v v$h
-
-" normal keyborad
 noremap <silent> gi gk
 noremap <silent> gk gj
-" visual keyborad
 vnoremap <silent> gi gk
 vnoremap <silent> gk gj
 
 " 覆蓋 i, k 成 gk, gj 
-" noremap <silent> i gk
-" noremap <silent> k gj
+" nnoremap <silent> i gk
+" nnoremap <silent> k gj
 
 " U/E keys for 5 times u/e (faster navigation)
-" colemak keyborad
-" noremap <silent> U 5k
-" noremap <silent> E 5j
-
-" normal keyborad
 noremap <silent> I 5k
 noremap <silent> K 5j
-" visual keyborad
 vnoremap <silent> I 5k
 vnoremap <silent> K 5j
 
 " 覆蓋 I, K 成 5gk, 5gj 
-" noremap <silent> I 5gk
-" noremap <silent> K 5gj
+" nnoremap <silent> I 5gk
+" nnoremap <silent> K 5gj
 
 " N key: go to the start of the line
-" colemak keyborad
-" noremap <silent> N 0
-
-" normal keyborad
 nnoremap <silent> J 0
-" visual keyborad
 vnoremap <silent> J 0
 
-" I key: go to the end of the line
-" colemak keyborad
-" noremap <silent> I $
-
-" normal keyborad
 nnoremap <silent> L $
-" visual keyborad
 vnoremap <silent> L $
 
 " noremap <silent> J g0
@@ -280,62 +182,19 @@ vnoremap W 5w
 vnoremap E 5e
 vnoremap B 5b
 
-" set h (same as n, cursor left) to 'end of word'
-" noremap h e
-" noremap h e
-" Ctrl + U or E will move up/down the view port without moving the cursor
-" colemak keyborad
-" noremap <C-U> 5<C-y>
-" noremap <C-E> 5<C-e>
-" normal Keyborad
-
-nmap <C-i> <Nop> 
-noremap <C-I> 5<C-y>
-noremap <C-K> 5<C-e>
-
-" colemak keyborad
-" Custom cursor movement
-" source $HOME/.config/nvim/cursor.vim
-" normal Keyborad
-" If you use Qwerty keyboard, uncomment the next line.
-
-
-
+" Faster insert to normal mode
+" inoremap <a-j> <esc>
+inoremap <a-J> <esc>
 " ==================== Insert Mode Cursor Movement ====================
-inoremap <C-a> <ESC>A
-
-inoremap <a-n> <Up>
+inoremap <a-n> <esc>
 inoremap <a-m> <Down>
 inoremap <a-,> <Left>
 inoremap <a-.> <Right>
-
-" ==================== Command Mode Cursor Movement ====================
-cnoremap <C-a> <Home>
-cnoremap <C-e> <End>
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
-cnoremap <C-b> <Left>
-cnoremap <C-f> <Right>
-cnoremap <M-b> <S-Left>
-cnoremap <M-w> <S-Right>
-
 " ==================== Window management ====================
 " Use <space> + new arrow keys for moving the cursor around windows
-" colemak keyboard
-" noremap <leader>w <C-w>w
-" noremap <leader>u <C-w>k
-" noremap <leader>e <C-w>j
-" noremap <leader>n <C-w>h
-" noremap <leader>i <C-w>l
 nnoremap qf <C-w>o
 " NOTE: feat: fixed buffer to windows of neovim-0.10
 nnoremap qw :setlocal winfixbuf!<cr>
-" normal keyboard
-" noremap <leader>i <C-w>k
-" noremap <leader>k <C-w>j
-" noremap <leader>j <C-w>h
-" noremap <leader>l <C-w>l
-
 nnoremap <leader>i <C-w>k
 nnoremap <leader>k <C-w>j
 nnoremap <leader>j <C-w>h
@@ -348,13 +207,6 @@ nnoremap <leader>n <C-w><C-p>
 " Disable the default s key
 nnoremap s <nop>
 " split the screens to up (horizontal), down (horizontal), left (vertical), right (vertical)
-" colemak keyboard
-" noremap su :set nosplitbelow<cr>:split<cr>:set splitbelow<cr>
-" noremap se :set splitbelow<cr>:split<cr>
-" noremap sn :set nosplitright<cr>:vsplit<cr>:set splitright<cr>
-" noremap si :set splitright<cr>:vsplit<cr>
-
-" normal keyboard
 nnoremap si :set nosplitbelow<cr>:split<cr>:set splitbelow<cr>
 nnoremap sk :set splitbelow<cr>:split<cr>
 nnoremap sj :set nosplitright<cr>:vsplit<cr>:set splitright<cr>
@@ -369,14 +221,11 @@ nnoremap sT :wincmd T<cr>
 
 
 " Resize splits with arrow keys
-" noremap <up> :res +5<cr>
-" noremap <down> :res -5<cr>
 nnoremap <up> :res -5<cr>
 nnoremap <down> :res +5<cr>
-
-
 nnoremap <left> :vertical resize-5<cr>
 nnoremap <right> :vertical resize+5<cr>
+
 " Place the two screens up and down
 nnoremap sh <C-w>t<C-w>K
 " Place the two screens side by side
@@ -385,12 +234,8 @@ nnoremap sv <C-w>t<C-w>H
 nnoremap srh <C-w>b<C-w>K
 nnoremap srv <C-w>b<C-w>H
 
-" Press <SPACE> + q to close the window below the current window
-" noremap <leader>q <C-w>j:q<cr>
 " close current window only
 nnoremap <leader>q :q<cr>
- 
-
 " ==================== Tab management ====================
 " Create a new tab with tu
 " colemak keyboard
@@ -422,14 +267,6 @@ nnoremap <leader>q :q<cr>
 
 " noremap tmj :-tabmove<cr>
 " noremap tml :+tabmove<cr>
-""""" noremap <F6> :-tabmove<cr>
-""""" noremap <F7> :+tabmove<cr>
-
-" nmap <leader>f "fyaw/<c-r>f<cr>
-" nmap <leader>F "fyaw/<c-r>f\C<cr>
-" nmap <leader>h "fyaw:.,$s/<c-r>f//gc<Left><Left><Left>
-" nmap <leader>H "fyaw:.,$s/<c-r>f\C//gc<Left><Left><Left>
-
 " ==================== tabular ====================
 vmap ga   :Tabularize /
 " vmap g= :Tabularize /^[^=]*\zs=
@@ -440,7 +277,6 @@ vmap g;   :GTabularize /^[^:]*\zs:/l1
 vmap gr;  :GTabularize /:\zs/l0l1
 vmap g:   :GTabularize /^[^:]*\zs:$/l0
 vmap gt   :GTabularize / <c-r>0 /l0
-
 " ==================== other ====================
 vnoremap Y "+y
 vnoremap <leader><c-c> "+y
@@ -449,8 +285,6 @@ nnoremap gj J
 vnoremap gj J
 nnoremap <a-a> <c-x>
 nnoremap <a-d> <c-a>
-
-
 " ==================== spell ====================
 nnoremap s,G zG
 nnoremap s,g zg
@@ -470,23 +304,8 @@ vnoremap s,ug zug
 vnoremap s,uW zuW
 vnoremap s,uG zuG
 vnoremap s,= z=
-
-
-function! NotNeg(number)
-  let min_current_line=1
-  let start_line = a:number-30
-  if start_line <= 1
-     return min_current_line 
-  else
-     return start_line
-  endif
-endfunction
-" nnoremap <a-m> :let min_cur_line=NotNeg(line('.')) \| exe "!bat -r" min_cur_line.":+60" "%"<cr>
-"
-" nnoremap <a-m> :let min_cur_line=NotNeg(line('.')) \| exe ":w !tee \| bat -r" min_cur_line.":+60"<cr>
-" nnoremap <leader><a-m> :let min_cur_line=NotNeg(line('.')) \| exe ":w !tee \| bat"<cr>
+" ===
 nnoremap <silent> <a-m> :set list!<cr>
-
 " === gf control ===
 autocmd BufEnter * if expand('%') != '' | set path=.,%:h | endif
 nnoremap sF <c-w>F

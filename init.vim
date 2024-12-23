@@ -76,7 +76,6 @@ call plug#end()
 
 set re=0
 silent! exec ":UpdateRemotePlugins"
-
 " ========= nvim notebook (Andy6) =========
 " Jupytext
 let g:jupytext_fmt = 'py'
@@ -95,7 +94,6 @@ vmap [w str
 vmap ]w str
 vmap [r str
 vmap ]r str
-
 " ==================== Ultisnips ====================
 " let g:tex_flavor = "latex"
 " inoremap <c-n> <nop>

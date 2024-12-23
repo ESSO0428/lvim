@@ -35,12 +35,7 @@ local function get_formatted_lines(state)
   -- Create a separator line with the same length as fpath
   local separator = string.rep("—", #fpath)
 
-  return vim.tbl_flatten({
-    fpath,
-    lines_info,
-    separator,
-    file_preview
-  })
+  return vim.iter({ fpath, lines_info, separator, file_preview }):flatten():totable()
 end
 
 local current_popup = nil
@@ -62,7 +57,7 @@ local function setup_window(node)
   })
 
   local winnr = vim.api.nvim_open_win(0, false, open_win_config)
-  vim.api.nvim_win_set_option(winnr, "number", false) -- Hide line numbers
+  vim.api.nvim_set_option_value('number', false, { win = winnr }) -- Hide line numbers
 
   current_popup = {
     winnr = winnr,
@@ -89,7 +84,7 @@ end
 
 function M.close_popup()
   if current_popup ~= nil then
-    vim.api.nvim_win_close(current_popup.winnr, { force = true })
+    vim.api.nvim_win_close(current_popup.winnr, true)
     vim.cmd "augroup NvimTreeRemoveFilePopup | au! CursorMoved | augroup END"
 
     current_popup = nil

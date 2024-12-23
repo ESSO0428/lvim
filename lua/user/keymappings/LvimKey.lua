@@ -5,8 +5,7 @@ local windows_terminal = require("user.integrated.WindowsTerminal")
 -- lvim.keys.normal_mode["<a-q>"] = { "<cmd>copen<cr>" }
 lvim.keys.normal_mode["<a-q>"] = { Nvim.Quickfix.open_quickfix_safety, desc = "Open Quickfix at bottom-right" }
 lvim.keys.normal_mode["<c-q>"] = { Nvim.Quickfix.toggle_quickfix_safety, desc = "Toggle Quickfix at bottom-right" }
--- lvim core command <c-q>
---[[
+--[[ -- lvim core command <c-q>
 vim.cmd [[
   function! QuickFixToggle()
     if empty(filter(getwininfo(), 'v:val.quickfix'))
@@ -113,37 +112,37 @@ vim.keymap.set('v', '<a-right>',
 -- lvim.builtin.which_key.mappings['Od'] = { "zR", "Folding Code (Open All)" }
 lvim.keys.visual_mode['<leader>o'] = "za"
 
-function peekFoldedLinesUnderCursor()
+function PeekFoldedLinesUnderCursor()
   require('ufo').peekFoldedLinesUnderCursor()
   local winid = require('ufo.preview.floatwin').winid
 
   if winid ~= nil then
-    vim.api.nvim_win_set_option(winid, 'list', vim.opt.list:get())
+    vim.api.nvim_set_option_value('list', vim.opt.list:get(), { win = winid })
   end
 end
 
-lvim.keys.normal_mode['<leader>uu'] = { "<cmd>lua peekFoldedLinesUnderCursor()<cr>" }
+lvim.keys.normal_mode['<leader>uu'] = { "<cmd>lua PeekFoldedLinesUnderCursor()<cr>" }
 
 
-function vscode_like_foldLevel_enhance(n)
+function Vscode_like_foldLevel_enhance(n)
   require('fold-cycle').close_all()
   n = n - 1
   if n >= 1 then
-    for i = 1, n do
+    for _ = 1, n do
       require('fold-cycle').open()
     end
   end
 end
 
-lvim.keys.normal_mode[']1'] = { "<cmd>lua vscode_like_foldLevel_enhance(1)<cr>" }
-lvim.keys.normal_mode[']2'] = { "<cmd>lua vscode_like_foldLevel_enhance(2)<cr>" }
-lvim.keys.normal_mode[']3'] = { "<cmd>lua vscode_like_foldLevel_enhance(3)<cr>" }
-lvim.keys.normal_mode[']4'] = { "<cmd>lua vscode_like_foldLevel_enhance(4)<cr>" }
-lvim.keys.normal_mode[']5'] = { "<cmd>lua vscode_like_foldLevel_enhance(5)<cr>" }
-lvim.keys.normal_mode[']6'] = { "<cmd>lua vscode_like_foldLevel_enhance(6)<cr>" }
-lvim.keys.normal_mode[']7'] = { "<cmd>lua vscode_like_foldLevel_enhance(7)<cr>" }
-lvim.keys.normal_mode[']8'] = { "<cmd>lua vscode_like_foldLevel_enhance(8)<cr>" }
-lvim.keys.normal_mode[']9'] = { "<cmd>lua vscode_like_foldLevel_enhance(9)<cr>" }
+lvim.keys.normal_mode[']1'] = { "<cmd>lua Vscode_like_foldLevel_enhance(1)<cr>" }
+lvim.keys.normal_mode[']2'] = { "<cmd>lua Vscode_like_foldLevel_enhance(2)<cr>" }
+lvim.keys.normal_mode[']3'] = { "<cmd>lua Vscode_like_foldLevel_enhance(3)<cr>" }
+lvim.keys.normal_mode[']4'] = { "<cmd>lua Vscode_like_foldLevel_enhance(4)<cr>" }
+lvim.keys.normal_mode[']5'] = { "<cmd>lua Vscode_like_foldLevel_enhance(5)<cr>" }
+lvim.keys.normal_mode[']6'] = { "<cmd>lua Vscode_like_foldLevel_enhance(6)<cr>" }
+lvim.keys.normal_mode[']7'] = { "<cmd>lua Vscode_like_foldLevel_enhance(7)<cr>" }
+lvim.keys.normal_mode[']8'] = { "<cmd>lua Vscode_like_foldLevel_enhance(8)<cr>" }
+lvim.keys.normal_mode[']9'] = { "<cmd>lua Vscode_like_foldLevel_enhance(9)<cr>" }
 
 
 -- lvim.keys.visual_mode['<leader>Od'] = "zo"
@@ -176,18 +175,14 @@ lvim.keys.normal_mode["<leader><a-i>"] = "<cmd>BufferLineTogglePin<cr>"
 -- lvim.keys.normal_mode["<c-w>"]         = "<cmd>BufferKill<cr>"
 lvim.keys.normal_mode["<c-w>"]         = "<cmd>BufferLineKill<cr>"
 -- NOTE: 利用 BufferKill 強制關閉緩衝區
-function forceBufferKill(_)
+function ForceBufferKill(_)
   require("lvim.core.bufferline").buf_kill("bd", 0, true)
 end
 
--- lvim.keys.normal_mode["<leader><c-w>"]  = "<cmd>lua forceBufferKill()<cr>"
+-- lvim.keys.normal_mode["<leader><c-w>"]  = "<cmd>lua ForceBufferKill()<cr>"
 lvim.keys.normal_mode["<leader><c-w>"]   = "<cmd>ForceBufferLineKill<cr>"
 -- NOTE: 直接使用 bd! 強制關閉緩衝區
 lvim.keys.normal_mode["<leader>d<c-w>"]  = "<cmd>bd!<cr>"
-
--- lvim.keys.normal_mode["<a-1>"] = nil
--- lvim.keys.normal_mode["<a-2>"] = nil
--- lvim.keys.normal_mode["<a-3>"] = nil
 
 lvim.keys.normal_mode["gy"]              = "<cmd>let @+ = expand('%:p')<cr>"
 lvim.keys.normal_mode["<a-1>"]           = "<cmd>BufferLineGoToBuffer 1<cr>"
