@@ -134,7 +134,7 @@
   "statuscol.nvim": { "branch": "main", "commit": "8822f76e105549620ef9c0d96e7b95aedf14c490" },
   "structlog.nvim": { "branch": "main", "commit": "45b26a2b1036bb93c0e83f4225e85ab3cee8f476" },
   "swenv.nvim": { "branch": "main", "commit": "6589447dc49f082dca5b00e845dc6677be9436a7" },
-  "tabline.nvim": { "branch": "main", "commit": "b67f66eef817a2b6d7ff4e47ac72cebb7c6d7456" },
+  "tabline.nvim": { "branch": "main", "commit": "ebb59e96f661c558e906b84711db2247e2af3b6e" },
   "tabular": { "branch": "master", "commit": "12437cd1b53488e24936ec4b091c9324cafee311" },
   "tailwind-tools.nvim": { "branch": "master", "commit": "3703e162d819a04b128902c508276553dae0dfb8" },
   "telescope-command-palette.nvim": { "branch": "master", "commit": "cf38d89446ff36d07191d32796eed6e38e5ce118" },
