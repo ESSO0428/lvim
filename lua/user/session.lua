@@ -56,10 +56,36 @@ function utils.load_session(filename, discard_current)
   utils.session_loading = false
 end
 
+vim.api.nvim_create_autocmd('User', {
+  pattern = "SessionSavePre",
+  group = config_group,
+  callback = function()
+    -- HACK: Save the Bufferline pinned state to a global variable before saving the session.
+    -- This is a workaround to address an issue where the pinned state becomes inconsistent after SessionLoadPost.
+    -- By saving the current state into BufferlinePinnedBuffersPreLoad, we ensure it can be restored correctly.
+    vim.g.BufferlinePinnedBuffersPreLoad = vim.g.BufferlinePinnedBuffers or ""
+  end,
+})
 vim.api.nvim_create_autocmd({ 'User' }, {
   pattern = "SessionLoadPost",
   group = config_group,
   callback = function()
+    -- HACK: Restore the Bufferline pinned state after loading the session.
+    -- For unknown reasons, the pinned state becomes inconsistent after SessionLoadPost.
+    -- This inconsistency reflects in BufferlinePinnedBuffers, which we fix by restoring it
+    -- from BufferlinePinnedBuffersPreLoad and reloading the plugin.
+    local success, err = pcall(function()
+      vim.g.BufferlinePinnedBuffers = vim.g.BufferlinePinnedBuffers or ""
+      if vim.g.BufferlinePinnedBuffersPreLoad ~= vim.g.BufferlinePinnedBuffers then
+        vim.g.BufferlinePinnedBuffers = vim.g.BufferlinePinnedBuffersPreLoad
+        local plugin = require("lazy.core.config").plugins["bufferline.nvim"]
+        require("lazy.core.loader").reload(plugin)
+        -- vim.notify("Bufferline.nvim plugin reloaded", vim.log.levels.INFO)
+      end
+    end)
+    if not success then
+      vim.notify("Error reloading bufferline: " .. err, vim.log.levels.ERROR)
+    end
     if lvim.builtin.nvimtree.active == false then
       session_open_neo_tree()
     else
