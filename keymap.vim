@@ -187,7 +187,7 @@ vnoremap B 5b
 inoremap <a-J> <esc>
 nnoremap <a-J> <nop>
 " ==================== Insert Mode Cursor Movement ====================
-inoremap <a-n> <esc>
+inoremap <a-n> <Up>
 inoremap <a-m> <Down>
 inoremap <a-,> <Left>
 inoremap <a-.> <Right>
