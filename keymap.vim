@@ -185,6 +185,7 @@ vnoremap B 5b
 " Faster insert to normal mode
 " inoremap <a-j> <esc>
 inoremap <a-J> <esc>
+nnoremap <a-J> <nop>
 " ==================== Insert Mode Cursor Movement ====================
 inoremap <a-n> <esc>
 inoremap <a-m> <Down>
