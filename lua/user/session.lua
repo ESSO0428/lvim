@@ -56,36 +56,30 @@ function utils.load_session(filename, discard_current)
   utils.session_loading = false
 end
 
+function Check_and_clear_empty_vars(vars)
+  for _, var_name in ipairs(vars) do
+    local var_value = vim.g[var_name]
+    if (type(var_value) == "table" and vim.tbl_isempty(var_value)) or
+        (type(var_value) == "string" and var_value == "") then
+      vim.g[var_name] = nil
+    end
+  end
+end
+
 vim.api.nvim_create_autocmd('User', {
   pattern = "SessionSavePre",
   group = config_group,
   callback = function()
-    -- HACK: Save the Bufferline pinned state to a global variable before saving the session.
-    -- This is a workaround to address an issue where the pinned state becomes inconsistent after SessionLoadPost.
-    -- By saving the current state into BufferlinePinnedBuffersPreLoad, we ensure it can be restored correctly.
-    vim.g.BufferlinePinnedBuffersPreLoad = vim.g.BufferlinePinnedBuffers or ""
+    -- HACK: Check and adjust the global variable for Bufferline's pinned state before saving the session.
+    -- If BufferlinePinnedBuffers is empty (e.g., "" or {}), set it to nil to prevent restoration issues.
+    local check_variables = { "BufferlinePinnedBuffers" }
+    Check_and_clear_empty_vars(check_variables)
   end,
 })
 vim.api.nvim_create_autocmd({ 'User' }, {
   pattern = "SessionLoadPost",
   group = config_group,
   callback = function()
-    -- HACK: Restore the Bufferline pinned state after loading the session.
-    -- For unknown reasons, the pinned state becomes inconsistent after SessionLoadPost.
-    -- This inconsistency reflects in BufferlinePinnedBuffers, which we fix by restoring it
-    -- from BufferlinePinnedBuffersPreLoad and reloading the plugin.
-    local success, err = pcall(function()
-      vim.g.BufferlinePinnedBuffers = vim.g.BufferlinePinnedBuffers or ""
-      if vim.g.BufferlinePinnedBuffersPreLoad ~= vim.g.BufferlinePinnedBuffers then
-        vim.g.BufferlinePinnedBuffers = vim.g.BufferlinePinnedBuffersPreLoad
-        local plugin = require("lazy.core.config").plugins["bufferline.nvim"]
-        require("lazy.core.loader").reload(plugin)
-        -- vim.notify("Bufferline.nvim plugin reloaded", vim.log.levels.INFO)
-      end
-    end)
-    if not success then
-      vim.notify("Error reloading bufferline: " .. err, vim.log.levels.ERROR)
-    end
     if lvim.builtin.nvimtree.active == false then
       session_open_neo_tree()
     else
