@@ -29,7 +29,7 @@ function code_runner()
   elseif filetype == 'html' then
     vim.cmd("silent! !" .. vim.g.mkdp_browser .. " % &")
   elseif filetype == 'markdown' then
-    vim.cmd("MarkdownPreview")
+    vim.cmd("MarkdownPreviewToggle")
   elseif filetype == 'tex' then
     vim.cmd("silent! VimtexStop")
     vim.cmd("silent! VimtexCompile")
