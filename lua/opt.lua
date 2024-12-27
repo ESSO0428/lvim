@@ -2,6 +2,11 @@
  THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
  `lvim` is the global options object
 ]]
+-- HACK: #31675 After upgrading to 0.10.3, the Inspect command throws an error
+-- Abstract: The `Inspect` command is not functional in Neovim v0.10.3.
+-- Reference: [#31675](https://github.com/neovim/neovim/issues/31675)
+-- NOTE: If you are using a version higher than v0.10.3, consider commenting out the line below to check if the issue has been resolved.
+vim.hl = vim.highlight
 -- vim options
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
@@ -15,9 +20,9 @@ vim.wo.foldlevel = 99
 vim.wo.foldenable = true
 vim.wo.foldmethod = "expr"
 vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
--- vim.g.conda_auto_activate_base = 0 -- 关闭base环境的自动激活
+-- vim.g.conda_auto_activate_base = 0 -- 关闭 base 环境的自动激活
 -- vim.g.conda_auto_env = 1 -- 开启自动激活环境
--- vim.g.conda_env = 'base' -- 设置自动激活的conda环境
+-- vim.g.conda_env = 'base' -- 设置自动激活的 conda 环境
 
 local function get_clipboard_content()
   local content = vim.fn.getreg('')
@@ -118,7 +123,7 @@ for _, filetype in ipairs(dap_filetypes) do
 end
 
 -- 與 vscode 集成
---ex: code --remote ssh-remote+LabServerDP
+-- ex: code --remote ssh-remote+LabServerDP
 -- default hostname
 vim.g.host = "YourVscodeReomoteServerName"
 local host = vim.g.host
