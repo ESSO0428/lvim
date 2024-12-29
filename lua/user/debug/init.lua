@@ -32,6 +32,7 @@ lvim.builtin.which_key.mappings.d['`'] = { "<cmd>lua require'dap'.restart()<cr>"
 
 require "user.debug.python"
 require "user.debug.php"
+require "user.debug.javascript"
 
 require "nvim-dap-virtual-text".setup()
 local function reloadLaunchJson()
