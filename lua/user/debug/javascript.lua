@@ -40,6 +40,11 @@ for _, language in ipairs(js_filetypes) do
   if not dap.configurations[language] then
     dap.configurations[language] = {
       {
+        -- NOTE: Try below in command line or package.json script
+        -- and then run `:lua require('dap').continue()`
+        -- command line: NODE_OPTIONS='--inspect=9230' npm run dev
+        -- package.json: "dev-debug": "NODE_OPTIONS='--inspect=9230' next dev"
+        -- (and run `npm run dev-debug`)
         name = 'Next.js: debug server-side',
         type = 'pwa-node',
         request = 'attach',
