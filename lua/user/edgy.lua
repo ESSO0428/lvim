@@ -44,11 +44,6 @@ function M.reload_edgy_if_error()
 end
 
 M.config = {
-  left = {}, ---@type (Edgy.View.Opts|string)[]
-  bottom = {}, ---@type (Edgy.View.Opts|string)[]
-  right = {}, ---@type (Edgy.View.Opts|string)[]
-  top = {}, ---@type (Edgy.View.Opts|string)[]
-
   ---@type table<Edgy.Pos, {size:integer | fun():integer, wo?:vim.wo}>
   options = {
     left = { size = 30 },
@@ -159,6 +154,7 @@ M.config = {
   -- enable this on Neovim <= 0.10.0 to properly fold edgebar windows.
   -- Not needed on a nightly build >= June 5, 2023.
   fix_win_height = vim.fn.has("nvim-0.10.0") == 0,
+  top = {}, ---@type (Edgy.View.Opts|string)[]
   bottom = {
     -- toggleterm / lazyterm at the bottom with a height of 40% of the screen
     {
@@ -189,9 +185,10 @@ M.config = {
       end,
     },
     { ft = "spectre_panel", size = { height = 0.4 } },
-  },
+  }, ---@type (Edgy.View.Opts|string)[]
   -- File explorer configuration based on active plugin
   left =
+  ---@type (Edgy.View.Opts|string)[]
       vim.list_extend(
         lvim.builtin.nvimtree.active and {
           {
@@ -205,7 +202,7 @@ M.config = {
             title = "Neo-Tree",
             ft = "neo-tree",
             filter = function(buf)
-              return vim.b[buf].neo_tree_source == "filesystem"
+              return vim.b[buf].neo_tree_source == "filesystem" and vim.b[buf].neo_tree_position ~= "current"
             end,
             open = "Neotree reveal_force_cwd",
             pinned = true,
@@ -216,6 +213,9 @@ M.config = {
             title = "RemoteExplore",
             ft = "neo-tree",
             open = "Neotree remote",
+            filter = function(buf)
+              return vim.b[buf].neo_tree_source == "remote"
+            end,
             pinned = false,
             collapsed = false,
           },
@@ -256,7 +256,7 @@ M.config = {
       ft = "copilot-chat",
       open = "CopilotChatOpen",
     }
-  }
+  } ---@type (Edgy.View.Opts|string)[]
 }
 require("edgy").setup(M.config)
 
