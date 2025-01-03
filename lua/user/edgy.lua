@@ -22,7 +22,7 @@ end
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'qf',
   callback = function()
-    vim.o.winbar = "%{%v:lua.require'user.edgy'.qf_winbar()%}"
+    vim.opt_local.winbar = "%{%v:lua.require'user.edgy'.qf_winbar()%}"
   end
 })
 function M.reload_edgy_if_error()
