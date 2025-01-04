@@ -60,7 +60,13 @@ end
 require('ufo').setup({
   fold_virt_text_handler = handler,
   provider_selector = function(bufnr, filetype, buftype)
-    if filetype == 'org' or filetype == 'markdown' then
+    local empty_return_filetypes = {
+      'org',
+      'markdown',
+      'copilot-chat',
+      'Avante',
+    }
+    if vim.tbl_contains(empty_return_filetypes, filetype) then
       return ''
     end
     -- if you prefer treesitter provider rather than lsp,
