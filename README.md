@@ -68,8 +68,8 @@ Run "nvim -V1 -v" for more info
      1. Install nvim.appimage
      2. Alias nvim.appimage to your .bashrc/.zshrc
         ```bash
-        echo 'alias nvim=~/nvim.appimag' >> ~/.bashrc
-        echo 'alias nvim=~/nvim.appimag' >> ~/.zshrc
+        echo 'alias nvim=~/nvim.appimage' >> ~/.bashrc
+        echo 'alias nvim=~/nvim.appimage' >> ~/.zshrc
         ```
      3. Install `pyenv` for neovim (for plug of neovim)
         ```bash
