@@ -174,14 +174,6 @@ vnoremap <silent> L $
 " noremap <silent> J g0
 " noremap <silent> L g$
 
-" Faster in-line navigation
-nnoremap W 5w
-nnoremap E 5e
-nnoremap B 5b
-vnoremap W 5w
-vnoremap E 5e
-vnoremap B 5b
-
 " Faster insert to normal mode
 " inoremap <a-j> <esc>
 inoremap <a-J> <esc>
