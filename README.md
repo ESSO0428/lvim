@@ -30,10 +30,10 @@ date: Sunday, October, 08, 2023
 
 ## Current support neovim version
 
-NVIM v0.10.3 (release)
+NVIM v0.10.4 (release)
 ```bash
 $ nvim --version
-NVIM v0.10.3
+NVIM v0.10.4
 Build type: Release
 LuaJIT 2.1.1713484068
 Run "nvim -V1 -v" for more info

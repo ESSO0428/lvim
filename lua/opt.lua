@@ -2,11 +2,6 @@
  THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
  `lvim` is the global options object
 ]]
--- HACK: #31675 After upgrading to 0.10.3, the Inspect command throws an error
--- Abstract: The `Inspect` command is not functional in Neovim v0.10.3.
--- Reference: [#31675](https://github.com/neovim/neovim/issues/31675)
--- NOTE: If you are using a version higher than v0.10.3, consider commenting out the line below to check if the issue has been resolved.
-vim.hl = vim.highlight
 -- vim options
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
