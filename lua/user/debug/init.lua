@@ -30,6 +30,7 @@ lvim.builtin.which_key.mappings.d[';'] = { "<cmd>lua require'telescope'.extensio
 lvim.builtin.which_key.mappings.d['`'] = { "<cmd>lua require'dap'.restart()<cr>", "Restart" }
 
 
+require "user.debug.bash"
 require "user.debug.python"
 require "user.debug.php"
 require "user.debug.javascript"

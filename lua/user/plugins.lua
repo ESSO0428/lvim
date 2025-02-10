@@ -627,7 +627,7 @@ lvim.plugins = {
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
-    version = false,   -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
+    version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
     -- NOTE: If you can't activate the plugin, please check the following (same as CopilotChat.nvim):
     -- 1. Check if the $XDG_RUNTIME_DIR directory exists.
     -- 2. Verify the permissions of $XDG_RUNTIME_DIR:
