@@ -627,6 +627,7 @@ lvim.plugins = {
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
+    version = false,   -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
     -- NOTE: If you can't activate the plugin, please check the following (same as CopilotChat.nvim):
     -- 1. Check if the $XDG_RUNTIME_DIR directory exists.
     -- 2. Verify the permissions of $XDG_RUNTIME_DIR:
@@ -652,9 +653,11 @@ lvim.plugins = {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
       --- The below dependencies are optional,
-      "hrsh7th/nvim-cmp",            -- autocompletion for avante commands and mentions
-      "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-      "github/copilot.vim",          -- for providers='copilot'
+      "echasnovski/mini.pick",         -- for file_selector provider mini.pick
+      "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+      "hrsh7th/nvim-cmp",              -- autocompletion for avante commands and mentions
+      "nvim-tree/nvim-web-devicons",   -- or echasnovski/mini.icons
+      "github/copilot.vim",            -- for providers='copilot'
       {
         -- support for image pasting
         "HakonHarnes/img-clip.nvim",

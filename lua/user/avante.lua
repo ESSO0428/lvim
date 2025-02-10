@@ -51,7 +51,8 @@ M.opts = {
     auto_set_keymaps = true,
     auto_apply_diff_after_generation = false,
     support_paste_from_clipboard = false,
-    minimize_diff = true, -- Whether to remove unchanged lines when applying a code block
+    minimize_diff = true,         -- Whether to remove unchanged lines when applying a code block
+    enable_token_counting = true, -- Whether to enable token counting. Default to true.
   },
   mappings = {
     --- @class AvanteConflictMappings
@@ -128,6 +129,10 @@ M.opts = {
     --- Helps to avoid entering operator-pending mode with diff mappings starting with `c`.
     --- Disable by setting to -1.
     override_timeoutlen = 500,
+    suggestion = {
+      debounce = 600,
+      throttle = 600,
+    },
   },
 }
 

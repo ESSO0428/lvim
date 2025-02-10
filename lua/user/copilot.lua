@@ -2,8 +2,15 @@ vim.g.copilot_assume_mapped = true
 vim.api.nvim_set_keymap("i", "<M-l>", 'copilot#Accept("<cr>")', { silent = true, expr = true })
 vim.g.copilot_no_tab_map = true
 
+-- Quick chat with Copilot (no context)
+function CopilotChatNoContextchat()
+  require("CopilotChat").ask("", {
+    selection = false,
+  })
+end
+
 -- Quick chat with Copilot
-function CopilotChatQuickchatCore(ask)
+function CopilotChatQuickchatCore(_, _, ask)
   if ask == true then
     local ok, input = pcall(vim.fn.input, "Quick Chat: ")
     if ok and input ~= "" then
@@ -20,7 +27,7 @@ function CopilotChatQuickchat(ask)
 end
 
 -- Quick chat (visuals) for Copilot
-function CopilotChatQuickchatVisualCore(ask)
+function CopilotChatQuickchatVisualCore(_, _, ask)
   if ask == true then
     local ok, input = pcall(vim.fn.input, "Quick Chat: ")
     if ok and input ~= "" then
@@ -77,8 +84,7 @@ end
 lvim.builtin.which_key.mappings.u['ki'] = { "<cmd>lua CopilotChatQuickchat(false)<cr>", "CopilotChat - Quick chat panel" }
 lvim.builtin.which_key.vmappings.u['ki'] = { "<cmd>lua CopilotChatQuickchatVisual(false)<cr>",
   "CopilotChat - Quick chat panel" }
-lvim.builtin.which_key.mappings.u['kw'] = { "<cmd>lua CopilotChatInline()<cr>", "CopilotChat Inline" }
-lvim.builtin.which_key.vmappings.u['kw'] = { "<cmd>lua CopilotChatInlineVisual()<cr>", "CopilotChat Inline" }
+lvim.builtin.which_key.mappings.u['kw'] = { "<cmd>lua CopilotChatNoContextchat()<cr>", "CopilotChat - No context chat" }
 
 lvim.builtin.which_key.mappings.u['ka'] = { "<cmd>lua CopilotChatQuickchat(true)<cr>", "CopilotChat - Quick chat" }
 lvim.builtin.which_key.vmappings.u['ka'] = { "<cmd>lua CopilotChatQuickchatVisual(true)<cr>", "CopilotChat - Quick chat" }
@@ -86,10 +92,8 @@ lvim.builtin.which_key.vmappings.u['ka'] = { "<cmd>lua CopilotChatQuickchatVisua
 lvim.builtin.which_key.mappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
 lvim.builtin.which_key.vmappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
 
-local context = require('CopilotChat.context')
 local select = require('CopilotChat.select')
 local buffer = require('CopilotChat.select').buffer
-local utils = require('CopilotChat.utils')
 
 
 select.diagnostics = function(source)
@@ -219,8 +223,9 @@ require("CopilotChat").setup {
   model = 'claude-3.5-sonnet', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
   agent = 'copilot',           -- Default agent to use, see ':CopilotChatAgents' for available agents (can be specified manually in prompt via @).
   context = nil,               -- Default context to use (can be specified manually in prompt via #).
-  temperature = 0.1,           -- GPT result temperature
+  sticky = nil,                -- Default sticky prompt or array of sticky prompts to use at start of every new chat.
 
+  temperature = 0.1,           -- GPT result temperature
   headless = false,            -- Do not write to chat buffer and use history(useful for using callback for custom processing)
   callback = nil,              -- Callback to use when ask response is received
 
@@ -269,98 +274,7 @@ require("CopilotChat").setup {
   separator = '───', -- Separator to use in chat
 
   -- default contexts
-  contexts = {
-    buffer = {
-      description = 'Includes specified buffer in chat context (default current). Supports input.',
-      input = function(callback)
-        vim.ui.select(
-          vim.tbl_map(
-            function(buf)
-              return { id = buf, name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ':p:.') }
-            end,
-            vim.tbl_filter(function(buf)
-              return utils.buf_valid(buf) and vim.fn.buflisted(buf) == 1
-            end, vim.api.nvim_list_bufs())
-          ),
-          {
-            prompt = 'Select a buffer> ',
-            format_item = function(item)
-              return item.name
-            end,
-          },
-          function(choice)
-            callback(choice and choice.id)
-          end
-        )
-      end,
-      resolve = function(input, source)
-        return {
-          context.buffer(input and tonumber(input) or source.bufnr),
-        }
-      end,
-    },
-    buffers = {
-      description = 'Includes all buffers in chat context (default listed). Supports input.',
-      input = function(callback)
-        vim.ui.select({ 'listed', 'visible' }, {
-          prompt = 'Select buffer scope> ',
-        }, callback)
-      end,
-      resolve = function(input)
-        input = input or 'listed'
-        return vim.tbl_map(
-          context.buffer,
-          vim.tbl_filter(function(b)
-            return utils.buf_valid(b)
-                and vim.fn.buflisted(b) == 1
-                and (input == 'listed' or #vim.fn.win_findbuf(b) > 0)
-          end, vim.api.nvim_list_bufs())
-        )
-      end,
-    },
-    file = {
-      description = 'Includes content of provided file in chat context. Supports input.',
-      input = function(callback)
-        local files = vim.tbl_filter(function(file)
-          return vim.fn.isdirectory(file) == 0
-        end, vim.fn.glob('**/*', false, true))
-
-        vim.ui.select(files, {
-          prompt = 'Select a file> ',
-        }, callback)
-      end,
-      resolve = function(input)
-        return {
-          context.file(input),
-        }
-      end,
-    },
-    files = {
-      description = 'Includes all non-hidden filenames in the current workspace in chat context. Supports input.',
-      input = function(callback)
-        vim.ui.input({
-          prompt = 'Enter a file pattern> ',
-          default = '**/*',
-        }, callback)
-      end,
-      resolve = function(input)
-        return context.files(input)
-      end,
-    },
-    git = {
-      description = 'Includes current git diff in chat context (default unstaged). Supports input.',
-      input = function(callback)
-        vim.ui.select({ 'unstaged', 'staged' }, {
-          prompt = 'Select diff type> ',
-        }, callback)
-      end,
-      resolve = function(input, source)
-        return {
-          context.gitdiff(input, source.bufnr),
-        }
-      end,
-    },
-  },
+  contexts = {},
   -- See Configuration section for rest
   -- NOTE: Default prompts configuration
   -- prompts = {
