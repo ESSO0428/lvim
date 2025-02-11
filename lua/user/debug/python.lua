@@ -1,6 +1,12 @@
 local dap = require('dap')
+local LoadLaunchJsonSucess = vim.gLoadLaunchJsonSucess
+local launch_config = {}
+local attach_config = {}
+local example_launch_config = {}
+local example_attach_config = {}
+
 require "dap-python".setup("python", {})
-local attach_config = {
+example_attach_config = {
   type = "python",
   request = "attach",
   name = "Attach remote (django [example])",
@@ -21,26 +27,21 @@ local attach_config = {
     return { host = host, port = port }
   end,
 }
--- 檢查 launch.json 文件是否存在
-local launch_json_path = vim.fn.getcwd() .. '/.vscode/launch.json'
-if vim.fn.filereadable(launch_json_path) == 0 then
-  print("launch.json does not exist. Using default debug configuration.")
-  table.insert(dap.configurations.python, attach_config)
-else
-  -- 嘗試加載 launch.json
-  local status, err = pcall(function()
-    require('dap.ext.vscode').load_launchjs()
-  end)
-  -- 如果加載失敗，則使用備用配置
-  if not status then
-    print(
-      table.concat(
-        {
-          "Failed to load launch.json. Please check for trailing commas or if the file exists.",
-          "Will use default debug configuration."
-        }, " "
-      )
-    )
-    table.insert(dap.configurations.python, attach_config)
+
+local function insert_config(lang, config)
+  if next(config) then
+    dap.configurations[lang] = dap.configurations[lang] or {}
+    table.insert(dap.configurations[lang], config)
   end
+end
+
+local target_lang = "python"
+
+if LoadLaunchJsonSucess == true then
+  require('dap.ext.vscode').load_launchjs()
+  insert_config(target_lang, launch_config)
+  insert_config(target_lang, attach_config)
+else
+  insert_config(target_lang, example_launch_config)
+  insert_config(target_lang, example_attach_config)
 end

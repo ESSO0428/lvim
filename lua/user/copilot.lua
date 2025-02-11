@@ -209,6 +209,7 @@ local function read_copilot_prompt(file)
   end
   return prompts
 end
+
 -- NOTE: CopilotChat 主要配置
 -- prompts 另外配置於 : `~/.config/lvim/docs/CopilotChatPrompts/`
 -- Prompts are configured separately at: `~/.config/lvim/docs/CopilotChatPrompts/`

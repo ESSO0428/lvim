@@ -1,4 +1,6 @@
 local dap = require('dap')
+vim.g.LoadLaunchJsonSucess = true
+
 require('dap.ext.vscode').json_decode = require('json5').parse
 dap.defaults.fallback.switchbuf = 'useopen,uselast'
 
@@ -7,6 +9,32 @@ dap.defaults.fallback.switchbuf = 'useopen,uselast'
 require('persistent-breakpoints.api').set_breakpoint = function(condition, logMessage, hitCondition)
   require('dap').set_breakpoint(condition, logMessage, hitCondition);
   require('persistent-breakpoints.api').breakpoints_changed_in_current_buffer()
+end
+
+-- 檢查 launch.json 文件是否存在
+local launch_json_path = vim.fn.getcwd() .. '/.vscode/launch.json'
+if vim.fn.filereadable(launch_json_path) == 0 then
+  print("launch.json does not exist. Using default debug configuration.")
+  vim.g.LoadLaunchJsonSucess = false
+else
+  -- 嘗試加載 launch.json
+  local status, err = pcall(function()
+    require('dap.ext.vscode').load_launchjs()
+  end)
+  -- 如果加載失敗，則使用備用配置
+  if not status then
+    print(
+      table.concat(
+        {
+          "Failed to load launch.json. Please check for trailing commas or if the file exists.",
+          "Will use default debug configuration."
+        }, " "
+      )
+    )
+    vim.g.LoadLaunchJsonSucess = false
+  else
+    vim.g.LoadLaunchJsonSucess = true
+  end
 end
 
 -- NOTE: 根據 `lvim.builtin.dap.ui.auto_open` 的值設定是否自動開啟 DAP UI
