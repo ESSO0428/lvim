@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Detect architecture
+ARCH=$(uname -m)
+
 # NOTE: Foolproofing
 echo "This script will install Neovim Release and LunarVim core."
 echo "Your current LunarVim configuration will be backed up to ~/.config/lvim_stage/"
@@ -10,7 +13,14 @@ echo "Downloading Neovim Release ..."
 cd ~
 rm -rf nvim.appimage
 # NOTE: Install NeovimRelease
-wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+if [ "$ARCH" = "x86_64" ]; then
+  wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.appimage -O nvim.appimage
+elif [ "$ARCH" = "aarch64" ]; then
+  wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-arm64.appimage -O nvim.appimage
+else
+  echo "Unsupported architecture: $ARCH"
+  exit 1
+fi
 chmod u+x nvim.appimage
 
 # Test if the release version works
@@ -23,13 +33,18 @@ else
   # , which is an official link provided by Neovim to accommodate machines with older glibc versions
   cd ~
   rm -rf nvim.appimage
-  wget https://github.com/neovim/neovim-releases/releases/download/stable/nvim.appimage
+  if [ "$ARCH" = "x86_64" ]; then
+    wget https://github.com/neovim/neovim-releases/releases/download/stable/nvim-linux-x86_64.appimage -O nvim.appimage
+  else
+    echo "LOW_GLIBC version is only available for x86_64, Current server not support Neovim."
+    exit 1
+  fi
   chmod u+x nvim.appimage
   # Test if the release version (LOW_GLIBC) works
   if ./nvim.appimage --version; then
     echo "Neovim Release (LOW_GLIBC) is executable."
   else
-    echo "Neovim Release (LOW_GLIBC) can't execute. Current server not support Neovim"
+    echo "Neovim Release (LOW_GLIBC) can't execute. Current server not support Neovim."
     exit 1
   fi
 fi
