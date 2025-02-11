@@ -1,6 +1,7 @@
 Nvim.null_ls = {}
 Nvim.Buffer_check = {}
 Nvim.Quickfix = {}
+Nvim.DAP = {}
 Nvim.DAPUI = {}
 
 function Nvim.nvim_create_user_commands(command_names, command_function)
@@ -170,6 +171,16 @@ function Nvim.Quickfix.toggle_loclist_safety()
     vim.cmd("lclose")
   else
     Nvim.Quickfix.open_loclist_safety()
+  end
+end
+
+function Nvim.DAP.insert_dap_configs(lang, configs)
+  local dap = require("dap")
+  if next(configs) then
+    dap.configurations[lang] = dap.configurations[lang] or {}
+    for _, config in ipairs(configs) do
+      table.insert(dap.configurations[lang], config)
+    end
   end
 end
 

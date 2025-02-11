@@ -1,9 +1,9 @@
 local dap = require('dap')
-local LoadLaunchJsonSucess = vim.gLoadLaunchJsonSucess
-local launch_config = {}
-local attach_config = {}
-local example_launch_config = {}
-local example_attach_config = {}
+local LoadLaunchJsonSucess = vim.g.LoadLaunchJsonSucess
+local launch_configs = {}
+local attach_configs = {}
+local example_launch_configs = {}
+local example_attach_configs = {}
 
 dap.adapters.sh = {
   type = 'executable',
@@ -11,7 +11,7 @@ dap.adapters.sh = {
   name = 'bashdb',
 }
 dap.configurations.sh = {}
-launch_config = {
+launch_configs = {
   {
     type = 'sh',
     request = 'launch',
@@ -31,20 +31,13 @@ launch_config = {
   }
 }
 
-local function insert_config(lang, config)
-  if next(config) then
-    dap.configurations[lang] = dap.configurations[lang] or {}
-    table.insert(dap.configurations[lang], config)
-  end
-end
-
 local target_lang = "sh"
 
 if LoadLaunchJsonSucess == true then
   require('dap.ext.vscode').load_launchjs()
-  insert_config(target_lang, launch_config)
-  insert_config(target_lang, attach_config)
 else
-  insert_config(target_lang, example_launch_config)
-  insert_config(target_lang, example_attach_config)
+  Nvim.DAP.insert_dap_configs(target_lang, example_launch_configs)
+  Nvim.DAP.insert_dap_configs(target_lang, example_attach_configs)
 end
+Nvim.DAP.insert_dap_configs(target_lang, launch_configs)
+Nvim.DAP.insert_dap_configs(target_lang, attach_configs)
