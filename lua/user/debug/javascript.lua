@@ -118,9 +118,9 @@ attach_configs = {
     webRoot = "${workspaceFolder}",
   },
   {
+    name = "Attach Program (pwa-chrome, select port)",
     type = "chrome",
     request = "attach",
-    name = "Attach Program (pwa-chrome, select port)",
     program = "${file}",
     cwd = vim.fn.getcwd(),
     sourceMaps = true,
