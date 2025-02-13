@@ -8,7 +8,18 @@ local example_attach_configs = {}
 -- Reference:
 --  - https://www.lazyvim.org/extras/lang/typescript
 --  - https://stackoverflow.com/questions/78455585/correct-setup-for-debugging-nextjs-app-inside-neovim-with-dap
-
+dap.adapters['chrome'] = {
+  type = 'executable',
+  command = 'node',
+  -- TODO change to your correct path
+  args = { vim.fn.stdpath('data') .. '/mason/packages/chrome-debug-adapter/out/src/chromeDebug.js' },
+}
+dap.adapters['firefox'] = {
+  type = 'executable',
+  command = 'node',
+  -- TODO change to your correct path
+  args = { vim.fn.stdpath('data') .. '/mason/packages/firefox-debug-adapter/dist/adapter.bundle.js' },
+}
 dap.adapters["pwa-node"] = {
   type = "server",
   host = "localhost",
@@ -40,6 +51,8 @@ local js_filetypes = { "typescript", "javascript", "typescriptreact", "javascrip
 local vscode = require("dap.ext.vscode")
 vscode.type_to_filetypes["node"] = js_filetypes
 vscode.type_to_filetypes["pwa-node"] = js_filetypes
+vscode.type_to_filetypes["chrome"] = js_filetypes
+vscode.type_to_filetypes["firefox"] = js_filetypes
 
 example_attach_configs = {
   {
@@ -58,6 +71,33 @@ example_attach_configs = {
 }
 launch_configs = {
   {
+    name = "Launch Firefox (custom connect)",
+    type = "firefox",
+    request = "launch",
+    url = function()
+      return vim.fn.input("Select url: ", "http://localhost:3000")
+    end,
+    reAttach = true,
+    webRoot = "${workspaceFolder}",
+    -- pathMappings = {
+    --   {
+    --     url = "webpack://_N_E",
+    --     path = "${workspaceFolder}"
+    --   }
+    -- }
+  },
+  {
+    name = 'Next.js: debug client-side (chrome)',
+    type = 'chrome',
+    request = 'launch',
+    url = 'http://localhost:3000',
+    webRoot = '${workspaceFolder}',
+    sourceMaps = true, -- https://github.com/vercel/next.js/issues/56702#issuecomment-1913443304
+    sourceMapPathOverrides = {
+      ['webpack://_N_E/*'] = '${webRoot}/*',
+    },
+  },
+  {
     type = "pwa-node",
     request = "launch",
     name = "Launch file",
@@ -66,6 +106,29 @@ launch_configs = {
   },
 }
 attach_configs = {
+  {
+    name = "Attach Firefox (custom connect)",
+    type = "firefox",
+    request = "attach",
+    reAttach = true,
+    -- See https://github.com/firefox-devtools/vscode-firefox-debug/issues/306
+    url = function()
+      return vim.fn.input("Select url: ", "http://localhost:3000")
+    end,
+    webRoot = "${workspaceFolder}",
+  },
+  {
+    type = "chrome",
+    request = "attach",
+    name = "Attach Program (pwa-chrome, select port)",
+    program = "${file}",
+    cwd = vim.fn.getcwd(),
+    sourceMaps = true,
+    port = function()
+      return vim.fn.input("Select port: ", 9222)
+    end,
+    webRoot = "${workspaceFolder}",
+  },
   {
     -- NOTE: Try below in command line or package.json script
     -- and then run `:lua require('dap').continue()`
