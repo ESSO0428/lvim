@@ -1,4 +1,9 @@
 local dap = require('dap')
+local LoadLaunchJsonSucess = vim.g.LoadLaunchJsonSucess
+local launch_configs = {}
+local attach_configs = {}
+local example_launch_configs = {}
+local example_attach_configs = {}
 
 -- Reference:
 --  - https://www.lazyvim.org/extras/lang/typescript
@@ -36,39 +41,65 @@ local vscode = require("dap.ext.vscode")
 vscode.type_to_filetypes["node"] = js_filetypes
 vscode.type_to_filetypes["pwa-node"] = js_filetypes
 
+example_attach_configs = {
+  {
+    -- NOTE: Try below in command line or package.json script
+    -- and then run `:lua require('dap').continue()`
+    -- command line: NODE_OPTIONS='--inspect=9230' npm run dev
+    -- package.json: "dev-debug": "NODE_OPTIONS='--inspect=9230' next dev"
+    -- (and run `npm run dev-debug`)
+    name = 'Next.js: debug attach server-side (example)',
+    type = 'pwa-node',
+    request = 'attach',
+    port = 9231,
+    skipFiles = { '<node_internals>/**', 'node_modules/**' },
+    cwd = '${workspaceFolder}',
+  },
+}
+launch_configs = {
+  {
+    type = "pwa-node",
+    request = "launch",
+    name = "Launch file",
+    program = "${file}",
+    cwd = "${workspaceFolder}",
+  },
+}
+attach_configs = {
+  {
+    -- NOTE: Try below in command line or package.json script
+    -- and then run `:lua require('dap').continue()`
+    -- command line: NODE_OPTIONS='--inspect=9230' npm run dev
+    -- package.json: "dev-debug": "NODE_OPTIONS='--inspect=9230' next dev"
+    -- (and run `npm run dev-debug`)
+    name = 'Next.js: debug attach server-side (custom connect)',
+    type = 'pwa-node',
+    request = 'attach',
+    port = function()
+      local port = tonumber(vim.fn.input('Port [9231]: ')) or 9231
+      return port
+    end,
+    skipFiles = { '<node_internals>/**', 'node_modules/**' },
+    cwd = '${workspaceFolder}',
+  },
+  {
+    type = "pwa-node",
+    request = "attach",
+    name = "Attach to Process",
+    processId = require("dap.utils").pick_process,
+    cwd = "${workspaceFolder}",
+  },
+}
+
 for _, language in ipairs(js_filetypes) do
-  if not dap.configurations[language] then
-    dap.configurations[language] = {
-      {
-        -- NOTE: Try below in command line or package.json script
-        -- and then run `:lua require('dap').continue()`
-        -- command line: NODE_OPTIONS='--inspect=9230' npm run dev
-        -- package.json: "dev-debug": "NODE_OPTIONS='--inspect=9230' next dev"
-        -- (and run `npm run dev-debug`)
-        name = 'Next.js: debug server-side',
-        type = 'pwa-node',
-        request = 'attach',
-        port = function()
-          local port = tonumber(vim.fn.input('Port [9231]: ')) or 9231
-          return port
-        end,
-        skipFiles = { '<node_internals>/**', 'node_modules/**' },
-        cwd = '${workspaceFolder}',
-      },
-      {
-        type = "pwa-node",
-        request = "launch",
-        name = "Launch file",
-        program = "${file}",
-        cwd = "${workspaceFolder}",
-      },
-      {
-        type = "pwa-node",
-        request = "attach",
-        name = "Attach",
-        processId = require("dap.utils").pick_process,
-        cwd = "${workspaceFolder}",
-      },
-    }
+  local target_lang = language
+
+  if LoadLaunchJsonSucess == true then
+    require('dap.ext.vscode').load_launchjs()
+  else
+    Nvim.DAP.insert_dap_configs(target_lang, example_launch_configs)
+    Nvim.DAP.insert_dap_configs(target_lang, example_attach_configs)
   end
+  Nvim.DAP.insert_dap_configs(target_lang, launch_configs)
+  Nvim.DAP.insert_dap_configs(target_lang, attach_configs)
 end
