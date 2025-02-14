@@ -196,6 +196,10 @@ iron.setup({
         command = { "jupyter", "console" },
         format = require("iron.fts.common").bracketed_paste,
       },
+      sh = {
+        command = { "bash" },
+        format = require("iron.fts.common").bracketed_paste,
+      },
     },
   },
   keymaps = {
