@@ -28,7 +28,6 @@ launch_configs = {
     pathPkill = "pkill",
     args = {},
     env = {},
-    terminalKind = "integrated",
   }
 }
 
