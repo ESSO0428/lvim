@@ -16,7 +16,7 @@ launch_configs = {
     type = 'sh',
     request = 'launch',
     name = 'Launch Bash debugger',
-    -- showDebugOutput = true,
+    showDebugOutput = true,
     -- trace = true,
     pathBashdb = vim.fn.stdpath("data") .. '/mason/packages/bash-debug-adapter/extension/bashdb_dir/bashdb',
     pathBashdbLib = vim.fn.stdpath("data") .. '/mason/packages/bash-debug-adapter/extension/bashdb_dir',
@@ -28,6 +28,7 @@ launch_configs = {
     pathPkill = "pkill",
     args = {},
     env = {},
+    terminalKind = "integrated",
   }
 }
 
