@@ -118,9 +118,9 @@ launch_configs = {
     },
   },
   {
+    name = "Launch file",
     type = "pwa-node",
     request = "launch",
-    name = "Launch file",
     program = "${file}",
     cwd = "${workspaceFolder}",
   },
@@ -166,9 +166,9 @@ attach_configs = {
     cwd = '${workspaceFolder}',
   },
   {
+    name = "Attach to Process",
     type = "pwa-node",
     request = "attach",
-    name = "Attach to Process",
     processId = require("dap.utils").pick_process,
     cwd = "${workspaceFolder}",
   },

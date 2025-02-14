@@ -8,9 +8,9 @@ local example_attach_config = {}
 require "dap-python".setup("python", {})
 example_attach_config = {
   {
+    name = "Attach remote (django [example])",
     type = "python",
     request = "attach",
-    name = "Attach remote (django [example])",
     cwd = "${workspaceFolder}",
     mode = "remote",
     pathMappings = {

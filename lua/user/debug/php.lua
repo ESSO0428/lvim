@@ -15,9 +15,9 @@ dap.adapters.php = {
 dap.configurations.php = {}
 launch_configs = {
   {
+    name = "Listen for Xdebug (custom connect)",
     type = "php",
     request = "launch",
-    name = "Listen for Xdebug (custom connect)",
     pathMappings = function()
       local remote_path = vim.fn.input('Remote path [/var/www/html/]: ', "/var/www/html/", "file")
       local local_path = vim.fn.input('Local path [${workspaceFolder}]: ', "${workspaceFolder}", "file")
@@ -33,9 +33,9 @@ launch_configs = {
 }
 example_launch_configs = {
   {
+    name = "Listen for Xdebug (example)",
     type = "php",
     request = "launch",
-    name = "Listen for Xdebug (example)",
     pathMappings = {
       ["/var/www/html/"] = "${workspaceFolder}"
     },
