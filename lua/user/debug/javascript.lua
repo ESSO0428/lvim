@@ -87,6 +87,26 @@ launch_configs = {
     -- }
   },
   {
+    name = "Launch Firefox webpack (custom connect)",
+    type = "firefox",
+    request = "launch",
+    url = function()
+      return vim.fn.input("Select url: ", "http://localhost:3000")
+    end,
+    reAttach = true,
+    webRoot = "${workspaceFolder}",
+    pathMappings = function()
+      local url = vim.fn.input("Webpack url pattern: ", "webpack://*/dev/src/")
+      local path = vim.fn.input("Local path: ", "${workspaceFolder}/dev/src")
+      return {
+        {
+          url = url,
+          path = path
+        }
+      }
+    end
+  },
+  {
     name = 'Next.js: debug client-side (chrome)',
     type = 'chrome',
     request = 'launch',
