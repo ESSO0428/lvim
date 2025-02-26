@@ -53,6 +53,9 @@ vim.opt.spell = true
 vim.opt.list = false
 vim.opt.listchars:append "space:·"
 
+-- Pmenu
+vim.opt.completeopt = "menuone,noselect,popup"
+
 vim.g.PythonEnv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
 vim.g.WorkDirectoryPath = vim.fn.getcwd()
 

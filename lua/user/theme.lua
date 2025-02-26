@@ -41,6 +41,7 @@ if lvim.transparent_window == true then
   vim.cmd "au ColorScheme * hi FloatBorder ctermbg=none guibg=none guifg=#3d59a1"
   vim.cmd "au ColorScheme * hi Float ctermbg=none guibg=none"
   vim.cmd "au ColorScheme * hi NvimFloat ctermbg=none guibg=none"
+  vim.cmd "au ColorScheme * hi Pmenu ctermbg=none guibg=none guifg=none"
   vim.cmd "au ColorScheme * hi WhichKeyFloat ctermbg=none guibg=none"
   vim.cmd "au ColorScheme * hi NvimTreeNormal ctermbg=none guibg=none"
   vim.cmd "au ColorScheme * hi NvimTreeNormalNC ctermbg=none guibg=none"
