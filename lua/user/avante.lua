@@ -22,7 +22,6 @@ vim.api.nvim_create_user_command('AvanteCacheReset', function() require("avante.
 
 -- NOTE: Avante config
 local Utils = require("avante.utils")
-require('avante_lib').load()
 require('avante.config').support_paste_image = function()
   local has_xclip = os.execute('which xclip > /dev/null 2>&1') == 0
   if has_xclip then
@@ -38,7 +37,7 @@ M.opts = {
   provider = "copilot", -- Recommend using Claude
   copilot = {
     endpoint = "https://api.githubcopilot.com",
-    model = "claude-3.5-sonnet",
+    model = "claude-3.7-sonnet",
     proxy = nil,            -- [protocol://]host[:port] Use this proxy
     allow_insecure = false, -- Allow insecure server connections
     timeout = 30000,        -- Timeout in milliseconds
@@ -51,8 +50,9 @@ M.opts = {
     auto_set_keymaps = true,
     auto_apply_diff_after_generation = false,
     support_paste_from_clipboard = false,
-    minimize_diff = true,         -- Whether to remove unchanged lines when applying a code block
-    enable_token_counting = true, -- Whether to enable token counting. Default to true.
+    minimize_diff = true,                -- Whether to remove unchanged lines when applying a code block
+    enable_token_counting = true,        -- Whether to enable token counting. Default to true.
+    enable_cursor_planning_mode = false, -- Whether to enable Cursor Planning Mode. Default to false.
   },
   mappings = {
     --- @class AvanteConflictMappings
@@ -85,6 +85,10 @@ M.opts = {
       switch_windows = "<Tab>",
       reverse_switch_windows = "<S-Tab>",
     },
+    files = {
+      add_current = "<leader>ac", -- Add current buffer to selected files
+    },
+    select_model = "<leader>a?",  -- Select model command
   },
   hints = { enabled = true },
   windows = {
@@ -129,10 +133,10 @@ M.opts = {
     --- Helps to avoid entering operator-pending mode with diff mappings starting with `c`.
     --- Disable by setting to -1.
     override_timeoutlen = 500,
-    suggestion = {
-      debounce = 600,
-      throttle = 600,
-    },
+  },
+  suggestion = {
+    debounce = 600,
+    throttle = 600,
   },
 }
 

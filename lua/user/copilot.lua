@@ -221,7 +221,7 @@ local question_header = "  " .. user .. " "
 local answer_header = "  Copilot "
 require("CopilotChat").setup {
   -- system_prompt = require("CopilotChat").prompts().COPILOT_INSTRUCTIONS, -- System prompt to use (can be specified manually in prompt via /).
-  model = 'claude-3.5-sonnet', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
+  model = 'claude-3.7-sonnet', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
   agent = 'copilot',           -- Default agent to use, see ':CopilotChatAgents' for available agents (can be specified manually in prompt via @).
   context = nil,               -- Default context to use (can be specified manually in prompt via #).
   sticky = nil,                -- Default sticky prompt or array of sticky prompts to use at start of every new chat.
@@ -431,8 +431,11 @@ require("CopilotChat").setup {
     jump_to_diff = {
       normal = 'gD',
     },
+    quickfix_answers = {
+      normal = 'gqa',
+    },
     quickfix_diffs = {
-      normal = 'gq',
+      normal = 'gqd',
     },
     yank_diff = {
       normal = 'gy',
@@ -440,6 +443,7 @@ require("CopilotChat").setup {
     },
     show_diff = {
       normal = 'gd',
+      full_diff = false, -- Show full diff instead of unified diff when showing diff window
     },
     show_info = {
       normal = 'gp',
