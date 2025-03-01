@@ -1216,6 +1216,12 @@ lvim.plugins = {
       vim.g.mkdp_auto_start = 1
     end
   },
+  -- NOTE: The handling of `concealcursor` in LSP hover markdown rendering
+  -- was changed after commit 0022a57. The previous behavior allowed
+  -- concealed elements to be visible, but the new version hides them
+  -- by default.
+  -- If you prefer the old behavior in LSP hover windows, check issue #312
+  -- for possible workarounds: [#312](https://github.com/MeanderingProgrammer/render-markdown.nvim/issues/312)
   {
     'MeanderingProgrammer/markdown.nvim',
     main = "render-markdown",
