@@ -14,16 +14,16 @@ let g:SetWrapKeymapExcludeArray = ['minifiles']
 " Markdown code block text object
 vnoremap <silent> hc :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
 vnoremap <silent> ,c :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
-vnoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
+" vnoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
 onoremap <silent> hc :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
 onoremap <silent> ,c :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
-" onoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
+"" onoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
 nnoremap <silent> yo :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>y
 
 vnoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
-vnoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
+" vnoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
 onoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
-" onoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
+"" onoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
 nnoremap <silent> yO :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>y
 
 function! s:MdCodeBlockTextObj(type) abort
