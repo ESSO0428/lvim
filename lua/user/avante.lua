@@ -42,7 +42,14 @@ M.opts = {
     allow_insecure = false, -- Allow insecure server connections
     timeout = 30000,        -- Timeout in milliseconds
     temperature = 0,
-    max_tokens = 4096,
+    -- NOTE: [2025-03-04 00:34]
+    -- Default Copilot GPT-4o config in avante.nvim used **4096 tokens**.
+    -- However, 4096 is nearly unusable for Claude-3.5 or 3.7.
+    -- Even GPT-4o struggles at 4096 due to Vim's scheduling mechanism.
+    -- - Related issue: [#981](https://github.com/yetone/avante.nvim/issues/981)
+    -- Copilot previously claimed **8000 tokens support**, and this setting
+    -- works smoothly with `claude-3.7-sonnet`. `claude-3.5-sonnet` has not been tested yet.
+    max_tokens = 8000,
   },
   behaviour = {
     auto_suggestions = false, -- Experimental stage
