@@ -323,3 +323,6 @@ end
 lvim.builtin.which_key.mappings.d['le'] = {
   "<cmd>lua DAP_edit_breakpoint()<cr>",
   'Edit Breakpoint' }
+
+-- DiffTool
+lvim.keys.normal_mode["cv"] = { "<cmd>ConflictDiff<cr>", desc = "Compare Conflict" }

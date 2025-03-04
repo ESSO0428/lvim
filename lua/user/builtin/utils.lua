@@ -1,4 +1,5 @@
 Nvim.null_ls = {}
+Nvim.DiffTool = {}
 Nvim.Buffer_check = {}
 Nvim.Quickfix = {}
 Nvim.DAP = {}
@@ -107,6 +108,178 @@ function Nvim.null_ls.create_cli_format_action(opts)
     format_file()
   end
 end
+
+--- Opens a conflict resolution diff tool in Neovim.
+---
+--- This function detects the Git conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`)
+--- surrounding the cursor position and splits the conflicting changes into two
+--- separate buffers, displayed side by side in a diff view.
+---
+--- Features:
+--- - Detects conflict regions based on the cursor's position.
+--- - Creates two temporary buffers to store `OURS` and `THEIRS` versions.
+--- - Automatically enables `diffthis` for easier comparison.
+--- - Closes both buffers when either one is closed.
+--- - Keeps the cursor position aligned to the corresponding line in the new buffers.
+---
+--- ---
+--- Usage:
+--- Call `:ConflictDiff` when inside a file with merge conflicts.
+---
+--- ---
+--- Result
+--- ```
+--- |raw file--|
+--- |  <<<<<   |
+--- |  OURS    |
+--- |  =====   |
+--- |  THEIRS  |
+--- |  >>>>>   |
+--- |----------|
+--- | OURS   | THEIRS |
+--- | buf1   | buf2   |
+--- |--------|--------|
+--- ```
+function Nvim.DiffTool.open_conflict_diff()
+  local cursor_pos = vim.api.nvim_win_get_cursor(0)
+  local ft = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+  local line_num = cursor_pos[1]
+
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+
+  -- Find conflict markers within the file
+  local start1, end1, start2, end2 = nil, nil, nil, nil
+  local in_conflict = false
+
+  -- Locate the start of the conflict (`<<<<<<<`)
+  for i = line_num, 1, -1 do
+    if lines[i]:match("^<<<<<<<") then
+      start1 = i
+      in_conflict = true
+      break
+    end
+  end
+
+  -- If no conflict markers are found, print a message and exit
+  if not in_conflict then
+    print("No Git conflict found!")
+    return
+  end
+
+  -- Locate the middle (`=======`) and end (`>>>>>>>`) markers
+  for i = start1 + 1, #lines do
+    if lines[i]:match("^=======") then
+      end1 = i - 1
+      start2 = i + 1
+    elseif lines[i]:match("^>>>>>>>") then
+      end2 = i - 1
+      break
+    end
+  end
+
+  -- If any markers are missing, the conflict block is invalid
+  if not (start1 and end1 and start2 and end2) then
+    print("Invalid conflict block!")
+    return
+  end
+
+  -- Determine the relative cursor position within the conflict block
+  local relative_line
+  local target_buffer = "ours"
+
+  if line_num > start1 and line_num <= end1 then
+    relative_line = line_num - (start1 + 1)
+    target_buffer = "ours"
+  elseif line_num >= start2 and line_num <= end2 then
+    relative_line = line_num - start2
+    target_buffer = "theirs"
+  else
+    relative_line = 0
+  end
+
+  -- Create two new buffers for OURS and THEIRS versions
+  local buf1 = vim.api.nvim_create_buf(false, true)
+  local buf2 = vim.api.nvim_create_buf(false, true)
+
+  -- Populate the buffers with the corresponding conflict sections
+  vim.api.nvim_buf_set_lines(buf1, 0, -1, false, vim.list_slice(lines, start1 + 1, end1))
+  vim.api.nvim_buf_set_lines(buf2, 0, -1, false, vim.list_slice(lines, start2, end2))
+
+  -- Set the buffers to automatically wipe when no longer used
+  vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf1 })
+  vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf2 })
+
+  -- Function to close both buffers when either one is closed
+  local function close_both_buffers()
+    if not vim.api.nvim_buf_is_valid(buf1) and not vim.api.nvim_buf_is_valid(buf2) then
+      return -- Avoid redundant buffer deletions
+    end
+    vim.schedule(function()
+      if vim.api.nvim_buf_is_valid(buf1) then
+        vim.api.nvim_buf_delete(buf1, { force = true })
+      end
+      if vim.api.nvim_buf_is_valid(buf2) then
+        vim.api.nvim_buf_delete(buf2, { force = true })
+      end
+    end)
+  end
+
+  -- Set up autocommands to close both buffers when one is closed
+  vim.api.nvim_create_autocmd("BufWinLeave", {
+    buffer = buf1,
+    callback = function()
+      close_both_buffers()
+    end,
+  })
+  vim.api.nvim_create_autocmd("BufWinLeave", {
+    buffer = buf2,
+    callback = function()
+      close_both_buffers()
+    end,
+  })
+
+  -- Split the window and load OURS into the left pane
+  vim.cmd("split")
+  local win1 = vim.api.nvim_get_current_win()
+  vim.api.nvim_win_set_buf(win1, buf1)
+  vim.api.nvim_set_option_value("winbar", "OURS", { win = win1 })
+
+  -- Create a vertical split for THEIRS on the right side
+  vim.cmd("belowright vsplit")
+  local win2 = vim.api.nvim_get_current_win()
+  vim.api.nvim_win_set_buf(win2, buf2)
+  vim.api.nvim_set_option_value("winbar", "THEIRS", { win = win2 })
+
+  -- Enable diff mode in both buffers
+  if ft and ft ~= "" then
+    vim.api.nvim_set_current_win(win1)
+    vim.cmd("setlocal filetype=" .. ft)
+    vim.cmd("diffthis")
+
+    vim.api.nvim_set_current_win(win2)
+    vim.cmd("setlocal filetype=" .. ft)
+    vim.cmd("diffthis")
+  else
+    vim.api.nvim_set_current_win(win1)
+    vim.cmd("diffthis")
+
+    vim.api.nvim_set_current_win(win2)
+    vim.cmd("diffthis")
+  end
+
+  -- Move the cursor to the corresponding line in OURS or THEIRS
+  if target_buffer == "ours" then
+    vim.api.nvim_set_current_win(win1)
+    local target_line = math.max(0, relative_line)
+    vim.api.nvim_win_set_cursor(win1, { target_line + 1, 0 })
+  elseif target_buffer == "theirs" then
+    vim.api.nvim_set_current_win(win2)
+    local target_line = math.max(0, relative_line)
+    vim.api.nvim_win_set_cursor(win2, { target_line + 1, 0 })
+  end
+end
+
+vim.api.nvim_create_user_command("ConflictDiff", Nvim.DiffTool.open_conflict_diff, {})
 
 --- Check if filetype window exists
 --- @return boolean true if filetype window is found, false otherwise
