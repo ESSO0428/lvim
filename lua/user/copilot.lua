@@ -2,22 +2,40 @@ vim.g.copilot_assume_mapped = true
 vim.api.nvim_set_keymap("i", "<M-l>", 'copilot#Accept("<cr>")', { silent = true, expr = true })
 vim.g.copilot_no_tab_map = true
 
+
+local select = require('CopilotChat.select')
+local buffer = require('CopilotChat.select').buffer
+select.open_select_promt_mode = nil
+
 -- Quick chat with Copilot (no context)
 function CopilotChatNoContextchat()
-  require("CopilotChat").ask("", {
-    selection = false,
-  })
+  local is_focused = require("CopilotChat").chat:focused()
+  if is_focused then
+    require("CopilotChat").open({ selection = false })
+    -- HACK: Manually trigger BufLeave event to clear selection highlights
+    -- This is a workaround because CopilotChat currently doesn't properly handle
+    -- selection highlight clearing in all cases. The plugin only clears highlights
+    -- on buffer leave events.
+    vim.cmd("doautocmd BufLeave")
+  else
+    require("CopilotChat").open({ selection = false })
+  end
 end
 
 -- Quick chat with Copilot
 function CopilotChatQuickchatCore(_, _, ask)
+  local is_focused = require("CopilotChat").chat:focused()
+  local config = { selection = false }
+  if not is_focused then
+    config.context = "buffer"
+  end
   if ask == true then
     local ok, input = pcall(vim.fn.input, "Quick Chat: ")
     if ok and input ~= "" then
-      require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+      require("CopilotChat").ask(input, config)
     end
   else
-    require("CopilotChat").ask("", { selection = require("CopilotChat.select").buffer })
+    require("CopilotChat").open(config)
   end
 end
 
@@ -34,7 +52,7 @@ function CopilotChatQuickchatVisualCore(_, _, ask)
       require("CopilotChat").ask(input, { selection = require("CopilotChat.select").visual })
     end
   else
-    require("CopilotChat").ask("", { selection = require("CopilotChat.select").visual })
+    require("CopilotChat").open({ selection = require("CopilotChat.select").visual })
   end
 end
 
@@ -43,13 +61,27 @@ function CopilotChatQuickchatVisual(ask)
   wrapped_fn(ask)
 end
 
+-- WARNING: If CopilotChat integrations telescope is not available, notify user to use the new method
+local _, telescope_integration = pcall(require, "CopilotChat.integrations.telescope")
+if not telescope_integration then
+  vim.notify(
+    "CopilotChat integrations telescope is deprecated. Now use require(\"CopilotChat\").select_prompt() instead.",
+    vim.log.levels.WARN)
+end
 -- Triggers the Copilot chat prompt action
 function CopilotChatPromptActionCore()
   local actions = require("CopilotChat.actions")
-  require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
+  local has_telescope, telescope_integration = pcall(require, "CopilotChat.integrations.telescope")
+
+  if has_telescope then
+    telescope_integration.pick(actions.prompt_actions())
+  else
+    require("CopilotChat").select_prompt()
+  end
 end
 
 function CopilotChatPromptAction()
+  select.open_select_promt_mode = vim.fn.mode()
   local wrapped_fn = Nvim.DAPUI.with_layout_handling_when_dapui_open(CopilotChatPromptActionCore)
   wrapped_fn()
 end
@@ -92,8 +124,18 @@ lvim.builtin.which_key.vmappings.u['ka'] = { "<cmd>lua CopilotChatQuickchatVisua
 lvim.builtin.which_key.mappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
 lvim.builtin.which_key.vmappings.u['kk'] = { "<cmd>lua CopilotChatPromptAction()<cr>", "CopilotChat Prompt Action" }
 
-local select = require('CopilotChat.select')
-local buffer = require('CopilotChat.select').buffer
+local function get_select_prompt_selection(source)
+  local open_select_promt_mode = select.open_select_promt_mode
+  local content = select.buffer(source)
+
+  -- "\x16" represents Visual Block mode
+  local visual_modes = { v = true, V = true, ["\x16"] = true }
+  if visual_modes[open_select_promt_mode] then
+    content = select.visual(source) or content
+  end
+  select.open_select_promt_mode = nil
+  return content
+end
 
 
 select.diagnostics = function(source)
@@ -302,45 +344,7 @@ require("CopilotChat").setup {
     Review = {
       prompt = read_copilot_prompt('Review.md'),
       sticky = '/COPILOT_REVIEW',
-      callback = function(response, source)
-        local diagnostics = {}
-        for line in response:gmatch('[^\r\n]+') do
-          if line:find('^line=') then
-            local start_line = nil
-            local end_line = nil
-            local message = nil
-            local single_match, message_match = line:match('^line=(%d+): (.*)$')
-            if not single_match then
-              local start_match, end_match, m_message_match = line:match('^line=(%d+)-(%d+): (.*)$')
-              if start_match and end_match then
-                start_line = tonumber(start_match)
-                end_line = tonumber(end_match)
-                message = m_message_match
-              end
-            else
-              start_line = tonumber(single_match)
-              end_line = start_line
-              message = message_match
-            end
-
-            if start_line and end_line then
-              table.insert(diagnostics, {
-                lnum = start_line - 1,
-                end_lnum = end_line - 1,
-                col = 0,
-                message = message,
-                severity = vim.diagnostic.severity.WARN,
-                source = 'Copilot Review',
-              })
-            end
-          end
-        end
-        vim.diagnostic.set(
-          vim.api.nvim_create_namespace('copilot_diagnostics'),
-          source.bufnr,
-          diagnostics
-        )
-      end,
+      selection = get_select_prompt_selection,
     },
     ReviewClear = {
       prompt = read_copilot_prompt('ReviewClear.md'),
@@ -383,23 +387,40 @@ require("CopilotChat").setup {
         vim.diagnostic.set(ns, source.bufnr, diagnostics)
       end
     },
-    Fix = read_copilot_prompt('Fix.md'),
-    Optimize = read_copilot_prompt('Optimize.md'),
-    OneLineComment = read_copilot_prompt('OneLineComment.md'),
-    OneParagraphComment = read_copilot_prompt('OneParagraphComment.md'),
-    Docs = read_copilot_prompt('Docs.md'),
-    Tests = read_copilot_prompt('Tests.md'),
+    Fix = {
+      prompt = read_copilot_prompt('Fix.md'),
+    },
+    Optimize = {
+      prompt = read_copilot_prompt('Optimize.md'),
+    },
+    OneLineComment = {
+      prompt = read_copilot_prompt('OneLineComment.md'),
+    },
+    OneParagraphComment = {
+      prompt = read_copilot_prompt('OneParagraphComment.md'),
+    },
+    Docs = {
+      prompt = read_copilot_prompt('Docs.md'),
+      selection = get_select_prompt_selection,
+    },
+    Tests = {
+      prompt = read_copilot_prompt('Tests.md'),
+      selection = get_select_prompt_selection,
+    },
     CodeGraph = {
       prompt = read_copilot_prompt('CodeGraph.md'),
       sticky = '/COPILOT_EXPLAIN',
+      selection = get_select_prompt_selection,
     },
     MermaidUml = {
       prompt = read_copilot_prompt('MermaidUml.md'),
       sticky = '/COPILOT_EXPLAIN',
+      selection = get_select_prompt_selection,
     },
     MermaidSequence = {
       prompt = read_copilot_prompt('MermaidSequence.md'),
       sticky = '/COPILOT_EXPLAIN',
+      selection = get_select_prompt_selection,
     },
     FixDiagnostic = {
       prompt = read_copilot_prompt('FixDiagnostic.md'),
