@@ -291,10 +291,17 @@ require("CopilotChat").setup {
   -- },
   -- NOTE: Chinese prompts
   prompts = {
-    Explain = '> /COPILOT_EXPLAIN\n\n' .. read_copilot_prompt('Explain.md'),
-    Ask = '> /COPILOT_EXPLAIN\n\n' .. read_copilot_prompt('Ask.md'),
+    Explain = {
+      prompt = read_copilot_prompt('Explain.md'),
+      sticky = '/COPILOT_EXPLAIN',
+    },
+    Ask = {
+      prompt = read_copilot_prompt('Ask.md'),
+      sticky = '/COPILOT_EXPLAIN',
+    },
     Review = {
-      prompt = '> /COPILOT_REVIEW\n\n' .. read_copilot_prompt('Review.md'),
+      prompt = read_copilot_prompt('Review.md'),
+      sticky = '/COPILOT_REVIEW',
       callback = function(response, source)
         local diagnostics = {}
         for line in response:gmatch('[^\r\n]+') do
@@ -336,7 +343,8 @@ require("CopilotChat").setup {
       end,
     },
     ReviewClear = {
-      prompt = '> /COPILOT_REVIEW\n\n' .. read_copilot_prompt('ReviewClear.md'),
+      prompt = read_copilot_prompt('ReviewClear.md'),
+      sticky = '/COPILOT_REVIEW',
       callback = function(response, source)
         local ns = vim.api.nvim_create_namespace('copilot_review')
         local diagnostics = {}
@@ -375,15 +383,24 @@ require("CopilotChat").setup {
         vim.diagnostic.set(ns, source.bufnr, diagnostics)
       end
     },
-    Fix = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('Fix.md'),
-    Optimize = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('Optimize.md'),
-    OneLineComment = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('OneLineComment.md'),
-    OneParagraphComment = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('OneParagraphComment.md'),
-    Docs = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('Docs.md'),
-    Tests = '> /COPILOT_GENERATE\n\n' .. read_copilot_prompt('Tests.md'),
-    CodeGraph = '> /COPILOT_EXPLAIN\n\n' .. read_copilot_prompt('CodeGraph.md'),
-    MermaidUml = '> /COPILOT_EXPLAIN\n\n' .. read_copilot_prompt('MermaidUml.md'),
-    MermaidSequence = '> /COPILOT_EXPLAIN\n\n' .. read_copilot_prompt('MermaidSequence.md'),
+    Fix = read_copilot_prompt('Fix.md'),
+    Optimize = read_copilot_prompt('Optimize.md'),
+    OneLineComment = read_copilot_prompt('OneLineComment.md'),
+    OneParagraphComment = read_copilot_prompt('OneParagraphComment.md'),
+    Docs = read_copilot_prompt('Docs.md'),
+    Tests = read_copilot_prompt('Tests.md'),
+    CodeGraph = {
+      prompt = read_copilot_prompt('CodeGraph.md'),
+      sticky = '/COPILOT_EXPLAIN',
+    },
+    MermaidUml = {
+      prompt = read_copilot_prompt('MermaidUml.md'),
+      sticky = '/COPILOT_EXPLAIN',
+    },
+    MermaidSequence = {
+      prompt = read_copilot_prompt('MermaidSequence.md'),
+      sticky = '/COPILOT_EXPLAIN',
+    },
     FixDiagnostic = {
       prompt = read_copilot_prompt('FixDiagnostic.md'),
       selection = select.diagnostics,
@@ -421,8 +438,10 @@ require("CopilotChat").setup {
       insert = '<C-s>',
     },
     toggle_sticky = {
-      detail = 'Makes line under cursor sticky or deletes sticky line.',
-      normal = 'gr',
+      normal = 'grr',
+    },
+    clear_stickies = {
+      normal = 'grx',
     },
     accept_diff = {
       normal = '<C-y>',
