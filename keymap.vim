@@ -200,10 +200,10 @@ nnoremap <leader>n <C-w><C-p>
 " Disable the default s key
 nnoremap s <nop>
 " split the screens to up (horizontal), down (horizontal), left (vertical), right (vertical)
-nnoremap si :set nosplitbelow<cr>:split<cr>:set splitbelow<cr>
-nnoremap sk :set splitbelow<cr>:split<cr>
-nnoremap sj :set nosplitright<cr>:vsplit<cr>:set splitright<cr>
-nnoremap sl :set splitright<cr>:vsplit<cr>
+nnoremap si :above split<cr>
+nnoremap sk :below split<cr>
+nnoremap sj :leftabove vsplit<cr>
+nnoremap sl :rightbelow vsplit<cr>
 
 nnoremap sI :wincmd K<cr>
 nnoremap sK :wincmd J<cr>
