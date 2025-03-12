@@ -1,6 +1,6 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "0236521ea582747b58869cb72f70ccfa967d2e89" },
-  "CopilotChat.nvim": { "branch": "main", "commit": "371620e550efda53fa97cf177448b46dbd100c63" },
+  "CopilotChat.nvim": { "branch": "main", "commit": "4012712aac2c892294fa12505cb4cc829f161f6c" },
   "FixCursorHold.nvim": { "branch": "master", "commit": "1900f89dc17c603eec29960f57c00bd9ae696495" },
   "LuaSnip": { "branch": "master", "commit": "1def35377854535bb3b0f4cc7a33c083cdb12571" },
   "NeoZoom.lua": { "branch": "main", "commit": "c97a0197548c1e9b559e4fa41ab3f7782c93e613" },
@@ -8,7 +8,7 @@
   "actions-preview.nvim": { "branch": "master", "commit": "9f52a01c374318e91337697ebed51c6fae57f8a4" },
   "alpha-nvim": { "branch": "main", "commit": "29074eeb869a6cbac9ce1fbbd04f5f5940311b32" },
   "antovim": { "branch": "master", "commit": "733d3d12ed034997fa05a3144979864fc0af738e" },
-  "avante.nvim": { "branch": "main", "commit": "de6e3657f18aa60949126af851a6898e62ce0b0e" },
+  "avante.nvim": { "branch": "main", "commit": "9e3e8d06a2ea88762a52a8afeff71e8dd3a9257a" },
   "baleia.nvim": { "branch": "main", "commit": "1b25eac3ac03659c3d3af75c7455e179e5f197f7" },
   "bigfile.nvim": { "branch": "main", "commit": "33eb067e3d7029ac77e081cfe7c45361887a311a" },
   "bioSyntax-vim": { "branch": "master", "commit": "85e3c82530d082c03ddfc8e23e487ff4e79958e8" },
