@@ -57,6 +57,13 @@ lvim.builtin.telescope.defaults.mappings.n = {
   },
   ["k"] = actions.move_selection_next,
   ["i"] = actions.move_selection_previous,
+  ['<ScrollWheelUp>'] = actions.move_selection_previous,
+  ['<ScrollWheelDown>'] = actions.move_selection_next,
+  ['<LeftMouse>'] = function()
+    vim.defer_fn(function()
+      vim.api.nvim_input('<cr>')
+    end, 100)
+  end,
   ["<C-q>"] = function(...)
     actions.smart_send_to_qflist(...)
     actions.open_qflist(...)
@@ -89,6 +96,13 @@ lvim.builtin.telescope.defaults.mappings.i = {
   --     vim.api.nvim_input('<cr>')
   --   end, 100)
   -- end,
+  ['<ScrollWheelUp>'] = actions.move_selection_previous,
+  ['<ScrollWheelDown>'] = actions.move_selection_next,
+  ['<LeftMouse>'] = function()
+    vim.defer_fn(function()
+      vim.api.nvim_input('<cr>')
+    end, 100)
+  end,
   ['<C-q>'] = function(...)
     actions.smart_send_to_qflist(...)
     actions.open_qflist(...)
