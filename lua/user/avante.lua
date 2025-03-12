@@ -51,6 +51,48 @@ M.opts = {
     -- works smoothly with `claude-3.7-sonnet`. `claude-3.5-sonnet` has not been tested yet.
     max_tokens = 8000,
   },
+  vendors = {
+    ["copilot-claude-3.7-sonnet-thought"] = {
+      __inherited_from = "copilot",
+      endpoint = "https://api.githubcopilot.com",
+      model = "claude-3.7-sonnet-thought",
+      proxy = nil,
+      allow_insecure = false,
+      timeout = 30000,
+      temperature = 0,
+      max_tokens = 8000,
+    },
+    ["copilot-claude-3.5-sonnet"] = {
+      __inherited_from = "copilot",
+      endpoint = "https://api.githubcopilot.com",
+      model = "claude-3.5-sonnet",
+      proxy = nil,
+      allow_insecure = false,
+      timeout = 30000,
+      temperature = 0,
+      max_tokens = 8000,
+    },
+    ["copilot-gpt-4o"] = {
+      __inherited_from = "copilot",
+      endpoint = "https://api.githubcopilot.com",
+      model = "gpt-4o",
+      proxy = nil,
+      allow_insecure = false,
+      timeout = 30000,
+      temperature = 0,
+      max_tokens = 8000,
+    },
+    ["copilot-o1"] = {
+      __inherited_from = "copilot",
+      endpoint = "https://api.githubcopilot.com",
+      model = "o1",
+      proxy = nil,
+      allow_insecure = false,
+      timeout = 30000,
+      temperature = 0,
+      max_tokens = 8000,
+    },
+  },
   behaviour = {
     auto_suggestions = false, -- Experimental stage
     auto_set_highlight_group = true,
@@ -91,6 +133,10 @@ M.opts = {
       apply_cursor = "a",
       switch_windows = "<Tab>",
       reverse_switch_windows = "<S-Tab>",
+      remove_file = "d",
+      add_file = "@",
+      close = { "q" },        -- default: close = { "<Esc>", "q" }
+      close_from_input = nil, -- e.g., { normal = "<Esc>", insert = "<C-d>" }
     },
     files = {
       add_current = "<leader>ac", -- Add current buffer to selected files
