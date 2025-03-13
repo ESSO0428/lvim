@@ -34,8 +34,15 @@ lvim.builtin.treesitter.ensure_installed       = {
 }
 lvim.builtin.treesitter.ignore_install         = { "regex" }
 lvim.builtin.treesitter.highlight              = {
-  enable = true,        -- false will disable the whole extension
-  disable = { "rust" }, -- list of language that will be disabled
+  enable = true, -- false will disable the whole extension
+  -- disable = { "rust" }, -- list of language that will be disabled
+  disable = function(_, bufnr)
+    local filetype = vim.bo[bufnr].filetype
+    local disable_filetypes = {
+      rust = true,
+    }
+    return disable_filetypes[filetype] or false
+  end,
   -- Required for spellcheck, some LaTex highlights and
   -- code block highlights that do not have ts grammar
   additional_vim_regex_highlighting = { 'org' },
@@ -80,6 +87,46 @@ lvim.builtin.treesitter.incremental_selection = {
     -- scope_incremental = '.',
   }
 }
+lvim.builtin.treesitter.context_commentstring = {
+  enable = true,
+  disable = function(_, bufnr)
+    local filetype = vim.bo[bufnr].filetype
+    local disable_filetypes = {
+      Avante = true,
+    }
+    return disable_filetypes[filetype] or false
+  end,
+}
+lvim.builtin.treesitter.indent = {
+  enable = true,
+  disable = function(_, bufnr)
+    local filetype = vim.bo[bufnr].filetype
+    local disable_filetypes = {
+      Avante = true,
+    }
+    return disable_filetypes[filetype] or false
+  end,
+}
+lvim.builtin.treesitter.illuminate = {
+  enable = true,
+  disable = function(_, bufnr)
+    local filetype = vim.bo[bufnr].filetype
+    local disable_filetypes = {
+      Avante = true,
+    }
+    return disable_filetypes[filetype] or false
+  end,
+}
+lvim.builtin.treesitter.query_linter = {
+  enable = true,
+  disable = function(_, bufnr)
+    local filetype = vim.bo[bufnr].filetype
+    local disable_filetypes = {
+      Avante = true,
+    }
+    return disable_filetypes[filetype] or false
+  end,
+}
 -- 启用基于 Treesitter 的代码格式化(=)
 -- 尊重 lvim 默認配置，故這裡註解以下
 --[[
@@ -95,9 +142,9 @@ vim.api.nvim_create_autocmd('FileType', {
   end
 })
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "Avante",
+  pattern = "*",
   callback = function()
-    vim.cmd("TSBufDisable context_commentstring indent incremental selection autotag illuminate query_linter")
+    require "rainbow-delimiters".disable(0)
   end
 })
 local ft = require('Comment.ft')
