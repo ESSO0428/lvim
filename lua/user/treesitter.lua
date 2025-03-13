@@ -142,7 +142,7 @@ vim.api.nvim_create_autocmd('FileType', {
   end
 })
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "*",
+  pattern = "Avante",
   callback = function()
     require "rainbow-delimiters".disable(0)
   end
