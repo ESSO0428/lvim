@@ -94,5 +94,11 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.bo[args.buf].syntax = 'on' -- only if additional legacy syntax is needed
   end
 })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "Avante",
+  callback = function()
+    vim.cmd("TSBufDisable context_commentstring indent incremental selection autotag illuminate query_linter")
+  end
+})
 local ft = require('Comment.ft')
 ft.set('mysql', '-- %s')
