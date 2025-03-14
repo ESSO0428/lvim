@@ -49,7 +49,7 @@ M.opts = {
     -- - Related issue: [#981](https://github.com/yetone/avante.nvim/issues/981)
     -- Copilot previously claimed **8000 tokens support**, and this setting
     -- works smoothly with `claude-3.7-sonnet`. `claude-3.5-sonnet` has not been tested yet.
-    max_tokens = 8000,
+    max_tokens = 32768,
   },
   vendors = {
     ["copilot-claude-3.7-sonnet-thought"] = {
@@ -60,7 +60,7 @@ M.opts = {
       allow_insecure = false,
       timeout = 30000,
       temperature = 0,
-      max_tokens = 8000,
+      max_tokens = 32768,
     },
     ["copilot-claude-3.5-sonnet"] = {
       __inherited_from = "copilot",
@@ -70,7 +70,7 @@ M.opts = {
       allow_insecure = false,
       timeout = 30000,
       temperature = 0,
-      max_tokens = 8000,
+      max_tokens = 32768,
     },
     ["copilot-gpt-4o"] = {
       __inherited_from = "copilot",
@@ -80,7 +80,7 @@ M.opts = {
       allow_insecure = false,
       timeout = 30000,
       temperature = 0,
-      max_tokens = 8000,
+      max_tokens = 64000,
     },
     ["copilot-o1"] = {
       __inherited_from = "copilot",
@@ -90,7 +90,7 @@ M.opts = {
       allow_insecure = false,
       timeout = 30000,
       temperature = 0,
-      max_tokens = 8000,
+      max_tokens = 20000,
     },
   },
   behaviour = {
