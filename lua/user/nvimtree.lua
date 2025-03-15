@@ -242,6 +242,32 @@ function NvimTreeFilePreview(...)
   file_preview.toggle_file_info(state)
 end
 
+function NvimTree_avante_add_files(...)
+  local node = require("nvim-tree.lib").get_node_at_cursor()
+  if not node then return end
+
+  local filepath = node.absolute_path
+  local relative_path = require('avante.utils').relative_path(filepath)
+
+  local sidebar = require('avante').get()
+
+  local open = sidebar:is_open()
+  -- ensure avante sidebar is open
+  if not open then
+    require('avante.api').ask()
+    sidebar = require('avante').get()
+  end
+
+  sidebar.file_selector:add_selected_file(relative_path)
+
+  -- remove nvim-tree buffer
+  if not open then
+    -- Get the current nvim-tree buffer name
+    local nvim_tree_buf_name = vim.fn.bufname('%')
+    sidebar.file_selector:remove_selected_file("NvimTree_1")
+  end
+end
+
 if lvim.builtin.nvimtree.active == false then
 else
   local function on_attach(bufnr)
@@ -284,6 +310,7 @@ else
 
     local useful_keys = {
       ["l"] = { api.node.open.edit, opts "Open" },
+      ["@"] = { NvimTree_avante_add_files, opts "Avante Add Files" },
       ["u"] = { float_termMore, opts "lvim_FloatTermMore" },
       ["o"] = { api.node.open.no_window_picker, opts "Open: No Window Picker" },
       ["<Tab>"] = { api.node.open.preview_no_picker, opts "Open Preview" },
