@@ -1,9 +1,13 @@
 Nvim.null_ls = {}
 Nvim.DiffTool = {}
+Nvim.Buffer_Manager = {}
 Nvim.Buffer_check = {}
 Nvim.Quickfix = {}
 Nvim.DAP = {}
 Nvim.DAPUI = {}
+
+
+Nvim.Buffer_Manager.scratch_opener = require "user.builtin.apps.scratch_opener"
 
 function Nvim.nvim_create_user_commands(command_names, command_function)
   for _, cmd_name in ipairs(command_names) do

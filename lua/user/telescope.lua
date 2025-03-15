@@ -379,6 +379,7 @@ lvim.builtin.which_key.mappings.s.l    = { "<cmd>Telescope harpoon marks<cr>", "
 lvim.keys.normal_mode["="]             = "<cmd>Telescope harpoon marks<cr>"
 lvim.keys.normal_mode["mf"]            = "<cmd>lua require('harpoon.mark').add_file()<cr>"
 lvim.keys.normal_mode["mw"]            = "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>"
+lvim.keys.normal_mode["me"]            = "<cmd>lua Nvim.Buffer_Manager.scratch_opener.open_scratch()<cr>"
 lvim.keys.normal_mode["_"]             = "<cmd>lua require('harpoon.ui').nav_prev()<cr>"
 lvim.keys.normal_mode["+"]             = "<cmd>lua require('harpoon.ui').nav_next()<cr>"
 
