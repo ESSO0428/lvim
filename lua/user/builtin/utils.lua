@@ -411,7 +411,7 @@ function Nvim.DiffTool.open_all_conflict_diff()
   end
 
   -- Open a new tab for the diff view.
-  vim.cmd("tabnew")
+  vim.cmd("tab split")
   vim.cmd("vsplit") -- Split THEIRS on the right.
   local win_theirs = vim.api.nvim_get_current_win()
   vim.api.nvim_win_set_buf(win_theirs, theirs_buf)
