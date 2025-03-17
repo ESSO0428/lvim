@@ -283,7 +283,172 @@ function Nvim.DiffTool.open_conflict_diff()
   end
 end
 
+--- Opens a full conflict resolution diff tool in Neovim.
+---
+--- This function scans the entire buffer for Git conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`)
+--- and splits the conflicting changes into separate buffers, displayed side by side in a diff view.
+---
+--- Features:
+--- - Detects all conflict regions across the entire buffer.
+--- - Removes Git conflict markers while preserving non-conflicting content.
+--- - Creates temporary buffers to store `OURS` and `THEIRS` versions.
+--- - Automatically enables `diffthis` for easier comparison.
+--- - Closes all buffers when any of them is closed.
+--- - Supports both 2-way (`OURS | THEIRS`) and 3-way (`OURS | BASE | THEIRS`) diffs.
+--- - Opens in a new tab to avoid disrupting the current workflow.
+---
+--- ---
+--- Usage:
+--- Call `:ConflictDiffAll` to resolve all conflicts in the file.
+---
+--- ---
+--- Result:
+--- ```
+--- | Original file  |
+--- |  <<<<< HEAD    |
+--- |  OURS content  |
+--- |  =======       |
+--- |  THEIRS content|
+--- |  >>>>>>> branch|
+--- |--------------- |
+--- | OURS    | THEIRS |
+--- | buf1    | buf2   |
+--- |---------|--------|
+--- ```
+---
+--- If `|||||||` markers are found, `BASE` content is extracted, enabling a 3-way diff:
+---
+--- ```
+--- | OURS    | BASE    | THEIRS |
+--- | buf1    | buf3    | buf2   |
+--- |---------|--------|--------|
+--- ```
+---
+--- ---
+--- Reference:
+--- This implementation is inspired by [whiteinge/diffconflicts](https://github.com/whiteinge/diffconflicts).
+function Nvim.DiffTool.open_all_conflict_diff()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  local ft = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
+
+  local ours_lines, theirs_lines = {}, {}
+  local base_lines = nil -- Default to `nil`, only used in `diff3` mode.
+  local inside_ours, inside_theirs, inside_base = false, false, false
+  local is_diff3 = false -- Default to `2-way` mode.
+
+  local in_conflict = false
+
+  -- Traverse the buffer, remove conflict markers, and extract OURS / THEIRS / BASE content.
+  for _, line in ipairs(lines) do
+    if line:match("^<<<<<<<") then
+      inside_ours, inside_theirs, inside_base = true, false, false -- Enter OURS section.
+      in_conflict = true
+    elseif line:match("^|||||||") then
+      inside_ours, inside_base = false, true -- Enter BASE section (diff3 mode).
+      is_diff3 = true
+      base_lines = base_lines or {}          -- Initialize BASE buffer.
+      in_conflict = true
+    elseif line:match("^=======") then
+      inside_ours, inside_theirs, inside_base = false, true, false  -- Switch to THEIRS section.
+    elseif line:match("^>>>>>>>") then
+      inside_ours, inside_theirs, inside_base = false, false, false -- End of conflict block.
+      in_conflict = true
+    else
+      if inside_ours then
+        table.insert(ours_lines, line)   -- Keep OURS content.
+      elseif inside_theirs then
+        table.insert(theirs_lines, line) -- Keep THEIRS content.
+      elseif inside_base then
+        table.insert(base_lines, line)   -- Keep BASE content.
+      else
+        -- Preserve non-conflicting content in all buffers.
+        table.insert(ours_lines, line)
+        table.insert(theirs_lines, line)
+        if base_lines then table.insert(base_lines, line) end
+      end
+    end
+  end
+  if not in_conflict then
+    print("No Git conflict found!")
+    return
+  end
+
+  -- Create OURS / THEIRS / BASE buffers.
+  local ours_buf = vim.api.nvim_create_buf(false, true)
+  local theirs_buf = vim.api.nvim_create_buf(false, true)
+  local base_buf = is_diff3 and vim.api.nvim_create_buf(false, true) or nil
+
+  -- Populate the buffers with extracted content.
+  vim.api.nvim_buf_set_lines(ours_buf, 0, -1, false, ours_lines)
+  vim.api.nvim_buf_set_lines(theirs_buf, 0, -1, false, theirs_lines)
+  if base_buf then
+    vim.api.nvim_buf_set_lines(base_buf, 0, -1, false, base_lines)
+  end
+
+  -- Set buffers as temporary.
+  for _, buf in ipairs({ ours_buf, theirs_buf, base_buf }) do
+    if buf then
+      vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+    end
+  end
+
+  -- Auto-close all buffers when one is closed.
+  local function close_all_buffers()
+    vim.schedule(function()
+      for _, buf in ipairs({ ours_buf, theirs_buf, base_buf }) do
+        if buf and vim.api.nvim_buf_is_valid(buf) then
+          vim.api.nvim_buf_delete(buf, { force = true })
+        end
+      end
+    end)
+  end
+
+  for _, buf in ipairs({ ours_buf, theirs_buf, base_buf }) do
+    if buf then
+      vim.api.nvim_create_autocmd("BufWinLeave", { buffer = buf, callback = close_all_buffers })
+    end
+  end
+
+  -- Open a new tab for the diff view.
+  vim.cmd("tabnew")
+  vim.cmd("vsplit") -- Split THEIRS on the right.
+  local win_theirs = vim.api.nvim_get_current_win()
+  vim.api.nvim_win_set_buf(win_theirs, theirs_buf)
+
+  if base_buf then
+    vim.cmd("split") -- Split BASE below.
+    local win_base = vim.api.nvim_get_current_win()
+    vim.api.nvim_win_set_buf(win_base, base_buf)
+    vim.api.nvim_set_option_value("winbar", "BASE", { win = win_base })
+  end
+
+  vim.cmd("wincmd h") -- Move back to the left window.
+  local win_ours = vim.api.nvim_get_current_win()
+  vim.api.nvim_win_set_buf(win_ours, ours_buf)
+
+  -- Set window titles.
+  vim.api.nvim_set_option_value("winbar", "OURS", { win = win_ours })
+  vim.api.nvim_set_option_value("winbar", "THEIRS", { win = win_theirs })
+
+  -- Enable `diffthis` for all buffers.
+  for _, win in ipairs({ win_ours, win_theirs, base_buf and vim.api.nvim_get_current_win() or nil }) do
+    if win then
+      vim.api.nvim_set_current_win(win)
+      if ft and ft ~= "" then
+        vim.cmd("setlocal filetype=" .. ft)
+      end
+      vim.cmd("diffthis")
+    end
+  end
+
+  -- Set focus back to OURS window.
+  vim.api.nvim_set_current_win(win_ours)
+  print("Opened conflict diff view for all conflicts (mode: " .. (is_diff3 and "diff3" or "2way") .. ").")
+end
+
 vim.api.nvim_create_user_command("ConflictDiff", Nvim.DiffTool.open_conflict_diff, {})
+vim.api.nvim_create_user_command("ConflictAllDiff", Nvim.DiffTool.open_all_conflict_diff, {})
 
 --- Check if filetype window exists
 --- @return boolean true if filetype window is found, false otherwise

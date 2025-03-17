@@ -326,3 +326,4 @@ lvim.builtin.which_key.mappings.d['le'] = {
 
 -- DiffTool
 lvim.keys.normal_mode["cv"] = { "<cmd>ConflictDiff<cr>", desc = "Compare Conflict" }
+lvim.keys.normal_mode["cp"] = { "<cmd>ConflictAllDiff<cr>", desc = "Compare Conflict (All Buffer)" }
