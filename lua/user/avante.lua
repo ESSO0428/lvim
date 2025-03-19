@@ -109,9 +109,10 @@ M.opts = {
     auto_set_keymaps = true,
     auto_apply_diff_after_generation = false,
     support_paste_from_clipboard = false,
-    minimize_diff = true,                -- Whether to remove unchanged lines when applying a code block
-    enable_token_counting = true,        -- Whether to enable token counting. Default to true.
-    enable_cursor_planning_mode = false, -- Whether to enable Cursor Planning Mode. Default to false.
+    minimize_diff = true,                        -- Whether to remove unchanged lines when applying a code block
+    enable_token_counting = true,                -- Whether to enable token counting. Default to true.
+    enable_cursor_planning_mode = false,         -- Whether to enable Cursor Planning Mode. Default to false.
+    enable_claude_text_editor_tool_mode = false, -- Whether to enable Claude Text Editor Tool Mode.
   },
   mappings = {
     --- @class AvanteConflictMappings
@@ -141,12 +142,14 @@ M.opts = {
     sidebar = {
       apply_all = "A",
       apply_cursor = "a",
+      retry_user_request = "r",
+      edit_user_request = "e",
       switch_windows = "<Tab>",
       reverse_switch_windows = "<S-Tab>",
       remove_file = "d",
       add_file = "@",
-      close = { "q" },        -- default: close = { "<Esc>", "q" }
-      close_from_input = nil, -- e.g., { normal = "<Esc>", insert = "<C-d>" }
+      close = { "q", "<leader>q" }, -- default: close = { "<Esc>", "q" }
+      close_from_input = nil,       -- e.g., { normal = "<Esc>", insert = "<C-d>" }
     },
     files = {
       add_current = "<leader>ac", -- Add current buffer to selected files
