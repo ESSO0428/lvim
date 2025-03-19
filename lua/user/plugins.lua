@@ -629,7 +629,8 @@ lvim.plugins = {
       "nvim-lua/plenary.nvim", -- Required for Job and HTTP requests
     },
     -- cmd = "MCPHub", -- lazily start the hub when `MCPHub` is called
-    build = "curl -LsSf https://astral.sh/uv/install.sh | sh && npm install -g shx && npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
+    build =
+    "command -v uvx >/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh && npm install -g shx && npm install -g mcp-hub@latest",         -- Installs required mcp-hub npm module
     config = function()
       -- Check if mcpservers.json exists, if not copy the template
       local mcpservers_path = vim.fn.expand("~/mcpservers.json")
