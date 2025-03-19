@@ -624,6 +624,51 @@ lvim.plugins = {
     }
   },
   {
+    "ravitemer/mcphub.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- Required for Job and HTTP requests
+    },
+    -- cmd = "MCPHub", -- lazily start the hub when `MCPHub` is called
+    build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
+    config = function()
+      -- Check if mcpservers.json exists, if not copy the template
+      local mcpservers_path = vim.fn.expand("~/mcpservers.json")
+      local template_path = vim.fn.expand("~/.config/lvim/templates/mcphubserver.json")
+
+      if vim.fn.filereadable(mcpservers_path) == 0 then
+        -- Check if template exists
+        if vim.fn.filereadable(template_path) == 1 then
+          -- Create directory if it doesn't exist
+          vim.fn.system("cp " .. template_path .. " " .. mcpservers_path)
+          vim.notify("Not Found " .. mcpservers_path .. " (For mcphub.nvim) Created mcpservers.json from template",
+            vim.log.levels.INFO)
+        else
+          vim.notify("Template file not found at: " .. template_path, vim.log.levels.WARN)
+        end
+      end
+      require("mcphub").setup({
+        -- Required options
+        port = 2222,              -- Port for MCP Hub server
+        config = mcpservers_path, -- Absolute path to config file
+
+        -- Optional options
+        on_ready = function(hub)
+          -- Called when hub is ready
+        end,
+        on_error = function(err)
+          -- Called on errors
+        end,
+        shutdown_delay = 0, -- Wait 0ms before shutting down server after last client exits
+        log = {
+          level = vim.log.levels.WARN,
+          to_file = false,
+          file_path = nil,
+          prefix = "MCPHub"
+        },
+      })
+    end
+  },
+  {
     "yetone/avante.nvim",
     event = "VeryLazy",
     version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
