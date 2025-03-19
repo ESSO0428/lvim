@@ -648,7 +648,7 @@ lvim.plugins = {
       end
       require("mcphub").setup({
         -- Required options
-        port = 2222,              -- Port for MCP Hub server
+        port = 2284,              -- Port for MCP Hub server
         config = mcpservers_path, -- Absolute path to config file
 
         -- Optional options
@@ -671,7 +671,7 @@ lvim.plugins = {
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
-    version = false,  -- Never set this value to "*"! Never!
+    version = false, -- Never set this value to "*"! Never!
     -- NOTE: If you can't activate the plugin, please check the following (same as CopilotChat.nvim):
     -- 1. Check if the $XDG_RUNTIME_DIR directory exists.
     -- 2. Verify the permissions of $XDG_RUNTIME_DIR:
