@@ -405,17 +405,17 @@ lvim.builtin.telescope.defaults.mappings.n["<c-w>"] = actions.move_selection_pre
 -- source : https://github.com/nvim-telescope/telescope.nvim/issues/623#issuecomment-792233601
 local previewers = require('telescope.previewers')
 local previewers_utils = require('telescope.previewers.utils')
-local ns_previewer = vim.api.nvim_create_namespace "telescope.previewers"
-local jump_to_line = function(self, bufnr, lnum)
-  pcall(vim.api.nvim_buf_clear_namespace, bufnr, ns_previewer, 0, -1)
-  if lnum and lnum > 0 then
-    pcall(vim.api.nvim_buf_add_highlight, bufnr, ns_previewer, "TelescopePreviewLine", lnum - 1, 0, -1)
-    pcall(vim.api.nvim_win_set_cursor, self.state.winid, { lnum, 0 })
-    vim.api.nvim_buf_call(bufnr, function()
-      vim.cmd "norm! zz"
-    end)
-  end
-end
+-- local ns_previewer = vim.api.nvim_create_namespace "telescope.previewers"
+-- local jump_to_line = function(self, bufnr, lnum)
+--   pcall(vim.api.nvim_buf_clear_namespace, bufnr, ns_previewer, 0, -1)
+--   if lnum and lnum > 0 then
+--     pcall(vim.api.nvim_buf_add_highlight, bufnr, ns_previewer, "TelescopePreviewLine", lnum - 1, 0, -1)
+--     pcall(vim.api.nvim_win_set_cursor, self.state.winid, { lnum, 0 })
+--     vim.api.nvim_buf_call(bufnr, function()
+--       vim.cmd "norm! zz"
+--     end)
+--   end
+-- end
 
 
 local max_size = 500000
@@ -434,6 +434,7 @@ local truncate_large_files = function(filepath, bufnr, opts)
   end)
 end
 
+--[[
 local buffer_previewer = previewers.new_buffer_previewer({
   define_preview = function(self, entry, _)
     -- If using :Telescope buffers, entry.bufnr is the source buffer
@@ -523,5 +524,6 @@ local buffer_previewer = previewers.new_buffer_previewer({
     end
   end,
 })
-lvim.builtin.telescope.defaults.buffer_previewer_maker = truncate_large_files
 lvim.builtin.telescope.pickers.buffers.previewer = buffer_previewer
+--]]
+lvim.builtin.telescope.defaults.buffer_previewer_maker = truncate_large_files
