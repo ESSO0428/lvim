@@ -89,6 +89,8 @@ local function close_selected_window(window_infos, prompt_bufnr)
     -- 可以加入其他錯誤處理邏輯，如果需要的話
   end
 end
+
+-- HACK: Avoid edgy.nvim layout conflict
 local edgy_config = require("user.edgy").config
 local restricted_fts = {}
 
