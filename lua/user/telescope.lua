@@ -405,6 +405,18 @@ lvim.builtin.telescope.defaults.mappings.n["<c-w>"] = actions.move_selection_pre
 -- source : https://github.com/nvim-telescope/telescope.nvim/issues/623#issuecomment-792233601
 local previewers = require('telescope.previewers')
 local previewers_utils = require('telescope.previewers.utils')
+local ns_previewer = vim.api.nvim_create_namespace "telescope.previewers"
+local jump_to_line = function(self, bufnr, lnum)
+  pcall(vim.api.nvim_buf_clear_namespace, bufnr, ns_previewer, 0, -1)
+  if lnum and lnum > 0 then
+    pcall(vim.api.nvim_buf_add_highlight, bufnr, ns_previewer, "TelescopePreviewLine", lnum - 1, 0, -1)
+    pcall(vim.api.nvim_win_set_cursor, self.state.winid, { lnum, 0 })
+    vim.api.nvim_buf_call(bufnr, function()
+      vim.cmd "norm! zz"
+    end)
+  end
+end
+
 
 local max_size = 500000
 local truncate_large_files = function(filepath, bufnr, opts)
@@ -417,8 +429,62 @@ local truncate_large_files = function(filepath, bufnr, opts)
       local cmd = { "head", "-c", max_size, filepath }
       previewers_utils.job_maker(cmd, bufnr, opts)
     else
+      -- previewers.buffer_previewer_maker(filepath, bufnr, opts)
       previewers.buffer_previewer_maker(filepath, bufnr, opts)
     end
   end)
 end
+local buffer_previewer = previewers.new_buffer_previewer({
+  define_preview = function(self, entry, _)
+    -- If using :Telescope buffers, entry.bufnr is the source buffer
+    if entry.bufnr and vim.api.nvim_buf_is_loaded(entry.bufnr) then
+      -- We need to read line by line to avoid loading the entire large buffer into memory
+      local line_count = vim.api.nvim_buf_line_count(entry.bufnr)
+      local truncated_lines = {}
+      local total_bytes = 0
+
+      for i = 1, line_count do
+        local line = vim.api.nvim_buf_get_lines(entry.bufnr, i - 1, i, false)[1]
+        if not line then
+          break
+        end
+
+        -- +1 means including the newline character in the byte count
+        local line_bytes = #line + 1
+
+        -- If adding this line exceeds max_size, only take the remaining bytes and add a notice
+        if total_bytes + line_bytes > max_size then
+          local remaining = max_size - total_bytes
+          if remaining > 1 then
+            -- Only include the usable portion of the line (subtract 1 for newline)
+            table.insert(truncated_lines, line:sub(1, remaining - 1))
+          end
+          table.insert(truncated_lines, "[... TRUNCATED ...]")
+          break
+        else
+          table.insert(truncated_lines, line)
+          total_bytes = total_bytes + line_bytes
+        end
+      end
+
+      -- Write the truncated content to the preview buffer (self.state.bufnr)
+      vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, truncated_lines)
+
+      local src_filetype = vim.api.nvim_get_option_value("filetype", { buf = entry.bufnr })
+      vim.api.nvim_set_option_value("filetype", src_filetype, { buf = self.state.bufnr })
+
+      pcall(function()
+        vim.api.nvim_command("setlocal foldmethod=expr")
+        vim.api.nvim_command("setlocal foldexpr=nvim_treesitter#foldexpr()")
+        vim.schedule(function()
+          jump_to_line(self, self.state.bufnr, entry.lnum)
+        end)
+      end)
+    else
+      -- In case the source buffer doesn't exist, use fallback, e.g. display file or show a notice
+      truncate_large_files(entry.filename, self.state.bufnr)
+    end
+  end,
+})
 lvim.builtin.telescope.defaults.buffer_previewer_maker = truncate_large_files
+lvim.builtin.telescope.pickers.buffers.previewer = buffer_previewer
