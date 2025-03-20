@@ -329,6 +329,9 @@ end
 --- This implementation is inspired by [whiteinge/diffconflicts](https://github.com/whiteinge/diffconflicts).
 function Nvim.DiffTool.open_all_conflict_diff()
   local bufnr = vim.api.nvim_get_current_buf()
+  local original_buf = bufnr
+  local original_win = vim.api.nvim_get_current_win()
+  local original_tab = vim.api.nvim_get_current_tabpage()
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   local ft = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
 
@@ -404,9 +407,62 @@ function Nvim.DiffTool.open_all_conflict_diff()
     end)
   end
 
+  vim.api.nvim_buf_set_keymap(ours_buf, "n", "g?", "", {
+    noremap = true,
+    silent = true,
+    callback = function()
+      Nvim.DiffTool.show_help_window()
+    end,
+  })
+  vim.api.nvim_buf_set_keymap(ours_buf, "n", "<c-y>", "", {
+    noremap = true,
+    silent = true,
+    callback = function()
+      local ours_content = vim.api.nvim_buf_get_lines(ours_buf, 0, -1, false)
+      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, ours_content)
+      vim.notify("Replaced buffer with OURS content.", vim.log.levels.INFO)
+    end,
+  })
   for _, buf in ipairs({ ours_buf, theirs_buf, base_buf }) do
     if buf then
-      vim.api.nvim_create_autocmd("BufWinLeave", { buffer = buf, callback = close_all_buffers })
+      vim.api.nvim_create_autocmd("BufWinLeave", {
+        buffer = buf,
+        callback = function()
+          close_all_buffers()
+          vim.defer_fn(function()
+            -- Make sure the original buffer still exists
+            if not vim.api.nvim_buf_is_valid(original_buf) then return end
+
+            -- Try to jump back to the original window ID (if it's still valid)
+            if vim.api.nvim_win_is_valid(original_win) then
+              -- Check if the original tab is correct, and jump to it
+              local current_tab = vim.api.nvim_get_current_tabpage()
+              if current_tab ~= original_tab then
+                vim.cmd("tabnext " .. vim.api.nvim_tabpage_get_number(original_tab))
+              end
+              vim.api.nvim_set_current_win(original_win)
+              vim.api.nvim_win_set_buf(original_win, original_buf)
+              return
+            end
+
+            -- If the original window ID doesn't exist, try to find the buffer from the tab
+            if vim.api.nvim_tabpage_is_valid(original_tab) then
+              local found = false
+              for _, win in ipairs(vim.api.nvim_tabpage_list_wins(original_tab)) do
+                if vim.api.nvim_win_get_buf(win) == original_buf then
+                  vim.api.nvim_set_current_win(win)
+                  found = true
+                  break
+                end
+              end
+
+              if found then
+                vim.cmd("tabnext " .. vim.api.nvim_tabpage_get_number(original_tab))
+              end
+            end
+          end, 10) -- 10ms delay to ensure other `BufWinLeave` events complete first
+        end,
+      })
     end
   end
 
@@ -428,7 +484,7 @@ function Nvim.DiffTool.open_all_conflict_diff()
   vim.api.nvim_win_set_buf(win_ours, ours_buf)
 
   -- Set window titles.
-  vim.api.nvim_set_option_value("winbar", "OURS", { win = win_ours })
+  vim.api.nvim_set_option_value("winbar", "OURS (Apply: <c-y>, Help: g?)", { win = win_ours })
   vim.api.nvim_set_option_value("winbar", "THEIRS", { win = win_theirs })
 
   -- Enable `diffthis` for all buffers.
@@ -445,6 +501,43 @@ function Nvim.DiffTool.open_all_conflict_diff()
   -- Set focus back to OURS window.
   vim.api.nvim_set_current_win(win_ours)
   print("Opened conflict diff view for all conflicts (mode: " .. (is_diff3 and "diff3" or "2way") .. ").")
+end
+
+function Nvim.DiffTool.show_help_window()
+  local help_buf = vim.api.nvim_create_buf(false, true)
+  local help_text = {
+    "Git Conflict Resolution Help",
+    "----------------------------",
+    "g?   - Show this help window",
+    "<c-y> - Apply OURS content to original file",
+    "do   - Obtain (get) changes from the other side",
+    "dp   - Put (apply) changes to the other side",
+    "<Esc> - Close this window",
+  }
+
+  vim.api.nvim_buf_set_lines(help_buf, 0, -1, false, help_text)
+  vim.bo[help_buf].modifiable = false
+
+  local help_width = 50
+  local help_height = #help_text + 2
+  local row = math.floor((vim.o.lines - help_height) / 2)
+  local col = math.floor((vim.o.columns - help_width) / 2)
+
+  local help_opts = {
+    style = "minimal",
+    relative = "editor",
+    width = help_width,
+    height = help_height,
+    row = row,
+    col = col,
+    border = "rounded",
+  }
+
+  local help_win = vim.api.nvim_open_win(help_buf, true, help_opts)
+
+  vim.keymap.set("n", "<Esc>", function()
+    vim.api.nvim_win_close(help_win, true)
+  end, { noremap = true, silent = true, buffer = help_buf })
 end
 
 vim.api.nvim_create_user_command("ConflictDiff", Nvim.DiffTool.open_conflict_diff, {})
