@@ -1,3 +1,15 @@
+local ns_previewer = vim.api.nvim_create_namespace "telescope.previewers"
+local jump_to_line = function(self, bufnr, lnum)
+  pcall(vim.api.nvim_buf_clear_namespace, bufnr, ns_previewer, 0, -1)
+  if lnum and lnum > 0 then
+    pcall(vim.api.nvim_buf_add_highlight, bufnr, ns_previewer, "TelescopePreviewLine", lnum - 1, 0, -1)
+    pcall(vim.api.nvim_win_set_cursor, self.state.winid, { lnum, 0 })
+    vim.api.nvim_buf_call(bufnr, function()
+      vim.cmd "norm! zz"
+    end)
+  end
+end
+
 local function open_float_window()
   -- 獲取當前緩衝區的檔案路徑
   local filepath = vim.fn.expand('%:p')
@@ -77,6 +89,27 @@ local function close_selected_window(window_infos, prompt_bufnr)
     -- 可以加入其他錯誤處理邏輯，如果需要的話
   end
 end
+local edgy_config = require("user.edgy").config
+local restricted_fts = {}
+
+local regions = { "bottom", "left", "right", "top" }
+
+-- 收集所有 ft
+for _, region in ipairs(regions) do
+  if edgy_config[region] and type(edgy_config[region]) == "table" then
+    for _, obj in ipairs(edgy_config[region]) do
+      if obj.ft then
+        table.insert(restricted_fts, obj.ft)
+      end
+    end
+  end
+end
+
+-- **優化：改用 table 來存儲 ft，提升查找速度**
+local restricted_fts_set = {}
+for _, ft in ipairs(restricted_fts) do
+  restricted_fts_set[ft] = true
+end
 
 local function list_and_select_windows_in_tab()
   local window_infos = {}
@@ -86,6 +119,8 @@ local function list_and_select_windows_in_tab()
     local buf = vim.api.nvim_win_get_buf(win)
     local name = vim.fn.expand('#' .. buf .. ':t')     -- 获取文件名
     local filepath = vim.fn.expand('#' .. buf .. ':p') -- 获取文件路径
+    local lnum = vim.api.nvim_win_get_cursor(win)[1]
+    local src_filetype = vim.api.nvim_get_option_value("filetype", { buf = buf })
 
     if name == '' then
       name = '[No Name]'
@@ -96,7 +131,9 @@ local function list_and_select_windows_in_tab()
 
     local is_float = vim.api.nvim_win_get_config(win).relative ~= ''
     local prefix = is_float and "[Float]: " or "[Normal]: "
-    table.insert(window_infos, { win = win, name = prefix .. name, bufnr = buf })
+    if not restricted_fts_set[src_filetype] then
+      table.insert(window_infos, { win = win, name = prefix .. name, bufnr = buf, lnum = lnum })
+    end
   end
 
   -- 对 window_infos 进行排序
@@ -118,6 +155,7 @@ local function list_and_select_windows_in_tab()
           display = entry.name,
           ordinal = entry.name,
           bufnr = entry.bufnr,
+          lnum = entry.lnum,
         }
       end,
     }),
@@ -145,6 +183,9 @@ local function list_and_select_windows_in_tab()
         pcall(function()
           vim.api.nvim_command('setlocal foldmethod=expr')
           vim.api.nvim_command('setlocal foldexpr=nvim_treesitter#foldexpr()')
+          vim.schedule(function()
+            jump_to_line(self, self.state.bufnr, entry.lnum)
+          end)
         end)
       end,
     }),

@@ -429,18 +429,19 @@ local truncate_large_files = function(filepath, bufnr, opts)
       local cmd = { "head", "-c", max_size, filepath }
       previewers_utils.job_maker(cmd, bufnr, opts)
     else
-      -- previewers.buffer_previewer_maker(filepath, bufnr, opts)
       previewers.buffer_previewer_maker(filepath, bufnr, opts)
     end
   end)
 end
+
 local buffer_previewer = previewers.new_buffer_previewer({
   define_preview = function(self, entry, _)
     -- If using :Telescope buffers, entry.bufnr is the source buffer
+    local truncated_lines = {}
+    local src_filetype = ""
     if entry.bufnr and vim.api.nvim_buf_is_loaded(entry.bufnr) then
       -- We need to read line by line to avoid loading the entire large buffer into memory
       local line_count = vim.api.nvim_buf_line_count(entry.bufnr)
-      local truncated_lines = {}
       local total_bytes = 0
 
       for i = 1, line_count do
@@ -470,9 +471,8 @@ local buffer_previewer = previewers.new_buffer_previewer({
       -- Write the truncated content to the preview buffer (self.state.bufnr)
       vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, truncated_lines)
 
-      local src_filetype = vim.api.nvim_get_option_value("filetype", { buf = entry.bufnr })
+      src_filetype = vim.api.nvim_get_option_value("filetype", { buf = entry.bufnr })
       vim.api.nvim_set_option_value("filetype", src_filetype, { buf = self.state.bufnr })
-
       pcall(function()
         vim.api.nvim_command("setlocal foldmethod=expr")
         vim.api.nvim_command("setlocal foldexpr=nvim_treesitter#foldexpr()")
@@ -482,7 +482,44 @@ local buffer_previewer = previewers.new_buffer_previewer({
       end)
     else
       -- In case the source buffer doesn't exist, use fallback, e.g. display file or show a notice
-      truncate_large_files(entry.filename, self.state.bufnr)
+      -- truncate_large_files(entry.filename, self.state.bufnr)
+      local filepath = entry.filename
+      filepath = vim.fn.expand(filepath)
+
+      if filepath == "" or not vim.loop.fs_stat(filepath) then
+        table.insert(truncated_lines, "[File Not Found]")
+      else
+        src_filetype = vim.filetype.match({ filename = filepath })
+        vim.loop.fs_stat(filepath, function(_, stat)
+          if not stat then
+            table.insert(truncated_lines, "[File Not Found]")
+          elseif stat.size > max_size then
+            -- **File is too large, only reading `max_size` bytes**
+            local cmd = { "head", "-c", tostring(max_size), filepath }
+            local handle = io.popen(table.concat(cmd, " "))
+            local content = handle:read("*a")
+            handle:close()
+
+            -- Process content
+            for line in content:gmatch("[^\r\n]+") do
+              table.insert(truncated_lines, line)
+            end
+            table.insert(truncated_lines, "[... TRUNCATED ...]")
+          else
+            -- **File is smaller than `max_size`, reading entire content**
+            for line in io.lines(filepath) do
+              table.insert(truncated_lines, line)
+            end
+          end
+
+          -- **Write to buffer**
+          vim.schedule(function()
+            vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, truncated_lines)
+            vim.api.nvim_set_option_value("filetype", src_filetype, { buf = self.state.bufnr })
+            jump_to_line(self, self.state.bufnr, entry.lnum)
+          end)
+        end)
+      end
     end
   end,
 })
