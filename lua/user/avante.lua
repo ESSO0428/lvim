@@ -1,6 +1,8 @@
 local M = {}
 
 -- NOTE: Avante ColorScheme
+-- AvanteSidebarWinSeparator can be linked to FloatBorder or NormalFloat (defaults to NormalFloat).
+vim.cmd "au ColorScheme * hi link AvanteSidebarWinSeparator WinSeparator"
 vim.cmd "au ColorScheme * hi link AvanteSuggestion Comment"
 vim.cmd "au ColorScheme * hi link AvanteAnnotation Comment"
 vim.cmd "au ColorScheme * hi link AvantePopupHint NormalFloat"
