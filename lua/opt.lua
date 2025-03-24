@@ -137,7 +137,11 @@ local host = vim.g.host
 ---@param host string
 function GetServerHostName(host)
   local ip = nil
-  local command = io.popen("hostname -I | awk '{print $1}'")
+
+  -- NOTE: 棄用 `hostname -I`，因為某些 Linux 發行版 (如 Arch) 未支援此參數
+  -- 改用 ip -json 搭配 grep 抓取本機 IP，更具相容性
+  -- local command = io.popen("hostname -I 2> /dev/null | awk '{print $1}'")
+  local command = io.popen([[ip -json route get 8.8.8.8 | grep -oP '"prefsrc":\s*"\K[0-9.]+' 2> /dev/null]])
   ip = command:read("*line")
   command:close()
 
