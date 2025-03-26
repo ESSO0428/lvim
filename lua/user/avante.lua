@@ -12,16 +12,6 @@ vim.cmd "au ColorScheme * hi link AvanteConflictCurrent DiffText"
 vim.cmd "au ColorScheme * hi AvanteConflictIncomingLabel guibg=#1a3c3e"
 vim.cmd "au ColorScheme * hi link AvanteConflictIncoming DiffAdd"
 
--- NOTE: `AvanteCacheReset` resolves issues
--- where Avante is unusable
--- and throws `Make sure to build avante (missing avante_templates)`.
--- It:
---  1. Reinitializes the avante.path module
---  2. Creates cache files and history records
---  3. Loads `avante_templates`
--- Reloading this workflow may correct Avante.
-vim.api.nvim_create_user_command('AvanteCacheReset', function() require("avante.path").setup() end, {})
-
 -- NOTE: Avante config
 local Utils = require("avante.utils")
 require('avante.config').support_paste_image = function()
