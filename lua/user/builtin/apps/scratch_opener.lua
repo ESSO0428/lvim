@@ -100,7 +100,6 @@ function M.open_files(win)
   local buf = vim.api.nvim_win_get_buf(win)
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 
-  local files_to_open = {}
   -- Open each file in the background
   for _, line in ipairs(lines) do
     line = line:gsub("%s+$", "")
@@ -108,21 +107,10 @@ function M.open_files(win)
       local file = vim.fn.fnameescape(line)
       if vim.loop.fs_stat(file) then
         vim.cmd("silent! badd " .. file)
-        table.insert(files_to_open, file)
       else
         vim.notify("File not found: " .. file, vim.log.levels.WARN)
       end
     end
-  end
-  for _, file in ipairs(files_to_open) do
-    vim.cmd("silent! buffer " .. file)
-    vim.wo.number = vim.opt_global.number:get()
-    vim.wo.relativenumber = vim.opt_global.relativenumber:get()
-    vim.wo.cursorline = vim.opt_global.cursorline:get()
-    vim.opt.signcolumn = vim.opt_global.signcolumn:get()
-    vim.wo.foldcolumn = vim.opt_global.foldcolumn:get()
-    vim.wo.wrap = vim.opt_global.wrap:get()
-    pcall(function() require('statuscol').setup() end)
   end
 
   -- Close floating window
