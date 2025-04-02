@@ -23,6 +23,25 @@ require('avante.config').support_paste_image = function()
   end
 end
 
+local api_key = os.getenv("OPENAI_API_KEY")
+
+local function has_command(cmd)
+  local handle = io.popen("command -v " .. cmd .. " 2>/dev/null")
+  local result = handle:read("*a")
+  handle:close()
+  return result ~= ""
+end
+
+local rag_enabled = true
+
+if not api_key or api_key == "" then
+  vim.notify("[RAG] OPENAI_API_KEY not found. RAG service disabled.", vim.log.levels.WARN)
+  rag_enabled = false
+elseif not has_command("docker") then
+  vim.notify("[RAG] Docker command not found. RAG service disabled.", vim.log.levels.WARN)
+  rag_enabled = false
+end
+
 ---@class avante.Config
 M.opts = {
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
@@ -42,6 +61,14 @@ M.opts = {
     -- Copilot previously claimed **8000 tokens support**, and this setting
     -- works smoothly with `claude-3.7-sonnet`. `claude-3.5-sonnet` has not been tested yet.
     max_tokens = 32768,
+  },
+  rag_service = {
+    enabled = rag_enabled,                  -- Enables the RAG service
+    host_mount = os.getenv("HOME"),         -- Host mount path for the rag service
+    provider = "openai",                    -- The provider to use for RAG service (e.g. openai or ollama)
+    llm_model = "",                         -- The LLM model to use for RAG service
+    embed_model = "",                       -- The embedding model to use for RAG service
+    endpoint = "https://api.openai.com/v1", -- The API endpoint for RAG service
   },
   vendors = {
     ["copilot-claude-3.7-sonnet-thought"] = {
