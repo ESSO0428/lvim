@@ -26,24 +26,45 @@ function M.find_and_edit_terminal_settings()
   if user_dir then
     -- Determine the location of the Microsoft.WindowsTerminalPreview directory
     local base_dir = string.format("/mnt/c/Users/%s/AppData/Local/Packages/", user_dir)
-    local terminal_dir_handle = io.popen("ls -d " ..
-    base_dir .. "Microsoft.WindowsTerminalPreview*/LocalState 2>/dev/null")
+    local terminal_dirs_handle = io.popen("ls -d " ..
+      base_dir .. "Microsoft.WindowsTerminal*/LocalState 2>/dev/null")
 
-    if not terminal_dir_handle then
+    if not terminal_dirs_handle then
       print("Failed to locate the Windows Terminal directory.")
       return
     end
 
-    local terminal_dir = terminal_dir_handle:read("*a"):gsub("\n", "")
-    terminal_dir_handle:close()
+    local results = {}
+    for line in terminal_dirs_handle:lines() do
+      table.insert(results, line)
+    end
+    terminal_dirs_handle:close()
 
-    if terminal_dir == "" then
-      print("Microsoft.WindowsTerminalPreview directory not found.")
+    if results == "" then
+      print("Microsoft.WindowsTerminal* directory not found.")
       return
     end
 
+    local input_message = ""
+    local input_message_table = {}
+    for i, dir in ipairs(results) do
+      table.insert(input_message_table, string.format("%d. %s/settings.json", i, dir))
+    end
+    input_message = table.concat(input_message_table, "\n")
+
     -- Construct the full path to the settings.json file
-    local settings_path = terminal_dir .. "/settings.json"
+    local choice = 0
+    if #results == 1 then
+      choice = 1
+    else
+      choice = tonumber(vim.fn.input("Select want to open settings.json:\n" .. input_message .. "\nInput number: "))
+      if not choice or choice < 1 or choice > #results then
+        print("\nInvalid Number")
+        return
+      end
+    end
+    local selected_dir = results[choice]
+    local settings_path = selected_dir .. "/settings.json"
 
     -- 检查文件是否存在
     -- Check if the file exists
