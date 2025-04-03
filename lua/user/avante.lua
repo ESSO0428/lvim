@@ -72,6 +72,7 @@ M.opts = {
     -- works smoothly with `claude-3.7-sonnet`. `claude-3.5-sonnet` has not been tested yet.
     max_tokens = 32768,
   },
+  disabled_tools = {},
   rag_service = {
     enabled = rag_enabled,                  -- Enables the RAG service
     host_mount = os.getenv("HOME"),         -- Host mount path for the rag service
@@ -234,6 +235,24 @@ if require("mcphub").get_hub_instance() ~= nil then
     return {
       require("mcphub.extensions.avante").mcp_tool(),
     }
+  end
+  -- add disabled tools in table and unique
+  local tools_to_disable = {
+    "list_files",
+    "search_files",
+    "read_file",
+    "create_file",
+    "rename_file",
+    "delete_file",
+    "create_dir",
+    "rename_dir",
+    "delete_dir",
+    "bash",
+  }
+  for _, tool in ipairs(tools_to_disable) do
+    if not vim.tbl_contains(M.opts.disabled_tools, tool) then
+      table.insert(M.opts.disabled_tools, tool)
+    end
   end
 end
 
