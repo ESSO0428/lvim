@@ -12,7 +12,7 @@ hydra({
   config = {
     invoke_on_body = true,
     color = "pink",
-    hint = { border = "rounded" },
+    hint = { float_opts = {} },
   },
   body = "<leader>hq",
   heads = {
@@ -32,7 +32,7 @@ hydra({
   config = {
     invoke_on_body = true,
     color = "pink",
-    hint = { border = "rounded" },
+    hint = { float_opts = {} },
   },
   body = "<leader>hd",
   heads = {
@@ -53,7 +53,7 @@ hydra({
   config = {
     invoke_on_body = true,
     color = "pink",
-    hint = { border = "rounded" },
+    hint = { float_opts = {} },
   },
   body = "<leader>ho",
   heads = {
@@ -73,7 +73,7 @@ hydra({
   config = {
     invoke_on_body = true,
     color = "pink",
-    hint = { border = "rounded" },
+    hint = { float_opts = {} },
   },
   body = "<leader>hm",
   heads = {
@@ -93,7 +93,7 @@ hydra({
   config = {
     invoke_on_body = true,
     color = "pink",
-    hint = { border = "rounded" },
+    hint = { float_opts = {} },
   },
   body = "<leader>hs",
   heads = {
