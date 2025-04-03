@@ -509,7 +509,7 @@ lvim.plugins = {
     dependencies = {
       "echasnovski/mini.comment",
       -- "akinsho/toggleterm.nvim", -- alternative repl provider
-      "anuvyklack/hydra.nvim",
+      "nvimtools/hydra.nvim",
     },
     event = "VeryLazy",
     config = function()
