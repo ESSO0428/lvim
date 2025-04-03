@@ -32,6 +32,13 @@ local function has_command(cmd)
   return result ~= ""
 end
 
+local function is_docker_running()
+  local handle = io.popen("docker info 2>&1")
+  local result = handle:read("*a")
+  handle:close()
+  return not result:match("Cannot connect to the Docker daemon")
+end
+
 local rag_enabled = true
 
 if not api_key or api_key == "" then
@@ -39,6 +46,9 @@ if not api_key or api_key == "" then
   rag_enabled = false
 elseif not has_command("docker") then
   vim.notify("[RAG] Docker command not found. RAG service disabled.", vim.log.levels.WARN)
+  rag_enabled = false
+elseif not is_docker_running() then
+  vim.notify("[RAG] Docker daemon is not running. RAG service disabled.", vim.log.levels.WARN)
   rag_enabled = false
 end
 
@@ -112,16 +122,6 @@ M.opts = {
       max_tokens = 20000,
     },
   },
-  system_prompt = function()
-    local hub = require("mcphub").get_hub_instance()
-    return hub:get_active_servers_prompt()
-  end,
-  -- The custom_tools type supports both a list and a function that returns a list. Using a function here prevents requiring mcphub before it's loaded
-  custom_tools = function()
-    return {
-      require("mcphub.extensions.avante").mcp_tool(),
-    }
-  end,
   behaviour = {
     auto_suggestions = false, -- Experimental stage
     auto_set_highlight_group = true,
@@ -224,5 +224,17 @@ M.opts = {
     throttle = 600,
   },
 }
+if require("mcphub").get_hub_instance() ~= nil then
+  -- The system_prompt type supports both a string and a function that returns a string. Using a function here allows dynamically updating the prompt with mcphub
+  M.opts.system_prompt = function()
+    local hub = require("mcphub").get_hub_instance()
+    return hub:get_active_servers_prompt()
+  end
+  M.opts.custom_tools = function()
+    return {
+      require("mcphub.extensions.avante").mcp_tool(),
+    }
+  end
+end
 
 return M

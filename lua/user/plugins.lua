@@ -630,16 +630,21 @@ lvim.plugins = {
     },
     -- cmd = "MCPHub", -- lazily start the hub when `MCPHub` is called
     build =
-    "command -v uvx >/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh && npm install -g shx && npm install -g mcp-hub@latest",         -- Installs required mcp-hub npm module
+    "command -v uvx >/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh && npm install -g shx && npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
     config = function()
       -- Check if mcpservers.json exists, if not copy the template
-      local mcpservers_path = vim.fn.expand("~/mcpservers.json")
-      local template_path = vim.fn.expand("~/.config/lvim/templates/mcphubserver.json")
+      local mcpservers_path = vim.fn.expand("~/.config/mcphub/servers.json")
+      local mcpservers_dir = vim.fn.fnamemodify(mcpservers_path, ":h")
+
+      local template_path = vim.fn.expand("~/.config/lvim/templates/mcphub/servers.json")
 
       if vim.fn.filereadable(mcpservers_path) == 0 then
         -- Check if template exists
         if vim.fn.filereadable(template_path) == 1 then
           -- Create directory if it doesn't exist
+          if vim.fn.isdirectory(mcpservers_dir) == 0 then
+            vim.fn.mkdir(mcpservers_dir, "p")
+          end
           vim.fn.system("cp " .. template_path .. " " .. mcpservers_path)
           vim.notify("Not Found " .. mcpservers_path .. " (For mcphub.nvim) Created mcpservers.json from template",
             vim.log.levels.INFO)
