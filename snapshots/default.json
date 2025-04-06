@@ -2,6 +2,9 @@
   "bufferline.nvim": {
     "commit": "261a72b"
   },
+  "none-ls.nvim": {
+    "commit": "6377e77"
+  },
   "nvim-navic": {
     "commit": "27124a7"
   },
