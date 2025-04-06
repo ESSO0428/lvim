@@ -49,6 +49,8 @@ vim.wo.signcolumn = "auto:3-6"
 -- vim.opt.inccommand = ""
 vim.opt.inccommand = "split"
 vim.opt.spell = true
+-- spell options noplainbuffer (default) add camel
+vim.opt.spelloptions:append "camel"
 
 vim.opt.list = false
 vim.opt.listchars:append "space:·"

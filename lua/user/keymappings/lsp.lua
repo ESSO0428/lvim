@@ -8,7 +8,8 @@ function lsp_or_jupyter_hover()
   if is_jupyter_attached then
     vim.cmd('JupyterInspect')
   else
-    vim.lsp.buf.hover()
+    -- Add border = 'rounded' to hover for neovim 0.11
+    vim.lsp.buf.hover({ border = 'rounded' })
   end
 end
 

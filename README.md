@@ -87,8 +87,8 @@ Run "nvim -V1 -v" for more info
      2. Install nodejs, npm for lunarvim (suggest use nvm)
      3. Install `cargo` for lunarvim
      4. Install `fd` and `rg` for lunarvim (can use cargo, npm, conda)
-  4. Install `lunarvim`
-  5. git `clone this repo` to `~/.config/`
+  3. Install `lunarvim`
+  4. git `clone this repo` to `~/.config/`
      - And sync the config for sync new update to your worker machine
 
 ## Some notice
