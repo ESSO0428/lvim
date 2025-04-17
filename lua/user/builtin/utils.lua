@@ -587,7 +587,7 @@ function Nvim.DiffTool.show_help_window()
     "Git Conflict Resolution Help",
     "----------------------------",
     "g?   - Show this help window",
-    "<c-y> - Apply OURS content to original file",
+    "<c-y> - Apply OURS/THEIRS/BASE content to original file",
     "do   - Obtain (get) changes from the other side",
     "dp   - Put (apply) changes to the other side",
     "<Esc> - Close this window",
