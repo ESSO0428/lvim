@@ -412,6 +412,20 @@ function Nvim.DiffTool.open_all_conflict_diff()
           vim.notify("Replaced buffer with " .. info.role .. " content.", vim.log.levels.INFO)
         end,
       })
+      vim.api.nvim_buf_set_keymap(info.buf, "n", "do", "", {
+        noremap = true,
+        silent = true,
+        callback = function()
+          Nvim.DiffTool.smart_diffaccept("get")
+        end,
+      })
+      vim.api.nvim_buf_set_keymap(info.buf, "n", "dp", "", {
+        noremap = true,
+        silent = true,
+        callback = function()
+          Nvim.DiffTool.smart_diffaccept("put")
+        end,
+      })
     end
   end
 
@@ -476,6 +490,8 @@ function Nvim.DiffTool.open_all_conflict_diff()
   vim.api.nvim_win_set_buf(win_theirs, theirs_buf)
 
   local help_hint = "(Apply: <c-y>, Help: g?)"
+  local tabpage = vim.api.nvim_win_get_tabpage(win_theirs)
+
   local win_base = nil
   if base_buf then
     vim.cmd("split") -- Split BASE below.
@@ -483,6 +499,7 @@ function Nvim.DiffTool.open_all_conflict_diff()
     vim.api.nvim_win_set_buf(win_base, base_buf)
     -- Set window titles.
     vim.api.nvim_set_option_value("winbar", "BASE " .. help_hint, { win = win_base })
+    vim.api.nvim_buf_set_name(base_buf, "difftool://" .. tabpage .. "/BASE")
   end
 
   vim.cmd("wincmd h") -- Move back to the left window.
@@ -492,6 +509,8 @@ function Nvim.DiffTool.open_all_conflict_diff()
   -- Set window titles.
   vim.api.nvim_set_option_value("winbar", "OURS " .. help_hint, { win = win_ours })
   vim.api.nvim_set_option_value("winbar", "THEIRS " .. help_hint, { win = win_theirs })
+  vim.api.nvim_buf_set_name(ours_buf, "difftool://" .. tabpage .. "/OURS")
+  vim.api.nvim_buf_set_name(theirs_buf, "difftool://" .. tabpage .. "/THEIRS")
 
   local diff_wins = { win_ours, win_theirs }
   if win_base then
@@ -511,6 +530,55 @@ function Nvim.DiffTool.open_all_conflict_diff()
   -- Set focus back to OURS window.
   vim.api.nvim_set_current_win(win_ours)
   print("Opened conflict diff view for all conflicts (mode: " .. (is_diff3 and "diff3" or "2way") .. ").")
+end
+
+function Nvim.DiffTool.smart_diffaccept(mode)
+  if mode ~= "get" and mode ~= "put" then
+    vim.notify("Invalid mode for smart_diffaccept: " .. tostring(mode), vim.log.levels.ERROR)
+    return
+  end
+
+  local all_windows = vim.api.nvim_tabpage_list_wins(0)
+  local diff_windows = {}
+  for _, win in ipairs(all_windows) do
+    if vim.api.nvim_get_option_value("diff", { win = win }) then
+      table.insert(diff_windows, win)
+    end
+  end
+  if #diff_windows == 2 then
+    -- 2-way diff, normal behavior
+    vim.cmd("diff" .. mode)
+  elseif #diff_windows == 3 then
+    -- 3-way diff, let user pick
+    local target_bufs = {}
+    local target_buf_names = {}
+    local current_win = vim.api.nvim_get_current_win()
+    for _, win in ipairs(diff_windows) do
+      -- Skip the current window
+      if win ~= current_win then
+        local buf = vim.api.nvim_win_get_buf(win)
+        local buf_name = vim.api.nvim_buf_get_name(buf)
+        buf_name = buf_name ~= "" and vim.fn.fnamemodify(buf_name, ":t") or "[No Name]"
+
+        table.insert(target_bufs, buf)
+        table.insert(target_buf_names, buf_name)
+      end
+    end
+    local choice_list = { "Select side to " .. (mode == "get" and "accept from" or "push to") .. ":" }
+    for i, name in ipairs(target_buf_names) do
+      table.insert(choice_list, string.format("%d. %s", i, name))
+    end
+    local choice = vim.fn.inputlist(choice_list)
+
+    if choice >= 1 and choice <= #target_bufs then
+      local target_buf = target_bufs[choice]
+      vim.cmd("diff" .. mode .. " " .. target_buf)
+    else
+      vim.notify("No valid selection made.", vim.log.levels.WARN)
+    end
+  else
+    vim.notify("Unsupported number of diff windows.", vim.log.levels.ERROR)
+  end
 end
 
 function Nvim.DiffTool.show_help_window()
