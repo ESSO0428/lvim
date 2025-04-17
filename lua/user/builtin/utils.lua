@@ -335,8 +335,7 @@ function Nvim.DiffTool.open_all_conflict_diff()
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   local ft = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
 
-  local ours_lines, theirs_lines = {}, {}
-  local base_lines = nil -- Default to `nil`, only used in `diff3` mode.
+  local ours_lines, theirs_lines, base_lines = {}, {}, {}
   local inside_ours, inside_theirs, inside_base = false, false, false
   local is_diff3 = false -- Default to `2-way` mode.
 
@@ -350,7 +349,6 @@ function Nvim.DiffTool.open_all_conflict_diff()
     elseif line:match("^|||||||") then
       inside_ours, inside_base = false, true -- Enter BASE section (diff3 mode).
       is_diff3 = true
-      base_lines = base_lines or {}          -- Initialize BASE buffer.
       in_conflict = true
     elseif line:match("^=======") then
       inside_ours, inside_theirs, inside_base = false, true, false  -- Switch to THEIRS section.
@@ -368,7 +366,7 @@ function Nvim.DiffTool.open_all_conflict_diff()
         -- Preserve non-conflicting content in all buffers.
         table.insert(ours_lines, line)
         table.insert(theirs_lines, line)
-        if base_lines then table.insert(base_lines, line) end
+        table.insert(base_lines, line)
       end
     end
   end
@@ -390,9 +388,30 @@ function Nvim.DiffTool.open_all_conflict_diff()
   end
 
   -- Set buffers as temporary.
-  for _, buf in ipairs({ ours_buf, theirs_buf, base_buf }) do
-    if buf then
-      vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+  local diff_buffers = {
+    { buf = ours_buf,   role = "OURS" },
+    { buf = theirs_buf, role = "THEIRS" },
+    { buf = base_buf,   role = "BASE" },
+  }
+  for _, info in ipairs(diff_buffers) do
+    if info.buf then
+      vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = info.buf })
+      vim.api.nvim_buf_set_keymap(info.buf, "n", "g?", "", {
+        noremap = true,
+        silent = true,
+        callback = function()
+          Nvim.DiffTool.show_help_window()
+        end,
+      })
+      vim.api.nvim_buf_set_keymap(info.buf, "n", "<c-y>", "", {
+        noremap = true,
+        silent = true,
+        callback = function()
+          local buf_content = vim.api.nvim_buf_get_lines(info.buf, 0, -1, false)
+          vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, buf_content)
+          vim.notify("Replaced buffer with " .. info.role .. " content.", vim.log.levels.INFO)
+        end,
+      })
     end
   end
 
@@ -407,22 +426,6 @@ function Nvim.DiffTool.open_all_conflict_diff()
     end)
   end
 
-  vim.api.nvim_buf_set_keymap(ours_buf, "n", "g?", "", {
-    noremap = true,
-    silent = true,
-    callback = function()
-      Nvim.DiffTool.show_help_window()
-    end,
-  })
-  vim.api.nvim_buf_set_keymap(ours_buf, "n", "<c-y>", "", {
-    noremap = true,
-    silent = true,
-    callback = function()
-      local ours_content = vim.api.nvim_buf_get_lines(ours_buf, 0, -1, false)
-      vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, ours_content)
-      vim.notify("Replaced buffer with OURS content.", vim.log.levels.INFO)
-    end,
-  })
   for _, buf in ipairs({ ours_buf, theirs_buf, base_buf }) do
     if buf then
       vim.api.nvim_create_autocmd("BufWinLeave", {
@@ -472,11 +475,14 @@ function Nvim.DiffTool.open_all_conflict_diff()
   local win_theirs = vim.api.nvim_get_current_win()
   vim.api.nvim_win_set_buf(win_theirs, theirs_buf)
 
+  local help_hint = "(Apply: <c-y>, Help: g?)"
+  local win_base = nil
   if base_buf then
     vim.cmd("split") -- Split BASE below.
-    local win_base = vim.api.nvim_get_current_win()
+    win_base = vim.api.nvim_get_current_win()
     vim.api.nvim_win_set_buf(win_base, base_buf)
-    vim.api.nvim_set_option_value("winbar", "BASE", { win = win_base })
+    -- Set window titles.
+    vim.api.nvim_set_option_value("winbar", "BASE " .. help_hint, { win = win_base })
   end
 
   vim.cmd("wincmd h") -- Move back to the left window.
@@ -484,12 +490,16 @@ function Nvim.DiffTool.open_all_conflict_diff()
   vim.api.nvim_win_set_buf(win_ours, ours_buf)
 
   -- Set window titles.
-  vim.api.nvim_set_option_value("winbar", "OURS (Apply: <c-y>, Help: g?)", { win = win_ours })
-  vim.api.nvim_set_option_value("winbar", "THEIRS", { win = win_theirs })
+  vim.api.nvim_set_option_value("winbar", "OURS " .. help_hint, { win = win_ours })
+  vim.api.nvim_set_option_value("winbar", "THEIRS " .. help_hint, { win = win_theirs })
 
+  local diff_wins = { win_ours, win_theirs }
+  if win_base then
+    table.insert(diff_wins, win_base)
+  end
   -- Enable `diffthis` for all buffers.
-  for _, win in ipairs({ win_ours, win_theirs, base_buf and vim.api.nvim_get_current_win() or nil }) do
-    if win then
+  for _, win in ipairs(diff_wins) do
+    if win and vim.api.nvim_win_is_valid(win) then
       vim.api.nvim_set_current_win(win)
       if ft and ft ~= "" then
         vim.cmd("setlocal filetype=" .. ft)
