@@ -109,9 +109,9 @@ link_utils.open_file_and_search = function(file_path, search_text)
   if not file_path or file_path == '' then
     return true
   end
-  if file_path ~= utils.current_file_path() then
+  local filetype = vim.filetype.match({ filename = file_path })
+  if filetype ~= "org" then
     local editable = true
-    local filetype = vim.filetype.match({ filename = file_path })
     if file_path:match("^https?://") or vim.tbl_contains(external_filetypes, filetype) then
       vim.ui.open(file_path)
       editable = false
@@ -120,7 +120,9 @@ link_utils.open_file_and_search = function(file_path, search_text)
     if not editable then
       return true
     end
+
     vim.cmd(('edit %s'):format(file_path))
+    return true
   end
   return original_open_file_and_search(file_path, search_text)
 end
