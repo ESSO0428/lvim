@@ -263,8 +263,11 @@ vim.ui.open = function(url)
     return nil
   end
 
-  local function is_nc_connection_valid(port)
-    local command = string.format("nc -z 127.0.0.1 %s && echo success", port)
+  local function is_ssh_tunnel_alive(port)
+    local command = string.format(
+      [[netstat -tuln | grep -q -E '127\.0\.0\.1:%s\s' && echo success]],
+      port, port
+    )
     local result = io.popen(command):read("*a")
     return result:find("success") ~= nil
   end
@@ -285,7 +288,7 @@ vim.ui.open = function(url)
 
   -- try to check if nc channel is available
   local port = check_rssh_tunnel()
-  if is_url(url) and port and is_nc_connection_valid(port) then
+  if is_url(url) and port and is_ssh_tunnel_alive(port) then
     local nc_command = string.format("echo 'explorer.exe \"%s\"' | nc -w 1 127.0.0.1 %s", url, port)
     -- use jobstart to run command non-blocking
     vim.fn.jobstart({ vim.o.shell, vim.o.shellcmdflag, nc_command }, { detach = true })

@@ -94,6 +94,37 @@ opt_org_agenda_files = {}
 for item, _ in pairs(unique_opt_org_agenda_files) do
   table.insert(opt_org_agenda_files, item)
 end
+
+local utils = require('orgmode.utils')
+local link_utils = require('orgmode.org.links.utils')
+local original_open_file_and_search = link_utils.open_file_and_search
+local external_filetypes = {
+  -- pdf is considered a valid filetype even though it cannot be correctly read
+  'pdf',
+  -- Add common image file types
+  'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'tiff',
+}
+
+link_utils.open_file_and_search = function(file_path, search_text)
+  if not file_path or file_path == '' then
+    return true
+  end
+  if file_path ~= utils.current_file_path() then
+    local editable = true
+    local filetype = vim.filetype.match({ filename = file_path })
+    if file_path:match("^https?://") or vim.tbl_contains(external_filetypes, filetype) then
+      vim.ui.open(file_path)
+      editable = false
+    end
+    -- Return without attempt to find text. File is not editable.
+    if not editable then
+      return true
+    end
+    vim.cmd(('edit %s'):format(file_path))
+  end
+  return original_open_file_and_search(file_path, search_text)
+end
+
 require('orgmode').setup({
   -- org_agenda_files = { '~/Dropbox/org/*', '~/my-orgs/**/*', ('%s/Dropbox/org/*'):format(vim.fn.getcwd()) },
   org_agenda_files = opt_org_agenda_files,
@@ -343,14 +374,14 @@ lvim.keys.normal_mode['<leader>rP'] = "<cmd>lua goto_WorkSpaceOrgFile 'projects.
 
 function OpenFileLink()
   local line = vim.fn.getline('.')
-  local link_pattern = '%[%[file:(.-)%]%[(.-)%]%]'
+  local link_pattern = '%[%[file:%s*(.-)%]%[(.-)%]%]'
   local path, label = string.match(line, link_pattern)
   if not path then
-    link_pattern = '%[%[file:(.-)%]%[(.-)%]%]'
+    link_pattern = '%[%[file:%s*(.-)%]%[(.-)%]%]'
     path = string.match(line, link_pattern)
   end
   if not path then
-    link_pattern = '%[%[file:(.-)%]%]'
+    link_pattern = '%[%[file:%s*(.-)%]%]'
     path = string.match(line, link_pattern)
   end
   if not path then

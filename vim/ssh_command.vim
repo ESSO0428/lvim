@@ -13,8 +13,8 @@ function! DownloadToLocal(file)
   if filereadable(expand("~/.rssh_tunnel"))
     " 讀取文件內容以獲取端口號
     let port = readfile(expand("~/.rssh_tunnel"))[0]
-    let nc_connect_command = "nc -z 127.0.0.1 " . port . " && echo sucess"
-    let nc_connect_results = substitute(system(nc_connect_command), '\n', '', '')
+    let netstat_connect_command = "netstat -tuln | grep -q '127.0.0.1:" . port . "' && echo success"
+    let nc_connect_results = substitute(system(netstat_connect_command), '\n', '', '')
     if nc_connect_results == 'sucess'
       echo "Downloading this file or directory to your Windows local download folder of Windows PC"
       
@@ -53,9 +53,9 @@ function! UpdateRegisterHostHameFromLocal()
   if filereadable(expand("~/.rssh_tunnel"))
     " 讀取文件內容以獲取端口號
     let port = readfile(expand("~/.rssh_tunnel"))[0]
-    let nc_connect_command = "nc -z 127.0.0.1 " . port . " && echo sucess"
-    let nc_connect_results = substitute(system(nc_connect_command), '\n', '', '')
-    if nc_connect_results == 'sucess'
+    let netstat_connect_command = "netstat -tuln | grep -q '127.0.0.1:" . port . "' && echo success"
+    let nc_connect_results = substitute(system(netstat_connect_command), '\n', '', '')
+    if nc_connect_results == 'success'
       echo "Updating this server register hostname of ssh config from Windows PC"
       
       " 使用 whoami 命令获取当前用户

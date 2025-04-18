@@ -438,9 +438,9 @@ function! SendInputMethodCommandToLocal(mode)
     let file_content = readfile(expand("~/.rssh_tunnel"))
     if len(file_content) > 0
       let port = file_content[0]
-      let nc_connect_command = "nc -z 127.0.0.1 " . port . " && echo sucess"
-      let nc_connect_results = substitute(system(nc_connect_command), '\n', '', '')
-      if nc_connect_results == 'sucess'
+      let netstat_connect_command = "netstat -tuln | grep -q '127.0.0.1:" . port . "' && echo success"
+      let nc_connect_results = substitute(system(netstat_connect_command), '\n', '', '')
+      if nc_connect_results == 'success'
         " 根據模式構建命令
         if a:mode == "insert"
           " NOTE: 修改原先的 -w 0.01 版本為 -w 1，最多等待一秒
