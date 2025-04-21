@@ -38,16 +38,16 @@ function! DownloadToLocal(file)
       let awk_main_script_start = "'{"
       let awk_main_script_end = "}'"
       let scp_prepare_command = join([
-      \ "ps -x | grep localhost:" . port . " | grep ssh | grep -v grep", 
-      \ " | awk '{for (i=5; i<=NF; i++) printf \"%s \", \$i; print \"\"}'",
-      \ " | awk " . awk_main_script_start,
-      \ "port=\"\"; jump=\"\"; userhost=\"\"; ",
-      \ "for (i=1;i<=NF;i++) ", 
-      \ "{ ",
-      \ "if (\$i==\"-p\") port=\$i\" \"\$(i+1); sub(/^-p/, \"-P\", port); ",
-      \ "if (\$i==\"-J\") jump=\$i\" \"\$(i+1); ", 
-      \ "if (\$i ~ /@/) userhost=\" \"\$i;",
-      \ "} "
+        \ "ps -x | grep localhost:" . port . " | grep ssh | grep -v grep", 
+        \ " | awk '{for (i=5; i<=NF; i++) printf \"%s \", \$i; print \"\"}'",
+        \ " | awk " . awk_main_script_start,
+        \ "port=\"\"; jump=\"\"; userhost=\"\"; ",
+        \ "for (i=1;i<=NF;i++) ", 
+        \ "{ ",
+        \ "if (\$i==\"-p\") port=\$i\" \"\$(i+1); sub(/^-p/, \"-P\", port); ",
+        \ "if (\$i==\"-J\") jump=\$i\" \"\$(i+1); ", 
+        \ "if (\$i ~ /@/) userhost=\" \"\$i;",
+        \ "} "
       \ ], "")
 
       let windows_path = "/mnt/c/Users/\$(wslvar USERNAME)/Downloads/"
@@ -57,8 +57,8 @@ function! DownloadToLocal(file)
       
       let open_download_explorer_command = "explorer.exe \$(wslpath -w '/mnt/c/Users/'\$(wslvar USERNAME)'/Downloads/') >/dev/null 2>&1"
       let full_remote_command = scp_prepare_command .
-            \ " printf \"scp %s %s %s %s:%s %s >/dev/null 2>&1 && %s \"," . "\"" . scp_dir_arg  . "\", " . "port, jump, userhost, \"" . current_file . "\", \"" . windows_path . "\", " . "\"" . open_download_explorer_command . "\""
-            \ . awk_main_script_end
+        \ " printf \"scp %s %s %s %s:%s %s >/dev/null 2>&1 && %s \"," . "\"" . scp_dir_arg  . "\", " . "port, jump, userhost, \"" . current_file . "\", \"" . windows_path . "\", " . "\"" . open_download_explorer_command . "\""
+        \ . awk_main_script_end
       let full_remote_command = EscapeChars(full_remote_command, ['\', '"', '$'])
 
       " 最重要：用雙引號包住 echo !!
