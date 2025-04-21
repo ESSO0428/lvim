@@ -15,7 +15,7 @@ function! DownloadToLocal(file)
     let port = readfile(expand("~/.rssh_tunnel"))[0]
     let netstat_connect_command = "netstat -tuln | grep -q '127.0.0.1:" . port . "' && echo success"
     let nc_connect_results = substitute(system(netstat_connect_command), '\n', '', '')
-    if nc_connect_results == 'sucess'
+    if nc_connect_results == 'success'
       echo "Downloading this file or directory to your Windows local download folder of Windows PC"
       
       " 使用 whoami 命令获取当前用户
