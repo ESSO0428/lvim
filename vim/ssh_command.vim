@@ -2,7 +2,7 @@ function! DownloadToLocal(file)
   " 去除參數左右的空白
   let file = substitute(a:file, '^\s*\|\s*$', '', 'g')
 
-  let current_file = empty(file) ? expand('%:p') : file
+  let current_file = empty(file) || file ==# '%' ? expand('%:p') : file
 
   if filereadable(expand("~/.rssh_tunnel"))
     let port = readfile(expand("~/.rssh_tunnel"))[0]
