@@ -199,35 +199,7 @@ M.config = {
   left =
   ---@type (Edgy.View.Opts|string)[]
       vim.list_extend(
-        lvim.builtin.nvimtree.active and {
-          {
-            title = "Nvim-Tree",
-            ft = "NvimTree",
-            pinned = true,
-            open = "NvimTreeOpen",
-          }
-        } or {
-          {
-            title = "Neo-Tree",
-            ft = "neo-tree",
-            filter = function(buf)
-              return vim.b[buf].neo_tree_source == "filesystem" and vim.b[buf].neo_tree_position ~= "current"
-            end,
-            open = "Neotree reveal_force_cwd",
-            pinned = true,
-          },
-        },
         {
-          {
-            title = "RemoteExplore",
-            ft = "neo-tree",
-            open = "Neotree remote",
-            filter = function(buf)
-              return vim.b[buf].neo_tree_source == "remote"
-            end,
-            pinned = false,
-            collapsed = false,
-          },
           {
             title = "DBUI",
             ft = "dbui",
@@ -235,30 +207,61 @@ M.config = {
             pinned = false,
             collapsed = false,
             size = { height = 0.55 },
+          }
+        },
+        vim.list_extend(
+          lvim.builtin.nvimtree.active and {
+            {
+              title = "Nvim-Tree",
+              ft = "NvimTree",
+              pinned = true,
+              open = "NvimTreeOpen",
+            }
+          } or {
+            {
+              title = "Neo-Tree",
+              ft = "neo-tree",
+              filter = function(buf)
+                return vim.b[buf].neo_tree_source == "filesystem" and vim.b[buf].neo_tree_position ~= "current"
+              end,
+              open = "Neotree reveal_force_cwd",
+              pinned = true,
+            },
           },
           {
-            title = function()
-              local buf_name = vim.api.nvim_buf_get_name(0)
+            {
+              title = "RemoteExplore",
+              ft = "neo-tree",
+              open = "Neotree remote",
+              filter = function(buf)
+                return vim.b[buf].neo_tree_source == "remote"
+              end,
+              pinned = false,
+              collapsed = false,
+            },
+            {
+              title = function()
+                local buf_name = vim.api.nvim_buf_get_name(0)
 
-              local special_windows = { "NeoTree", "NvimTree", "OUTLINE" }
-              local pattern = table.concat(special_windows, "\\|")
-              local outline_file_name = vim.g.outline_laset_focuse_file_name or buf_name
-              outline_file_name = outline_file_name or "[No Name]"
-              if not vim.regex(pattern):match_str(buf_name) and vim.bo[0].buftype == "" then
-                vim.g.outline_laset_focuse_file_name = buf_name
-              end
-              if outline_file_name ~= "" then
-                return "Outline " .. "(" .. vim.fn.fnamemodify(outline_file_name, ":t") .. ")"
-              end
-              return "Outline"
-            end,
-            ft = "Outline",
-            open = "OutlineOpen",
-            pinned = true,
-            collapsed = false,
-          },
-        }
-      ),
+                local special_windows = { "NeoTree", "NvimTree", "OUTLINE" }
+                local pattern = table.concat(special_windows, "\\|")
+                local outline_file_name = vim.g.outline_laset_focuse_file_name or buf_name
+                outline_file_name = outline_file_name or "[No Name]"
+                if not vim.regex(pattern):match_str(buf_name) and vim.bo[0].buftype == "" then
+                  vim.g.outline_laset_focuse_file_name = buf_name
+                end
+                if outline_file_name ~= "" then
+                  return "Outline " .. "(" .. vim.fn.fnamemodify(outline_file_name, ":t") .. ")"
+                end
+                return "Outline"
+              end,
+              ft = "Outline",
+              open = "OutlineOpen",
+              pinned = true,
+              collapsed = false,
+            },
+          }
+        )),
   right = {
     {
       title = "CopilotChat",
