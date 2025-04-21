@@ -1,41 +1,54 @@
 function! DownloadToLocal(file)
-  " 去除外部參數左右的空白
+  " 去除參數左右的空白
   let file = substitute(a:file, '^\s*\|\s*$', '', 'g')
 
-  if empty(file)
-    " 如果外部參數為空或只包含空白，使用當前文件的路徑
-    let current_file = expand("%:p")
-  else
-    " 如果外部參數不為空，使用外部參數作為文件名
-    let current_file = file
-  endif
+  let current_file = empty(file) ? expand('%:p') : file
 
   if filereadable(expand("~/.rssh_tunnel"))
-    " 讀取文件內容以獲取端口號
     let port = readfile(expand("~/.rssh_tunnel"))[0]
-    let netstat_connect_command = "netstat -tuln | grep -q '127.0.0.1:" . port . "' && echo success"
-    let nc_connect_results = substitute(system(netstat_connect_command), '\n', '', '')
-    if nc_connect_results == 'success'
-      echo "Downloading this file or directory to your Windows local download folder of Windows PC"
-      
-      " 使用 whoami 命令获取当前用户
-      let user = substitute(system('whoami'), '\n', '', '')
-      " 使用 hostname -I 命令获取服务器IP（假设您的服务器只有一个IP）
-      let server_ip = substitute(system("hostname -I | awk \'{print $1}\'"), '\n', '', '')
-      
-      " 檢查要下載的是文件還是目錄
-      if isdirectory(current_file)
-        let scp_command = "scp -r " . user . "@" . server_ip . ":" . current_file . " /mnt/c/Users/\"$(wslvar USERNAME)\"/Downloads/ >/dev/null 2>&1"
-      else
-        let scp_command = "scp " . user . "@" . server_ip . ":" . current_file . " /mnt/c/Users/\"$(wslvar USERNAME)\"/Downloads/ >/dev/null 2>&1"
-      endif
+    let netstat_cmd = "netstat -tuln | grep -q '127.0.0.1:" . port . "' && echo success"
+    let tunnel_status = substitute(system(netstat_cmd), '\n', '', '')
 
-      let scp_and_open_command = scp_command . " && " . "explorer.exe $(wslpath -w '/mnt/c/Users/'$(wslvar USERNAME)'/Downloads/') >/dev/null 2>&1"
-      let scp_and_open_command = "echo" . " '" . scp_and_open_command . "'" . " | nc -w 0.01 127.0.0.1 " . port . " &"
-      call system(scp_and_open_command)
+    if tunnel_status ==# 'success'
+      echo "Downloading this file or directory to your Windows local download folder..."
+
+      " 準備在遠端執行的完整 bash 指令
+      let awk_main_script_start = "'{"
+      let awk_main_script_end = "}'"
+      let scp_prepare_command = join([
+      \ "ps -x | grep localhost:" . port . " | grep ssh | grep -v grep", 
+      \ " | awk '{for (i=5; i<=NF; i++) printf \\\"%s \\\", \\\$i; print \\\"\\\"}'",
+      \ " | awk " . awk_main_script_start,
+      \ "port=\\\"\\\"; jump=\\\"\\\"; userhost=\\\"\\\"; ",
+      \ "for (i=1;i<=NF;i++) ", 
+      \ "{ ",
+      \ "if (\\\$i==\\\"-p\\\") port=\\\$i\\\" \\\"\\\$(i+1); sub(/^-p/, \\\"-P\\\", port); ",
+      \ "if (\\\$i==\\\"-J\\\") jump=\\\$i\\\" \\\"\\\$(i+1); ", 
+      \ "if (\\\$i ~ /@/) userhost=\\\" \\\"\\\$i;",
+      \ "} "
+      \ ], "")
+       
+
+      let windows_path = "/mnt/c/Users/\\\$(wslvar USERNAME)/Downloads/"
+
+      " 根據是目錄還是檔案決定加不加 -r
+      let scp_dir_arg = isdirectory(current_file) ? "-r" : ""
+      
+      let open_download_explorer_command = "explorer.exe \\\$(wslpath -w '/mnt/c/Users/'\\\$(wslvar USERNAME)'/Downloads/') >/dev/null 2>&1"
+      let full_remote_command = scp_prepare_command .
+            \ " printf \\\"scp %s %s %s %s:%s %s >/dev/null 2>&1 && %s \\\"," . "\\\"" . scp_dir_arg  . "\\\", " . "port, jump, userhost, \\\"" . current_file . "\\\", \\\"" . windows_path . "\\\", " . "\\\"" . open_download_explorer_command . "\\\""
+            \ . awk_main_script_end
+
+      " 最重要：用雙引號包住 echo !!
+      let final_send_command = "echo \"" . full_remote_command . " | sh" . "\" | nc -w 1 127.0.0.1 " . port . " &"
+
+      " scp and open explorer
+      call system(final_send_command)
     else
-      echo "Reverse SSH tunnel is not running"
+      echo "Reverse SSH tunnel is not active"
     endif
+  else
+    echo "Tunnel config not found!"
   endif
 endfunction
 
