@@ -21,14 +21,22 @@ require("lvim.core.autocmds").enable_transparent_mode = function()
   })
   vim.opt.fillchars = "eob: "
 end
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = get_config_dir():gsub("\\", "/") .. "/*.lua",
+  callback = function()
+    vim.defer_fn(function()
+      vim.cmd("highlight link TelescopeBorder FloatBorder")
+    end, 300)
+  end,
+})
 -- vim.cmd "au ColorScheme * hi Visual cterm=reverse gui=reverse"
 ---[[
 -- lvim.colorscheme = "tokyonight-night"
 -- lvim.builtin.lualine.options.theme = "tokyonight-night"
-vim.g.limelight_conceal_guifg                         = '#545763'
-lvim.keys.visual_mode['<leader>ta']                   = { "<Plug>(Limelight)" }
-lvim.builtin.which_key.mappings["ta"]                 = { "<cmd>Limelight<cr>", "Limelight Close" }
-lvim.builtin.which_key.mappings["tA"]                 = { "<cmd>Limelight!<cr>", "Limelight Close (All)" }
+vim.g.limelight_conceal_guifg         = '#545763'
+lvim.keys.visual_mode['<leader>ta']   = { "<Plug>(Limelight)" }
+lvim.builtin.which_key.mappings["ta"] = { "<cmd>Limelight<cr>", "Limelight Close" }
+lvim.builtin.which_key.mappings["tA"] = { "<cmd>Limelight!<cr>", "Limelight Close (All)" }
 if lvim.transparent_window == true then
   vim.cmd "au ColorScheme * hi Normal ctermbg=none guibg=none"
   vim.cmd "au ColorScheme * hi SignColumn ctermbg=none guibg=none"
