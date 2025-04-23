@@ -1612,6 +1612,7 @@ lvim.plugins = {
     "s1n7ax/nvim-window-picker",
     version = "2.*",
     config = function()
+      local avante_filtypes = { "Avante", "AvanteSelectedFiles", "AvanteInput", "AvantePromptInput" }
       require("window-picker").setup({
         -- type of hints you want to get
         -- following types are supported
@@ -1626,7 +1627,7 @@ lvim.plugins = {
           -- filter using buffer options
           bo = {
             -- if the file type is one of following, the window will be ignored
-            filetype = { "NvimTree", "neo-tree", "neo-tree-popup", "notify", "Outline" },
+            filetype = vim.list_extend({ "NvimTree", "neo-tree", "neo-tree-popup", "notify", "Outline" }, avante_filtypes),
             -- if the buffer type is one of following, the window will be ignored
             buftype = { "terminal", "quickfix" },
           },

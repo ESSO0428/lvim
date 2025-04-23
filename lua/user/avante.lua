@@ -13,13 +13,26 @@ vim.cmd "au ColorScheme * hi AvanteConflictIncomingLabel guibg=#1a3c3e"
 vim.cmd "au ColorScheme * hi link AvanteConflictIncoming DiffAdd"
 
 -- NOTE: Avante config
-local Utils = require("avante.utils")
-require('avante.config').support_paste_image = function()
-  local has_xclip = os.execute('which xclip > /dev/null 2>&1') == 0
-  if has_xclip then
-    return Utils.has("img-clip.nvim") or Utils.has("img-clip")
-  else
-    return false
+local Utils
+local ok_utils, utils_module = pcall(require, "avante.utils")
+if ok_utils then
+  Utils = utils_module
+else
+  Utils = {
+    has = function(_) return false end -- Simple fallback implementation
+  }
+  vim.notify("[Avante] avante.utils module not found", vim.log.levels.WARN)
+end
+
+local ok_config, avante_config = pcall(require, 'avante.config')
+if ok_config then
+  avante_config.support_paste_image = function()
+    local has_xclip = os.execute('which xclip > /dev/null 2>&1') == 0
+    if has_xclip then
+      return Utils.has("img-clip.nvim") or Utils.has("img-clip")
+    else
+      return false
+    end
   end
 end
 
@@ -225,17 +238,23 @@ M.opts = {
     throttle = 600,
   },
 }
-if require("mcphub").get_hub_instance() ~= nil then
+local ok_mcphub, mcphub = pcall(require, "mcphub")
+if ok_mcphub and mcphub.get_hub_instance() ~= nil then
   -- The system_prompt type supports both a string and a function that returns a string. Using a function here allows dynamically updating the prompt with mcphub
   M.opts.system_prompt = function()
-    local hub = require("mcphub").get_hub_instance()
+    local hub = mcphub.get_hub_instance()
     return hub:get_active_servers_prompt()
   end
-  M.opts.custom_tools = function()
-    return {
-      require("mcphub.extensions.avante").mcp_tool(),
-    }
+
+  local ok_avante_ext, avante_ext = pcall(require, "mcphub.extensions.avante")
+  if ok_avante_ext then
+    M.opts.custom_tools = function()
+      return {
+        avante_ext.mcp_tool(),
+      }
+    end
   end
+
   -- add disabled tools in table and unique
   local tools_to_disable = {
     "list_files",

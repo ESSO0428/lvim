@@ -140,4 +140,21 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.keymap.set('n', '<a-o>', markdown_go_to_definition, { silent = true, buffer = true })
   end,
 })
+
+-- NOTE: AI chat open link under cursor
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "Avante*", "copilot-chat" },
+  callback = function()
+    vim.keymap.set("n", "gd", function()
+      Nvim.MarkDownTool.open_link()
+    end, { buffer = true, desc = "Open file under cursor in picked window" })
+    vim.keymap.set("n", "<a-o>", function()
+      Nvim.MarkDownTool.open_link()
+    end, { buffer = true, desc = "Open file under cursor in picked window" })
+    vim.keymap.set("n", "gh", function()
+      Nvim.MarkDownTool.open_link()
+    end, { buffer = true, desc = "Open file under cursor in float window" })
+  end,
+})
+
 vim.api.nvim_create_user_command('Date', 'silent! r! date +"\\%A, \\%B, \\%d, \\%Y"', { nargs = "*" })

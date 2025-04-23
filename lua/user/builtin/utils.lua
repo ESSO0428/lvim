@@ -1,5 +1,6 @@
 Nvim.null_ls = {}
 Nvim.DiffTool = {}
+Nvim.MarkDownTool = {}
 Nvim.Buffer_Manager = {}
 Nvim.Buffer_check = {}
 Nvim.Quickfix = {}
@@ -620,6 +621,109 @@ end
 
 vim.api.nvim_create_user_command("ConflictDiff", Nvim.DiffTool.open_conflict_diff, {})
 vim.api.nvim_create_user_command("ConflictAllDiff", Nvim.DiffTool.open_all_conflict_diff, {})
+
+function Nvim.MarkDownTool.open_link(mode)
+  local function is_url(text)
+    local pattern = "^(https?://.+)$"
+    return text:match(pattern) ~= nil
+  end
+  -- Treesitter check if current node is a link
+  local ts_utils = require('nvim-treesitter.ts_utils')
+  local node = ts_utils.get_node_at_cursor()
+  local function get_node_text(node)
+    local bufnr = vim.api.nvim_get_current_buf()
+    return vim.treesitter.get_node_text(node, bufnr)
+  end
+
+  -- Check node type
+  local link_text
+  local link_url
+  if node and node:type() == "link_text" then
+    -- Get the next node
+    local next_node = node:next_named_sibling()
+    if next_node and next_node:type() == "link_destination" then
+      link_text = get_node_text(next_node)
+      if is_url(link_text) then
+        link_url = link_text
+      end
+    end
+  elseif node and node:type() == "link_destination" then
+    link_text = get_node_text(node)
+    if is_url(link_text) then
+      link_url = link_text
+    end
+  end
+  if link_url then
+    if mode == "float" then
+      vim.notify("Cannot open URLs in float mode", vim.log.levels.INFO)
+      return
+    end
+
+    vim.ui.open(link_url)
+    return
+  end
+
+  local cfile = vim.fn.expand("<cfile>")
+  link_text = link_text or cfile
+  if not link_text or link_text == "" then
+    vim.notify("No file or link under cursor", vim.log.levels.WARN)
+    return
+  end
+
+  if vim.fn.filereadable(link_text) == 0 then
+    vim.notify("File not found: " .. link_text, vim.log.levels.ERROR)
+    return
+  end
+
+  if mode == "float" then
+    -- Float window mode
+    local buf = vim.api.nvim_create_buf(false, true)
+
+    local lines = vim.fn.readfile(link_text)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+    vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+
+    local filetype = vim.filetype.match({ filename = link_text }) or ""
+
+    if filetype ~= "" then
+      vim.api.nvim_set_option_value("filetype", filetype, { buf = buf })
+    end
+
+    local width = 100
+    local height = math.min(20, #lines)
+    local float_win = vim.api.nvim_open_win(buf, true, {
+      relative = "cursor",
+      width = width,
+      height = height,
+      row = 1,
+      col = 1,
+      border = "single",
+      title = "↖ " .. link_text,
+      style = "minimal"
+    })
+    vim.api.nvim_set_option_value('cursorline', true, { win = float_win })
+    vim.api.nvim_set_option_value('winblend', 0, { win = float_win })
+    vim.api.nvim_set_option_value("wrap", false, { win = float_win })
+    vim.api.nvim_set_option_value("number", true, { win = float_win })
+    vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
+    vim.api.nvim_set_option_value("readonly", true, { buf = buf })
+    return
+  end
+
+  local ok, window_picker = pcall(require, "window-picker")
+  if not ok then
+    vim.notify("window-picker not found", vim.log.levels.ERROR)
+    return
+  end
+
+  local picked_win = window_picker.pick_window()
+  if picked_win then
+    vim.api.nvim_set_current_win(picked_win)
+    vim.cmd("edit " .. link_text)
+  else
+    vim.notify("No window picked", vim.log.levels.INFO)
+  end
+end
 
 --- Check if filetype window exists
 --- @return boolean true if filetype window is found, false otherwise
