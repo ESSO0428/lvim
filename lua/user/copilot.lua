@@ -492,7 +492,7 @@ require("CopilotChat").setup {
       normal = 'gs',
     },
     show_help = {
-      normal = 'gh',
+      normal = 'g?',
     },
   },
 }

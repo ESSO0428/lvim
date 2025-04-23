@@ -145,14 +145,11 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "Avante*", "copilot-chat" },
   callback = function()
-    vim.keymap.set("n", "gd", function()
-      Nvim.MarkDownTool.open_link()
-    end, { buffer = true, desc = "Open file under cursor in picked window" })
     vim.keymap.set("n", "<a-o>", function()
       Nvim.MarkDownTool.open_link()
     end, { buffer = true, desc = "Open file under cursor in picked window" })
     vim.keymap.set("n", "gh", function()
-      Nvim.MarkDownTool.open_link()
+      Nvim.MarkDownTool.open_link("float")
     end, { buffer = true, desc = "Open file under cursor in float window" })
   end,
 })
