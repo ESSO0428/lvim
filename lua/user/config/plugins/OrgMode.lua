@@ -75,7 +75,7 @@ end
 
 vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
-local opt_org_agenda_files = { '~/Dropbox/org/*', '~/my-orgs/**/*', ('%s/Dropbox/org/*'):format(vim.fn.getcwd()) }
+local opt_org_agenda_files = { '~/Dropbox/org/**/*', '~/my-orgs/**/*', ('%s/orgmode/**/*'):format(vim.fn.getcwd()) }
 
 -- 將 ~ 轉成絕對路徑
 local home = os.getenv("HOME") or ""
