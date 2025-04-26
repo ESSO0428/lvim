@@ -144,7 +144,7 @@ require('orgmode').setup({
       description = 'Task (WorkSpace)',
       template = '* TODO %?\n %u',
       -- target = '~/Dropbox/org/task.org'
-      target = ('%s/Dropbox/org/notes.org'):format(vim.fn.getcwd())
+      target = ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
     },
     j = {
       description = 'Journal',
@@ -156,7 +156,7 @@ require('orgmode').setup({
       description = 'Journal (WorkSpace)',
       template = '\n*** %<%Y-%m-%d> %<%A>\n**** %U\n\n%?',
       -- target = '~/Dropbox/org/journal.org'
-      target = ('%s/Dropbox/org/notes.org'):format(vim.fn.getcwd())
+      target = ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
     },
     n = {
       description = 'Catch',
@@ -168,7 +168,7 @@ require('orgmode').setup({
       description = 'Catch (WorkSpace)',
       template = '* %?\n %u',
       -- target = '~/Dropbox/org/catch.org'
-      target = ('%s/Dropbox/org/notes.org'):format(vim.fn.getcwd())
+      target = ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
     },
     p = {
       description = 'Project',
@@ -178,7 +178,7 @@ require('orgmode').setup({
     P = {
       description = 'Project (WorkSpace)',
       template = '* %?\n %u',
-      target = ('%s/Dropbox/org/projects.org'):format(vim.fn.getcwd())
+      target = ('%s/orgmode/projects.org'):format(vim.fn.getcwd())
     }
   },
   org_tags_column = -80,
