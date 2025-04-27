@@ -204,8 +204,6 @@ select.gitdiff_current_file = function(source, staged)
     return nil
   end
 
-  -- local cmd_diff = 'git -C ' ..
-  --     file_dir .. ' diff --no-color --no-ext-diff' .. (staged and ' --staged' or '') .. ' 2>/dev/null'
   local cmd_diff = table.concat({
     'git',
     '-C',
@@ -216,8 +214,6 @@ select.gitdiff_current_file = function(source, staged)
     (file_path and '-- ' .. file_path or ''),
     '2>/dev/null'
   }, ' ')
-  -- local cmd_diff_stat = 'git -C ' ..
-  --     file_dir .. ' diff --stat --no-color --no-ext-diff' .. (staged and ' --staged' or '') .. ' 2>/dev/null'
   local cmd_diff_stat = table.concat({
     'git',
     '-C',
