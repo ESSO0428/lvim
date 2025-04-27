@@ -13,7 +13,7 @@ vim.cmd "au ColorScheme * highlight link @markup.list.markdown Identifier"
 vim.cmd "au ColorScheme * highlight! link markdownOrderedListMarker Identifier"
 vim.cmd "au ColorScheme * highlight @markup.link.label.markdown_inline guifg=#3794FF gui=underline"
 vim.cmd "au ColorScheme * highlight markdownLinkText guifg=#3794FF gui=underline"
-vim.cmd "au ColorScheme * highlight link @org.bullet @markup.list.markdown"
+vim.cmd "au ColorScheme * highlight link @org.bullet.org @markup.list.markdown"
 vim.cmd "au ColorScheme * highlight link @org.checkbox.org Identifier"
 
 vim.cmd "au ColorScheme * highlight link @text.title.1 Title"

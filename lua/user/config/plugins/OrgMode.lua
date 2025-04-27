@@ -1,78 +1,3 @@
--- Load custom treesitter grammar for org filetype
-local function check_org_notes()
-  local home_dir = os.getenv("HOME")
-  local current_dir = vim.fn.getcwd()
-
-  local notes_file = ('%s/Dropbox/org/notes.org'):format(vim.fn.getcwd())
-  local org_dir = ('%s/Dropbox/org'):format(vim.fn.getcwd())
-
-  -- 检查当前目录是否从第一个字符开始与主目录匹配
-  if not (current_dir:sub(1, #home_dir) == home_dir) then
-    return
-  end
-  -- 检查当前目录是否为 Dropbox 或 org 的后缀
-  if current_dir:match('.*/Dropbox$') or current_dir:match('.*/org$') then
-    return
-  end
-
-  -- 使用 command -v 检查 git 命令是否可用
-  local git_available = vim.fn.system("command -v git")
-  if git_available == "" then
-    -- git 不可用，检查当前目录是否有 .git 目录
-    if vim.fn.isdirectory(current_dir .. "/.git") == 0 then
-      -- 没有 .git 目录，直接返回
-      return
-    end
-    return
-  else
-    -- 检查当前目录是否为 Git 仓库
-    local is_git_repo = vim.fn.system("git rev-parse --is-inside-work-tree"):match("true")
-    if is_git_repo then
-      return
-    end
-    -- 非 Git 仓库，卻有 .gitignore 文件，且 Dropbox 被作為排除對象
-    -- 檢查 .gitignore 文件是否存在且包含 Dropbox/
-    local gitignore_file = current_dir .. "/.gitignore"
-    if vim.fn.filereadable(gitignore_file) == 1 then
-      local gitignore_content = vim.fn.readfile(gitignore_file)
-      for _, line in ipairs(gitignore_content) do
-        if line:match("Dropbox/") then
-          return
-        end
-      end
-    end
-  end
-
-  -- 檢查 notes.org 檔案是否存在
-  local notes_exist = vim.fn.filereadable(notes_file) == 1
-
-  if not notes_exist then
-    -- 檢查 org 目錄是否存在
-    local org_dir_exist = vim.fn.isdirectory(org_dir) == 1
-
-    if not org_dir_exist then
-      -- 創建 org 目錄及 notes.org 檔案
-      vim.fn.system('mkdir -p ' .. org_dir)
-      vim.fn.system('touch ' .. notes_file)
-    else
-      -- 只創建 notes.org 檔案
-      vim.fn.system('touch ' .. notes_file)
-    end
-  end
-end
-if next(vim.fn.argv()) == nil then
-  vim.api.nvim_create_augroup("check_org_dir_and_note", {})
-  vim.api.nvim_create_autocmd({
-    "VimEnter"
-  }, {
-    group = "check_org_dir_and_note",
-    callback = function()
-      check_org_notes()
-    end
-  })
-end
-
-
 vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
 local opt_org_agenda_files = { '~/Dropbox/org/**/*', '~/my-orgs/**/*', ('%s/orgmode/**/*'):format(vim.fn.getcwd()) }
@@ -144,7 +69,8 @@ require('orgmode').setup({
       description = 'Task (WorkSpace)',
       template = '* TODO %?\n %u',
       -- target = '~/Dropbox/org/task.org'
-      target = ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
+      target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/notes.org") or
+      ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
     },
     j = {
       description = 'Journal',
@@ -156,7 +82,8 @@ require('orgmode').setup({
       description = 'Journal (WorkSpace)',
       template = '\n*** %<%Y-%m-%d> %<%A>\n**** %U\n\n%?',
       -- target = '~/Dropbox/org/journal.org'
-      target = ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
+      target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/notes.org") or
+      ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
     },
     n = {
       description = 'Catch',
@@ -168,7 +95,8 @@ require('orgmode').setup({
       description = 'Catch (WorkSpace)',
       template = '* %?\n %u',
       -- target = '~/Dropbox/org/catch.org'
-      target = ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
+      target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/notes.org") or
+      ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
     },
     p = {
       description = 'Project',
@@ -178,7 +106,8 @@ require('orgmode').setup({
     P = {
       description = 'Project (WorkSpace)',
       template = '* %?\n %u',
-      target = ('%s/orgmode/projects.org'):format(vim.fn.getcwd())
+      target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/projects.org") or
+      ('%s/orgmode/projects.org'):format(vim.fn.getcwd())
     }
   },
   org_tags_column = -80,
@@ -355,7 +284,8 @@ function goto_OrgFile(filename)
 end
 
 function goto_WorkSpaceOrgFile(filename)
-  local org_dir = ('%s/Dropbox/org/'):format(vim.fn.getcwd())
+  local org_dir = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/") or
+  ('%s/orgmode/'):format(vim.fn.getcwd())
   create_directory(org_dir)
   local file_full_path = org_dir .. filename
   local buf_nr = vim.fn.bufnr(file_full_path)
@@ -406,7 +336,7 @@ vim.api.nvim_create_autocmd({
   group = "org_file_custom",
   callback = function()
     vim.keymap.set('n', '<leader><a-o>', '<cmd>lua OpenFileLink()<cr>', { silent = true, buffer = true })
-    vim.cmd('noremap <silent> <buffer> <leader>o <Nop>')
+    vim.cmd('nnoremap <silent> <buffer> <leader>o <Nop>')
     vim.keymap.set('n', '<leader>oo', '<cmd>silent! norm!za<cr>', { silent = true, buffer = true })
   end
 })
@@ -417,6 +347,6 @@ vim.api.nvim_create_autocmd({
   pattern = { "orgagenda" },
   group = "orgagenda_custom",
   callback = function()
-    vim.cmd('noremap <silent> <buffer> <leader>o <Nop>')
+    vim.cmd('nnoremap <silent> <buffer> <leader>o <Nop>')
   end
 })
