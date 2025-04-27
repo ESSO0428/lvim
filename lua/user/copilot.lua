@@ -184,7 +184,7 @@ end
 -- Then it constructs the `git diff` command and executes it.
 -- If the diff result is too large (> 30000 characters), it uses the git diff stat command instead.
 -- Finally, it sets the filetype of the buffer to `diff` and the lines of the buffer to the diff result.
-select.gitdiff = function(source, staged)
+select.gitdiff_current_file = function(source, staged)
   local select_buffer = buffer(source)
   if not select_buffer then
     return nil
@@ -197,12 +197,38 @@ select.gitdiff = function(source, staged)
   end
 
   -- NOTE: Fix vulnerability #417 in CopilotC-Nvim/CopilotChat.nvim
+  local is_in_gitdir = string.find(file_dir, '.git', 1, true) ~= nil
   file_dir = file_dir:gsub('.git$', '')
+  source.file_dir = file_dir
+  if is_in_gitdir then
+    return nil
+  end
 
-  local cmd_diff = 'git -C ' ..
-      file_dir .. ' diff --no-color --no-ext-diff' .. (staged and ' --staged' or '') .. ' 2>/dev/null'
-  local cmd_diff_stat = 'git -C ' ..
-      file_dir .. ' diff --stat --no-color --no-ext-diff' .. (staged and ' --staged' or '') .. ' 2>/dev/null'
+  -- local cmd_diff = 'git -C ' ..
+  --     file_dir .. ' diff --no-color --no-ext-diff' .. (staged and ' --staged' or '') .. ' 2>/dev/null'
+  local cmd_diff = table.concat({
+    'git',
+    '-C',
+    file_dir,
+    'diff',
+    '--no-color --no-ext-diff',
+    (staged and ' --staged' or ''),
+    (file_path and '-- ' .. file_path or ''),
+    '2>/dev/null'
+  }, ' ')
+  -- local cmd_diff_stat = 'git -C ' ..
+  --     file_dir .. ' diff --stat --no-color --no-ext-diff' .. (staged and ' --staged' or '') .. ' 2>/dev/null'
+  local cmd_diff_stat = table.concat({
+    'git',
+    '-C',
+    file_dir,
+    'diff',
+    '--stat',
+    '--no-color --no-ext-diff',
+    (staged and '--staged' or ''),
+    (file_path and '-- ' .. file_path or ''),
+    '2>/dev/null'
+  }, ' ')
 
   local handle = io.popen(cmd_diff)
   if not handle then
@@ -226,7 +252,6 @@ select.gitdiff = function(source, staged)
   if not result or result == '' then
     return nil
   end
-  source.file_dir = file_dir
   return {
     content = result,
     filename = 'git_diff_' .. (staged and 'staged' or 'unstaged'),
@@ -432,15 +457,15 @@ require("CopilotChat").setup {
     -- },
     Commit = {
       prompt = read_copilot_prompt('Commit.md'),
-      selection = select.gitdiff,
-      sticky = '#git:unstaged',
+      selection = select.gitdiff_current_file,
+      context = 'git:unstaged',
     },
     CommitStaged = {
       prompt = read_copilot_prompt('CommitStaged.md'),
       selection = function(source)
-        return select.gitdiff(source, true)
+        return select.gitdiff_current_file(source, true)
       end,
-      sticky = '#git:staged',
+      context = 'git:staged',
     },
   },
 
@@ -518,17 +543,34 @@ require("CopilotChat").config.contexts.git = {
       '--no-color',
       '--no-ext-diff',
     }
+    local cmd_stat = {
+      'git',
+      '-C',
+      file_dir,
+      'diff',
+      '--stat',
+      '--no-color',
+      '--no-ext-diff',
+    }
 
     if input == 'staged' then
       table.insert(cmd, '--staged')
+      table.insert(cmd_stat, '--staged')
     elseif input == 'unstaged' then
       table.insert(cmd, '--')
+      table.insert(cmd_stat, '--')
     else
       table.insert(cmd, input)
+      table.insert(cmd_stat, input)
     end
 
-    local out = utils.system(cmd)
+    local cmd_out = utils.system(cmd)
 
+    -- jugde if the diff is too large (> 30000 characters) to handle, use diff --stat to instead
+    local out = cmd_out
+    if #cmd_out.stdout > 30000 then
+      out = utils.system(cmd_stat)
+    end
     return {
       {
         content = out.stdout,
