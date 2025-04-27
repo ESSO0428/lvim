@@ -3,6 +3,7 @@ vim.api.nvim_set_keymap("i", "<M-l>", 'copilot#Accept("<cr>")', { silent = true,
 vim.g.copilot_no_tab_map = true
 
 
+local utils = require('CopilotChat.utils')
 local select = require('CopilotChat.select')
 local buffer = require('CopilotChat.select').buffer
 select.open_select_promt_mode = nil
@@ -225,7 +226,7 @@ select.gitdiff = function(source, staged)
   if not result or result == '' then
     return nil
   end
-
+  source.file_dir = file_dir
   return {
     content = result,
     filename = 'git_diff_' .. (staged and 'staged' or 'unstaged'),
@@ -432,12 +433,14 @@ require("CopilotChat").setup {
     Commit = {
       prompt = read_copilot_prompt('Commit.md'),
       selection = select.gitdiff,
+      sticky = '#git:unstaged',
     },
     CommitStaged = {
       prompt = read_copilot_prompt('CommitStaged.md'),
       selection = function(source)
         return select.gitdiff(source, true)
       end,
+      sticky = '#git:staged',
     },
   },
 
@@ -496,6 +499,46 @@ require("CopilotChat").setup {
     },
   },
 }
+require("CopilotChat").config.contexts.git = {
+  description =
+  'Requires `git`. Includes current git diff in chat context. Supports input (default unstaged, also accepts commit number).',
+  input = function(callback)
+    vim.ui.select({ 'unstaged', 'staged' }, {
+      prompt = 'Select diff type> ',
+    }, callback)
+  end,
+  resolve = function(input, source)
+    input = input or 'unstaged'
+    local file_dir = source.file_dir and source.file_dir or source.cwd()
+    local cmd = {
+      'git',
+      '-C',
+      file_dir,
+      'diff',
+      '--no-color',
+      '--no-ext-diff',
+    }
+
+    if input == 'staged' then
+      table.insert(cmd, '--staged')
+    elseif input == 'unstaged' then
+      table.insert(cmd, '--')
+    else
+      table.insert(cmd, input)
+    end
+
+    local out = utils.system(cmd)
+
+    return {
+      {
+        content = out.stdout,
+        filename = 'git_diff_' .. input,
+        filetype = 'diff',
+      },
+    }
+  end,
+}
+
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "copilot-*",
   callback = function()
