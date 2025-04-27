@@ -281,7 +281,7 @@ vim.ui.open = function(url)
 
   local open_cmd
   if is_wsl() and is_url(url) then
-    open_cmd = string.format('explorer.exe "%s"', url)
+    open_cmd = string.format('cmd.exe /C start "%s" > /dev/null 2>&1', url)
   else
     open_cmd = string.format('xdg-open "%s"', url)
   end
@@ -289,7 +289,7 @@ vim.ui.open = function(url)
   -- try to check if nc channel is available
   local port = check_rssh_tunnel()
   if is_url(url) and port and is_ssh_tunnel_alive(port) then
-    local nc_command = string.format("echo 'explorer.exe \"%s\"' | nc -w 1 127.0.0.1 %s", url, port)
+    local nc_command = string.format("echo 'cmd.exe /C start \"%s\" > /dev/null 2>&1' | nc -w 1 127.0.0.1 %s", url, port)
     -- use jobstart to run command non-blocking
     vim.fn.jobstart({ vim.o.shell, vim.o.shellcmdflag, nc_command }, { detach = true })
   else
