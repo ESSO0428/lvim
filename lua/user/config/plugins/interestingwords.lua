@@ -185,13 +185,25 @@ function telescope_interestingwords_selected(use_stored_words)
     sorter = conf.generic_sorter({}),
     previewer = custom_previewer,
     attach_mappings = function(prompt_bufnr, map)
-      -- Add < and > mappings to navigate between occurrences of the current word
-      local current_word_occurrences = {}
+      -- Store occurrences and indices for each word
+      local word_occurrences = {}
+      local word_indices = {} -- Track the current index for each word
+      local current_word = nil
       local current_occurrence_index = 1
 
       local function find_occurrences(word)
-        -- Reset occurrences
-        current_word_occurrences = {}
+        -- If we already have occurrences for this word, just return them
+        if word_occurrences[word] then
+          current_word = word
+          -- Use saved index or default to 1
+          current_occurrence_index = word_indices[word] or 1
+          return #word_occurrences[word] > 0
+        end
+
+        -- Initialize occurrences for this word
+        word_occurrences[word] = {}
+        word_indices[word] = 1
+        current_word = word
         current_occurrence_index = 1
 
         -- Use the original buffer for searching, not the telescope buffer
@@ -211,7 +223,7 @@ function telescope_interestingwords_selected(use_stored_words)
             if not match_start then break end
 
             -- Add this occurrence to our list
-            table.insert(current_word_occurrences, {
+            table.insert(word_occurrences[word], {
               lnum = i,
               col = match_start,
               text = line
@@ -222,7 +234,7 @@ function telescope_interestingwords_selected(use_stored_words)
           end
         end
 
-        return #current_word_occurrences > 0
+        return #word_occurrences[word] > 0
       end
 
       local function navigate_occurrences(direction)
@@ -232,26 +244,35 @@ function telescope_interestingwords_selected(use_stored_words)
           return
         end
 
-        -- Find all occurrences if we haven't done so yet
-        if #current_word_occurrences == 0 then
-          if not find_occurrences(selection.value) then
-            vim.notify("No occurrences found for: " .. selection.value, vim.log.levels.WARN)
+        -- Check if this is a different word than the current one
+        local selected_word = selection.value
+        if selected_word ~= current_word then
+          -- Find occurrences for this word
+          if not find_occurrences(selected_word) then
             return
           end
         end
 
+        local occurrences = word_occurrences[selected_word]
+        if not occurrences or #occurrences == 0 then
+          return
+        end
+
         -- Update index based on direction
         if direction == "next" then
-          current_occurrence_index = current_occurrence_index % #current_word_occurrences + 1
-        else -- prev
+          current_occurrence_index = current_occurrence_index % #occurrences + 1
+        elseif direction == "prev" then
           current_occurrence_index = current_occurrence_index - 1
           if current_occurrence_index < 1 then
-            current_occurrence_index = #current_word_occurrences
+            current_occurrence_index = #occurrences
           end
         end
 
+        -- Remember the current index for this word
+        word_indices[selected_word] = current_occurrence_index
+
         -- Get the current occurrence
-        local occurrence = current_word_occurrences[current_occurrence_index]
+        local occurrence = occurrences[current_occurrence_index]
 
         -- Update preview to show the current occurrence
         local picker = action_state.get_current_picker(prompt_bufnr)
@@ -268,8 +289,26 @@ function telescope_interestingwords_selected(use_stored_words)
       map("n", ">", function() navigate_occurrences("next") end)
       map("i", "<a-,>", function() navigate_occurrences("prev") end)
       map("i", "<a-.>", function() navigate_occurrences("next") end)
+      map("n", "<Up>", function() actions.move_selection_previous(prompt_bufnr) end)
+      map("n", "<Down>", function() actions.move_selection_next(prompt_bufnr) end)
       map("n", "<a-m>", function() end)
       map("i", "<a-m>", function() end)
+
+      -- Override the move_selection functions to automatically navigate occurrences
+      local orig_move_selection_next = actions.move_selection_next
+      actions.move_selection_next = function(prompt_bufnr)
+        orig_move_selection_next(prompt_bufnr)
+        vim.defer_fn(function()
+          navigate_occurrences()
+        end, 10)
+      end
+      local orig_move_selection_prev = actions.move_selection_previous
+      actions.move_selection_previous = function(prompt_bufnr)
+        orig_move_selection_prev(prompt_bufnr)
+        vim.defer_fn(function()
+          navigate_occurrences()
+        end, 10)
+      end
 
 
       actions.select_default:replace(function()
@@ -282,17 +321,26 @@ function telescope_interestingwords_selected(use_stored_words)
           return
         end
 
-        -- Find all occurrences if we haven't done so yet
-        if #current_word_occurrences == 0 then
-          if not find_occurrences(selection.value) then
-            vim.notify("No occurrences found for: " .. selection.value, vim.log.levels.WARN)
+        -- Check if this is a different word than the current one
+        local selected_word = selection.value
+        if selected_word ~= current_word then
+          -- Find occurrences for this word
+          if not find_occurrences(selected_word) then
+            vim.notify("No occurrences found for: " .. selected_word, vim.log.levels.WARN)
             actions.close(prompt_bufnr)
             return
           end
         end
 
+        local occurrences = word_occurrences[selected_word]
+        if not occurrences or #occurrences == 0 then
+          vim.notify("No occurrences found for: " .. selected_word, vim.log.levels.WARN)
+          actions.close(prompt_bufnr)
+          return
+        end
+
         -- Get the current occurrence
-        local occurrence = current_word_occurrences[current_occurrence_index]
+        local occurrence = occurrences[current_occurrence_index]
         actions.close(prompt_bufnr)
 
         -- Use defer_fn to ensure we jump after the telescope UI is closed
@@ -302,8 +350,8 @@ function telescope_interestingwords_selected(use_stored_words)
           -- Center the view
           vim.cmd("normal! zz")
           -- Give visual feedback
-          vim.notify("Jumped to occurrence " .. current_occurrence_index .. " of " .. #current_word_occurrences ..
-            " for: " .. selection.value, vim.log.levels.INFO)
+          vim.notify("Jumped to occurrence " .. current_occurrence_index .. " of " .. #occurrences ..
+            " for: " .. selected_word, vim.log.levels.INFO)
         end, 10)
       end)
       return true
