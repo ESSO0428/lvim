@@ -291,6 +291,8 @@ function telescope_interestingwords_selected(use_stored_words)
       map("i", "<a-.>", function() navigate_occurrences("next") end)
       map("n", "<Up>", function() actions.move_selection_previous(prompt_bufnr) end)
       map("n", "<Down>", function() actions.move_selection_next(prompt_bufnr) end)
+      map("i", "<Up>", function() actions.move_selection_previous(prompt_bufnr) end)
+      map("i", "<Down>", function() actions.move_selection_next(prompt_bufnr) end)
       map("n", "<a-m>", function() end)
       map("i", "<a-m>", function() end)
 
