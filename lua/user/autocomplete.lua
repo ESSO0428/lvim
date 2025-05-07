@@ -10,6 +10,10 @@ require("cmp_path").get_trigger_characters = function()
   return { '/', '.', "'", '"', ":" }
 end
 require("cmp_path")._dirname = function(self, params, option)
+  local original_return = original_cmp_path_dirname(self, params, option)
+  if original_return ~= nil then
+    return original_return
+  end
   local NAME_REGEX = "\\%([^/\\\\:\\*?<>'\"`\\|]\\)"
   local PATH_REGEX = vim.regex(([[\%([/"\']PAT\+\)*[/"\']\zePAT*$]]):gsub("PAT", NAME_REGEX))
   local cursor_line = params.context.cursor_before_line
@@ -35,7 +39,7 @@ require("cmp_path")._dirname = function(self, params, option)
     end
   end
 
-  return original_cmp_path_dirname(self, params, option)
+  return nil
 end
 
 lvim.builtin.cmp.enabled = function()
