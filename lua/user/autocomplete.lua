@@ -4,6 +4,39 @@ local cmp = require("lvim.utils.modules").require_on_index "cmp"
 local cmp_mapping = require "cmp.config.mapping"
 local luasnip = require("lvim.utils.modules").require_on_index "luasnip"
 local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
+local original_cmp_path_dirname = require("cmp_path")._dirname
+
+require("cmp_path").get_trigger_characters = function()
+  return { '/', '.', "'", '"', ":" }
+end
+require("cmp_path")._dirname = function(self, params, option)
+  local NAME_REGEX = "\\%([^/\\\\:\\*?<>'\"`\\|]\\)"
+  local PATH_REGEX = vim.regex(([[\%([/"\']PAT\+\)*[/"\']\zePAT*$]]):gsub("PAT", NAME_REGEX))
+  local cursor_line = params.context.cursor_before_line
+
+  local s = PATH_REGEX:match_str(cursor_line)
+
+  if s then
+    local buf_dirname = option.get_cwd(params)
+    local dirname = string.gsub(string.sub(cursor_line, s + 2), '%a*$', '') -- exclude '/'
+    local prefix = string.sub(cursor_line, 1, s + 1)                        -- include '/'
+    if prefix:match("\"$") or prefix:match("'$") then
+      return vim.fn.resolve(buf_dirname .. "/" .. dirname)
+    end
+  end
+
+  local orgmode_s = cursor_line:find("%[%[file:")
+  if orgmode_s then
+    local buf_dirname = option.get_cwd(params)
+    local dirname = string.gsub(string.sub(cursor_line, orgmode_s + 7), '%a*$', '') -- exclude '/'
+    local prefix = string.sub(cursor_line, 7, orgmode_s + 7)                        -- include '/'
+    if prefix:match(':/$') then
+      return vim.fn.resolve('/' .. dirname)
+    end
+  end
+
+  return original_cmp_path_dirname(self, params, option)
+end
 
 lvim.builtin.cmp.enabled = function()
   local filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
