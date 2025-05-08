@@ -8,6 +8,12 @@
   "nvim-navic": {
     "commit": "27124a7"
   },
+  "mason-lspconfig.nvim": {
+    "commit": "a4caa0d"
+  },
+  "mason.nvim": {
+    "commit": "7c7318e"
+  },
   "nvim-lspconfig": {
     "commit": "056f569"
   },
