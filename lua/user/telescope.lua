@@ -375,7 +375,7 @@ lvim.builtin.which_key.mappings.s.j    = { "<cmd>Telescope jumplist<cr>", "jumpl
 lvim.builtin.which_key.mappings.s.G    = { "<cmd>Telescope live_grep_args<cr>", "Live_grep_args" }
 lvim.builtin.which_key.mappings.s.u    = { "<cmd>Telescope telescope-tabs list_tabs<cr>", "Search Tabs" }
 
-lvim.builtin.which_key.mappings.s.l    = { "<cmd>Telescope harpoon marks<cr>", "Search harpoon marks" }
+lvim.builtin.which_key.mappings.s.l    = { "<cmd>Telescope tagstack<cr>", "tags" }
 lvim.keys.normal_mode["="]             = "<cmd>Telescope harpoon marks<cr>"
 lvim.keys.normal_mode["mf"]            = "<cmd>lua require('harpoon.mark').add_file()<cr>"
 lvim.keys.normal_mode["mw"]            = "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>"
