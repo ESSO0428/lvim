@@ -52,6 +52,33 @@ function M.reload_edgy_if_error()
   end
 end
 
+M.title_memory = {
+  help = "help",
+  CopilotChat = "CopilotChat"
+}
+
+local title_update_based_edgy_status = function(title_name, buftype, filetype)
+  local suffix = ""
+  if vim.b[0].edgy_disable == true then
+    suffix = "( edgy)"
+  end
+  local title = table.concat({ title_name, suffix }, " ")
+  if buftype and vim.bo[0].buftype == buftype or vim.bo[0].filetype == filetype then
+    vim.b.edgy_winbar_title = title_name
+    M.title_memory[title_name] = title
+  end
+  return M.title_memory[title_name]
+end
+
+M.init_winbar = function()
+  if vim.b[0].edgy_disable and vim.b[0].edgy_winbar_title then
+    vim.wo.winbar = string.format("%%#EdgyIconActive# %%#EdgyWinBar# %s %s", vim.b.edgy_winbar_title,
+      "( edgy)")
+  else
+    vim.wo.winbar = "%!v:lua.require'edgy.window'.edgy_winbar()"
+    vim.cmd("doautocmd VimResized")
+  end
+end
 M.config = {
   ---@type table<Edgy.Pos, {size:integer | fun():integer, wo?:vim.wo}>
   options = {
@@ -118,6 +145,41 @@ M.config = {
       require("edgy").goto_main()
 
       M.reload_edgy_if_error()
+    end,
+    ["sw"] = function(win)
+      vim.b[0].edgy_disable = not vim.b[0].edgy_disable
+
+      vim.keymap.set("n", "sw", function()
+        vim.b[0].edgy_disable = not vim.b[0].edgy_disable
+        M.init_winbar()
+      end, { buffer = true })
+      vim.keymap.set("n", "<up>", function()
+        (vim.b[0].edgy_disable and function() vim.cmd("res -5") end or function()
+          require("edgy").get_win()
+              :resize("height", -5)
+        end)()
+      end, { buffer = true })
+
+      vim.keymap.set("n", "<down>", function()
+        (vim.b[0].edgy_disable and function() vim.cmd("res +5") end or function()
+          require("edgy").get_win()
+              :resize("height", 5)
+        end)()
+      end, { buffer = true })
+
+      vim.keymap.set("n", "<left>", function()
+        (vim.b[0].edgy_disable and function() vim.cmd("vertical resize-5") end or function()
+          require("edgy").get_win():resize("width",
+            -5)
+        end)()
+      end, { buffer = true })
+
+      vim.keymap.set("n", "<right>", function()
+        (vim.b[0].edgy_disable and function() vim.cmd("vertical resize+5") end or function()
+          require("edgy").get_win():resize("width",
+            5)
+        end)()
+      end, { buffer = true })
     end,
     -- next open window
     ["]]"] = function(win)
@@ -189,6 +251,9 @@ M.config = {
       ft = "help",
       size = { height = 20 },
       -- only show help buffers
+      title = function()
+        return title_update_based_edgy_status("help", "help", "")
+      end,
       filter = function(buf)
         return vim.bo[buf].buftype == "help"
       end,
@@ -264,8 +329,10 @@ M.config = {
         )),
   right = {
     {
-      title = "CopilotChat",
       ft = "copilot-chat",
+      title = function()
+        return title_update_based_edgy_status("CopilotChat", "", "copilot-chat")
+      end,
       open = "CopilotChatOpen",
     }
   } ---@type (Edgy.View.Opts|string)[]
