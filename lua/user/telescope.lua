@@ -57,6 +57,8 @@ lvim.builtin.telescope.defaults.mappings.n = {
   },
   ["k"] = actions.move_selection_next,
   ["i"] = actions.move_selection_previous,
+  ["j"] = actions.results_scrolling_left,
+  ["l"] = actions.results_scrolling_right,
   ['<ScrollWheelUp>'] = actions.move_selection_previous,
   ['<ScrollWheelDown>'] = actions.move_selection_next,
   ['<LeftMouse>'] = function()
@@ -68,22 +70,15 @@ lvim.builtin.telescope.defaults.mappings.n = {
     actions.smart_send_to_qflist(...)
     actions.open_qflist(...)
   end,
-  ['<c-k>'] = function(...)
-  end,
-  ["<C-j>"] = function(...)
-    actions.toggle_selection(...)
-    actions.move_selection_better(...)
-  end,
-  ["<C-l>"] = function(...)
-    actions.toggle_selection(...)
-    actions.move_selection_worse(...)
-  end,
+  ['<c-k>'] = actions.toggle_all,
+  ['<a-=>'] = actions.select_all,
+  ['<a-->'] = actions.drop_all,
   ['<a-t>'] = actions.select_tab,
   ['<a-m>'] = actions.select_tab,
   ['<a-l>'] = actions.select_vertical,
   ['<a-k>'] = actions.select_horizontal,
   ['<a-d>'] = action_layout.toggle_preview,
-  ['<c-p>'] = action_layout.cycle_layout_next
+  ['<C-p>'] = action_layout.cycle_layout_next
 }
 -- NOTE: 自訂 Telescope 在 nvim-tree 中的 insert 模式下的 <cr> 行為。
 --       由於 im-select 插件在退出插入模式時可能導致 Telescope 無法正確跳轉到指定窗口並產生錯誤，
@@ -107,16 +102,9 @@ lvim.builtin.telescope.defaults.mappings.i = {
     actions.smart_send_to_qflist(...)
     actions.open_qflist(...)
   end,
-  ['<c-k>'] = function(...)
-  end,
-  ["<C-j>"] = function(...)
-    actions.toggle_selection(...)
-    actions.move_selection_better(...)
-  end,
-  ["<C-l>"] = function(...)
-    actions.toggle_selection(...)
-    actions.move_selection_worse(...)
-  end,
+  ['<c-k>'] = actions.toggle_all,
+  ['<a-=>'] = actions.select_all,
+  ['<a-->'] = actions.drop_all,
   ['<a-t>'] = actions.select_tab,
   ['<a-m>'] = actions.select_tab,
   ['<a-l>'] = actions.select_vertical,
@@ -394,17 +382,16 @@ lvim.builtin.which_key.mappings.s["m"]              = {
   "Find Image" }
 lvim.builtin.telescope.defaults.mappings.i["<c-u>"] = actions.preview_scrolling_up
 lvim.builtin.telescope.defaults.mappings.i["<c-o>"] = actions.preview_scrolling_down
+lvim.builtin.telescope.defaults.mappings.i["<c-j>"] = actions.preview_scrolling_left
+lvim.builtin.telescope.defaults.mappings.i["<c-l>"] = actions.preview_scrolling_right
 lvim.builtin.telescope.defaults.mappings.n["<c-u>"] = actions.preview_scrolling_up
 lvim.builtin.telescope.defaults.mappings.n["<c-o>"] = actions.preview_scrolling_down
-lvim.builtin.telescope.defaults.mappings.i["<c-s>"] = actions.move_selection_next
-lvim.builtin.telescope.defaults.mappings.i["<c-w>"] = actions.move_selection_previous
-lvim.builtin.telescope.defaults.mappings.n["<c-s>"] = actions.move_selection_next
-lvim.builtin.telescope.defaults.mappings.n["<c-w>"] = actions.move_selection_previous
-
+lvim.builtin.telescope.defaults.mappings.n["<c-j>"] = actions.preview_scrolling_left
+lvim.builtin.telescope.defaults.mappings.n["<c-l>"] = actions.preview_scrolling_right
 
 -- source : https://github.com/nvim-telescope/telescope.nvim/issues/623#issuecomment-792233601
-local previewers = require('telescope.previewers')
-local previewers_utils = require('telescope.previewers.utils')
+local previewers                                    = require('telescope.previewers')
+local previewers_utils                              = require('telescope.previewers.utils')
 -- local ns_previewer = vim.api.nvim_create_namespace "telescope.previewers"
 -- local jump_to_line = function(self, bufnr, lnum)
 --   pcall(vim.api.nvim_buf_clear_namespace, bufnr, ns_previewer, 0, -1)

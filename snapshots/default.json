@@ -25,5 +25,8 @@
   },
   "nvim-cmp": {
     "commit": "b555203"
+  },
+  "telescope.nvim": {
+    "commit": "a4ed825"
   }
 }
