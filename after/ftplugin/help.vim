@@ -1,5 +1,6 @@
 " Force modify this help file
 nnoremap <buffer> sm :set noreadonly modifiable<CR>
+nnoremap <buffer> <a-o> <c-]>
 
 augroup HelpAutoHelptags
   autocmd!
