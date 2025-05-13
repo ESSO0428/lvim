@@ -55,6 +55,7 @@ end
 -- :MasonInstall emmet-ls
 -- lvim.lsp.installer.setup.ensure_installed = { "html", "tailwindcss" }
 lvim.lsp.installer.setup.ensure_installed = { "html", "tailwindcss", "tsserver", "basedpyright", "ruff", "intelephense" }
+lvim.lsp.installer.setup.automatic_installation.exclude = { "harper_ls" }
 local opts = { filetypes = { "html", "htmldjango" } }
 require("lvim.lsp.manager").setup("html", opts)
 
