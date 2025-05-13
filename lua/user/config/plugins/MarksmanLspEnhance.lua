@@ -29,16 +29,24 @@ local function find_links_in_line(line, line_num, current_dir, not_ignore_http)
       end_row = line_num
       start_col = get_visual_position(line, start_col)
       end_col = get_visual_position(line, end_col)
-      local is_not_http = not text:match('^http') or not_ignore_http
-      if type(text) == 'string' and is_not_http then
+
+      -- Handle paths wrapped with <>
+      local clean_text = text
+      if text:match("^<.+>$") then
+        clean_text = text:match("^<(.+)>$")
+      end
+
+      local is_not_http = not clean_text:match('^http') or not_ignore_http
+      if type(clean_text) == 'string' and is_not_http then
         -- Construct the full path
         local path
-        if text:match('^./') or text:match('^../') then
-          path = vim.fn.fnamemodify(current_dir .. '/' .. text, ":p")
+        if clean_text:match('^./') or clean_text:match('^../') then
+          path = vim.fn.fnamemodify(current_dir .. '/' .. clean_text, ":p")
         else
-          path = vim.fn.fnamemodify(text, ":p")
+          path = vim.fn.fnamemodify(clean_text, ":p")
         end
-        table.insert(links, { range = { start_row, start_col, end_row, end_col }, path = path, text = text })
+        table.insert(links,
+          { range = { start_row, start_col, end_row, end_col }, path = path, text = clean_text, original_text = text })
       end
     end
   end
