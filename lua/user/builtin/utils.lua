@@ -670,10 +670,91 @@ function Nvim.MarkDownTool.open_link(mode)
     return
   end
 
-  if vim.fn.filereadable(link_text) == 0 then
-    vim.notify("File not found: " .. link_text, vim.log.levels.ERROR)
-    return
+  --- Get Ai chat symbol and filename
+  ---
+  --- Support Avante and CopilotChat
+  --- surrounding the cursor position and splits the conflicting changes into two
+  --- separate buffers, displayed side by side in a diff view.
+  local function get_ai_chat_link(link_text)
+    local link_search, filename
+    local link_search_ok = true
+    local file_search_ok = true
+    local curr_line = vim.api.nvim_win_get_cursor(0)[1]
+
+    -- Get: CopilotChat filename
+    if vim.bo.filetype == "copilot-chat" then
+      local ok, copilot = pcall(require, "CopilotChat")
+      if ok and type(copilot.get_source) == "function" then
+        local success, result = pcall(copilot.get_source)
+        if success and result and result.bufnr then
+          filename = vim.api.nvim_buf_get_name(result.bufnr)
+        else
+          vim.notify('CopilotChat: `get_source().bufnr` is no longer available.', vim.log.levels.WARN)
+        end
+      else
+        vim.notify('CopilotChat: `get_source()` function is no longer available.', vim.log.levels.WARN)
+      end
+    else
+      -- Get: Avante filename
+      for i = curr_line - 1, 0, -1 do
+        local line = vim.api.nvim_buf_get_lines(0, i, i + 1, false)[1]
+
+        -- exact match "Filepath: xxx"
+        if line:match("^Filepath:%s+") then
+          filename = line:match("^Filepath:%s+(.+)$")
+          break
+        end
+
+        -- exact match "- Selected files:"，and get filename of below line
+        if line == "- Selected files:" then
+          local next_line = vim.api.nvim_buf_get_lines(0, i + 1, i + 2, false)[1]
+          if next_line then
+            filename = next_line:match("^%s*%-%s+(.+)$")
+          end
+          break
+        end
+      end
+    end
+
+    -- check search_text in file when filename is exists
+    if filename and vim.fn.filereadable(filename) == 1 then
+      link_search = link_text
+      link_text = filename
+
+      -- check search_text in search file
+      local lines = vim.fn.readfile(link_text)
+      local found = false
+      for _, line in ipairs(lines) do
+        if line:find(link_search, 1, true) then
+          found = true
+          break
+        end
+      end
+
+      if not found then
+        link_search_ok = false
+      end
+    else
+      file_search_ok = false
+    end
+    return file_search_ok, link_search_ok, filename, link_search
   end
+
+  local file_search_ok, link_search_ok, filename, link_search
+  if vim.fn.filereadable(link_text) == 0 then
+    file_search_ok, link_search_ok, filename, link_search = get_ai_chat_link(link_text)
+
+    link_text = filename
+    if file_search_ok and not link_search_ok then
+      vim.notify("File '" .. link_text .. "' found, but symbol '" .. link_search .. "' not present.", vim.log.levels
+        .WARN)
+      return
+    elseif not file_search_ok then
+      vim.notify("File not found: " .. (filename or link_text), vim.log.levels.ERROR)
+      return
+    end
+  end
+
 
   if mode == "float" then
     -- Float window mode
@@ -707,6 +788,11 @@ function Nvim.MarkDownTool.open_link(mode)
     vim.api.nvim_set_option_value("number", true, { win = float_win })
     vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
     vim.api.nvim_set_option_value("readonly", true, { buf = buf })
+
+    if link_search then
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.fn.search(link_search, "W")
+    end
     return
   end
 
@@ -720,6 +806,10 @@ function Nvim.MarkDownTool.open_link(mode)
   if picked_win then
     vim.api.nvim_set_current_win(picked_win)
     vim.cmd("edit " .. link_text)
+    if link_search then
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.fn.search(link_search, "W")
+    end
   else
     vim.notify("No window picked", vim.log.levels.INFO)
   end
