@@ -663,7 +663,25 @@ function Nvim.MarkDownTool.open_link(mode)
     return
   end
 
-  local cfile = vim.fn.expand("<cfile>")
+  local function get_visual_selection()
+    local s_start = vim.fn.getpos("'<")
+    local s_end = vim.fn.getpos("'>")
+    local n_lines = math.abs(s_end[2] - s_start[2]) + 1
+    local lines = vim.api.nvim_buf_get_lines(0, s_start[2] - 1, s_end[2], false)
+    lines[1] = string.sub(lines[1], s_start[3], -1)
+    if n_lines == 1 then
+      lines[n_lines] = string.sub(lines[n_lines], 1, s_end[3] - s_start[3] + 1)
+    else
+      lines[n_lines] = string.sub(lines[n_lines], 1, s_end[3])
+    end
+    return table.concat(lines, '\n')
+  end
+  local cfile
+  if mode == "visual" then
+    cfile = get_visual_selection()
+  else
+    cfile = vim.fn.expand("<cfile>")
+  end
   link_text = link_text or cfile
   if not link_text or link_text == "" then
     vim.notify("No file or link under cursor", vim.log.levels.WARN)
@@ -724,7 +742,7 @@ function Nvim.MarkDownTool.open_link(mode)
       -- check search_text in search file
       local lines
       local link_text_file_bufnr = vim.fn.bufnr(link_text)
-      if link_text_file_bufnr ~= -1 then
+      if link_text_file_bufnr ~= -1 and vim.fn.bufloaded(link_text_file_bufnr) == 1 then
         lines = vim.api.nvim_buf_get_lines(link_text_file_bufnr, 0, -1, false)
       else
         lines = vim.fn.readfile(link_text)
@@ -752,6 +770,7 @@ function Nvim.MarkDownTool.open_link(mode)
     file_search_ok, link_search_ok, filename, link_search = get_ai_chat_link(link_text)
 
     link_text = filename
+    -- NOTE: if search is multiple lines (in visual mode), will false of get link_search_ok
     if file_search_ok and not link_search_ok then
       vim.notify("File '" .. link_text .. "' found, but symbol '" .. link_search .. "' not present.", vim.log.levels
         .WARN)
@@ -762,14 +781,13 @@ function Nvim.MarkDownTool.open_link(mode)
     end
   end
 
-
   if mode == "float" then
     -- Float window mode
     local buf = vim.api.nvim_create_buf(false, true)
 
     local lines
     local link_text_file_bufnr = vim.fn.bufnr(link_text)
-    if link_text_file_bufnr ~= -1 then
+    if link_text_file_bufnr ~= -1 and vim.fn.bufloaded(link_text_file_bufnr) == 1 then
       lines = vim.api.nvim_buf_get_lines(link_text_file_bufnr, 0, -1, false)
     else
       lines = vim.fn.readfile(link_text)
@@ -819,32 +837,90 @@ function Nvim.MarkDownTool.open_link(mode)
 
     if link_search then
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
-      vim.fn.search(link_search, "W")
+      vim.fn.search("\\V" .. link_search, "W")
       vim.cmd("normal! zz")
     end
     return
   end
 
-  local ok, window_picker = pcall(require, "window-picker")
-  if not ok then
-    vim.notify("window-picker not found", vim.log.levels.ERROR)
-    return
+  local TEMP_HL_NS = vim.api.nvim_create_namespace("temporary_highlight")
+  if vim.fn.hlexists("SagaBeacon") == 0 then
+    vim.api.nvim_set_hl(0, "SagaBeacon", { bg = '#c43963' })
+  end
+  local function flash_and_wincmd_p(len, delay_ms)
+    delay_ms = delay_ms or 200
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    row = row - 1
+
+    if len then
+      vim.api.nvim_buf_add_highlight(0, TEMP_HL_NS, "SagaBeacon", row, col, col + len)
+    else
+      vim.api.nvim_buf_add_highlight(0, TEMP_HL_NS, "SagaBeacon", row, 0, -1)
+    end
+
+    vim.defer_fn(function()
+      vim.api.nvim_buf_clear_namespace(0, TEMP_HL_NS, 0, -1)
+      vim.cmd("wincmd p")
+    end, delay_ms)
   end
 
-  local picked_win = window_picker.pick_window()
-  if picked_win then
+  local function flash_search_and_wincmd_p(link_search, delay_ms)
+    delay_ms = delay_ms or 200
+    local found = vim.fn.search("\\V" .. link_search, "W")
+    vim.cmd("normal! zz")
+    if found ~= 0 then
+      local len = #link_search
+      flash_and_wincmd_p(len, delay_ms)
+    else
+      vim.cmd("wincmd p")
+    end
+  end
+
+  local target_bufnr = vim.fn.bufnr(link_text)
+  local target_win = nil
+
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if vim.api.nvim_win_get_buf(win) == target_bufnr then
+      target_win = win
+      break
+    end
+  end
+
+  local picked_win = target_win
+  if not picked_win then
+    local ok, window_picker = pcall(require, "window-picker")
+    if not ok then
+      vim.notify("window-picker not found", vim.log.levels.ERROR)
+      return
+    end
+    picked_win = window_picker.pick_window()
+    if picked_win then
+      vim.api.nvim_set_current_win(picked_win)
+      local current_picked_win_bufnr = vim.api.nvim_win_get_buf(picked_win)
+      if current_picked_win_bufnr ~= vim.fn.bufnr(link_text) then
+        vim.cmd("edit " .. link_text)
+      end
+      if link_search then
+        vim.api.nvim_win_set_cursor(0, { 1, 0 })
+        flash_search_and_wincmd_p(link_search)
+      else
+        flash_and_wincmd_p()
+      end
+    else
+      vim.notify("No window picked", vim.log.levels.INFO)
+    end
+  else
     vim.api.nvim_set_current_win(picked_win)
     local current_picked_win_bufnr = vim.api.nvim_win_get_buf(picked_win)
-    if current_picked_win_bufnr == vim.fn.bufnr(link_text) then
+    if current_picked_win_bufnr ~= vim.fn.bufnr(link_text) then
       vim.cmd("edit " .. link_text)
     end
     if link_search then
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
-      vim.fn.search(link_search, "W")
-      vim.cmd("normal! zz")
+      flash_search_and_wincmd_p(link_search)
+    else
+      flash_and_wincmd_p()
     end
-  else
-    vim.notify("No window picked", vim.log.levels.INFO)
   end
 end
 

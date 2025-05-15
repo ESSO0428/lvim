@@ -148,6 +148,8 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("n", "<a-o>", function()
       Nvim.MarkDownTool.open_link()
     end, { buffer = true, desc = "Open file under cursor in picked window" })
+    vim.keymap.set("v", "<a-o>", ":<C-u>call v:lua.Nvim.MarkDownTool.open_link('visual')<cr>",
+      { silent = true, buffer = true, desc = "Open file under cursor in picked window" })
     vim.keymap.set("n", "gh", function()
       Nvim.MarkDownTool.open_link("float")
     end, { buffer = true, desc = "Open file under cursor in float window" })
