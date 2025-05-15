@@ -806,7 +806,12 @@ function Nvim.MarkDownTool.open_link(mode)
   local picked_win = window_picker.pick_window()
   if picked_win then
     vim.api.nvim_set_current_win(picked_win)
-    vim.cmd("edit " .. link_text)
+    local current_picked_win_bufnr = vim.api.nvim_win_get_buf(picked_win)
+    local current_picked_abs_filename = vim.api.nvim_buf_get_name(current_picked_win_bufnr)
+    local current_picked_filename = vim.fn.expand('%')
+    if link_text ~= current_picked_filename and link_text ~= current_picked_abs_filename then
+      vim.cmd("edit " .. link_text)
+    end
     if link_search then
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
       vim.fn.search(link_search, "W")
