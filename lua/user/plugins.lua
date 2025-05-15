@@ -1627,7 +1627,8 @@ lvim.plugins = {
           -- filter using buffer options
           bo = {
             -- if the file type is one of following, the window will be ignored
-            filetype = vim.list_extend({ "NvimTree", "neo-tree", "neo-tree-popup", "notify", "Outline" }, avante_filtypes),
+            filetype = vim.list_extend({ "NvimTree", "neo-tree", "neo-tree-popup", "notify", "Outline", "edgy" },
+              avante_filtypes),
             -- if the buffer type is one of following, the window will be ignored
             buftype = { "terminal", "quickfix" },
           },
