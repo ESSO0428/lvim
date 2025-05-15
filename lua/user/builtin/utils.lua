@@ -792,6 +792,7 @@ function Nvim.MarkDownTool.open_link(mode)
     if link_search then
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
       vim.fn.search(link_search, "W")
+      vim.cmd("normal! zz")
     end
     return
   end
@@ -809,6 +810,7 @@ function Nvim.MarkDownTool.open_link(mode)
     if link_search then
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
       vim.fn.search(link_search, "W")
+      vim.cmd("normal! zz")
     end
   else
     vim.notify("No window picked", vim.log.levels.INFO)
