@@ -722,7 +722,14 @@ function Nvim.MarkDownTool.open_link(mode)
       link_text = filename
 
       -- check search_text in search file
-      local lines = vim.fn.readfile(link_text)
+      local lines
+      local link_text_file_bufnr = vim.fn.bufnr(link_text)
+      if link_text_file_bufnr ~= -1 then
+        lines = vim.api.nvim_buf_get_lines(link_text_file_bufnr, 0, -1, false)
+      else
+        lines = vim.fn.readfile(link_text)
+      end
+
       local found = false
       for _, line in ipairs(lines) do
         if line:find(link_search, 1, true) then
@@ -750,7 +757,7 @@ function Nvim.MarkDownTool.open_link(mode)
         .WARN)
       return
     elseif not file_search_ok then
-      vim.notify("File not found: " .. (filename or link_text), vim.log.levels.ERROR)
+      vim.notify("File not found: " .. (filename or link_text or ""), vim.log.levels.ERROR)
       return
     end
   end
@@ -760,7 +767,13 @@ function Nvim.MarkDownTool.open_link(mode)
     -- Float window mode
     local buf = vim.api.nvim_create_buf(false, true)
 
-    local lines = vim.fn.readfile(link_text)
+    local lines
+    local link_text_file_bufnr = vim.fn.bufnr(link_text)
+    if link_text_file_bufnr ~= -1 then
+      lines = vim.api.nvim_buf_get_lines(link_text_file_bufnr, 0, -1, false)
+    else
+      lines = vim.fn.readfile(link_text)
+    end
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
     vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
 
@@ -788,6 +801,21 @@ function Nvim.MarkDownTool.open_link(mode)
     vim.api.nvim_set_option_value("number", true, { win = float_win })
     vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
     vim.api.nvim_set_option_value("readonly", true, { buf = buf })
+    if link_text_file_bufnr ~= -1 then
+      local winbar_text = string.format("%%#Winbar#%s%%*", link_text)
+
+      local icon, icon_hl = require("nvim-web-devicons").get_icon_by_filetype(filetype)
+      if icon and icon_hl then
+        winbar_text = string.format("%%#%s#%s%%* ", icon_hl, icon) .. winbar_text
+      end
+
+      if vim.api.nvim_get_option_value("mod", { buf = link_text_file_bufnr }) then
+        local mod = lvim.icons.ui.Circle or ""
+        winbar_text = winbar_text .. string.format(" %%#LspCodeLens#%s%%*", mod)
+      end
+
+      vim.api.nvim_set_option_value("winbar", winbar_text, { win = float_win })
+    end
 
     if link_search then
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
@@ -807,9 +835,7 @@ function Nvim.MarkDownTool.open_link(mode)
   if picked_win then
     vim.api.nvim_set_current_win(picked_win)
     local current_picked_win_bufnr = vim.api.nvim_win_get_buf(picked_win)
-    local current_picked_abs_filename = vim.api.nvim_buf_get_name(current_picked_win_bufnr)
-    local current_picked_filename = vim.fn.expand('%')
-    if link_text ~= current_picked_filename and link_text ~= current_picked_abs_filename then
+    if current_picked_win_bufnr == vim.fn.bufnr(link_text) then
       vim.cmd("edit " .. link_text)
     end
     if link_search then
