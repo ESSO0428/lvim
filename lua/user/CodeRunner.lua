@@ -9,6 +9,9 @@ function code_runner()
     vim.o.splitbelow = true
     -- vim.cmd("sp | term " .. term_cd_cmd .. "python %")
     vim.cmd(string.format("sp | term %s python %s", term_cd_cmd, filename))
+  elseif filetype == 'lua' then
+    vim.o.splitbelow = true
+    vim.cmd(string.format("sp | term %s nvim -l %s", term_cd_cmd, filename))
   elseif filetype == 'mysql' then
     vim.cmd("w")
   elseif filetype == 'c' then

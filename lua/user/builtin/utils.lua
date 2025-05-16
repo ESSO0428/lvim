@@ -676,13 +676,17 @@ function Nvim.MarkDownTool.open_link(mode)
     end
     return table.concat(lines, '\n')
   end
-  local cfile
-  if mode == "visual" then
-    cfile = get_visual_selection()
+  local ccontent
+  if mode == "visual" or mode == "float_visual" then
+    ccontent = get_visual_selection()
+  elseif mode == "cline" or mode == "float_cline" then
+    ccontent = vim.api.nvim_get_current_line()
+  elseif mode == "cfile" or mode == "float" then
+    ccontent = vim.fn.expand("<cfile>")
   else
-    cfile = vim.fn.expand("<cfile>")
+    ccontent = vim.fn.expand("<cfile>")
   end
-  link_text = link_text or cfile
+  link_text = link_text or ccontent
   if not link_text or link_text == "" then
     vim.notify("No file or link under cursor", vim.log.levels.WARN)
     return
@@ -781,7 +785,7 @@ function Nvim.MarkDownTool.open_link(mode)
     end
   end
 
-  if mode == "float" then
+  if mode == "float" or mode == "float_cline" or mode == "float_visual" then
     -- Float window mode
     local buf = vim.api.nvim_create_buf(false, true)
 

@@ -146,13 +146,21 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = { "Avante*", "copilot-chat" },
   callback = function()
     vim.keymap.set("n", "<a-o>", function()
-      Nvim.MarkDownTool.open_link()
-    end, { buffer = true, desc = "Open file under cursor in picked window" })
+      Nvim.MarkDownTool.open_link("cfile")
+    end, { buffer = true, desc = "Open file under cursor (cfile) in picked window" })
     vim.keymap.set("v", "<a-o>", ":<C-u>call v:lua.Nvim.MarkDownTool.open_link('visual')<cr>",
-      { silent = true, buffer = true, desc = "Open file under cursor in picked window" })
+      { silent = true, buffer = true, desc = "Open file under cursor (visual) in picked window" })
     vim.keymap.set("n", "gh", function()
       Nvim.MarkDownTool.open_link("float")
-    end, { buffer = true, desc = "Open file under cursor in float window" })
+    end, { buffer = true, desc = "Open file under cursor (cfile) in float window" })
+    vim.keymap.set("v", "gh", ":<C-u>call v:lua.Nvim.MarkDownTool.open_link('float_visual')<cr>",
+      { silent = true, buffer = true, desc = "Open file under cursor (visual) in float window" })
+    vim.keymap.set("n", "g;", function()
+      Nvim.MarkDownTool.open_link("cline")
+    end, { buffer = true, desc = "Open file under cursor (cline) in picked window" })
+    vim.keymap.set("n", "gp", function()
+      Nvim.MarkDownTool.open_link("float_cline")
+    end, { buffer = true, desc = "Open file under cursor (cline) in float window" })
   end,
 })
 
