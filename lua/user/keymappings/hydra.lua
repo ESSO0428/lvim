@@ -2,7 +2,7 @@ local got_hydra, hydra = pcall(require, "hydra")
 lvim.builtin.which_key.setup.plugins.presets.h = false
 
 local hint = [[
-_(_/_)_: c previous/next
+_<_/_>_: c previous/next
 ]]
 
 hydra({
@@ -20,8 +20,32 @@ hydra({
   },
   body = "<leader>hq",
   heads = {
-    { ')', ':cnext<cr>',     { desc = 'cnext' } },
-    { '(', ':cprevious<CR>', { desc = 'cprevious' } }
+    { '>', ':cnext<cr>',     { desc = 'cnext' } },
+    { '<', ':cprevious<CR>', { desc = 'cprevious' } }
+  }
+})
+
+hint = [[
+_<_/_>_: previous/next
+]]
+
+hydra({
+  name = "args",
+  mode = { "n" },
+  hint = hint,
+  config = {
+    invoke_on_body = true,
+    color = "pink",
+    hint = {
+      float_opts = {
+        border = 'rounded',
+      },
+    },
+  },
+  body = "<leader>ha",
+  heads = {
+    { '>', ':next<cr>',     { desc = 'next' } },
+    { '<', ':previous<CR>', { desc = 'previous' } }
   }
 })
 
