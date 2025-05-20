@@ -246,9 +246,20 @@ M.config = {
     },
     "Trouble",
     -- WARNING: This will break the layout if the qf is used as an edgy bottom
-    -- { ft = "qf",            title = "QuickFix" },
+    -- { ft = "qf", title = "QuickFix" },
     {
       ft = "help",
+      size = { height = 20 },
+      -- only show help buffers
+      title = function()
+        return title_update_based_edgy_status("help", "help", "")
+      end,
+      filter = function(buf)
+        return vim.bo[buf].buftype == "help"
+      end,
+    },
+    {
+      ft = "markdown",
       size = { height = 20 },
       -- only show help buffers
       title = function()
