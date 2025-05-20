@@ -110,6 +110,12 @@ function ReStartNotTableFileTypeLayout(action)
     -- vim.cmd("lua require('lualine').setup()")
     vim.cmd("set laststatus=3")
   end
+  if action == 'enter' and is_match_filetype == 1 and vim.b.current_buffer_syntax == "on" then
+    vim.defer_fn(function()
+      vim.cmd("TSBufDisable highlight")
+      vim.cmd("set laststatus=2")
+    end, 20)
+  end
 end
 
 function SetupMarkdownBufferSyntaxConceal()
