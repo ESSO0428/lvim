@@ -299,6 +299,8 @@ vnoremap s,uG zuG
 vnoremap s,= z=
 " ===
 nnoremap <silent> <a-m> :set list!<cr>
+" indent
+nnoremap <silent> se :set expandtab!<cr>:echo "tab indent: " . (!&expandtab ? "on" : "off")<cr>
 " === gf control ===
 autocmd BufEnter * if expand('%') != '' | set path=.,%:h | endif
 nnoremap sF <c-w>F
