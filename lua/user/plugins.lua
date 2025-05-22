@@ -1613,6 +1613,20 @@ lvim.plugins = {
     version = "2.*",
     config = function()
       local avante_filtypes = { "Avante", "AvanteSelectedFiles", "AvanteInput", "AvantePromptInput" }
+      local ignore_filetype = vim.list_extend({ "NvimTree", "neo-tree", "neo-tree-popup", "notify", "Outline", "edgy" },
+        avante_filtypes)
+      local ignore_buftype = { "terminal", "quickfix" }
+      -- NOTE: Integrate with edgy
+      for i_pos, layout_pos in ipairs({ "bottom", "left", "right" }) do
+        for i_view, obj in ipairs(require("edgy.config").layout[layout_pos].views) do
+          if obj.ft and obj.ft ~= "markdown" and not vim.tbl_contains(ignore_filetype, obj.ft) then
+            table.insert(ignore_filetype, obj.ft)
+          end
+        end
+        if vim.tbl_contains(ignore_buftype, "help") then
+          table.insert(ignore_buftype, "help")
+        end
+      end
       require("window-picker").setup({
         -- type of hints you want to get
         -- following types are supported
@@ -1627,10 +1641,9 @@ lvim.plugins = {
           -- filter using buffer options
           bo = {
             -- if the file type is one of following, the window will be ignored
-            filetype = vim.list_extend({ "NvimTree", "neo-tree", "neo-tree-popup", "notify", "Outline", "edgy" },
-              avante_filtypes),
+            filetype = ignore_filetype,
             -- if the buffer type is one of following, the window will be ignored
-            buftype = { "terminal", "quickfix" },
+            buftype = ignore_buftype,
           },
         },
       })
