@@ -14,7 +14,7 @@ local function window_picker_open(state)
   -- Get the number of windows
   local win_count = #vim.api.nvim_tabpage_list_wins(0)
   -- Get the filetype of the current buffer
-  local current_filetype = vim.api.nvim_buf_get_option(0, "filetype")
+  local current_filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
 
   -- If there is only one window and the filetype is neo-tree, open directly
   if win_count == 1 and current_filetype == "neo-tree" then
@@ -30,7 +30,21 @@ local function window_picker_open(state)
     return
   end
   if is_file then
-    local picked_window_id = picker.pick_window()
+    local picked_window_id
+    if vim.fn.winnr() < 2 then
+      picked_window_id = picker.pick_window()
+    else
+      local ignore_filetype = require("user.window_picker").opts.filter_rules.bo.filetype
+      ignore_filetype = vim.tbl_filter(function(ft) return ft ~= "neo-tree" end, ignore_filetype)
+      picked_window_id = picker.pick_window({
+        include_current_win = true,
+        filter_rules = {
+          bo = {
+            filetype = ignore_filetype,
+          },
+        },
+      })
+    end
     if type(picked_window_id) == "number" then
       vim.api.nvim_set_current_win(picked_window_id)
       vim.cmd("edit " .. vim.fn.fnameescape(node.path))
@@ -43,7 +57,7 @@ local function window_picker_open_vsplit(state)
   -- Get the number of windows
   local win_count = #vim.api.nvim_tabpage_list_wins(0)
   -- Get the filetype of the current buffer
-  local current_filetype = vim.api.nvim_buf_get_option(0, "filetype")
+  local current_filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
 
   -- If there is only one window and the filetype is neo-tree, open directly
   if win_count == 1 and current_filetype == "neo-tree" then
@@ -72,7 +86,7 @@ local function window_picker_open_split(state)
   -- Get the number of windows
   local win_count = #vim.api.nvim_tabpage_list_wins(0)
   -- Get the filetype of the current buffer
-  local current_filetype = vim.api.nvim_buf_get_option(0, "filetype")
+  local current_filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
 
   -- If there is only one window and the filetype is neo-tree, open directly
   if win_count == 1 and current_filetype == "neo-tree" then

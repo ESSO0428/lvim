@@ -132,9 +132,14 @@ local function list_and_select_windows_in_tab()
     end
 
     local is_float = vim.api.nvim_win_get_config(win).relative ~= ''
-    local prefix = is_float and "[Float]: " or "[Normal]: "
+    local prefix = is_float and "[Float]" or "[Normal]"
     if not restricted_fts_set[src_filetype] then
-      table.insert(window_infos, { win = win, name = prefix .. name, bufnr = buf, lnum = lnum })
+      local display_text = string.format("%-6s %-8s %s",
+        tostring(win),
+        prefix,
+        name
+      )
+      table.insert(window_infos, { win = win, name = display_text, bufnr = buf, lnum = lnum })
     end
   end
 
