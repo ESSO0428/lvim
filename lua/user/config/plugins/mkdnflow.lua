@@ -126,7 +126,9 @@ local function markdown_go_to_definition()
       end
     else
       vim.api.nvim_echo({ { "LSP 'go to definition' failed, using MkdnFollowLink instead", "WarningMsg" } }, true, {})
-      vim.api.nvim_command('MkdnFollowLink')
+      pcall(function()
+        vim.api.nvim_command('MkdnFollowLink')
+      end)
     end
   end)
 end

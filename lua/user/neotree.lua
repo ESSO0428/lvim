@@ -137,6 +137,7 @@ local custom_mappings = {
   -- ["/"] = "telescope",
   -- navigate_up == dir_up
   ['@'] = avante_add_files,
+  ['u'] = float_termMore,
   ['e'] = function() vim.cmd('Neotree focus filesystem left') end,
   ['b'] = function() vim.cmd('Neotree focus buffers left') end,
   ['<leader>gg'] = function() vim.cmd('Neotree focus git_status left') end,

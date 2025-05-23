@@ -166,11 +166,6 @@ M.exec_toggleBatOrMore = function(opts)
     file_cmd = "more " .. opts.abspath
   end
 
-  local venv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
-  if venv and venv ~= vim.g.PythonEnv then
-    file_cmd = "'conda activate " .. venv .. " && " .. file_cmd .. "'"
-  end
-
   local Terminal = require("toggleterm.terminal").Terminal
   local viewer = Terminal:new {
     cmd = file_cmd,
@@ -180,7 +175,7 @@ M.exec_toggleBatOrMore = function(opts)
     close_on_exit = true,
     on_open = function(term)
       vim.cmd "startinsert!"
-      vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<c-\\>", "<cmd>close<cr>", { noremap = true, silent = true })
+      vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<c-\\>", "<cmd>bd!<cr>", { noremap = true, silent = true })
     end,
     count = opts.count
   }

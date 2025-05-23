@@ -34,7 +34,8 @@ lvim.builtin.bigfile.config = {
               "[n]ot open",
               "[s]ecurity session save and open",
               "[y]es directly open",
-              "choice(s/y/n): ",
+              "[v]iew with bat/more in terminal",
+              "choice(s/y/v/n): ",
             }, "\n")
           )
           if choice == "s" then
@@ -47,6 +48,36 @@ lvim.builtin.bigfile.config = {
             end, 50)
           elseif choice == "y" then
             -- Continue with default settings
+          elseif choice == "v" then
+            -- View with bat or more in terminal
+            vim.cmd("b#")
+            vim.cmd("bd " .. bufnr)
+
+            local cmd_exists = function(cmd)
+              return vim.fn.system("command -v " .. cmd) ~= ""
+            end
+
+            local file_cmd
+            if cmd_exists("bat") then
+              file_cmd = "bat --paging=always --style=full --wrap=never " .. vim.fn.shellescape(fileName)
+            else
+              file_cmd = "more " .. vim.fn.shellescape(fileName)
+            end
+
+            -- 使用 toggleterm 來處理終端
+            local Terminal = require("toggleterm.terminal").Terminal
+            local viewer = Terminal:new {
+              cmd = file_cmd,
+              hidden = true,
+              direction = "float",
+              close_on_exit = true,
+              on_open = function(term)
+                vim.cmd "startinsert!"
+                vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<c-\\>", "<cmd>bd!<cr>",
+                  { noremap = true, silent = true })
+              end,
+            }
+            viewer:open()
           else
             -- vim.cmd("BufferLineKill")
             vim.cmd("b#")
