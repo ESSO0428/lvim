@@ -13,6 +13,11 @@ vim.cmd "au ColorScheme * hi AvanteConflictIncomingLabel guibg=#1a3c3e"
 vim.cmd "au ColorScheme * hi link AvanteConflictIncoming DiffAdd"
 
 -- NOTE: Switch Avante mode
+-- HACK: [avante.nvim commit: 87c4c6b] Switching Avante mode by changing the config value alone is not sufficient.
+--       If the previous conversation context contains agentic-style instructions or examples,
+--       the AI may continue behaving in agentic mode even after switching to legacy.
+--       Therefore, **always remind the AI explicitly** of the current mode after switching,
+--       especially when switching to legacy, to enforce rules like SEARCH/REPLACE blocks.
 local function avante_switch_mode()
   local avante_config = require("avante.config")
 
