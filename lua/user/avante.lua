@@ -69,6 +69,8 @@ end
 M.opts = {
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
   provider = "copilot", -- Recommend using Claude
+  ---@alias Mode "agentic" | "legacy"
+  mode = "agentic",     -- The default mode for interaction. "agentic" uses tools to automatically generate code, "legacy" uses the old planning method to generate code.
   copilot = {
     endpoint = "https://api.githubcopilot.com",
     model = "claude-sonnet-4",
@@ -162,10 +164,8 @@ M.opts = {
     auto_set_keymaps = true,
     auto_apply_diff_after_generation = false,
     support_paste_from_clipboard = false,
-    minimize_diff = true,                        -- Whether to remove unchanged lines when applying a code block
-    enable_token_counting = true,                -- Whether to enable token counting. Default to true.
-    enable_cursor_planning_mode = false,         -- Whether to enable Cursor Planning Mode. Default to false.
-    enable_claude_text_editor_tool_mode = false, -- Whether to enable Claude Text Editor Tool Mode.
+    minimize_diff = true,         -- Whether to remove unchanged lines when applying a code block
+    enable_token_counting = true, -- Whether to enable token counting. Default to true.
   },
   mappings = {
     --- @class AvanteConflictMappings
@@ -258,40 +258,43 @@ M.opts = {
     throttle = 600,
   },
 }
-local ok_mcphub, mcphub = pcall(require, "mcphub")
-if ok_mcphub and mcphub.get_hub_instance() ~= nil then
-  -- The system_prompt type supports both a string and a function that returns a string. Using a function here allows dynamically updating the prompt with mcphub
-  M.opts.system_prompt = function()
+-- system_prompt as function ensures LLM always has latest MCP server state
+-- This is evaluated for every message, even in existing chats
+M.opts.system_prompt = function()
+  local ok_mcphub, mcphub = pcall(require, "mcphub")
+  if ok_mcphub then
     local hub = mcphub.get_hub_instance()
-    return hub:get_active_servers_prompt()
+    return hub and hub:get_active_servers_prompt() or ""
   end
+  return ""
+end
 
-  local ok_avante_ext, avante_ext = pcall(require, "mcphub.extensions.avante")
-  if ok_avante_ext then
-    M.opts.custom_tools = function()
-      return {
-        avante_ext.mcp_tool(),
-      }
-    end
+-- Using function prevents requiring mcphub before it's loaded
+local ok_avante_ext, avante_ext = pcall(require, "mcphub.extensions.avante")
+if ok_avante_ext then
+  M.opts.custom_tools = function()
+    return {
+      avante_ext.mcp_tool(),
+    }
   end
+end
 
-  -- add disabled tools in table and unique
-  local tools_to_disable = {
-    "list_files",
-    "search_files",
-    "read_file",
-    "create_file",
-    "rename_file",
-    "delete_file",
-    "create_dir",
-    "rename_dir",
-    "delete_dir",
-    "bash",
-  }
-  for _, tool in ipairs(tools_to_disable) do
-    if not vim.tbl_contains(M.opts.disabled_tools, tool) then
-      table.insert(M.opts.disabled_tools, tool)
-    end
+-- add disabled tools in table and unique
+local tools_to_disable = {
+  "list_files", -- Built-in file operations
+  "search_files",
+  "read_file",
+  "create_file",
+  "rename_file",
+  "delete_file",
+  "create_dir",
+  "rename_dir",
+  "delete_dir",
+  "bash", -- Built-in terminal access
+}
+for _, tool in ipairs(tools_to_disable) do
+  if not vim.tbl_contains(M.opts.disabled_tools, tool) then
+    table.insert(M.opts.disabled_tools, tool)
   end
 end
 

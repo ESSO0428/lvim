@@ -223,6 +223,12 @@ lvim.builtin.lualine.sections = {
     { 'filetype',                                 icon_only = false },
     components.lsp,
     {
+      (function()
+        local success, module = pcall(require, 'mcphub.extensions.lualine')
+        return success and module or {}
+      end)()
+    },
+    {
       'pid',
       fmt = function() return "pid:" .. vim.g.vim_pid end
     }
