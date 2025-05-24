@@ -12,6 +12,58 @@ vim.cmd "au ColorScheme * hi link AvanteConflictCurrent DiffText"
 vim.cmd "au ColorScheme * hi AvanteConflictIncomingLabel guibg=#1a3c3e"
 vim.cmd "au ColorScheme * hi link AvanteConflictIncoming DiffAdd"
 
+-- NOTE: Switch Avante mode
+local function avante_switch_mode()
+  local avante_config = require("avante.config")
+
+  local modes = {
+    { name = "legacy",  label = "Legacy mode (use SEARCH/REPLACE diff blocks)" },
+    { name = "agentic", label = "Agentic mode (can directly overwrite file)" },
+  }
+
+  local current_mode = avante_config.mode or "legacy"
+
+  -- Prepare the menu entries, add * to the current mode
+  local items = vim.tbl_map(function(mode)
+    local prefix = (mode.name == current_mode) and "* " or "  "
+    return {
+      mode = mode.name,
+      display = prefix .. mode.label,
+    }
+  end, modes)
+
+  vim.ui.select(items, {
+    prompt = "Select Avante mode:",
+    format_item = function(item) return item.display end,
+  }, function(choice)
+    if not choice then return end
+
+    -- Always send reminder prompt, no matter if mode actually changed
+    avante_config.mode = choice.mode
+    if choice.mode == "legacy" then
+      vim.notify("[Avante] Switched to legacy mode", vim.log.levels.INFO)
+      require("avante.api").ask({
+        question =
+        "Reminder: Legacy mode enabled. Please apply the SEARCH/REPLACE diff block rule on your next response for file edits. Do not change files in the current conversation."
+      })
+    else
+      vim.notify("[Avante] Switched to agentic mode", vim.log.levels.INFO)
+      require("avante.api").ask({
+        question =
+        "Reminder: Agentic mode enabled. You may freely modify files as you normally would, starting with your next response to a file edit request. Do not make any file changes in the current conversation."
+      })
+    end
+  end)
+end
+
+-- Optionally, add a command to call the menu
+vim.api.nvim_create_user_command("AvanteSwitchMode", avante_switch_mode, {})
+
+-- Optional: Add keymap for quick access
+vim.keymap.set("n", "<leader>am", avante_switch_mode, {
+  desc = "Select Avante mode (legacy/agentic)"
+})
+
 -- NOTE: Avante config
 local Utils
 local ok_utils, utils_module = pcall(require, "avante.utils")
@@ -70,7 +122,7 @@ M.opts = {
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
   provider = "copilot", -- Recommend using Claude
   ---@alias Mode "agentic" | "legacy"
-  mode = "agentic",     -- The default mode for interaction. "agentic" uses tools to automatically generate code, "legacy" uses the old planning method to generate code.
+  mode = "legacy",      -- The default mode for interaction. "agentic" uses tools to automatically generate code, "legacy" uses the old planning method to generate code.
   copilot = {
     endpoint = "https://api.githubcopilot.com",
     model = "claude-sonnet-4",

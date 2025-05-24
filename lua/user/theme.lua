@@ -223,6 +223,17 @@ lvim.builtin.lualine.sections = {
     { 'filetype',                                 icon_only = false },
     components.lsp,
     {
+      function()
+        local ok, conf = pcall(require, "avante.config")
+        if ok and conf and conf.mode then
+          return "Avante:" .. tostring(conf.mode)
+        else
+          return ""
+        end
+      end,
+      color = { fg = "#9ece6a", gui = "bold" },
+    },
+    {
       (function()
         local success, module = pcall(require, 'mcphub.extensions.lualine')
         return success and module or {}
