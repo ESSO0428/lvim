@@ -19,8 +19,7 @@ local function generic_pdoc(ilevel, args)
     return trimed
   end, vim.split(
     args[1][1],
-    ',',
-    true
+    ','
   ))
 
   if args[1][1] == '' then
@@ -83,32 +82,55 @@ local snippets = {
     t({ "", "@author: " }), f(current_user, {}), t({ "", '"""', "" }),
     i(0) -- Jump here after filling header
   }),
-  s({ trig = 'class', dscr = 'Documented Class Structure' }, {
+  s({ trig = 'classd', dscr = 'Class with docstring' }, {
     t('class '),
-    i(1, { 'NewClass' }),
+    i(1, 'MyClass'),
     t('('),
-    i(2, { '' }),
-    t({ '):', '\t' }),
-    t({ 'def init(self,' }),
-    i(3),
+    i(2, 'object'),
+    t({ '):', '', '\t' }),
+    t("'''"),
+    i(3, 'Docstring for '),
+    f(function(args) return args[1] end, { 1 }),
+    t('. '),
+    t({ "'''", '', '\tdef __init__(self' }),
+    i(4),
     t({ '):', '\t\t' }),
-    d(4, pycdoc, { 3 }, { 2 }),
+    t("'''"),
+    i(5, 'TODO: to be defined.'),
+    t({ '', '' }),
     f(function(args)
       if not args[1][1] or args[1][1] == '' then
-        return { '' }
+        return { '\t\t' .. "'''" }
       end
-      local a = vim.tbl_map(function(item)
-        local trimed = vim.trim(item)
-        return '\t\tself.' .. trimed .. ' = ' .. trimed
-      end, vim.split(
-        args[1][1],
-        ',',
-        true
-      ))
-      return a
-    end, {
-      3,
-    }),
+
+      local lines = { '' }
+      local params = vim.tbl_map(function(item)
+        return vim.trim(item)
+      end, vim.split(args[1][1], ','))
+
+      -- Add Args section if there are parameters
+      if #params > 0 and params[1] ~= '' then
+        table.insert(lines, '\t\tArgs:')
+        for _, param in ipairs(params) do
+          if param ~= '' then
+            table.insert(lines, '\t\t\t' .. param .. ': TODO')
+          end
+        end
+        table.insert(lines, '')
+      end
+
+      table.insert(lines, "\t\t'''")
+
+      -- Add assignment statements for parameters
+      for _, param in ipairs(params) do
+        if param ~= '' then
+          table.insert(lines, '\t\tself.' .. param .. ' = ' .. param)
+        end
+      end
+
+      return lines
+    end, { 4 }),
+    t({ '', '' }),
     i(0),
   }),
   s({ trig = 'def', dscr = 'Documented Function Structure' }, {
