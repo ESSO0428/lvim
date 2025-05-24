@@ -30,7 +30,7 @@
   "copilot.vim": { "branch": "release", "commit": "7097b09e52621a97d11f254e04de5e5a0f26e5f5" },
   "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
   "dressing.nvim": { "branch": "master", "commit": "2d7c2db2507fa3c4956142ee607431ddb2828639" },
-  "eagle.nvim": { "branch": "main", "commit": "4105db74a1a0809b968661ec8d8531724fc66241" },
+  "eagle.nvim": { "branch": "main", "commit": "dd1a28c4d8626fbe85580b0a9ed8f88d77a26da1" },
   "edgy.nvim": { "branch": "main", "commit": "7e8dedc39abebe40c289b8012cc89b11c69aa7a0" },
   "emmet-ls": { "branch": "master", "commit": "23b301ba030a1ba1e0e86705462f020983d9c85a" },
   "flash.nvim": { "branch": "main", "commit": "34c7be146a91fec3555c33fe89c7d643f6ef5cf1" },
