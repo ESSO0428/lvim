@@ -49,14 +49,18 @@ local function avante_switch_mode()
       vim.notify("[Avante] Switched to legacy mode", vim.log.levels.INFO)
       require("avante.api").ask({
         question =
-        "Reminder: Legacy mode enabled. Please apply the SEARCH/REPLACE diff block rule on your next response for file edits. Do not change files in the current conversation."
+        "Reminder: Legacy mode enabled. For file edits: examine files if needed (view, grep, ls), then provide SEARCH/REPLACE blocks. Never use file modification tools. Starting from next file edit request."
       })
+      -- NOTE: OLD VERSION
+      -- Reminder: Legacy mode enabled. Please apply the SEARCH/REPLACE diff block rule on your next response for file edits. Do not change files in the current conversation.
     else
       vim.notify("[Avante] Switched to agentic mode", vim.log.levels.INFO)
       require("avante.api").ask({
         question =
-        "Reminder: Agentic mode enabled. You may freely modify files as you normally would, starting with your next response to a file edit request. Do not make any file changes in the current conversation."
+        "Reminder: Agentic mode enabled. You may directly modify files using file modification tools (replace_in_file, write_file, etc.) starting from next file edit request."
       })
+      -- NOTE: OLD VERSION
+      -- Reminder: Agentic mode enabled. You may freely modify files as you normally would, starting with your next response to a file edit request. Do not make any file changes in the current conversation.
     end
   end)
 end
