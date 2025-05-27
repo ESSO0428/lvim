@@ -348,7 +348,32 @@ M.config = {
     }
   } ---@type (Edgy.View.Opts|string)[]
 }
-require("edgy").setup(M.config)
+
+local edgy_ok, edgy = pcall(require, "edgy")
+if edgy_ok then
+  edgy.setup(M.config)
+
+  -- print(lvim.builtion.nvimtree.active)
+  local restricted_fts = {}
+  local regions = { "bottom", "left", "right", "top" }
+
+  -- 收集所有 ft
+  for _, region in ipairs(regions) do
+    if M.config[region] and type(M.config[region]) == "table" then
+      for _, obj in ipairs(M.config[region]) do
+        if obj.ft then
+          table.insert(restricted_fts, obj.ft)
+        end
+      end
+    end
+  end
+
+  -- **優化：改用 table 來存儲 ft，提升查找速度**
+  for _, ft in ipairs(restricted_fts) do
+    require("user.config.plugins.floatwindow").restricted_fts_set[ft] = true
+  end
+end
+
 
 -- Function to swap left and right layouts
 function M.swap_layouts()

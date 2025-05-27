@@ -207,6 +207,30 @@ lvim.builtin.nvimtree.setup.tab.sync.open = false
 
 -- when nvimtree open weather disable auto resize all windows of current tab
 lvim.builtin.nvimtree.setup.view.preserve_window_proportions = true
+
+local function is_nfs_mount(path)
+  local handle = io.popen("df -T " .. path .. " | tail -n 1")
+  local result = handle:read("*a")
+  handle:close()
+
+  -- 检查文件系统类型是否为 nfs
+  if result:find("nfs") then
+    return true
+  else
+    return false
+  end
+end
+
+-- NOTE: judge if current path is on
+-- NFS file system will disable nvim-tree
+-- will switch nvim-tree to neo-tree
+if is_nfs_mount(vim.fn.getcwd()) then
+  -- NOTE: using nvim-tree or neo-tree
+  lvim.builtin.nvimtree.active = false
+else
+  lvim.builtin.nvimtree.active = true
+end
+
 -- general
 lvim.log.level = "info"
 lvim.format_on_save = {

@@ -34,15 +34,25 @@ local function window_picker_open(state)
     if vim.fn.winnr() < 2 then
       picked_window_id = picker.pick_window()
     else
-      local ignore_filetype = require("user.window_picker").opts.filter_rules.bo.filetype
+      local ignore_filetype = require("user.window_picker").opts.filter_rules.bo.filetype or {}
+      local ignore_buftype = require("user.window_picker").opts.filter_rules.bo.buftype or {}
       ignore_filetype = vim.tbl_filter(function(ft) return ft ~= "neo-tree" end, ignore_filetype)
       picked_window_id = picker.pick_window({
         include_current_win = true,
-        filter_rules = {
-          bo = {
-            filetype = ignore_filetype,
-          },
-        },
+        filter_func = function(window_ids)
+          local current_win = vim.api.nvim_get_current_win()
+          for i = #window_ids, 1, -1 do
+            local buffer = vim.api.nvim_win_get_buf(window_ids[i])
+            local filetype = vim.api.nvim_get_option_value("filetype", { buf = buffer })
+            local buftype = vim.api.nvim_get_option_value("buftype", { buf = buffer })
+            if filetype == "neo-tree" and window_ids[i] ~= current_win then
+              table.remove(window_ids, i)
+            elseif vim.tbl_contains(ignore_filetype, filetype) or vim.tbl_contains(ignore_buftype, buftype) then
+              table.remove(window_ids, i)
+            end
+          end
+          return window_ids
+        end,
       })
     end
     if type(picked_window_id) == "number" then
