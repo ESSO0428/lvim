@@ -6,4 +6,4 @@ if vim.fn.argc() == 0 or vim.fn.argv(0) ~= "." then
     autocmd({ "VimEnter" }, { callback = open_nvim_tree })
   end
 end
-autocmd({ "VimLeave" }, { pattern = "*", command = "set guicursor= | call chansend(v:stderr, \"\x1b[ q\")" })
+autocmd({ "VimLeave" }, { pattern = "*", command = "set guicursor= | call chansend(v:stderr, \"\x1b[5 q\")" })
