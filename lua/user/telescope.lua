@@ -356,6 +356,7 @@ vim.cmd('cnoreabbrev howdo Telescope howdoi')
 
 -- lvim.keys.normal_mode['<a-b>'] = { "<cmd>Telescope buffers<cr>" }
 lvim.builtin.which_key.mappings.s.c    = { "<cmd>Telescope command_history<cr>", "Command History" }
+lvim.builtin.which_key.mappings.s["/"] = { "<cmd>Telescope search_history<cr>", "Search History" }
 lvim.builtin.which_key.mappings.s.s    = { "<cmd>Telescope buffers<cr>", "Find" }
 lvim.builtin.which_key.mappings.s['`'] = { "<cmd>Telescope marks<cr>", "Marks" }
 lvim.builtin.which_key.mappings.s["'"] = { "<cmd>execute 'Telescope find_files default_text=' . expand('<cfile>')<cr>",
