@@ -132,21 +132,99 @@ M.opts = {
   provider = "copilot", -- Recommend using Claude
   ---@alias Mode "agentic" | "legacy"
   mode = "legacy",      -- The default mode for interaction. "agentic" uses tools to automatically generate code, "legacy" uses the old planning method to generate code.
-  copilot = {
-    endpoint = "https://api.githubcopilot.com",
-    model = "claude-sonnet-4",
-    proxy = nil,            -- [protocol://]host[:port] Use this proxy
-    allow_insecure = false, -- Allow insecure server connections
-    timeout = 30000,        -- Timeout in milliseconds
-    temperature = 0,
-    -- NOTE: [2025-03-04 00:34]
-    -- Default Copilot GPT-4o config in avante.nvim used **4096 tokens**.
-    -- However, 4096 is nearly unusable for Claude-3.5 or 3.7.
-    -- Even GPT-4o struggles at 4096 due to Vim's scheduling mechanism.
-    -- - Related issue: [#981](https://github.com/yetone/avante.nvim/issues/981)
-    -- Copilot previously claimed **8000 tokens support**, and this setting
-    -- works smoothly with `claude-3.7-sonnet`. `claude-3.5-sonnet` has not been tested yet.
-    max_tokens = 32768,
+  providers = {
+    copilot = {
+      endpoint = "https://api.githubcopilot.com",
+      model = "claude-sonnet-4",
+      proxy = nil,            -- [protocol://]host[:port] Use this proxy
+      allow_insecure = false, -- Allow insecure server connections
+      timeout = 30000,        -- Timeout in milliseconds
+      extra_request_body = {
+        temperature = 0,
+        -- NOTE: [2025-03-04 00:34]
+        -- Default Copilot GPT-4o config in avante.nvim used **4096 tokens**.
+        -- However, 4096 is nearly unusable for Claude-3.5 or 3.7.
+        -- Even GPT-4o struggles at 4096 due to Vim's scheduling mechanism.
+        -- - Related issue: [#981](https://github.com/yetone/avante.nvim/issues/981)
+        -- Copilot previously claimed **8000 tokens support**, and this setting
+        -- works smoothly with `claude-3.7-sonnet`. `claude-3.5-sonnet` has not been tested yet.
+        max_tokens = 32768,
+      },
+    },
+    vendors = {
+      ["copilot-claude-3.7-sonnet-thought"] = {
+        __inherited_from = "copilot",
+        endpoint = "https://api.githubcopilot.com",
+        model = "claude-3.7-sonnet-thought",
+        proxy = nil,
+        allow_insecure = false,
+        timeout = 30000,
+        extra_request_body = {
+          temperature = 0,
+          max_tokens = 32768,
+        },
+      },
+      ["copilot-claude-3.7-sonnet"] = {
+        __inherited_from = "copilot",
+        endpoint = "https://api.githubcopilot.com",
+        model = "claude-3.7-sonnet",
+        proxy = nil,
+        allow_insecure = false,
+        timeout = 30000,
+        extra_request_body = {
+          temperature = 0,
+          max_tokens = 32768,
+        },
+      },
+      ["copilot-claude-3.5-sonnet"] = {
+        __inherited_from = "copilot",
+        endpoint = "https://api.githubcopilot.com",
+        model = "claude-3.5-sonnet",
+        proxy = nil,
+        allow_insecure = false,
+        timeout = 30000,
+        extra_request_body = {
+          temperature = 0,
+          max_tokens = 32768,
+        },
+      },
+      ["copilot-gpt-4.1"] = {
+        __inherited_from = "copilot",
+        endpoint = "https://api.githubcopilot.com",
+        model = "gpt-4.1",
+        proxy = nil,
+        allow_insecure = false,
+        timeout = 30000,
+        extra_request_body = {
+          temperature = 0,
+          max_tokens = 64000,
+        },
+      },
+      ["copilot-gpt-4o"] = {
+        __inherited_from = "copilot",
+        endpoint = "https://api.githubcopilot.com",
+        model = "gpt-4o",
+        proxy = nil,
+        allow_insecure = false,
+        timeout = 30000,
+        extra_request_body = {
+          temperature = 0,
+          max_tokens = 64000,
+        },
+      },
+      ["copilot-o1"] = {
+        __inherited_from = "copilot",
+        endpoint = "https://api.githubcopilot.com",
+        model = "o1",
+        proxy = nil,
+        allow_insecure = false,
+        timeout = 30000,
+        extra_request_body = {
+          temperature = 0,
+          max_tokens = 20000,
+        },
+      },
+    },
   },
   disabled_tools = {},
   rag_service = {
@@ -156,68 +234,6 @@ M.opts = {
     llm_model = "",                         -- The LLM model to use for RAG service
     embed_model = "",                       -- The embedding model to use for RAG service
     endpoint = "https://api.openai.com/v1", -- The API endpoint for RAG service
-  },
-  vendors = {
-    ["copilot-claude-3.7-sonnet-thought"] = {
-      __inherited_from = "copilot",
-      endpoint = "https://api.githubcopilot.com",
-      model = "claude-3.7-sonnet-thought",
-      proxy = nil,
-      allow_insecure = false,
-      timeout = 30000,
-      temperature = 0,
-      max_tokens = 32768,
-    },
-    ["copilot-claude-3.7-sonnet"] = {
-      __inherited_from = "copilot",
-      endpoint = "https://api.githubcopilot.com",
-      model = "claude-3.7-sonnet",
-      proxy = nil,
-      allow_insecure = false,
-      timeout = 30000,
-      temperature = 0,
-      max_tokens = 32768,
-    },
-    ["copilot-claude-3.5-sonnet"] = {
-      __inherited_from = "copilot",
-      endpoint = "https://api.githubcopilot.com",
-      model = "claude-3.5-sonnet",
-      proxy = nil,
-      allow_insecure = false,
-      timeout = 30000,
-      temperature = 0,
-      max_tokens = 32768,
-    },
-    ["copilot-gpt-4.1"] = {
-      __inherited_from = "copilot",
-      endpoint = "https://api.githubcopilot.com",
-      model = "gpt-4.1",
-      proxy = nil,
-      allow_insecure = false,
-      timeout = 30000,
-      temperature = 0,
-      max_tokens = 64000,
-    },
-    ["copilot-gpt-4o"] = {
-      __inherited_from = "copilot",
-      endpoint = "https://api.githubcopilot.com",
-      model = "gpt-4o",
-      proxy = nil,
-      allow_insecure = false,
-      timeout = 30000,
-      temperature = 0,
-      max_tokens = 64000,
-    },
-    ["copilot-o1"] = {
-      __inherited_from = "copilot",
-      endpoint = "https://api.githubcopilot.com",
-      model = "o1",
-      proxy = nil,
-      allow_insecure = false,
-      timeout = 30000,
-      temperature = 0,
-      max_tokens = 20000,
-    },
   },
   behaviour = {
     auto_suggestions = false, -- Experimental stage
