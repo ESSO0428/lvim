@@ -184,6 +184,7 @@ lvim.builtin.nvimtree.setup.filters = {
   dotfiles = false,
   git_clean = false,
   no_buffer = false,
+  git_ignored = false,
   -- 忽略 User 下的 home link (並建立例外清單，允許 research 底下的 home)
   -- custom = { "node_modules", "\\.cache", "^home$" },
   custom = { "node_modules", "\\.cache", "^home$" },

@@ -20,6 +20,11 @@ lvim.builtin.telescope.on_config_done = function(telescope)
   pcall(telescope.load_extension, "bookmarks")
   -- any other extensions loading
 end
+lvim.builtin.telescope.pickers.find_files.no_ignore = true
+lvim.builtin.telescope.pickers.live_grep.additional_args = function(args)
+  return vim.list_extend(args,
+    { "--hidden", "--no-ignore" })
+end
 require("lvim.core.telescope.custom-finders").find_Lazy_pack_files = function(opts)
   opts = opts or {}
   local theme_opts = themes.get_ivy {
