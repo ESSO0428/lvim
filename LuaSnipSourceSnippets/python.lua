@@ -88,28 +88,29 @@ local snippets = {
     t('('),
     i(2, 'object'),
     t({ '):', '', '\t' }),
-    t("'''"),
+    t('"""'),
     i(3, 'Docstring for '),
     f(function(args) return args[1] end, { 1 }),
     t('. '),
-    t({ "'''", '', '\tdef __init__(self' }),
+    t({ '"""', '', '\tdef __init__(self' }),
     i(4),
     t({ '):', '\t\t' }),
-    t("'''"),
+    t('"""'),
     i(5, 'TODO: to be defined.'),
     t({ '', '' }),
     f(function(args)
       if not args[1][1] or args[1][1] == '' then
-        return { '\t\t' .. "'''" }
+        return { '\t\t' .. '"""' }
       end
 
       local lines = { '' }
+      -- Will split "," get parameters like `{"", "param1", "param2"}`, so param[1] is empty and need check #param > 0 and param[2] ~= ''
       local params = vim.tbl_map(function(item)
         return vim.trim(item)
       end, vim.split(args[1][1], ','))
 
       -- Add Args section if there are parameters
-      if #params > 0 and params[1] ~= '' then
+      if #params > 0 and params[2] ~= '' then
         table.insert(lines, '\t\tArgs:')
         for _, param in ipairs(params) do
           if param ~= '' then
@@ -119,7 +120,7 @@ local snippets = {
         table.insert(lines, '')
       end
 
-      table.insert(lines, "\t\t'''")
+      table.insert(lines, table.concat({ "\t\t", '"""' }, ""))
 
       -- Add assignment statements for parameters
       for _, param in ipairs(params) do
