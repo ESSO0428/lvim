@@ -58,6 +58,7 @@ lvim.builtin.which_key.mappings.u.a = { "<cmd>lua require('actions-preview').cod
 lvim.builtin.which_key.mappings.u.A = { "<cmd>lua require('inlayhint-filler').fill()<cr>", "Inlayhint Filler" }
 lvim.builtin.which_key.mappings.u.h = { "<cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<cr>",
   "LSP Inlay Hint" }
+lvim.builtin.which_key.mappings.u.t = { "<cmd>TSContextToggle<cr>", "Toggle Treesitter Context" }
 
 lvim.builtin.which_key.vmappings.u = lvim.builtin.which_key.vmappings.l
 lvim.builtin.which_key.vmappings.l = nil
