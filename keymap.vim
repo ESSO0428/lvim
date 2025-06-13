@@ -150,6 +150,9 @@ noremap <silent> gk gj
 vnoremap <silent> gi gk
 vnoremap <silent> gk gj
 
+" remap gi (go to last insert position)
+noremap <silent> ss gi
+
 " 覆蓋 i, k 成 gk, gj 
 " nnoremap <silent> i gk
 " nnoremap <silent> k gj
@@ -218,14 +221,6 @@ nnoremap <up> :res -5<cr>
 nnoremap <down> :res +5<cr>
 nnoremap <left> :vertical resize-5<cr>
 nnoremap <right> :vertical resize+5<cr>
-
-" Place the two screens up and down
-nnoremap sh <C-w>t<C-w>K
-" Place the two screens side by side
-nnoremap sv <C-w>t<C-w>H
-" Rotate screens
-nnoremap srh <C-w>b<C-w>K
-nnoremap srv <C-w>b<C-w>H
 
 " close current window only
 nnoremap <leader>q :q<cr>
