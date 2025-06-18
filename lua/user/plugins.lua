@@ -296,6 +296,8 @@ lvim.plugins = {
     'echasnovski/mini.nvim',
     version = false,
     config = function()
+      local MiniIcons = require('mini.icons')
+      MiniIcons.setup({})
       local files = require('mini.files')
       files.setup({
         options = {

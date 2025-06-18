@@ -24,7 +24,15 @@ local config = {
   warn_no_results = true,  -- show a warning when there are no results
   open_no_results = false, -- open the trouble window when there are no results
   ---@type trouble.Window.opts
-  win = {},                -- window options for the results window. Can be a split or a floating window.
+  win = {
+    bo = {
+      bufhidden = "wipe",
+      -- NOTE: use 'Trouble' instead of default 'trouble'
+      -- for better plugin compatibility (most plugins detect filetype 'Trouble' not 'trouble')
+      filetype = "Trouble",
+      buftype = "nofile",
+    },
+  }, -- window options for the results window. Can be a split or a floating window.
   -- Window options for the preview window. Can be a split, floating window,
   -- or `main` to show the preview in the main editor window.
   preview = {
