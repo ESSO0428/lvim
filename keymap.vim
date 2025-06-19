@@ -81,8 +81,12 @@ function! s:YankMarkdownCodeBlockOuter(type) abort
 
   let lines = getline(start_lnum, end_lnum)
 
+  let max_end_col = end_col
   for i in range(len(lines))
+    let line_len = len(lines[i])
     let lines[i] = lines[i][start_col - 1 :]
+    
+    let max_end_col = max([max_end_col, line_len])
   endfor
 
   call setreg('"', lines, 'l')
@@ -91,7 +95,7 @@ function! s:YankMarkdownCodeBlockOuter(type) abort
   " highlight the yank code block 
   try
     let pattern = '\%>' . (start_lnum - 1) . 'l\%>' . (start_col - 1) . 'c' .
-              \ '\%<' . (end_lnum + 1) . 'l\%<' . (end_col + 1) . 'c'
+              \ '\%<' . (end_lnum + 1) . 'l\%<' . (max_end_col + 1) . 'c'
 
     let id = matchadd('IncSearch', pattern)
 
