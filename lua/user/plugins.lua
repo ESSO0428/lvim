@@ -1003,6 +1003,22 @@ lvim.plugins = {
     deprecated = { 'nvim-telescope/telescope.nvim' },
     config = function()
       require('neoclip').setup()
+      vim.api.nvim_create_autocmd('TextYankPost', {
+        group = vim.api.nvim_create_augroup('NeoclipManualInsert', { clear = true }),
+        pattern = '*',
+        callback = function()
+          if require('neoclip').stopped then
+            return
+          end
+          if vim.v.event.regcontents == nil then
+            require('neoclip.storage').insert({
+              regtype = "l",
+              contents = vim.fn.getreg('"', 1, true),
+              filetype = vim.bo.filetype,
+            }, 'yanks')
+          end
+        end,
+      })
     end,
   },
   { "MunifTanjim/nui.nvim" },

@@ -18,36 +18,87 @@ vnoremap <silent> ,c :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
 onoremap <silent> hc :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
 onoremap <silent> ,c :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
 "" onoremap <silent> o :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>
-nnoremap <silent> yo :<C-U>call <SID>MdCodeBlockTextObj('i')<cr>y
+nnoremap <silent> yo :<C-U>call <SID>YankMarkdownCodeBlockOuter('i')<cr>
 
 vnoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
 " vnoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
 onoremap <silent> ac :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
 "" onoremap <silent> O :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>
-nnoremap <silent> yO :<C-U>call <SID>MdCodeBlockTextObj('a')<cr>y
+nnoremap <silent> yO :<C-U>call <SID>YankMarkdownCodeBlockOuter('a')<cr>
 
 function! s:MdCodeBlockTextObj(type) abort
   " the parameter type specify whether it is inner text objects or arround
   " text objects.
-  let start_row = searchpos('\s*```', 'bn')[0]
-  let end_row = searchpos('\s*```', 'n')[0]
+  let start_pos = searchpos('\s*\zs```', 'bn')
+  let end_pos = searchpos('\s*\zs```', 'n')
+  let start_row = start_pos[0]
+  let start_col = start_pos[1]
+  let end_row = end_pos[0]
+  let end_col = end_pos[1]
 
   " Check if valid positions are found
   if start_row == 0 || end_row == 0 || start_row >= end_row
     return
   endif
 
+  let code_block_upper_left = start_col
+  let code_block_lower_right = end_col
   if a:type ==# 'i'
     let start_row += 1
     let end_row -= 1
+    let code_block_lower_right = len(getline(end_row)) + 1
   endif
   " echo a:type start_row end_row
 
-  call setpos("'<", [0, start_row, 1, 0])
-  call setpos("'>", [0, end_row, 1, 0])
-  execute 'normal! `<V`>'
+  call setpos("'<", [0, start_row, code_block_upper_left, 0])
+  call setpos("'>", [0, end_row, code_block_lower_right, 0])
+  execute "normal! `<\<C-v>`>$"
 endfunction
 
+function! s:YankMarkdownCodeBlockOuter(type) abort
+  call <SID>MdCodeBlockTextObj(a:type)
+  
+  " Yank the visually selected code block (visual-block mode) into both:
+  " - the system clipboard (used for external Ctrl-V pasting),
+  " - and Vim's unnamed register (used for internal `p` pasting).
+  "
+  " The system clipboard does not preserve block selection structure, so Ctrl-V pastes
+  " the text as plain lines with line breaks — which is acceptable.
+  "
+  " However, Vim’s unnamed register (`"`) *does* preserve block structure (blockwise-mode),
+  " meaning `p` would paste the block to the right of the cursor instead of on its own lines.
+  "
+  " To correct this, we later extract the selected lines via marks `<` and `>`, apply
+  " linewise cleanup (e.g., trim indentation), and overwrite only Vim’s unnamed register
+  " using `setreg()`. The system clipboard remains untouched, which is desirable.
+  noautocmd normal! y
+  
+  let winid = win_getid()
+  let [_, start_lnum, start_col, _] = getpos("'<")
+  let [_, end_lnum, end_col, _] = getpos("'>")
+
+  call feedkeys("\<Esc>", 'n')
+
+  let lines = getline(start_lnum, end_lnum)
+
+  for i in range(len(lines))
+    let lines[i] = lines[i][start_col - 1 :]
+  endfor
+
+  call setreg('"', lines, 'l')
+  doautocmd TextYankPost
+
+  " highlight the yank code block 
+  try
+    let pattern = '\%>' . (start_lnum - 1) . 'l\%>' . (start_col - 1) . 'c' .
+              \ '\%<' . (end_lnum + 1) . 'l\%<' . (end_col + 1) . 'c'
+
+    let id = matchadd('IncSearch', pattern)
+
+    call timer_start(200, { -> win_execute(winid, 'call matchdelete(' . id . ')') })
+  catch
+  endtry
+endfunction
 
 nnoremap <c-w> :bd<cr>
 
@@ -107,6 +158,9 @@ nnoremap z u
 " Append Key
 noremap h i
 noremap H I
+
+" remap z relationship keymaps
+nnoremap <leader>z z
 
 " Search
 " nnoremap <leader><cr> :nohlsearch<cr>
