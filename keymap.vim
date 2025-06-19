@@ -48,7 +48,6 @@ function! s:MdCodeBlockTextObj(type) abort
     let end_row -= 1
     let code_block_lower_right = len(getline(end_row)) + 1
   endif
-  " echo a:type start_row end_row
 
   call setpos("'<", [0, start_row, code_block_upper_left, 0])
   call setpos("'>", [0, end_row, code_block_lower_right, 0])
