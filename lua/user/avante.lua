@@ -126,12 +126,15 @@ elseif not is_docker_running() then
   rag_enabled = false
 end
 
+---@module 'avante'
 ---@class avante.Config
 M.opts = {
   ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
+  ---@type Provider
   provider = "copilot", -- Recommend using Claude
   ---@alias Mode "agentic" | "legacy"
-  mode = "legacy",      -- The default mode for interaction. "agentic" uses tools to automatically generate code, "legacy" uses the old planning method to generate code.
+  ---@type Mode
+  mode = "legacy", -- The default mode for interaction. "agentic" uses tools to automatically generate code, "legacy" uses the old planning method to generate code.
   providers = {
     copilot = {
       endpoint = "https://api.githubcopilot.com",
@@ -227,13 +230,25 @@ M.opts = {
     },
   },
   disabled_tools = {},
-  rag_service = {
-    enabled = rag_enabled,                  -- Enables the RAG service
-    host_mount = os.getenv("HOME"),         -- Host mount path for the rag service
-    provider = "openai",                    -- The provider to use for RAG service (e.g. openai or ollama)
-    llm_model = "",                         -- The LLM model to use for RAG service
-    embed_model = "",                       -- The embedding model to use for RAG service
-    endpoint = "https://api.openai.com/v1", -- The API endpoint for RAG service
+  rag_service = {                             -- RAG Service configuration
+    enabled = rag_enabled,                    -- Enables the RAG service
+    host_mount = os.getenv("HOME"),           -- Host mount path for the rag service (Docker will mount this path)
+    runner = "docker",                        -- Runner for the RAG service (can use docker or nix)
+    llm = {                                   -- Language Model (LLM) configuration for RAG service
+      provider = "openai",                    -- LLM provider
+      endpoint = "https://api.openai.com/v1", -- LLM API endpoint
+      api_key = "OPENAI_API_KEY",             -- Environment variable name for the LLM API key
+      model = "gpt-4o-mini",                  -- LLM model name
+      extra = nil,                            -- Additional configuration options for LLM
+    },
+    embed = {                                 -- Embedding model configuration for RAG service
+      provider = "openai",                    -- Embedding provider
+      endpoint = "https://api.openai.com/v1", -- Embedding API endpoint
+      api_key = "OPENAI_API_KEY",             -- Environment variable name for the embedding API key
+      model = "text-embedding-3-large",       -- Embedding model name
+      extra = nil,                            -- Additional configuration options for the embedding model
+    },
+    docker_extra_args = "",                   -- Extra arguments to pass to the docker command
   },
   behaviour = {
     auto_suggestions = false, -- Experimental stage
@@ -241,8 +256,12 @@ M.opts = {
     auto_set_keymaps = true,
     auto_apply_diff_after_generation = false,
     support_paste_from_clipboard = false,
-    minimize_diff = true,         -- Whether to remove unchanged lines when applying a code block
-    enable_token_counting = true, -- Whether to enable token counting. Default to true.
+    minimize_diff = true,                  -- Whether to remove unchanged lines when applying a code block
+    enable_token_counting = true,          -- Whether to enable token counting. Default to true.
+    auto_approve_tool_permissions = false, -- Default: show permission prompts for all tools
+    -- Examples:
+    -- auto_approve_tool_permissions = true,                -- Auto-approve all tools (no prompts)
+    -- auto_approve_tool_permissions = {"bash", "replace_in_file"}, -- Auto-approve specific tools only
   },
   mappings = {
     --- @class AvanteConflictMappings
