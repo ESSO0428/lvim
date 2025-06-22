@@ -113,17 +113,20 @@ local function is_docker_running()
   return not result:match("Cannot connect to the Docker daemon")
 end
 
-local rag_enabled = true
+-- RAG service enabled or not, if docker or llm api_key is not available, it will be disabled.
+local rag_enabled = false
 
-if not api_key or api_key == "" then
-  vim.notify("[RAG] OPENAI_API_KEY not found. RAG service disabled.", vim.log.levels.WARN)
-  rag_enabled = false
-elseif not has_command("docker") then
-  vim.notify("[RAG] Docker command not found. RAG service disabled.", vim.log.levels.WARN)
-  rag_enabled = false
-elseif not is_docker_running() then
-  vim.notify("[RAG] Docker daemon is not running. RAG service disabled.", vim.log.levels.WARN)
-  rag_enabled = false
+if rag_enabled == true then
+  if not api_key or api_key == "" then
+    vim.notify("[RAG] OPENAI_API_KEY not found. RAG service disabled.", vim.log.levels.WARN)
+    rag_enabled = false
+  elseif not has_command("docker") then
+    vim.notify("[RAG] Docker command not found. RAG service disabled.", vim.log.levels.WARN)
+    rag_enabled = false
+  elseif not is_docker_running() then
+    vim.notify("[RAG] Docker daemon is not running. RAG service disabled.", vim.log.levels.WARN)
+    rag_enabled = false
+  end
 end
 
 ---@module 'avante'
