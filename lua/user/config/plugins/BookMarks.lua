@@ -53,7 +53,10 @@ require("bookmarks").setup {
     -- Save all bookmarks to the bookmarks file.
     -- This prevents data loss in case of an unexpected Neovim closure.
     -- NOTE: Bookmarks are auto-saved by VimLeavePre by default.)
-    map("n", "ms", bm_actions.saveBookmarks)
+    map("n", "ms", function()
+      bm_actions.saveBookmarks()
+      print("Saved Bookmarks")
+    end)
 
     map("n", "mk", bm.bookmark_next) -- jump to next mark in local buffer
     map("n", "mi", bm.bookmark_prev) -- jump to previous mark in local buffer
