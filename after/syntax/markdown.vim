@@ -27,6 +27,7 @@ function! SetupMarkdownEscapedSyntax()
   syntax match left_brackets /\\\[/ conceal cchar=[
   syntax match right_brackets /\\\]/ conceal cchar=]
   syntax match escaped_underscore /\\_/ conceal cchar=_
+  syntax match escaped_star /\\\*/ conceal cchar=*
 endfunction
 
 function! SetupMarkdownOtherConcelSyntax()
