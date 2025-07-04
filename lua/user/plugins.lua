@@ -298,6 +298,7 @@ lvim.plugins = {
     config = function()
       local MiniIcons = require('mini.icons')
       MiniIcons.setup({})
+      _G.MiniIcons = nil
       local files = require('mini.files')
       files.setup({
         options = {
