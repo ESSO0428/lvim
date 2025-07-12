@@ -122,6 +122,12 @@ vim.cmd "au ColorScheme * hi LspInlayHint guifg=#a59669 guibg=#2d2d2d"
 vim.cmd "au ColorScheme * hi TailwindConceal guifg=#38BDF8"
 
 if lvim.transparent_window == true then
+  -- NOTE: Neovim 0.11+ (commit: e049c6e) stacks highlight groups (e.g. TabLineFill + Normal),
+  -- which can override 'guibg=none' with an unintended background color (e.g. black).
+  -- This forces TabLineFill to stay transparent, and PanelHeading to keep solid bg.
+  vim.cmd "au ColorScheme * hi TabLineFill guibg=none"
+  vim.cmd "au ColorScheme * hi PanelHeading guibg=#000000 gui=nocombine"
+
   vim.cmd "au ColorScheme * hi BufferLineBufferSelected guifg=#3ab6f0"
 
   vim.cmd "au ColorScheme * hi BufferLineTabSelected guifg=#3ab6f0"

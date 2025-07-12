@@ -63,6 +63,17 @@ vim.opt.completeopt = "menuone,noselect,popup"
 vim.g.PythonEnv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
 vim.g.WorkDirectoryPath = vim.fn.getcwd()
 
+-- NOTE: For Nvim 0.11+, the python3 provider no longer falls back to system python.
+-- If `g:python3_host_prog` is not set, it defaults to `v:null`, causing errors like
+-- "E475: Invalid value for argument cmd: 'v:null' is not executable".
+-- This restores the old behavior by auto-detecting python3 from system PATH.
+if vim.g.python3_host_prog == nil then
+  local python3 = vim.fn.exepath("python3")
+  if python3 ~= "" then
+    vim.g.python3_host_prog = python3
+  end
+end
+
 -- 用於 nvim-navbuddy
 -- 更新 core plug 的 nvim-navic
 -- (到該目錄下先執行) git fetch; git pull

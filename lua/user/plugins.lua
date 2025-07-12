@@ -45,7 +45,7 @@ lvim.plugins = {
       require('hlslens').setup({})
     end
   },
-  -- NOTE: 使用我 folk 的版本，原先的版本對於 nvim-tree 上使用 telescopte 可能造成開檔錯誤 (這裡引入 exclude filetpe 排除 telescope 中運行該代碼)
+  -- NOTE: 使用我 fork 的版本，原先的版本對於 nvim-tree 上使用 telescopte 可能造成開檔錯誤 (這裡引入 exclude filetype 排除 telescope 中運行該代碼)
   {
     "ESSO0428/im-select.nvim",
     config = function()
