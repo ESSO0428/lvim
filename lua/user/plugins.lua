@@ -657,16 +657,15 @@ lvim.plugins = {
       end
       require("mcphub").setup({
         --- `mcp-hub` binary related options-------------------
-        config = mcpservers_path,       -- Absolute path to MCP Servers config file (will create if not exists)
-        port = 2284,                    -- The port `mcp-hub` server listens to
+        config = mcpservers_path,     -- Absolute path to MCP Servers config file (will create if not exists)
+        port = 2284,                  -- The port `mcp-hub` server listens to
         shutdown_delay = 60 * 10 * 000, -- Delay in ms before shutting down the server when last instance closes (default: 10 minutes)
-        use_bundled_binary = false,     -- Use local `mcp-hub` binary (set this to true when using build = "bundled_build.lua")
-        mcp_request_timeout = 60000,    --Max time allowed for a MCP tool or resource to execute in milliseconds, set longer for long running tasks
+        use_bundled_binary = false,   -- Use local `mcp-hub` binary (set this to true when using build = "bundled_build.lua")
+        mcp_request_timeout = 60000,  --Max time allowed for a MCP tool or resource to execute in milliseconds, set longer for long running tasks
 
         ---Chat-plugin related options-----------------
-        auto_approve = false,           -- Auto approve mcp tool calls
+        auto_approve = false,         -- Auto approve mcp tool calls
         auto_toggle_mcp_servers = true, -- Let LLMs start and stop MCP servers automatically
-        -- Extensions configuration
         extensions = {
           avante = {
             make_slash_commands = true, -- make /slash commands from MCP server prompts
@@ -675,15 +674,39 @@ lvim.plugins = {
 
         --- Plugin specific options-------------------
         native_servers = {}, -- add your custom lua native servers here
+        builtin_tools = {
+          edit_file = {
+            parser = {
+              track_issues = true,
+              extract_inline_content = true,
+            },
+            locator = {
+              fuzzy_threshold = 0.8,
+              enable_fuzzy_matching = true,
+            },
+            ui = {
+              go_to_origin_on_complete = true,
+              keybindings = {
+                accept = ".",
+                reject = ",",
+                next = "n",
+                prev = "p",
+                accept_all = "ga",
+                reject_all = "gr",
+              },
+            },
+          },
+        },
         ui = {
           window = {
-            width = 0.8,  -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
-            height = 0.8, -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
+            width = 0.8,    -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
+            height = 0.8,   -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
+            align = "center", -- "center", "top-left", "top-right", "bottom-left", "bottom-right", "top", "bottom", "left", "right"
             relative = "editor",
             zindex = 50,
             border = "rounded", -- "none", "single", "double", "rounded", "solid", "shadow"
           },
-          wo = {                -- window-scoped options (vim.wo)
+          wo = {              -- window-scoped options (vim.wo)
             winhl = "Normal:MCPHubNormal,FloatBorder:MCPHubBorder",
           },
         },
@@ -725,7 +748,16 @@ lvim.plugins = {
     -- If the plugin was installed before this version, you must use the command `:Lazy` to clear `avante.nvim`.
     -- 1. Then, re-login to Linux or reload `.bashrc` or `.zshrc`, and restart nvim to reinstall the plugin.
     -- 2. Since the provider is copilot, ensure you have successfully logged in using `:Copilot auth` to avoid potential errors.
-    build = "make",
+    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+    -- ⚠️ must add this setting! ! !
+    build = function()
+      -- conditionally use the correct build system for the current OS
+      if vim.fn.has("win32") == 1 then
+        return "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
+      else
+        return "make"
+      end
+    end,
     dependencies = {
       "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim",
