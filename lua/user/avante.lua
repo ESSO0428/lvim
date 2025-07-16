@@ -18,6 +18,23 @@ vim.cmd "au ColorScheme * hi link AvanteConflictIncoming DiffAdd"
 --       the AI may continue behaving in agentic mode even after switching to legacy.
 --       Therefore, **always remind the AI explicitly** of the current mode after switching,
 --       especially when switching to legacy, to enforce rules like SEARCH/REPLACE blocks.
+--
+--       Why not just enable or disable tools?
+--       Because tool availability alone is not enough for the AI to reliably behave correctly.
+--
+--       legacy:
+--         Tools like `replace_in_file` are correctly disabled.
+--         However, due to earlier agentic-style context, the AI may still try to initiate
+--         `mcp_use_tool` flows — believing it needs to choose a tool.
+--         This leads to wasted steps and delays, instead of just outputting a clean
+--         SEARCH/REPLACE block, which is the preferred behavior in legacy mode.
+--         Tool decisions should be based on the actual file content and context,
+--         not residual instructions from previous chat turns.--
+--
+--       agentic:
+--         Even when tools like `replace_in_file` are enabled, if the previous context used legacy-style prompts,
+--         the AI may hesitate to use tools and fall back to generating only diff blocks.
+--         This leads to incomplete or less confident file edits.
 local function avante_switch_mode()
   local avante_config = require("avante.config")
 
@@ -47,6 +64,13 @@ local function avante_switch_mode()
     avante_config.mode = choice.mode
     if choice.mode == "legacy" then
       vim.notify("[Avante] Switched to legacy mode", vim.log.levels.INFO)
+
+      for _, tool in ipairs(M.opts.legacy_disabled_tools) do
+        if not vim.tbl_contains(M.opts.disabled_tools, tool) then
+          table.insert(require("avante.config").disabled_tools, tool)
+        end
+      end
+
       require("avante.api").ask({
         question =
         "Reminder: Legacy mode enabled. For file edits: examine files if needed (view, grep, ls), then provide SEARCH/REPLACE blocks. Never use file modification tools. Starting from next file edit request."
@@ -55,6 +79,15 @@ local function avante_switch_mode()
       -- Reminder: Legacy mode enabled. Please apply the SEARCH/REPLACE diff block rule on your next response for file edits. Do not change files in the current conversation.
     else
       vim.notify("[Avante] Switched to agentic mode", vim.log.levels.INFO)
+
+      local config = require("avante.config")
+      config.disabled_tools = vim
+          .iter(config.disabled_tools)
+          :filter(function(tool)
+            return not vim.tbl_contains(M.opts.legacy_disabled_tools, tool)
+          end)
+          :totable()
+
       require("avante.api").ask({
         question =
         "Reminder: Agentic mode enabled. You may directly modify files using file modification tools (replace_in_file, write_file, etc.) starting from next file edit request."
@@ -389,6 +422,18 @@ local tools_to_disable = {
   "delete_dir",
   "bash", -- Built-in terminal access
 }
+M.opts.legacy_disabled_tools = {
+  -- "write_to_file", -- Legacy mode does not support direct file writing
+  "replace_in_file", -- Legacy mode does not support direct file replacement
+}
+if M.opts.mode == "legacy" then
+  for _, tool in ipairs(M.opts.legacy_disabled_tools) do
+    if not vim.tbl_contains(M.opts.disabled_tools, tool) then
+      table.insert(tools_to_disable, tool)
+    end
+  end
+end
+
 for _, tool in ipairs(tools_to_disable) do
   if not vim.tbl_contains(M.opts.disabled_tools, tool) then
     table.insert(M.opts.disabled_tools, tool)
