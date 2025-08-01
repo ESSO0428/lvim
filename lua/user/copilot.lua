@@ -62,23 +62,9 @@ function CopilotChatQuickchatVisual(ask)
   wrapped_fn(ask)
 end
 
--- WARNING: If CopilotChat integrations telescope is not available, notify user to use the new method
-local _, telescope_integration = pcall(require, "CopilotChat.integrations.telescope")
-if not telescope_integration then
-  vim.notify(
-    "CopilotChat integrations telescope is deprecated. Now use require(\"CopilotChat\").select_prompt() instead.",
-    vim.log.levels.WARN)
-end
 -- Triggers the Copilot chat prompt action
 function CopilotChatPromptActionCore()
-  local actions = require("CopilotChat.actions")
-  local has_telescope, telescope_integration = pcall(require, "CopilotChat.integrations.telescope")
-
-  if has_telescope then
-    telescope_integration.pick(actions.prompt_actions())
-  else
-    require("CopilotChat").select_prompt()
-  end
+  require("CopilotChat").select_prompt()
 end
 
 function CopilotChatPromptAction()
@@ -177,84 +163,6 @@ select.diagnostics = function(source)
   return out
 end
 
-
--- This function generates a git diff for a given file. If the diff is too large,
--- it uses a `diff --stat` instead. The function returns a buffer with the diff result.
--- It first checks if the file directory exists, if not, it uses the current directory.
--- Then it constructs the `git diff` command and executes it.
--- If the diff result is too large (> 30000 characters), it uses the git diff stat command instead.
--- Finally, it sets the filetype of the buffer to `diff` and the lines of the buffer to the diff result.
-select.gitdiff_current_file = function(source, staged)
-  local select_buffer = buffer(source)
-  if not select_buffer then
-    return nil
-  end
-  local file_path = vim.api.nvim_buf_get_name(source.bufnr)
-  local file_dir = vim.fn.fnamemodify(file_path, ':h')
-  -- check file dir is exist, or use current dir instead
-  if vim.fn.isdirectory(file_dir) == 0 then
-    file_dir = vim.fn.getcwd()
-  end
-
-  -- NOTE: Fix vulnerability #417 in CopilotC-Nvim/CopilotChat.nvim
-  local is_in_gitdir = string.find(file_dir, '.git', 1, true) ~= nil
-  file_dir = file_dir:gsub('.git$', '')
-  source.file_dir = file_dir
-  if is_in_gitdir then
-    return nil
-  end
-
-  local cmd_diff = table.concat({
-    'git',
-    '-C',
-    file_dir,
-    'diff',
-    '--no-color --no-ext-diff',
-    (staged and ' --staged' or ''),
-    (file_path and '-- ' .. file_path or ''),
-    '2>/dev/null'
-  }, ' ')
-  local cmd_diff_stat = table.concat({
-    'git',
-    '-C',
-    file_dir,
-    'diff',
-    '--stat',
-    '--no-color --no-ext-diff',
-    (staged and '--staged' or ''),
-    (file_path and '-- ' .. file_path or ''),
-    '2>/dev/null'
-  }, ' ')
-
-  local handle = io.popen(cmd_diff)
-  if not handle then
-    return nil
-  end
-
-  local result = handle:read('*a')
-  handle:close()
-
-  -- jugde if the diff is too large (> 30000 characters) to handle, use diff --stat to instead
-  if #result > 30000 then
-    handle = io.popen(cmd_diff_stat)
-    if not handle then
-      return nil
-    end
-
-    result = handle:read('*a')
-    handle:close()
-  end
-
-  if not result or result == '' then
-    return nil
-  end
-  return {
-    content = result,
-    filename = 'git_diff_' .. (staged and 'staged' or 'unstaged'),
-    filetype = 'diff',
-  }
-end
-
 local function read_copilot_prompt(file)
   -- Get the current Neovim configuration directory
   local config_dir = vim.fn.stdpath('config')
@@ -312,6 +220,7 @@ require("CopilotChat").setup {
     title = 'Copilot Chat', -- title of chat window
     footer = nil,           -- footer of chat window
     zindex = 1,             -- determines if window is on top or below other floating windows
+    blend = 0,              -- window blend (transparency), 0-100, 0 is opaque, 100 is fully transparent
   },
 
   show_help = true,                 -- Shows help message as virtual lines when waiting for user input
@@ -325,17 +234,19 @@ require("CopilotChat").setup {
 
   -- Static config starts here (can be configured only via setup function)
 
-  debug = false, -- Enable debug logging (same as 'log_level = 'debug')
-  log_level = 'info', -- Log level to use, 'trace', 'debug', 'info', 'warn', 'error', 'fatal'
-  proxy = nil, -- [protocol://]host[:port] Use this proxy
-  allow_insecure = false, -- Allow insecure server connections
+  debug = false,                                                   -- Enable debug logging (same as 'log_level = 'debug')
+  log_level = 'info',                                              -- Log level to use, 'trace', 'debug', 'info', 'warn', 'error', 'fatal'
+  proxy = nil,                                                     -- [protocol://]host[:port] Use this proxy
+  allow_insecure = false,                                          -- Allow insecure server connections
 
-  chat_autocomplete = true, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
+  chat_autocomplete = true,                                        -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
   history_path = vim.fn.stdpath('data') .. '/copilotchat_history', -- Default path to stored history
 
-  question_header = question_header, -- Header to use for user questions
-  answer_header = answer_header, -- Header to use for AI answers
-  error_header = '> [!ERROR] Error', -- Header to use for errors (default is '## Error ')
+  headers = {
+    user = question_header, -- Header to use for user questions
+    assistant = answer_header, -- Header to use for AI answers
+    tool = ' Tool ', -- Header to use for tool calls
+  },
   separator = '───', -- Separator to use in chat
 
   -- default contexts
@@ -449,19 +360,15 @@ require("CopilotChat").setup {
       selection = select.diagnostics,
     },
     -- Commit = {
-    --   prompt = '> #git:staged\n\nWrite commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.',
+    --   prompt = '> #gitdiff:staged\n\nWrite commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.',
     -- },
     Commit = {
       prompt = read_copilot_prompt('Commit.md'),
-      selection = select.gitdiff_current_file,
-      context = 'git:unstaged',
+      sticky = '#gitdiff:unstaged',
     },
     CommitStaged = {
       prompt = read_copilot_prompt('CommitStaged.md'),
-      selection = function(source)
-        return select.gitdiff_current_file(source, true)
-      end,
-      context = 'git:staged',
+      sticky = '#gitdiff:staged',
     },
   },
 
@@ -512,25 +419,47 @@ require("CopilotChat").setup {
     show_info = {
       normal = 'gp',
     },
-    show_context = {
-      normal = 'gs',
-    },
+    -- WARNING: NOT WORKING
+    -- show_context = {
+    --   normal = 'gs',
+    -- },
     show_help = {
       normal = 'g?',
     },
   },
 }
-require("CopilotChat").config.contexts.git = {
+local copilot_functions = require("CopilotChat.config.functions")
+copilot_functions.gitdiff = {
+  group = 'copilot',
+  uri = 'git://diff/{target}',
   description =
-  'Requires `git`. Includes current git diff in chat context. Supports input (default unstaged, also accepts commit number).',
-  input = function(callback)
-    vim.ui.select({ 'unstaged', 'staged' }, {
-      prompt = 'Select diff type> ',
-    }, callback)
-  end,
+  'Retrieves git diff information. Requires git to be installed. Useful for discussing code changes or explaining the purpose of modifications.',
+
+  schema = {
+    type = 'object',
+    required = { 'target' },
+    properties = {
+      target = {
+        type = 'string',
+        description = 'Target to diff against.',
+        enum = { 'unstaged', 'staged', '<sha>' },
+        default = 'unstaged',
+      },
+    },
+  },
+
   resolve = function(input, source)
-    input = input or 'unstaged'
-    local file_dir = source.file_dir and source.file_dir or source.cwd()
+    local file_path = vim.api.nvim_buf_get_name(source.bufnr)
+    local file_dir
+    if file_path ~= '' then
+      file_dir = vim.fn.fnamemodify(file_path, ':h')
+      if vim.fn.isdirectory(file_dir) == 0 then
+        file_dir = source.cwd()
+      end
+    else
+      file_dir = source.cwd()
+    end
+
     local cmd = {
       'git',
       '-C',
@@ -549,14 +478,14 @@ require("CopilotChat").config.contexts.git = {
       '--no-ext-diff',
     }
 
-    if input == 'staged' then
+    if input.target == 'staged' then
       table.insert(cmd, '--staged')
       table.insert(cmd_stat, '--staged')
-    elseif input == 'unstaged' then
+    elseif input.target == 'unstaged' then
       table.insert(cmd, '--')
       table.insert(cmd_stat, '--')
     else
-      table.insert(cmd, input)
+      table.insert(cmd, input.target)
       table.insert(cmd_stat, input)
     end
 
@@ -569,9 +498,9 @@ require("CopilotChat").config.contexts.git = {
     end
     return {
       {
-        content = out.stdout,
-        filename = 'git_diff_' .. input,
-        filetype = 'diff',
+        uri = 'git://diff/' .. input.target,
+        mimetype = 'text/plain',
+        data = out.stdout,
       },
     }
   end,
