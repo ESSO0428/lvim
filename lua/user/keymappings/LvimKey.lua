@@ -195,7 +195,7 @@ lvim.keys.normal_mode["<a-7>"]           = "<cmd>BufferLineGoToBuffer 7<cr>"
 lvim.keys.normal_mode["<a-8>"]           = "<cmd>BufferLineGoToBuffer 8<cr>"
 lvim.keys.normal_mode["<a-9>"]           = "<cmd>BufferLineGoToBuffer 9<cr>"
 lvim.keys.normal_mode["<a-0>"]           = "<cmd>BufferLineGoToBuffer -1<cr>"
-lvim.keys.normal_mode["<a-->"]           = "<cmd>b#<cr>"
+lvim.keys.normal_mode["<a-`>"]           = "<cmd>b#<cr>"
 -- -- Use which-key to add extra bindings with the leader-key prefix
 -- lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without formatting" }
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<cr>", "Projects" }

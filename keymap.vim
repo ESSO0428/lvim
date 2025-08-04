@@ -126,6 +126,8 @@ nnoremap U "_ddk
 nnoremap <c-d> "dyyp
 nnoremap <a-i> <c-u>
 nnoremap <a-k> <c-d>
+nnoremap <a--> <c-o>
+nnoremap <a-=> <c-i>
 
 nnoremap x "_x
 nnoremap <leader>d "_d
