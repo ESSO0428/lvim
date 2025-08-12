@@ -282,6 +282,22 @@ function telescope_interestingwords_selected(use_stored_words)
         end
       end
 
+      -- Override the move_selection functions to automatically navigate occurrences
+      local orig_move_selection_next = actions.move_selection_next
+      local move_selection_next = function(prompt_bufnr)
+        orig_move_selection_next(prompt_bufnr)
+        vim.defer_fn(function()
+          navigate_occurrences()
+        end, 10)
+      end
+      local orig_move_selection_prev = actions.move_selection_previous
+      local move_selection_previous = function(prompt_bufnr)
+        orig_move_selection_prev(prompt_bufnr)
+        vim.defer_fn(function()
+          navigate_occurrences()
+        end, 10)
+      end
+
       -- Map <a-,> and <a-.> or (or < and >) for navigating occurrences
       map("n", "<a-,>", function() navigate_occurrences("prev") end)
       map("n", "<a-.>", function() navigate_occurrences("next") end)
@@ -289,29 +305,12 @@ function telescope_interestingwords_selected(use_stored_words)
       map("n", ">", function() navigate_occurrences("next") end)
       map("i", "<a-,>", function() navigate_occurrences("prev") end)
       map("i", "<a-.>", function() navigate_occurrences("next") end)
-      map("n", "<Up>", function() actions.move_selection_previous(prompt_bufnr) end)
-      map("n", "<Down>", function() actions.move_selection_next(prompt_bufnr) end)
-      map("i", "<Up>", function() actions.move_selection_previous(prompt_bufnr) end)
-      map("i", "<Down>", function() actions.move_selection_next(prompt_bufnr) end)
+      map("n", "<Up>", function() move_selection_previous(prompt_bufnr) end)
+      map("n", "<Down>", function() move_selection_next(prompt_bufnr) end)
+      map("i", "<Up>", function() move_selection_previous(prompt_bufnr) end)
+      map("i", "<Down>", function() move_selection_next(prompt_bufnr) end)
       map("n", "<a-m>", function() end)
       map("i", "<a-m>", function() end)
-
-      -- Override the move_selection functions to automatically navigate occurrences
-      local orig_move_selection_next = actions.move_selection_next
-      actions.move_selection_next = function(prompt_bufnr)
-        orig_move_selection_next(prompt_bufnr)
-        vim.defer_fn(function()
-          navigate_occurrences()
-        end, 10)
-      end
-      local orig_move_selection_prev = actions.move_selection_previous
-      actions.move_selection_previous = function(prompt_bufnr)
-        orig_move_selection_prev(prompt_bufnr)
-        vim.defer_fn(function()
-          navigate_occurrences()
-        end, 10)
-      end
-
 
       actions.select_default:replace(function()
         local selection = action_state.get_selected_entry()
