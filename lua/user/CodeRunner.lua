@@ -28,7 +28,7 @@ function code_runner()
     vim.o.splitbelow = true
     vim.cmd("sp | res -5 | term " .. term_cd_cmd .. "javac % && time java %<")
   elseif filetype == 'sh' then
-    vim.cmd("sp | term " .. term_cd_cmd .. "bash %")
+    vim.cmd(string.format("sp | term %s bash %s", term_cd_cmd, filename))
   elseif filetype == 'html' then
     vim.cmd("silent! !" .. vim.g.mkdp_browser .. " % &")
   elseif filetype == 'markdown' then
