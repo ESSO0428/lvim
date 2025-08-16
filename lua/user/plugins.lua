@@ -657,14 +657,14 @@ lvim.plugins = {
       end
       require("mcphub").setup({
         --- `mcp-hub` binary related options-------------------
-        config = mcpservers_path,     -- Absolute path to MCP Servers config file (will create if not exists)
-        port = 2284,                  -- The port `mcp-hub` server listens to
+        config = mcpservers_path,       -- Absolute path to MCP Servers config file (will create if not exists)
+        port = 2284,                    -- The port `mcp-hub` server listens to
         shutdown_delay = 60 * 10 * 000, -- Delay in ms before shutting down the server when last instance closes (default: 10 minutes)
-        use_bundled_binary = false,   -- Use local `mcp-hub` binary (set this to true when using build = "bundled_build.lua")
-        mcp_request_timeout = 60000,  --Max time allowed for a MCP tool or resource to execute in milliseconds, set longer for long running tasks
+        use_bundled_binary = false,     -- Use local `mcp-hub` binary (set this to true when using build = "bundled_build.lua")
+        mcp_request_timeout = 60000,    --Max time allowed for a MCP tool or resource to execute in milliseconds, set longer for long running tasks
 
         ---Chat-plugin related options-----------------
-        auto_approve = false,         -- Auto approve mcp tool calls
+        auto_approve = false,           -- Auto approve mcp tool calls
         auto_toggle_mcp_servers = true, -- Let LLMs start and stop MCP servers automatically
         extensions = {
           avante = {
@@ -699,14 +699,14 @@ lvim.plugins = {
         },
         ui = {
           window = {
-            width = 0.8,    -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
-            height = 0.8,   -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
+            width = 0.8,      -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
+            height = 0.8,     -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
             align = "center", -- "center", "top-left", "top-right", "bottom-left", "bottom-right", "top", "bottom", "left", "right"
             relative = "editor",
             zindex = 50,
             border = "rounded", -- "none", "single", "double", "rounded", "solid", "shadow"
           },
-          wo = {              -- window-scoped options (vim.wo)
+          wo = {                -- window-scoped options (vim.wo)
             winhl = "Normal:MCPHubNormal,FloatBorder:MCPHubBorder",
           },
         },
@@ -968,6 +968,50 @@ lvim.plugins = {
   },
   { "godlygeek/tabular" },
   -- { "mbbill/undotree" },
+  {
+    "kevinhwang91/nvim-fundo",
+    dependencies = {
+      "kevinhwang91/promise-async",
+    },
+    build = function() require("fundo").install() end,
+    lazy = false,
+    init = function() vim.opt.undofile = true end,
+    config = function()
+      require("fundo").setup()
+    end
+  },
+  {
+    "debugloop/telescope-undo.nvim",
+    dependencies = { -- note how they're inverted to above example
+      {
+        "nvim-telescope/telescope.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+      },
+    },
+    keys = {
+      { -- lazy style key map
+        "<leader>sz",
+        "<cmd>Telescope undo<cr>",
+        desc = "undo history",
+      },
+    },
+    opts = {
+      -- don't use `defaults = { }` here, do this in the main telescope spec
+      extensions = {
+        undo = {
+          -- telescope-undo.nvim config, see below
+        },
+        -- no other extensions here, they can have their own spec too
+      },
+    },
+    config = function(_, opts)
+      -- Calling telescope's setup from multiple specs does not hurt, it will happily merge the
+      -- configs for us. We won't use data, as everything is in it's own namespace (telescope
+      -- defaults, as well as each extension).
+      require("telescope").setup(opts)
+      require("telescope").load_extension("undo")
+    end,
+  },
   { "mg979/vim-visual-multi" },
   { "matze/vim-move" },
   { "zirrostig/vim-schlepp" },
