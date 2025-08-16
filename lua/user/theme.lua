@@ -156,6 +156,12 @@ if lvim.transparent_window == true then
 end
 --]]
 
+-- Diff (tokyonight default colorscheme)
+vim.cmd "au ColorScheme * hi @variable.parameter guifg=#e0af68"
+vim.cmd "au ColorScheme * hi link @variable.parameter.diff @variable.parameter"
+vim.cmd "au ColorScheme * hi link @diff.minus.diff DiffDelete"
+vim.cmd "au ColorScheme * hi link @diff.plus.diff DiffAdd"
+
 -- Reference : https://github.com/sindrets/diffview.nvim/issues/241
 vim.cmd "au ColorScheme * hi DiffAdd gui=none guifg=none guibg=#2C6468"
 vim.cmd "au ColorScheme * hi DiffChange gui=none guifg=none guibg=#272D43"
