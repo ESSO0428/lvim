@@ -2,7 +2,21 @@ local _, themes = pcall(require, "telescope.themes")
 local _, builtin = pcall(require, "telescope.builtin")
 local actions = require("lvim.utils.modules").require_on_exported_call "telescope.actions"
 local action_layout = require("lvim.utils.modules").require_on_exported_call "telescope.actions.layout"
-lvim.builtin.telescope.defaults.layout_config.scroll_speed = 1
+local state = require("telescope.state")
+local action_state = require("telescope.actions.state")
+
+local slow_scroll = function(prompt_bufnr, direction)
+  local previewer = action_state.get_current_picker(prompt_bufnr).previewer
+  local status = state.get_status(prompt_bufnr)
+
+  -- Check if we actually have a previewer and a preview window
+  if type(previewer) ~= "table" or previewer.scroll_fn == nil or status.preview_win == nil then
+    return
+  end
+
+  previewer:scroll_fn(1 * direction)
+end
+-- lvim.builtin.telescope.defaults.layout_config.scroll_speed = 1
 lvim.builtin.telescope.defaults.path_display = { "truncate" }
 lvim.builtin.telescope.on_config_done = function(telescope)
   pcall(telescope.load_extension, "notify")
@@ -64,6 +78,14 @@ lvim.builtin.telescope.defaults.mappings.n = {
   ["i"] = actions.move_selection_previous,
   ["j"] = actions.results_scrolling_left,
   ["l"] = actions.results_scrolling_right,
+  ["<Left>"] = actions.preview_scrolling_left,
+  ["<Right>"] = actions.preview_scrolling_right,
+  ["<C-Left>"] = actions.preview_scrolling_left,
+  ["<C-Right>"] = actions.preview_scrolling_right,
+  ["<C-Up>"] = actions.preview_scrolling_up,
+  ["<C-Down>"] = actions.preview_scrolling_down,
+  ["<c-f>"] = actions.preview_scrolling_up,
+  ["<c-d>"] = actions.preview_scrolling_down,
   ['<ScrollWheelUp>'] = actions.move_selection_previous,
   ['<ScrollWheelDown>'] = actions.move_selection_next,
   ['<LeftMouse>'] = function()
@@ -96,6 +118,12 @@ lvim.builtin.telescope.defaults.mappings.i = {
   --     vim.api.nvim_input('<cr>')
   --   end, 100)
   -- end,
+  ["<C-Left>"] = actions.preview_scrolling_left,
+  ["<C-Right>"] = actions.preview_scrolling_right,
+  ["<C-Up>"] = actions.preview_scrolling_up,
+  ["<C-Down>"] = actions.preview_scrolling_down,
+  ["<c-f>"] = actions.preview_scrolling_up,
+  ["<c-d>"] = actions.preview_scrolling_down,
   ['<ScrollWheelUp>'] = actions.move_selection_previous,
   ['<ScrollWheelDown>'] = actions.move_selection_next,
   ['<LeftMouse>'] = function()
@@ -387,12 +415,12 @@ lvim.builtin.which_key.mappings.b["]"]              = { "<cmd>BufferLineCloseRig
 lvim.builtin.which_key.mappings.s["m"]              = {
   "<cmd>lua require('telescope').extensions.media_files.media_files()<cr>",
   "Find Image" }
-lvim.builtin.telescope.defaults.mappings.i["<c-u>"] = actions.preview_scrolling_up
-lvim.builtin.telescope.defaults.mappings.i["<c-o>"] = actions.preview_scrolling_down
+lvim.builtin.telescope.defaults.mappings.i["<c-u>"] = function(bufnr) slow_scroll(bufnr, -1) end
+lvim.builtin.telescope.defaults.mappings.i["<c-o>"] = function(bufnr) slow_scroll(bufnr, 1) end
 lvim.builtin.telescope.defaults.mappings.i["<c-j>"] = actions.preview_scrolling_left
 lvim.builtin.telescope.defaults.mappings.i["<c-l>"] = actions.preview_scrolling_right
-lvim.builtin.telescope.defaults.mappings.n["<c-u>"] = actions.preview_scrolling_up
-lvim.builtin.telescope.defaults.mappings.n["<c-o>"] = actions.preview_scrolling_down
+lvim.builtin.telescope.defaults.mappings.n["<c-u>"] = function(bufnr) slow_scroll(bufnr, -1) end
+lvim.builtin.telescope.defaults.mappings.n["<c-o>"] = function(bufnr) slow_scroll(bufnr, 1) end
 lvim.builtin.telescope.defaults.mappings.n["<c-j>"] = actions.preview_scrolling_left
 lvim.builtin.telescope.defaults.mappings.n["<c-l>"] = actions.preview_scrolling_right
 

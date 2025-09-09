@@ -321,18 +321,18 @@ lvim.builtin.telescope.pickers.find_files.find_command = { "fd", "--type", "f" }
 
 lvim.builtin.telescope.defaults.layout_strategy        = "horizontal"
 lvim.builtin.telescope.defaults.layout_config          = {
-  scroll_speed = 1,
+  -- scroll_speed = 1,
   width = 0.95,
   height = 0.65,
   prompt_position = "top",
   -- preview_width   = 0.50
   horizontal = {
-    scroll_speed = 1,
+    -- scroll_speed = 1,
     width = 0.95,
     height = 0.65,
   },
   vertical = {
-    scroll_speed = 1,
+    -- scroll_speed = 1,
     width = 0.95,
     height = 0.95,
     preview_height = 0.50,
