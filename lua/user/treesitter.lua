@@ -76,6 +76,8 @@ lvim.builtin.treesitter.incremental_selection = {
   disable = function(_, bufnr)
     local filetype = vim.bo[bufnr].filetype
     local disable_filetypes = {
+      Avante = true,
+      AvanteSelectedFiles = true,
       AvanteInput = true,
     }
     return disable_filetypes[filetype] or false

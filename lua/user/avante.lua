@@ -101,10 +101,57 @@ end
 -- Optionally, add a command to call the menu
 vim.api.nvim_create_user_command("AvanteSwitchMode", avante_switch_mode, {})
 
+local function SelectAvanteAcpProvider()
+  local config = require("avante.config")
+
+  -- 检查配置是否加载
+  if not config or not config.acp_providers then
+    vim.notify("Avante.nvim config or acp_providers not found.", vim.log.levels.WARN)
+    return
+  end
+
+  -- 1. 只从 acp_providers 表中读取选择项
+  local choices = {}
+  for name, _ in pairs(config.acp_providers) do
+    table.insert(choices, name)
+  end
+
+  -- 如果没有配置 ACP 供应商，则提示并退出
+  if #choices == 0 then
+    vim.notify("No ACP providers found in your Avante.nvim configuration.", vim.log.levels.INFO)
+    return
+  end
+
+  table.sort(choices)
+
+  -- 2. 使用 vim.ui.select 创建一个简单的选择列表
+  vim.ui.select(choices, {
+    prompt = "Select Avante ACP Provider:",
+    format_item = function(item)
+      -- 标记当前活动的供应商
+      if item == config.provider then
+        return item .. " (*)"
+      end
+      return item
+    end,
+  }, function(choice)
+    -- 3. 如果用户做出了选择，则执行切换
+    if choice then
+      config.override({ provider = choice })
+      vim.notify("Avante provider switched to: " .. choice, vim.log.levels.INFO)
+    end
+  end)
+end
+
+vim.api.nvim_create_user_command("AvanteSwitchAcpProvider", SelectAvanteAcpProvider, {})
+
 -- Optional: Add keymap for quick access
 vim.keymap.set("n", "<leader>am", avante_switch_mode, {
   desc = "Select Avante mode (legacy/agentic)"
 })
+
+vim.keymap.set("n", "<leader>ap", SelectAvanteAcpProvider, { desc = "[A]vante: Select [P]rovider" })
+
 
 -- NOTE: Avante config
 local Utils
