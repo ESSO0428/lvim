@@ -8,7 +8,7 @@
   "actions-preview.nvim": { "branch": "master", "commit": "9f52a01c374318e91337697ebed51c6fae57f8a4" },
   "alpha-nvim": { "branch": "main", "commit": "29074eeb869a6cbac9ce1fbbd04f5f5940311b32" },
   "antovim": { "branch": "master", "commit": "733d3d12ed034997fa05a3144979864fc0af738e" },
-  "avante.nvim": { "branch": "main", "commit": "6c2a785ebb296ca7ce7db622c12338a6c4b80310" },
+  "avante.nvim": { "branch": "main", "commit": "56951378f10b25f8bb0f5bb516b8d778a1e498a7" },
   "baleia.nvim": { "branch": "main", "commit": "1b25eac3ac03659c3d3af75c7455e179e5f197f7" },
   "bigfile.nvim": { "branch": "main", "commit": "33eb067e3d7029ac77e081cfe7c45361887a311a" },
   "bioSyntax-vim": { "branch": "master", "commit": "f9c5c2bb72cc686feb05e25fc95422968e66eb90" },

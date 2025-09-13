@@ -263,6 +263,25 @@ M.opts = {
       },
     },
   },
+  acp_providers = {
+    ["gemini-cli"] = {
+      command = "gemini",
+      args = { "--experimental-acp" },
+      env = {
+        NODE_NO_WARNINGS = "1",
+        GEMINI_API_KEY = os.getenv("GEMINI_API_KEY"),
+      },
+    },
+    ["claude-code"] = {
+      command = "npx",
+      args = { "@zed-industries/claude-code-acp" },
+      env = {
+        NODE_NO_WARNINGS = "1",
+        ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY"),
+      },
+    },
+  },
+  -- other configuration options...
   disabled_tools = {},
   rag_service = {                             -- RAG Service configuration
     enabled = rag_enabled,                    -- Enables the RAG service
@@ -339,7 +358,10 @@ M.opts = {
     },
     select_model = "<leader>a?",  -- Select model command
   },
-  hints = { enabled = true },
+  selection = {
+    enabled = true,
+    hint_display = "delayed",
+  },
   windows = {
     ---@type "right" | "left" | "top" | "bottom"
     position = "right", -- the position of the sidebar
