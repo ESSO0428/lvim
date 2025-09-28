@@ -28,7 +28,7 @@ function CopilotChatQuickchatCore(_, _, ask)
   local is_focused = require("CopilotChat").chat:focused()
   local config = { selection = false }
   if not is_focused then
-    config.context = "buffer"
+    config.sticky = { "#buffer" }
   end
   if ask == true then
     local ok, input = pcall(vim.fn.input, "Quick Chat: ")
@@ -194,18 +194,11 @@ local answer_header = "  Copilot "
 require("CopilotChat").setup {
   -- system_prompt = require("CopilotChat").prompts().COPILOT_INSTRUCTIONS, -- System prompt to use (can be specified manually in prompt via /).
   model = 'claude-sonnet-4', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
-  agent = 'copilot',         -- Default agent to use, see ':CopilotChatAgents' for available agents (can be specified manually in prompt via @).
-  context = nil,             -- Default context to use (can be specified manually in prompt via #).
   sticky = nil,              -- Default sticky prompt or array of sticky prompts to use at start of every new chat.
 
   temperature = 0.1,         -- GPT result temperature
   headless = false,          -- Do not write to chat buffer and use history(useful for using callback for custom processing)
   callback = nil,            -- Callback to use when ask response is received
-
-  -- default selection
-  selection = function(source)
-    return select.visual(source) or select.buffer(source)
-  end,
 
   -- default window options
   window = {
@@ -225,6 +218,7 @@ require("CopilotChat").setup {
 
   show_help = true,                 -- Shows help message as virtual lines when waiting for user input
   show_folds = true,                -- Shows folds for sections in chat
+  auto_fold = false,                -- Automatically non-assistant messages in chat (requires 'show_folds' to be true)
   highlight_selection = true,       -- Highlight selection in the source buffer when in the chat window
   highlight_headers = true,         -- Highlight headers in chat, disable if using markdown renderers (like render-markdown.nvim)
   auto_follow_cursor = true,        -- Auto-follow cursor in chat
@@ -239,6 +233,7 @@ require("CopilotChat").setup {
   proxy = nil,                                                     -- [protocol://]host[:port] Use this proxy
   allow_insecure = false,                                          -- Allow insecure server connections
 
+  selection = 'visual',                                            -- Selection source
   chat_autocomplete = true,                                        -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
   history_path = vim.fn.stdpath('data') .. '/copilotchat_history', -- Default path to stored history
 
@@ -249,8 +244,7 @@ require("CopilotChat").setup {
   },
   separator = '───', -- Separator to use in chat
 
-  -- default contexts
-  contexts = {},
+  -- default prompts
   -- See Configuration section for rest
   -- NOTE: Default prompts configuration
   -- prompts = {
@@ -417,7 +411,7 @@ require("CopilotChat").setup {
       full_diff = false, -- Show full diff instead of unified diff when showing diff window
     },
     show_info = {
-      normal = 'gp',
+      normal = 'gc',
     },
     -- WARNING: NOT WORKING
     -- show_context = {
