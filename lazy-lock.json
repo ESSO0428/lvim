@@ -94,7 +94,7 @@
   "nvim-dap-virtual-text": { "branch": "master", "commit": "df66808cd78b5a97576bbaeee95ed5ca385a9750" },
   "nvim-docs-view": { "branch": "master", "commit": "1b97f8f954d74c46061bf289b6cea9232484c12c" },
   "nvim-fundo": { "branch": "main", "commit": "ac9c9372c4bf677721e24f144ef29d3a05c2b589" },
-  "nvim-gemini-companion": { "branch": "main", "commit": "2bdbb4b91c3edc22d83e77eab3b85857f2a88dba" },
+  "nvim-gemini-companion": { "branch": "main", "commit": "b9c713ab9016c7499c9abf046e8c9ed8ee49f4eb" },
   "nvim-highlight-colors": { "branch": "main", "commit": "a770df5fbd98abbb0fc1a95d9a3f2bb1e51e3e2c" },
   "nvim-hlslens": { "branch": "main", "commit": "e22f8448b571b56d6140427e27e02406bcf4e059" },
   "nvim-html-css": { "branch": "main", "commit": "5915ff5c1c3c629efb35e43cec4cf87e9df005e1" },
