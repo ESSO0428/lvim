@@ -3,6 +3,10 @@ let mapleader = " " " map leader to Space
 
 tnoremap <C-N> <C-\><C-N>
 tnoremap <C-O> <C-\><C-N><C-O>
+tnoremap <C-J> <C-J>
+tnoremap <C-K> <C-K>
+tnoremap <C-L> <C-L>
+tnoremap <C-H> <C-H>
 
 autocmd FileType markdown inoremap <buffer> ,, <++>
                         \| noremap <buffer><leader><leader> <Esc>/<++><cr>:nohlsearch<cr>"_c4l
