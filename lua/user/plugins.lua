@@ -658,6 +658,23 @@ lvim.plugins = {
       --     height = 0.8,
       --   }
       -- })
+
+      -- Auto-reload when files are changed on disk.
+      -- NOTE: :checktime will only auto-read if the buffer has no unsaved changes.
+      vim.opt.autoread = true
+
+      -- Treat "leaving the embedded Gemini/Qwen CLI terminal" as a pseudo FocusGained.
+      -- Why: when the CLI writes patches to disk, returning from its terminal to any
+      --       normal buffer should trigger a reload (similar to clicking back from tmux).
+      local aug_term = vim.api.nvim_create_augroup("GeminiCliTermReload", { clear = true })
+      vim.api.nvim_create_autocmd({ "BufLeave", "TermClose" }, {
+        group = aug_term,
+        pattern = { "term://*gemini*", "term://*qwen*" },
+        callback = function()
+          vim.schedule(function() pcall(vim.cmd, "checktime") end)
+        end,
+        desc = "Treat leaving Gemini CLI terminal as FocusGained and reload files",
+      })
       require("gemini").setup({
         -- NOTE: Disable other LLM CLI providers to avoid <Tab> keymap overlap
         -- cmds = { 'gemini', 'qwen' },
