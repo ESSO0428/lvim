@@ -38,6 +38,20 @@ lvim.plugins = {
     "folke/trouble.nvim",
     cmd = "TroubleToggle"
   },
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    ---@type snacks.Config
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+      terminal = {
+        auto_insert = false,
+      }
+    },
+  },
   { "kevinhwang91/rnvimr" },
   {
     "kevinhwang91/nvim-hlslens",
@@ -627,6 +641,37 @@ lvim.plugins = {
     }
   },
   {
+    "gutsavgupta/nvim-gemini-companion",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "folke/snacks.nvim",
+    },
+    event = "VeryLazy",
+    config = function()
+      -- You can configure the plugin by passing a table to the setup function
+      -- Example:
+      -- require("gemini").setup({
+      --   cmds = {"gemini"},
+      --   win = {
+      --     preset = "floating",
+      --     width = 0.8,
+      --     height = 0.8,
+      --   }
+      -- })
+      require("gemini").setup({
+        -- NOTE: Disable other LLM CLI providers to avoid <Tab> keymap overlap
+        -- cmds = { 'gemini', 'qwen' },
+        cmds = { 'gemini' },
+      })
+    end,
+    -- keys = {
+    --   { "<leader>ukl", "<cmd>GeminiToggle<cr>", desc = "Toggle Gemini CLI" },
+    --   { "<leader>ukj", "<cmd>GeminiClose<cr>",  desc = "Close Gemini CLI process" },
+    --   { "<leader>uky", "<cmd>GeminiAccept<cr>", desc = "Accept Gemini suggested changes" },
+    --   { "<leader>ukn", "<cmd>GeminiReject<cr>", desc = "Reject Gemini suggested changes" },
+    -- }
+  },
+  {
     "ravitemer/mcphub.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -657,22 +702,22 @@ lvim.plugins = {
       end
       require("mcphub").setup({
         --- `mcp-hub` binary related options-------------------
-        config = mcpservers_path,                                                      -- Absolute path to MCP Servers config file (will create if not exists)
-        port = 2284,                                                                   -- The port `mcp-hub` server listens to
-        shutdown_delay = 60 * 10 * 000,                                                -- Delay in ms before shutting down the server when last instance closes (default: 10 minutes)
-        use_bundled_binary = false,                                                    -- Use local `mcp-hub` binary (set this to true when using build = "bundled_build.lua")
-        mcp_request_timeout = 60000,                                                   --Max time allowed for a MCP tool or resource to execute in milliseconds, set longer for long running tasks
-        global_env = {},                                                               -- Global environment variables available to all MCP servers (can be a table or a function returning a table)
+        config = mcpservers_path,                                                        -- Absolute path to MCP Servers config file (will create if not exists)
+        port = 2284,                                                                     -- The port `mcp-hub` server listens to
+        shutdown_delay = 60 * 10 * 000,                                                  -- Delay in ms before shutting down the server when last instance closes (default: 10 minutes)
+        use_bundled_binary = false,                                                      -- Use local `mcp-hub` binary (set this to true when using build = "bundled_build.lua")
+        mcp_request_timeout = 60000,                                                     --Max time allowed for a MCP tool or resource to execute in milliseconds, set longer for long running tasks
+        global_env = {},                                                                 -- Global environment variables available to all MCP servers (can be a table or a function returning a table)
         workspace = {
-          enabled = true,                                                              -- Enable project-local configuration files
+          enabled = true,                                                                -- Enable project-local configuration files
           look_for = { ".mcphub/servers.json", ".vscode/mcp.json", ".cursor/mcp.json" }, -- Files to look for when detecting project boundaries (VS Code format supported)
-          reload_on_dir_changed = true,                                                -- Automatically switch hubs on DirChanged event
-          port_range = { min = 40000, max = 41000 },                                   -- Port range for generating unique workspace ports
-          get_port = nil,                                                              -- Optional function returning custom port number. Called when generating ports to allow custom port assignment logic
+          reload_on_dir_changed = true,                                                  -- Automatically switch hubs on DirChanged event
+          port_range = { min = 40000, max = 41000 },                                     -- Port range for generating unique workspace ports
+          get_port = nil,                                                                -- Optional function returning custom port number. Called when generating ports to allow custom port assignment logic
         },
 
         ---Chat-plugin related options-----------------
-        auto_approve = false,         -- Auto approve mcp tool calls
+        auto_approve = false,           -- Auto approve mcp tool calls
         auto_toggle_mcp_servers = true, -- Let LLMs start and stop MCP servers automatically
         extensions = {
           avante = {
@@ -707,14 +752,14 @@ lvim.plugins = {
         },
         ui = {
           window = {
-            width = 0.8,    -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
-            height = 0.8,   -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
+            width = 0.8,      -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
+            height = 0.8,     -- 0-1 (ratio); "50%" (percentage); 50 (raw number)
             align = "center", -- "center", "top-left", "top-right", "bottom-left", "bottom-right", "top", "bottom", "left", "right"
             relative = "editor",
             zindex = 50,
             border = "rounded", -- "none", "single", "double", "rounded", "solid", "shadow"
           },
-          wo = {              -- window-scoped options (vim.wo)
+          wo = {                -- window-scoped options (vim.wo)
             winhl = "Normal:MCPHubNormal,FloatBorder:MCPHubBorder",
           },
         },
