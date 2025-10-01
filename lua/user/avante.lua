@@ -221,7 +221,7 @@ M.opts = {
   providers = {
     copilot = {
       endpoint = "https://api.githubcopilot.com",
-      model = "claude-sonnet-4",
+      model = "claude-sonnet-4.5",
       proxy = nil,            -- [protocol://]host[:port] Use this proxy
       allow_insecure = false, -- Allow insecure server connections
       timeout = 30000,        -- Timeout in milliseconds
@@ -234,6 +234,18 @@ M.opts = {
         -- - Related issue: [#981](https://github.com/yetone/avante.nvim/issues/981)
         -- Copilot previously claimed **8000 tokens support**, and this setting
         -- works smoothly with `claude-3.7-sonnet`. `claude-3.5-sonnet` has not been tested yet.
+        max_tokens = 32768,
+      },
+    },
+    ["copilot-claude-4-sonnet"] = {
+      __inherited_from = "copilot",
+      endpoint = "https://api.githubcopilot.com",
+      model = "claude-4-sonnet",
+      proxy = nil,
+      allow_insecure = false,
+      timeout = 30000,
+      extra_request_body = {
+        temperature = 0,
         max_tokens = 32768,
       },
     },

@@ -193,12 +193,12 @@ local question_header = "  " .. user .. " "
 local answer_header = "  Copilot "
 require("CopilotChat").setup {
   -- system_prompt = require("CopilotChat").prompts().COPILOT_INSTRUCTIONS, -- System prompt to use (can be specified manually in prompt via /).
-  model = 'claude-sonnet-4', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
-  sticky = nil,              -- Default sticky prompt or array of sticky prompts to use at start of every new chat.
+  model = 'claude-sonnet-4.5', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
+  sticky = nil,                -- Default sticky prompt or array of sticky prompts to use at start of every new chat.
 
-  temperature = 0.1,         -- GPT result temperature
-  headless = false,          -- Do not write to chat buffer and use history(useful for using callback for custom processing)
-  callback = nil,            -- Callback to use when ask response is received
+  temperature = 0.1,           -- GPT result temperature
+  headless = false,            -- Do not write to chat buffer and use history(useful for using callback for custom processing)
+  callback = nil,              -- Callback to use when ask response is received
 
   -- default window options
   window = {
