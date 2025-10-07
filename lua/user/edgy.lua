@@ -303,6 +303,16 @@ M.config = {
               open = "Neotree reveal_force_cwd",
               pinned = true,
             },
+            {
+              title = "Neo-Tree Buffers",
+              ft = "neo-tree",
+              filter = function(buf)
+                return vim.b[buf].neo_tree_source == "buffers" and vim.b[buf].neo_tree_position ~= "current"
+              end,
+              open = "Neotree buffers reveal_force_cwd",
+              pinned = false,
+              collapsed = false,
+            },
           },
           {
             {
