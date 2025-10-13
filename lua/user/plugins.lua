@@ -1095,9 +1095,6 @@ lvim.plugins = {
       })
     end,
   },
-  -- { "theniceboy/vim-snippets" },
-  -- cmp-nvim-ultisnips 有可能造成補全失效
-  -- { "quangnguyen30192/cmp-nvim-ultisnips" },
   { "lfv89/vim-interestingwords" },
   { "Shatur/neovim-session-manager" },
   { "stevearc/dressing.nvim" },
@@ -1249,7 +1246,6 @@ lvim.plugins = {
     end
   },
   { "sindrets/winshift.nvim" },
-  { "quangnguyen30192/cmp-nvim-ultisnips" },
   {
     "ray-x/lsp_signature.nvim",
     event = "InsertEnter",
@@ -1264,7 +1260,6 @@ lvim.plugins = {
       })
     end
   },
-  { "SirVer/ultisnips" },
   { "ESSO0428/vim-snippets" },
   { "nvim-telescope/telescope-media-files.nvim" },
   {

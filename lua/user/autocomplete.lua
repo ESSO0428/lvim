@@ -3,7 +3,6 @@ require("luasnip.loaders.from_lua").lazy_load { paths = "~/.config/lvim/LuaSnipS
 local cmp = require("lvim.utils.modules").require_on_index "cmp"
 local cmp_mapping = require "cmp.config.mapping"
 local luasnip = require("lvim.utils.modules").require_on_index "luasnip"
-local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 local original_cmp_path_dirname = require("cmp_path")._dirname
 
 require("cmp_path").get_trigger_characters = function()
@@ -113,12 +112,6 @@ require("cmp").setup.filetype({ "copilot-chat" }, {
     { name = "path" }
   }
 })
-lvim.builtin.cmp.snippet = {
-  expand = function(args)
-    -- luasnip.lsp_expand(args.body)
-    vim.fn["UltiSnips#Anon"](args.body)
-  end,
-}
 lvim.builtin.cmp.performance = {
   trigger_debounce_time = 500,
   throttle = 550,
@@ -159,7 +152,6 @@ table.insert(lvim.builtin.cmp.sources, 2, { name = "jupyter", priority = 10 })
 table.insert(lvim.builtin.cmp.sources, 3, { name = "jupynium", priority = 10 })
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "lazydev", group_index = 0 }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "cmdline_history" }
-lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "ultisnips" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "vsnip" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "orgmode" }
 lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "dap" }
@@ -504,7 +496,6 @@ lvim.builtin.cmp.mapping["<M-j>"] = cmp.mapping(cmp_mapping.abort(), { "i", "c" 
 lvim.builtin.cmp.formatting.source_names.lazydev = "(lazydev)"
 lvim.builtin.cmp.formatting.source_names.vsnip = "(V-Snippet)"
 lvim.builtin.cmp.formatting.source_names.luasnip = "(L-Snippet)"
-lvim.builtin.cmp.formatting.source_names.ultisnips = "(U-Snippet)"
 lvim.builtin.cmp.formatting.source_names.orgmode = "(orgmode)"
 lvim.builtin.cmp.formatting.source_names.dap = "(dap)"
 lvim.builtin.cmp.formatting.source_names['vim-dadbod-completion'] = "(dadbod-sql)"
@@ -517,23 +508,5 @@ lvim.builtin.cmp.formatting.duplicates = {
   path = 1,
   nvim_lsp = 1,
   luasnip = 1,
-  ultisnips = 1,
   vsnip = 1,
 }
--- 底下 UltiSnipsExpandTrigger 已經沒用了，但為了避免 visual model 的縮排受預設的 tab 受引響
--- 故故意設定無效按鍵
-vim.g.UltiSnipsExpandTrigger = "<C-space>"
-vim.g.UltiSnipsJumpBackwardTrigger = "<M-a>"
-vim.g.UltiSnipsJumpForwardTrigger = "<M-d>"
-
--- vim.g.UltiSnipsListSnippets="<leader>l"
-vim.g.UltiSnipsListSnippets = "<M-/>"
--- vim.g.UltiSnipsSnippetDirectories = { "$HOME/.config/lvim/Ultisnips/" }
-
--- vim.g.ultisnips_python_style="google"
--- lvim.builtin.cmp.formatting.format = function(entry, vim_item)
---   if entry.source.name == "html-css" then
---     vim_item.menu = entry.source.menu
---   end
---   return vim_item
--- end
