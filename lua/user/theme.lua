@@ -214,13 +214,50 @@ lvim.builtin.indentlines.options.space_char_highlight_list      = {
 --]]
 
 -- lvim.builtin.bufferline
-vim.g.vim_pid                 = vim.fn.getpid()
-lvim.builtin.lualine.options  = {
+vim.g.vim_pid                = vim.fn.getpid()
+lvim.builtin.lualine.options = {
   globalstatus = true,
   component_separators = { left = '', right = '' },
   section_separators = { left = '', right = '' }
 }
-local components              = require "lvim.core.lualine.components"
+local Path                   = require('plenary.path')
+local conditions             = require "lvim.core.lualine.conditions"
+local colors                 = require "lvim.core.lualine.colors"
+local components             = require "lvim.core.lualine.components"
+local function read_pyvenv_prompt(dir)
+  local cfg = tostring(Path:new(dir):joinpath('pyvenv.cfg'))
+  local f = io.open(cfg, "r")
+  if not f then return nil end
+  for line in f:lines() do
+    local key, value = line:match("^%s*(%w+)%s*=%s*(.+)%s*$")
+    if key == "prompt" then
+      f:close()
+      return vim.trim(value)
+    end
+  end
+  f:close()
+  return nil
+end
+components.python_env         = {
+  function()
+    local utils = require "lvim.core.lualine.utils"
+    if vim.bo.filetype == "python" then
+      local venv = os.getenv "CONDA_DEFAULT_ENV" or os.getenv "VIRTUAL_ENV"
+      if os.getenv "VIRTUAL_ENV" and os.getenv "CONDA_DEFAULT_ENV" == "base" then
+        venv = os.getenv "VIRTUAL_ENV"
+      end
+      if venv then
+        local icons = require "nvim-web-devicons"
+        local py_icon, _ = icons.get_icon ".py"
+        local venv_name = read_pyvenv_prompt(venv) or utils.env_cleanup(venv)
+        return string.format(" " .. py_icon .. " (%s)", venv_name)
+      end
+    end
+    return ""
+  end,
+  color = { fg = colors.green },
+  cond = conditions.hide_in_width,
+}
 lvim.builtin.lualine.sections = {
   lualine_a = { { 'mode' } },
   lualine_c = {
