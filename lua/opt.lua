@@ -10,6 +10,10 @@ vim.opt.number = true
 vim.opt.equalalways = false
 vim.opt.mousemoveevent = true
 lvim.builtin.project.manual_mode = true
+lvim.builtin.project.patterns = vim.list_extend(
+  lvim.builtin.project.patterns,
+  { "pyproject.toml", "requirements.txt", "setup.py", "setup.cfg" }
+)
 -- 摺疊代碼
 vim.wo.foldlevel = 99
 vim.wo.foldenable = true
