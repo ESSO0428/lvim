@@ -1079,6 +1079,33 @@ lvim.plugins = {
       -- configs for us. We won't use data, as everything is in it's own namespace (telescope
       -- defaults, as well as each extension).
       require("telescope").setup(opts)
+
+      local origin_get_previewer = require("telescope-undo.previewer").get_previewer
+      local previewers = require("telescope.previewers")
+      local is_wsl = (function()
+        local output = vim.fn.systemlist("uname -r")
+        return not not string.find(output[1] or "", "WSL")
+      end)()
+      local has_powershell = vim.fn.executable("powershell") == 1
+      local has_bash = vim.fn.executable("bash") == 1
+      require("telescope-undo.previewer").get_previewer = function(o)
+        o = o or {}
+        if o.use_custom_command == nil and not (o.use_delta and not is_wsl and (has_powershell or has_bash) and vim.fn.executable("delta") == 1) then
+          return previewers.new_buffer_previewer({
+            -- this is not the prettiest preview...
+            define_preview = function(self, entry, _)
+              vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, true, vim.split(entry.value.diff, "\n"))
+              require("telescope.previewers.utils").highlighter(
+                self.state.bufnr,
+                "diff",
+                { preview = { treesitter = { enable = true } } }
+              )
+            end,
+          })
+        else
+          return origin_get_previewer(o)
+        end
+      end
       require("telescope").load_extension("undo")
     end,
   },
