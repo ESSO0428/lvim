@@ -41,7 +41,7 @@ lvim.plugins = {
   {
     "folke/snacks.nvim",
     priority = 1000,
-    lazy = false,
+    event = "VeryLazy",
     ---@type snacks.Config
     opts = {
       -- your configuration comes here
@@ -55,6 +55,7 @@ lvim.plugins = {
   { "kevinhwang91/rnvimr" },
   {
     "kevinhwang91/nvim-hlslens",
+    event = "CmdlineEnter",
     config = function()
       require('hlslens').setup({})
     end
@@ -367,6 +368,7 @@ lvim.plugins = {
       "nvim-tree/nvim-tree.lua",
       "nvim-neo-tree/neo-tree.nvim"
     },
+    event = "VeryLazy",
     config = function()
       require("lsp-file-operations").setup {
         -- used to see debug logs in file `vim.fn.stdpath("cache") .. lsp-file-operations.log`
@@ -387,9 +389,13 @@ lvim.plugins = {
   },
   {
     "AckslD/muren.nvim",
+    ecent = "VeryLazy",
     config = true
   },
-  { "ESSO0428/calc.vim" },
+  {
+    "ESSO0428/calc.vim",
+    cmd = { "Calc" },
+  },
   { "ESSO0428/bioSyntax-vim" },
   {
     "ESSO0428/semshi",
@@ -443,6 +449,7 @@ lvim.plugins = {
   },
   {
     "brenoprata10/nvim-highlight-colors",
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
       require("nvim-highlight-colors").setup {
         ---Render style
@@ -488,6 +495,7 @@ lvim.plugins = {
   },
   {
     "amrbashir/nvim-docs-view",
+    cmd = { "DocsViewToggle" },
     config = function()
       require("docs-view").setup {
         position = "bottom",
@@ -505,6 +513,7 @@ lvim.plugins = {
   -- },
   {
     "soulis-1256/eagle.nvim",
+    event = "VeryLazy",
     config = function()
       require("eagle").setup({
         -- override the default values found in config.lua
@@ -528,7 +537,7 @@ lvim.plugins = {
       -- "akinsho/toggleterm.nvim", -- alternative repl provider
       "nvimtools/hydra.nvim",
     },
-    event = "VeryLazy",
+    ft = { "python" },
     config = function()
       local nn = require "notebook-navigator"
       nn.setup({
@@ -550,7 +559,7 @@ lvim.plugins = {
   },
   {
     "echasnovski/mini.ai",
-    event = "VeryLazy",
+    ft = { "python" },
     dependencies = { "ESSO0428/NotebookNavigator.nvim" },
     opts = function()
       local nn = require "notebook-navigator"
@@ -561,7 +570,7 @@ lvim.plugins = {
   },
   {
     "echasnovski/mini.hipatterns",
-    event = "VeryLazy",
+    ft = { "python" },
     dependencies = { "ESSO0428/NotebookNavigator.nvim" },
     opts = function()
       local nn = require "notebook-navigator"
@@ -570,21 +579,43 @@ lvim.plugins = {
       return opts
     end
   },
-  { "jbyuki/venn.nvim" },
+  {
+    "jbyuki/venn.nvim",
+    event = "VeryLazy",
+  },
   { "ESSO0428/bookmarks.nvim" },
   {
     "ESSO0428/vim-dadbod-ui",
+    cmd = {
+      "DBUI",
+      "DBUIToggle",
+      "DBUIAddConnection",
+    },
     dependencies = { "tpope/vim-dadbod", "tpope/vim-dotenv" }
   },
   { "kristijanhusak/vim-dadbod-completion" },
-  { "LinArcX/telescope-command-palette.nvim" },
-  { "nvim-telescope/telescope-live-grep-args.nvim" },
+  {
+    "LinArcX/telescope-command-palette.nvim",
+    event = "VeryLazy",
+  },
+  {
+    "nvim-telescope/telescope-live-grep-args.nvim",
+    event = "VeryLazy",
+  },
   {
     "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+    event = "VeryLazy",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      pcall(require("telescope").load_extension, "file_browser")
+    end
   },
   {
     'nvim-orgmode/orgmode',
+    ft = { "org" }, -- 只在 org 檔載入
     dependencies = {
       { 'nvim-treesitter/nvim-treesitter', lazy = true },
     },
@@ -608,6 +639,7 @@ lvim.plugins = {
   {
     'lukas-reineke/headlines.nvim',
     dependencies = "nvim-treesitter/nvim-treesitter",
+    ft = { "markdown", "md", "org", "norg", "rmd" },
     config = true, -- or `opts = {}`
   },
   -- NOTE: because orgmode update and org.parser.files depend on orgmode, so I have to disable it
@@ -622,11 +654,16 @@ lvim.plugins = {
   { "rcarriga/cmp-dap" },
   {
     "github/copilot.vim",
-    commit = "7097b09"
+    commit = "7097b09",
+    event = "InsertEnter", -- 進入 Insert 才啟動 Copilot
   },
-  { "hrsh7th/cmp-copilot" },
+  {
+    "hrsh7th/cmp-copilot",
+    event = "InsertEnter",
+  },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
+    cmd = { "CopilotChat", "CopilotChatToggle" },
     -- NOTE: If you can't activate the plugin, please check the following:
     -- 1. Check if the $XDG_RUNTIME_DIR directory exists.
     -- 2. Verify the permissions of $XDG_RUNTIME_DIR:
@@ -646,7 +683,8 @@ lvim.plugins = {
       "nvim-lua/plenary.nvim",
       "folke/snacks.nvim",
     },
-    event = "VeryLazy",
+    -- event = "VeryLazy",
+    cmd = { "GeminiToggle", "GeminiClose", "GeminiAccept", "GeminiReject" },
     config = function()
       -- You can configure the plugin by passing a table to the setup function
       -- Example:
@@ -797,8 +835,9 @@ lvim.plugins = {
   },
   {
     "yetone/avante.nvim",
-    event = "VeryLazy",
-    version = false, -- Never set this value to "*"! Never!
+    -- event = "VeryLazy",
+    cmd = { "AvanteAsk", "AvanteToggle" }, -- 依你自己常用的指令
+    version = false,                       -- Never set this value to "*"! Never!
     -- NOTE: If you can't activate the plugin, please check the following (same as CopilotChat.nvim):
     -- 1. Check if the $XDG_RUNTIME_DIR directory exists.
     -- 2. Verify the permissions of $XDG_RUNTIME_DIR:
@@ -856,12 +895,22 @@ lvim.plugins = {
         },
       },
     },
+    keys = {
+      { "<leader>aa", "<cmd>AvanteAsk<cr>",    desc = "Avante: Ask" },
+      { "<leader>ae", "<cmd>AvanteEdit<cr>",   desc = "Avante: Edit" },
+      { "<leader>a?", "<cmd>AvanteModels<cr>", desc = "Avante: Select Models" },
+    }
   },
   -- { "HiPhish/nvim-ts-rainbow2" },
-  { "HiPhish/rainbow-delimiters.nvim" },
+  {
+    "HiPhish/rainbow-delimiters.nvim",
+    commit = "77e5bad54227dcfe3878ffbda88ab1efdaacb475",
+    event = "BufReadPost",
+  },
   {
     "nvim-treesitter/playground",
-    event = "BufRead",
+    -- event = "BufRead",
+    cmd = { "TSPlaygroundToggle", "TSHighlightCapturesUnderCursor" },
   },
   -- WARNING: 使用此套件時請謹慎，因為它可能會導致在 nvim-tree 中結合使用 telescope 時出現開啟文件的錯誤。
   -- 當前的暫時解決方案是在 Neovim 配置文件中添加名為 handle_telescope_nvimtree_interaction (nvimtree.lua) 的函數，
@@ -873,6 +922,7 @@ lvim.plugins = {
   -- NOTE: 這裡先固定 commit 後續 nvim 大改再考慮更新
   {
     "nvim-treesitter/nvim-treesitter-context",
+    event = { "BufReadPost", "BufNewFile" },
     config = function()
       vim.keymap.set('n', '[a', function() require("treesitter-context").go_to_context() end,
         { silent = true, nowait = true })
@@ -894,6 +944,7 @@ lvim.plugins = {
   },
   {
     "windwp/nvim-ts-autotag",
+    ft = { "html", "xml", "javascriptreact", "typescriptreact", "svelte", "vue", "php", "heex" },
     config = function()
       require("nvim-ts-autotag").setup()
     end
@@ -905,6 +956,7 @@ lvim.plugins = {
   },
   {
     'luukvbaal/statuscol.nvim',
+    event = "BufReadPost", -- 開某個檔案後再載入
     opts = function()
       local builtin = require('statuscol.builtin')
       return {
@@ -925,20 +977,44 @@ lvim.plugins = {
   },
   {
     'jghauser/fold-cycle.nvim',
+    keys = {
+      {
+        '[f',
+        function()
+          return require('fold-cycle').close()
+        end,
+        desc = 'Fold-cycle: close folds',
+        silent = true,
+      },
+      {
+        ']f',
+        function()
+          return require('fold-cycle').open()
+        end,
+        desc = 'Fold-cycle: open folds',
+        silent = true,
+      },
+      {
+        '[g',
+        function()
+          return require('fold-cycle').close_all()
+        end,
+        desc = 'Fold-cycle: close all folds',
+        silent = true,
+        remap = true,
+      },
+      {
+        ']g',
+        function()
+          return require('fold-cycle').open_all()
+        end,
+        desc = 'Fold-cycle: open all folds',
+        silent = true,
+        remap = true,
+      },
+    },
     config = function()
       require('fold-cycle').setup()
-      vim.keymap.set('n', '[f',
-        function() return require('fold-cycle').close() end,
-        { silent = true, desc = 'Fold-cycle: close folds' })
-      vim.keymap.set('n', ']f',
-        function() return require('fold-cycle').open() end,
-        { silent = true, desc = 'Fold-cycle: open folds' })
-      vim.keymap.set('n', '[g',
-        function() return require('fold-cycle').close_all() end,
-        { remap = true, silent = true, desc = 'Fold-cycle: close all folds' })
-      vim.keymap.set('n', ']g',
-        function() return require('fold-cycle').open_all() end,
-        { remap = true, silent = true, desc = 'Fold-cycle: Open all folds' })
     end
   },
   {
@@ -1034,9 +1110,10 @@ lvim.plugins = {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "hrsh7th/nvim-cmp"
-    }
+    },
+    ft = { "html", "css", "scss", "javascriptreact", "typescriptreact" }
   },
-  { "godlygeek/tabular" },
+  { "godlygeek/tabular",         cmd = { "Tabularize" }, },
   -- { "mbbill/undotree" },
   {
     "kevinhwang91/nvim-fundo",
@@ -1109,13 +1186,26 @@ lvim.plugins = {
       require("telescope").load_extension("undo")
     end,
   },
-  { "mg979/vim-visual-multi" },
-  { "matze/vim-move" },
-  { "zirrostig/vim-schlepp" },
-  { "theniceboy/antovim" },
+  {
+    "mg979/vim-visual-multi",
+    event = "VeryLazy",
+  },
+  {
+    "matze/vim-move",
+    event = "VeryLazy",
+  },
+  {
+    "zirrostig/vim-schlepp",
+    event = "VeryLazy",
+  },
+  {
+    "theniceboy/antovim",
+    event = "VeryLazy",
+  },
   {
     'Wansmer/treesj',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    cmd = { "TSJToggle", "TSJSplit", "TSJJoin" },
     config = function()
       require('treesj').setup({
         use_default_keymaps = false
@@ -1126,23 +1216,28 @@ lvim.plugins = {
   {
     "Shatur/neovim-session-manager",
     config = function()
-      vim.api.nvim_clear_autocmds({
+      vim.api.nvim_clear_autocmds {
         group = "SessionManager",
         event = "VimEnter",
-      })
+      }
       local group = vim.api.nvim_create_augroup("SessionManager", { clear = false })
       vim.api.nvim_create_autocmd("User", {
         group = group,
         pattern = "VeryLazy",
         nested = true,
-        callback = function() require("session_manager").autoload_session() end
+        callback = function()
+          require("session_manager").autoload_session()
+        end,
       })
     end
   },
-  { "stevearc/dressing.nvim" },
+  {
+    "stevearc/dressing.nvim",
+    event = "VeryLazy",
+  },
   {
     "folke/flash.nvim",
-    event = "VeryLazy",
+    -- event = "VeryLazy",
     ---@type Flash.Config
     opts = {
       config = nil,
@@ -1256,6 +1351,7 @@ lvim.plugins = {
   -- 已將其代碼自行 copy 到我的 lua dir 下了
   {
     "petertriho/nvim-scrollbar",
+    event = "BufReadPost",
     config = function()
       require("scrollbar").setup({
         show = true,
@@ -1273,10 +1369,12 @@ lvim.plugins = {
   },
   {
     "zane-/howdoi.nvim",
+    cmd = { "Howdoi" },
     build = 'pip install howdoi'
   },
   {
     "folke/todo-comments.nvim",
+    event = { "BufReadPost", "BufNewFile" },
     deprecated = "nvim-lua/plenary.nvim",
     config = function()
       --[[ require ]]
@@ -1287,7 +1385,10 @@ lvim.plugins = {
       }
     end
   },
-  { "sindrets/winshift.nvim" },
+  {
+    "sindrets/winshift.nvim",
+    cmd = "WinShift", -- 用到才載
+  },
   {
     "ray-x/lsp_signature.nvim",
     event = "InsertEnter",
@@ -1311,6 +1412,7 @@ lvim.plugins = {
   },
   {
     "ESSO0428/swenv.nvim",
+    ft = { "python" },
     config = function()
       require('swenv').setup({
         post_set_venv = function()
@@ -1344,12 +1446,20 @@ lvim.plugins = {
   { "ofirgall/goto-breakpoints.nvim" },
   {
     "mfussenegger/nvim-dap-python",
+    ft = "python",
     build = "pip install debugpy"
   },
-  { "theHamsta/nvim-dap-virtual-text" },
-  { "LiadOz/nvim-dap-repl-highlights" },
+  {
+    "theHamsta/nvim-dap-virtual-text",
+    event = "VeryLazy",
+  },
+  {
+    "LiadOz/nvim-dap-repl-highlights",
+    event = "VeryLazy",
+  },
   {
     'Weissle/persistent-breakpoints.nvim',
+    event = "BufReadPost",
     config = function()
       require('persistent-breakpoints').setup {
         load_breakpoints_event = { "SessionLoadPost" }
@@ -1364,7 +1474,8 @@ lvim.plugins = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-neotest/neotest-python",
       "nvim-neotest/nvim-nio"
-    }
+    },
+    cmd = { "Neotest", "NeotestFile", "NeotestNearest", "NeotestSuite", "NeotestSummary", "NeotestJump" }
   },
   { "Davidyz/inlayhint-filler.nvim" },
   {
@@ -1376,6 +1487,7 @@ lvim.plugins = {
       "stevearc/dressing.nvim",
       "nvim-tree/nvim-web-devicons",
     },
+    ft = { "python" },
     -- NOTE: don't use build here, have some bug
     -- use pcall require pymple, when dependency not install,
     -- pymple will jump to `:PympleBuild` warning
@@ -1440,6 +1552,7 @@ lvim.plugins = {
   },
   {
     "aca/emmet-ls",
+    ft = { "html", "css", "javascriptreact", "typescriptreact", "svelte", "vue" },
     config = function()
       local lspconfig = require("lspconfig")
       local configs = require("lspconfig/configs")
@@ -1481,6 +1594,19 @@ lvim.plugins = {
   },
   {
     "luckasRanarison/tailwind-tools.nvim",
+    ft = {
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+      "vue",
+      "svelte",
+      "html",
+      "css",
+      "scss",
+      "heex",
+      "astro",
+    },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     opts = {
       document_color = {
@@ -1499,7 +1625,10 @@ lvim.plugins = {
       custom_filetypes = {} -- see the extension section to learn how it works
     }
   },
-  { "nvim-lua/popup.nvim" },
+  {
+    "nvim-lua/popup.nvim",
+    event = "VeryLazy", -- 很多 plugin 依賴，但不必一開始就載
+  },
   {
     "iamcco/markdown-preview.nvim",
     build = "cd app && npm install",
@@ -1522,6 +1651,7 @@ lvim.plugins = {
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ft = { 'markdown', 'Avante', 'AvanteInput', 'copilot-chat' },
     config = function()
       vim.g.MarkdownNvim = 1
       vim.treesitter.language.register('markdown', 'copilot-chat')
@@ -1664,6 +1794,7 @@ lvim.plugins = {
   },
   {
     'kosayoda/nvim-lightbulb',
+    event = "LspAttach",
     opts = require("user.config.plugins.nvim_lightbulb").opt,
   },
   {
@@ -1760,6 +1891,7 @@ lvim.plugins = {
   },
   {
     "hedyhli/outline.nvim",
+    cmd = { "Outline", "OutlineOpen" },
     opts = {
       -- Your setup opts here (leave empty to use defaults)
       preview_window = {
@@ -1780,15 +1912,20 @@ lvim.plugins = {
   {
     "danymat/neogen",
     dependencies = "nvim-treesitter/nvim-treesitter",
+    cmd = { "Neogen" },
     config = true,
     -- Uncomment next line if you want to follow only stable versions
     -- version = "*"
   },
   {
     "ESSO0428/md-headers.nvim",
+    ft = { "markdown" }, -- 只在 markdown 開啟
     deprecated = { 'nvim-lua/plenary.nvim' }
   },
-  { "ESSO0428/mkdnflow.nvim", },
+  {
+    "ESSO0428/mkdnflow.nvim",
+    ft = { "markdown" }, -- 只在 markdown 開啟
+  },
   {
     "nvchad/volt",
     lazy = true,
@@ -1801,7 +1938,13 @@ lvim.plugins = {
     "nvchad/menu",
     lazy = true,
   },
-  { "dhruvasagar/vim-table-mode" },
+  {
+    "dhruvasagar/vim-table-mode",
+    cmd = { "TableModeToggle" },
+    keys = {
+      { "<leader>tm", "<cmd>TableModeToggle<cr>", desc = "Toggle table mode" },
+    }
+  },
   {
     "miversen33/netman.nvim"
   },
@@ -1823,6 +1966,10 @@ lvim.plugins = {
   },
   {
     'nyngwang/NeoZoom.lua',
+    cmd = { "NeoZoomToggle" },
+    keys = {
+      { "<leader>tb", "<cmd>NeoZoomToggle<cr>", desc = "Toggle neo-zoom" },
+    },
     config = function()
       require('neo-zoom').setup {
         winopts = {
@@ -1861,7 +2008,6 @@ lvim.plugins = {
         --   exclude_buftypes = {},
         -- },
       }
-      vim.keymap.set('n', '<leader>tb', function() vim.cmd('NeoZoomToggle') end, { silent = true, nowait = true })
     end
   },
   -- {
@@ -1872,7 +2018,8 @@ lvim.plugins = {
   -- end
   -- },
   {
-    "ESSO0428/limelight.vim"
+    "ESSO0428/limelight.vim",
+    cmd = { "Limelight" }
   },
   {
     "princejoogie/chafa.nvim",
@@ -1882,12 +2029,27 @@ lvim.plugins = {
     }
   },
   -- { "tpope/vim-fugitive" },
-  { "ESSO0428/vim-fugitive" },
-  { "rbong/vim-flog" },
-  { "sindrets/diffview.nvim" },
+  {
+    "ESSO0428/vim-fugitive",
+    cmd = { "Git", "G", "Gdiffsplit", "Gread", "Gwrite", "Gstatus" },
+  },
+  {
+    "rbong/vim-flog",
+    cmd = { "Flog", "Flogsplit" },
+  },
+  {
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
+  },
   {
     "kiyoon/jupynium.nvim",
     build = "pip install --user .",
+    cmd = {
+      "JupyniumStartSync",
+      "JupyniumStopSync",
+      "JupyniumStartAndAttachToServer",
+      "JupyniumAttach",
+    },
     -- NOTE: The following steps ensure the installation of the latest version of Firefox.
     -- By installing it in the user directory, we can avoid conflicts with the default Firefox version on the server.
     -- 1. Navigate to your bin directory:
