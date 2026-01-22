@@ -259,6 +259,13 @@ M.config = {
       end,
     },
     {
+      ft = "man",
+      size = { height = 20 },
+      title = function()
+        return title_update_based_edgy_status("man", "man", "")
+      end,
+    },
+    {
       ft = "markdown",
       size = { height = 20 },
       -- only show help buffers

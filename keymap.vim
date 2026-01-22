@@ -226,6 +226,11 @@ noremap <silent> K 5j
 vnoremap <silent> I 5k
 vnoremap <silent> K 5j
 
+nnoremap <silent> gK K
+vnoremap <silent> gK K
+autocmd FileType man nunmap <buffer> k
+autocmd FileType man nunmap <buffer> j
+
 " 覆蓋 I, K 成 5gk, 5gj 
 " nnoremap <silent> I 5gk
 " nnoremap <silent> K 5gj
