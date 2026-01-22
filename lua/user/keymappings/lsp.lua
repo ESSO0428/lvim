@@ -100,6 +100,8 @@ lvim.keys.normal_mode['<leader>ue']    = { "<cmd>Telescope quickfix<cr>" }
 -- lvim.builtin.which_key.mappings['c']   = { "<cmd>Telescope lsp_references<cr>", "lsp_references" }
 lvim.builtin.which_key.mappings['gr']  = { "<cmd>Telescope lsp_references<cr>", "lsp_references" }
 lvim.builtin.which_key.mappings['v']   = { "<cmd>Telescope lsp_document_symbols<cr>", "lsp_document_symbols" }
+lvim.builtin.which_key.mappings['V']   = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
+  "lsp_dynamic_workspace_symbols" }
 
 -- lvim.lsp.buffer_mappings.normal_mode['gd'] = nil
 lvim.keys.normal_mode['<a-o>']         = "<cmd>lua vim.lsp.buf.definition()<cr>"
