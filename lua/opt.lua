@@ -10,7 +10,9 @@ vim.opt.number = true
 vim.opt.equalalways = false
 vim.opt.mousemoveevent = true
 --  HACK: Use '/' in netrw to prevent tree view breaking on Windows after 'x'
-vim.o.shellslash = true
+if vim.fn.exists("+shellslash") == 1 then
+  vim.o.shellslash = true
+end
 lvim.builtin.project.manual_mode = true
 lvim.builtin.project.patterns = vim.list_extend(
   lvim.builtin.project.patterns,
