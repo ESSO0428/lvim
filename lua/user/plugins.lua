@@ -904,7 +904,7 @@ lvim.plugins = {
   {
     "HiPhish/rainbow-delimiters.nvim",
     commit = "77e5bad54227dcfe3878ffbda88ab1efdaacb475",
-    event = "BufReadPost",
+    lazy = false,
   },
   {
     "nvim-treesitter/playground",
