@@ -182,11 +182,6 @@ M.exec_toggleBatOrMore = function(opts)
   viewer:toggle()
 end
 
-M.exec_Ranger = function(opts)
-  local basedir = opts.basedir
-  vim.fn['rnvimr#open'](basedir)
-end
-
 M.exec_cder = function(opts)
   require('telescope').setup({
     defaults = require('telescope.themes').get_ivy({}),

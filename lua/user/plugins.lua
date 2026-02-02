@@ -10,7 +10,7 @@ lvim.plugins = {
       },
     },
   },
-  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+  { "Bilal2453/luvit-meta",      lazy = true }, -- optional `vim.uv` typings
   --[[{                                        -- optional cmp completion source for require statements and module annotations
     "hrsh7th/nvim-cmp",
     opts = function(_, opts)
@@ -52,7 +52,6 @@ lvim.plugins = {
       }
     },
   },
-  { "kevinhwang91/rnvimr" },
   {
     "kevinhwang91/nvim-hlslens",
     event = "CmdlineEnter",

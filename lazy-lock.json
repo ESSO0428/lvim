@@ -131,7 +131,6 @@
   "rainbow_csv": { "branch": "master", "commit": "3dbbfd7d17536aebfb80f571255548495574c32b" },
   "refactoring.nvim": { "branch": "master", "commit": "2db6d378e873de31d18ade549c2edba64ff1c2e3" },
   "render-markdown": { "branch": "main", "commit": "0022a579ac7355966be5ade77699b88c76b6a549" },
-  "rnvimr": { "branch": "main", "commit": "3c41af742a61caf74a9f83fb82b9ed03ef13b880" },
   "schemastore.nvim": { "branch": "main", "commit": "9a5992a881583d886bfbb46631a09f736f0fae50" },
   "semshi": { "branch": "master", "commit": "d99b9bc812a15be6b3ffbd7152e55e3dfbb22964" },
   "snacks.nvim": { "branch": "main", "commit": "5d9dacd09876eed33bde204d224fa7596ac850e8" },

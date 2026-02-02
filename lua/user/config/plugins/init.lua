@@ -1,7 +1,6 @@
 require "user.config.plugins.dressing"
 require "user.config.plugins.Copilot"
 require "user.config.plugins.VimVisualMulti"
-require "user.config.plugins.ranger"
 require "user.config.plugins.LspSaga"
 require "user.config.plugins.nvim_lightbulb"
 require "user.config.plugins.wilder"
