@@ -559,7 +559,7 @@ lvim.plugins = {
   },
   {
     "echasnovski/mini.ai",
-    ft = { "python" },
+    event = "VeryLazy",
     dependencies = { "ESSO0428/NotebookNavigator.nvim" },
     opts = function()
       local nn = require "notebook-navigator"
@@ -570,7 +570,7 @@ lvim.plugins = {
   },
   {
     "echasnovski/mini.hipatterns",
-    ft = { "python" },
+    event = "VeryLazy",
     dependencies = { "ESSO0428/NotebookNavigator.nvim" },
     opts = function()
       local nn = require "notebook-navigator"
