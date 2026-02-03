@@ -1,19 +1,23 @@
+local M = {}
 -- NOTE: 注意 close buffer 的功能可能會因為彩虹括號套件而出錯
 -- 請不要安裝和使用 mrjones2014/nvim-ts-rainbow"
 -- 改用 HiPhish/nvim-ts-rainbow2
 -- 或 HiPhish/rainbow-delimiters.nvim (推薦)
 
-require('close_buffers').setup({
-  preserve_window_layout = { 'this' },
-  next_buffer_cmd = function(windows)
-    require('bufferline').cycle(1)
-    local bufnr = vim.api.nvim_get_current_buf()
+function M.setup()
+  require('close_buffers').setup({
+    preserve_window_layout = { 'this' },
+    next_buffer_cmd = function(windows)
+      require('bufferline').cycle(1)
+      local bufnr = vim.api.nvim_get_current_buf()
 
-    for _, window in ipairs(windows) do
-      vim.api.nvim_win_set_buf(window, bufnr)
-    end
-  end,
-})
+      for _, window in ipairs(windows) do
+        vim.api.nvim_win_set_buf(window, bufnr)
+      end
+    end,
+  })
+end
+
 function BufferLineKill(opts)
   opts = opts or {}
   local force = opts.force or false
@@ -64,3 +68,5 @@ vim.cmd([[
 command! BufferLineKill lua BufferLineKill({ force = false })
 command! ForceBufferLineKill lua BufferLineKill({ force = true })
 ]])
+
+return M

@@ -1,4 +1,6 @@
-require("dressing").setup({
+local M = {}
+
+M.opt = {
   input = {
     -- enabled = false,
     get_config = function()
@@ -21,4 +23,6 @@ require("dressing").setup({
       sidescrolloff = 0,
     }
   }
-})
+}
+
+return M

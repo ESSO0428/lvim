@@ -397,18 +397,6 @@ local autocommands = {
       end
     }
   },
-  {
-    "BufReadPost",
-    {
-      pattern = { "*" },
-      callback = function()
-        -- NOTE: fix semshi highlighting conflict with treesitter
-        if vim.bo.filetype == "python" then
-          vim.bo.syntax = "on"
-        end
-      end
-    }
-  }
 }
 for _, autocommand in pairs(autocommands) do
   table.insert(lvim.autocommands, autocommand)

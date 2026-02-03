@@ -45,7 +45,7 @@ lvim.builtin.treesitter.highlight              = {
   end,
   -- Required for spellcheck, some LaTex highlights and
   -- code block highlights that do not have ts grammar
-  additional_vim_regex_highlighting = { 'org' },
+  additional_vim_regex_highlighting = { 'org', "python", "markdown" },
 }
 lvim.builtin.treesitter.rainbow.enable         = true
 lvim.builtin.treesitter.playground.keybindings = {

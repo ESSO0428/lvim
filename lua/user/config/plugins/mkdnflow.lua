@@ -1,8 +1,11 @@
-local success, msg = pcall(function()
-  require('mkdnflow').setup({
-    new_file_template = {
-      use_template = true,
-      template = [[
+local M = {}
+
+function M.setup()
+  local success, msg = pcall(function()
+    require('mkdnflow').setup({
+      new_file_template = {
+        use_template = true,
+        template = [[
 ---
 title: {{ title }}
 author: Andy6
@@ -10,71 +13,73 @@ date: {{ date }}
 filename: {{ filename }}
 ---
 ]],
-      placeholders = {
-        before = {
-          date = function()
-            return os.date("%A, %B %d, %Y") -- Wednesday, March 1, 2023
-          end
-        },
-        after = {
-          filename = function()
-            return vim.api.nvim_buf_get_name(0)
-          end
+        placeholders = {
+          before = {
+            date = function()
+              return os.date("%A, %B %d, %Y") -- Wednesday, March 1, 2023
+            end
+          },
+          after = {
+            filename = function()
+              return vim.api.nvim_buf_get_name(0)
+            end
+          }
         }
-      }
-    },
-    to_do = {
-      symbols = { ' ', 'x' },
-      update_parents = true,
-      not_started = ' ',
-      complete = 'x'
-    },
-    create_dirs = false,
-    hijack_dirs = true,
-    mappings = {
-      -- MkdnEnter = { { 'i', 'n', 'v' }, '<CR>' }, -- This monolithic command has the aforementioned
-      MkdnEnter                   = false,
-      -- insert-mode-specific behavior and also will trigger row jumping in tables. Outside
-      -- of lists and tables, it behaves as <CR> normally does.
-      MkdnNewListItem             = { 'i', '<CR>' }, -- Use this command instead if you only want <CR> in
-      -- insert mode to add a new list item (and behave as usual outside of lists).
-      -- MkdnFollowLink              = { 'n', '<a-o>' },
-      MkdnFollowLink              = false, -- integrated with lsp gd (when lsp gd not work will use this)
-      MkdnDestroyLink             = false,
-      MkdnCreateLinkFromClipboard = false,
-      MkdnNextLink                = false,
-      MkdnPrevLink                = false,
-      MkdnToggleToDo              = { { 'n', 'v' }, 'gS' },
-      MkdnNewListItemAboveInsert  = false,
-      MkdnNewListItemBelowInsert  = { 'n', '<leader>oh' },
-      MkdnIncreaseHeading         = { 'n', '<a-<>' },
-      MkdnDecreaseHeading         = { 'n', '<a->>' },
-      -- MkdnNextHeading             = { 'n', '}' },
-      MkdnNextHeading             = { 'n', 'gk' },
-      -- MkdnPrevHeading             = { 'n', '{' },
-      MkdnPrevHeading             = { 'n', 'gi' },
-      -- MkdnFoldSection = false,
-      MkdnFoldSection             = { 'n', '<tab>' },
-      -- MkdnUnfoldSection = false,
-      -- MkdnUnfoldSection           = { 'n', '<S-tab>' },
-      MkdnFoldCycle               = { 'n', '<S-tab>' },
-      MkdnYankFileAnchorLink      = false,
-      MkdnYankAnchorLink          = false,
-      MkdnMoveSource              = false,
-      MkdnTableNextCell           = false,
-      MkdnTablePrevCell           = false,
-      MkdnTagSpan                 = false,
-      MkdnTableNewRowBelow        = false,
-      MkdnTableNewRowAbove        = false,
-      MkdnTableNewColAfter        = false,
-      MkdnTableNewColBefore       = false,
-      -- MkdnUpdateNumbering = { 'n', '<leader>rr' }
-    },
-  })
-end)
-if not success then
-  print("Error setting up mkdnflow")
+      },
+      to_do = {
+        symbols = { ' ', 'x' },
+        update_parents = true,
+        not_started = ' ',
+        complete = 'x'
+      },
+      create_dirs = false,
+      hijack_dirs = true,
+      mappings = {
+        -- MkdnEnter = { { 'i', 'n', 'v' }, '<CR>' }, -- This monolithic command has the aforementioned
+        MkdnEnter                   = false,
+        -- insert-mode-specific behavior and also will trigger row jumping in tables. Outside
+        -- of lists and tables, it behaves as <CR> normally does.
+        MkdnNewListItem             = { 'i', '<CR>' }, -- Use this command instead if you only want <CR> in
+        -- insert mode to add a new list item (and behave as usual outside of lists).
+        -- MkdnFollowLink              = { 'n', '<a-o>' },
+        MkdnFollowLink              = false, -- integrated with lsp gd (when lsp gd not work will use this)
+        MkdnDestroyLink             = false,
+        MkdnCreateLinkFromClipboard = false,
+        MkdnNextLink                = false,
+        MkdnPrevLink                = false,
+        MkdnToggleToDo              = { { 'n', 'v' }, 'gS' },
+        MkdnNewListItemAboveInsert  = false,
+        MkdnNewListItemBelowInsert  = { 'n', '<leader>oh' },
+        MkdnIncreaseHeading         = { 'n', '<a-<>' },
+        MkdnDecreaseHeading         = { 'n', '<a->>' },
+        -- MkdnNextHeading             = { 'n', '}' },
+        MkdnNextHeading             = { 'n', 'gk' },
+        -- MkdnPrevHeading             = { 'n', '{' },
+        MkdnPrevHeading             = { 'n', 'gi' },
+        -- MkdnFoldSection = false,
+        MkdnFoldSection             = { 'n', '<tab>' },
+        -- MkdnUnfoldSection = false,
+        -- MkdnUnfoldSection           = { 'n', '<S-tab>' },
+        MkdnFoldCycle               = { 'n', '<S-tab>' },
+        MkdnYankFileAnchorLink      = false,
+        MkdnYankAnchorLink          = false,
+        MkdnMoveSource              = false,
+        MkdnTableNextCell           = false,
+        MkdnTablePrevCell           = false,
+        MkdnTagSpan                 = false,
+        MkdnTableNewRowBelow        = false,
+        MkdnTableNewRowAbove        = false,
+        MkdnTableNewColAfter        = false,
+        MkdnTableNewColBefore       = false,
+        -- MkdnUpdateNumbering = { 'n', '<leader>rr' }
+      },
+    })
+  end)
+  if not success then
+    print("Error setting up mkdnflow")
+  end
 end
+
 local function markdown_go_to_definition()
   local params = vim.lsp.util.make_position_params()
   local function is_url(text)
@@ -167,3 +172,5 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_user_command('Date', 'silent! r! date +"\\%A, \\%B, \\%d, \\%Y"', { nargs = "*" })
+
+return M

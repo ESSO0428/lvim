@@ -10,7 +10,7 @@ lvim.plugins = {
       },
     },
   },
-  { "Bilal2453/luvit-meta",      lazy = true }, -- optional `vim.uv` typings
+  { "Bilal2453/luvit-meta",                lazy = true }, -- optional `vim.uv` typings
   --[[{                                        -- optional cmp completion source for require statements and module annotations
     "hrsh7th/nvim-cmp",
     opts = function(_, opts)
@@ -36,7 +36,9 @@ lvim.plugins = {
   },
   {
     "folke/trouble.nvim",
-    cmd = "TroubleToggle"
+    config = function()
+      require("user.trouble").setup()
+    end
   },
   {
     "folke/snacks.nvim",
@@ -62,6 +64,7 @@ lvim.plugins = {
   -- NOTE: 使用我 fork 的版本，原先的版本對於 nvim-tree 上使用 telescopte 可能造成開檔錯誤 (這裡引入 exclude filetype 排除 telescope 中運行該代碼)
   {
     "ESSO0428/im-select.nvim",
+    event = "BufReadPost",
     config = function()
       -- Check if im-select.exe exists
       local has_im_select = os.execute('which im-select.exe > /dev/null 2>&1') == 0
@@ -126,7 +129,6 @@ lvim.plugins = {
       "TSInstallSync",
       "TSInstallFromGrammar",
     },
-    event = "User FileOpened",
   },
   {
     "ESSO0428/telescope-tabs",
@@ -203,7 +205,6 @@ lvim.plugins = {
   },
   {
     "rcarriga/nvim-notify",
-    lazy = true,
     event = "VeryLazy",
     config = function()
       local notify = require("notify")
@@ -247,8 +248,10 @@ lvim.plugins = {
           print('CellularAutomaton : folding and wrapping is not supported')
         end
       end
-      vim.keymap.set("n", "<leader>Tc", "<cmd>lua CellularAutomaton_make_it_rain()<cr>")
-    end
+    end,
+    keys = {
+      { "<leader>Tc", "<cmd>lua CellularAutomaton_make_it_rain()<cr>", desc = "CellularAutomaton Make It Rain" }
+    }
   },
   -- WARNING: 這會造成 Nvim-tree 上運行 Telescope 出錯 (可能要壞成其他替代的套件)
   -- {
@@ -258,7 +261,13 @@ lvim.plugins = {
   --     require('lsp-progress').setup()
   --   end
   -- },
-  { "kazhala/close-buffers.nvim" },
+  {
+    "kazhala/close-buffers.nvim",
+    event = "BufReadPost",
+    config = function()
+      require("user.config.plugins.bufferlinekill").setup()
+    end
+  },
   {
     "ThePrimeagen/harpoon",
     config = function()
@@ -278,6 +287,7 @@ lvim.plugins = {
   },
   {
     'stevearc/oil.nvim',
+    cmd = "Oil", -- ★ command lazy
     opts = {
       default_file_explorer = false,
       keymaps = {
@@ -367,7 +377,7 @@ lvim.plugins = {
       "nvim-tree/nvim-tree.lua",
       "nvim-neo-tree/neo-tree.nvim"
     },
-    event = "VeryLazy",
+    event = "LspAttach",
     config = function()
       require("lsp-file-operations").setup {
         -- used to see debug logs in file `vim.fn.stdpath("cache") .. lsp-file-operations.log`
@@ -389,13 +399,22 @@ lvim.plugins = {
   {
     "AckslD/muren.nvim",
     ecent = "VeryLazy",
-    config = true
+    config = function()
+      require("user.config.plugins.Muren").setup()
+    end,
   },
   {
     "ESSO0428/calc.vim",
     cmd = { "Calc" },
   },
-  { "ESSO0428/bioSyntax-vim" },
+  {
+    "ESSO0428/bioSyntax-vim",
+    ft = {
+      "bed", "clustal", "cwl", "faidx", "fasta-hc", "fasta",
+      "fastq", "flagstat", "gaussian", "gtf", "nexus", "pdb", "pml",
+      "sam", "vcf"
+    },
+  },
   {
     "ESSO0428/semshi",
     ft = "python",
@@ -524,7 +543,15 @@ lvim.plugins = {
     end
   },
   {
+    "nvimtools/hydra.nvim",
+    event = "VeryLazy", -- 只有你真的用 hydra 的時候才會拖一點
+    config = function()
+      require("user.keymappings.hydra").setup()
+    end,
+  },
+  {
     "ESSO0428/NotebookNavigator.nvim",
+    ft = "python",
     keys = {
       { "gi", function() require("notebook-navigator").move_cell "u" end },
       { "gk", function() require("notebook-navigator").move_cell "d" end },
@@ -534,9 +561,10 @@ lvim.plugins = {
     dependencies = {
       "echasnovski/mini.comment",
       -- "akinsho/toggleterm.nvim", -- alternative repl provider
-      "nvimtools/hydra.nvim",
+      -- "nvimtools/hydra.nvim", -- we had setup hydra separately
+      "echasnovski/mini.ai",
+      "echasnovski/mini.hipatterns"
     },
-    ft = { "python" },
     config = function()
       local nn = require "notebook-navigator"
       nn.setup({
@@ -554,35 +582,25 @@ lvim.plugins = {
         },
         repl_provider = "iron"
       })
-    end
-  },
-  {
-    "echasnovski/mini.ai",
-    event = "VeryLazy",
-    dependencies = { "ESSO0428/NotebookNavigator.nvim" },
-    opts = function()
-      local nn = require "notebook-navigator"
+      require("mini.ai").setup({
+        custom_textobjects = { h = nn.miniai_spec },
+      })
 
-      local opts = { custom_textobjects = { h = nn.miniai_spec } }
-      return opts
-    end
-  },
-  {
-    "echasnovski/mini.hipatterns",
-    event = "VeryLazy",
-    dependencies = { "ESSO0428/NotebookNavigator.nvim" },
-    opts = function()
-      local nn = require "notebook-navigator"
-
-      local opts = { highlighters = { cells = nn.minihipatterns_spec } }
-      return opts
+      require("mini.hipatterns").setup({
+        highlighters = { cells = nn.minihipatterns_spec },
+      })
     end
   },
   {
     "jbyuki/venn.nvim",
     event = "VeryLazy",
   },
-  { "ESSO0428/bookmarks.nvim" },
+  {
+    "ESSO0428/bookmarks.nvim",
+    config = function()
+      require("user.config.plugins.BookMarks").setup()
+    end,
+  },
   {
     "ESSO0428/vim-dadbod-ui",
     cmd = {
@@ -619,13 +637,7 @@ lvim.plugins = {
       { 'nvim-treesitter/nvim-treesitter', lazy = true },
     },
     config = function()
-      -- Setup treesitter
-      require('nvim-treesitter.configs').setup({
-        highlight = {
-          enable = true,
-        },
-        ignore_install = { 'org' },
-      })
+      require("user.config.plugins.OrgMode").setup()
     end,
   },
   {
@@ -639,7 +651,9 @@ lvim.plugins = {
     'lukas-reineke/headlines.nvim',
     dependencies = "nvim-treesitter/nvim-treesitter",
     ft = { "markdown", "md", "org", "norg", "rmd" },
-    config = true, -- or `opts = {}`
+    config = function()
+      require("user.config.plugins.headline").setup()
+    end,
   },
   -- NOTE: because orgmode update and org.parser.files depend on orgmode, so I have to disable it
   -- {
@@ -648,7 +662,10 @@ lvim.plugins = {
   {
     'gelguy/wilder.nvim',
     build = ":UpdateRemotePlugins",
-    event = "CmdlineEnter"
+    event = "CmdlineEnter",
+    config = function()
+      require("user.config.plugins.wilder").setup()
+    end,
   },
   { "rcarriga/cmp-dap" },
   {
@@ -951,7 +968,10 @@ lvim.plugins = {
   { "kevinhwang91/promise-async" },
   {
     'kevinhwang91/nvim-ufo',
-    deprecated = { 'kevinhwang91/promise-async' }
+    deprecated = { 'kevinhwang91/promise-async' },
+    config = function()
+      require("user.config.plugins.fold").setup()
+    end,
   },
   {
     'luukvbaal/statuscol.nvim',
@@ -1233,6 +1253,7 @@ lvim.plugins = {
   {
     "stevearc/dressing.nvim",
     event = "VeryLazy",
+    opts = require("user.config.plugins.dressing").opt,
   },
   {
     "folke/flash.nvim",
@@ -1387,6 +1408,9 @@ lvim.plugins = {
   {
     "sindrets/winshift.nvim",
     cmd = "WinShift", -- 用到才載
+    config = function()
+      require("user.config.plugins.winshift").setup()
+    end,
   },
   {
     "ray-x/lsp_signature.nvim",
@@ -1652,116 +1676,7 @@ lvim.plugins = {
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
     ft = { 'markdown', 'Avante', 'AvanteInput', 'copilot-chat' },
     config = function()
-      vim.g.MarkdownNvim = 1
-      vim.treesitter.language.register('markdown', 'copilot-chat')
-      vim.treesitter.language.register('markdown', 'AvanteInput')
-      require('render-markdown').setup({
-        file_types = { 'markdown', 'copilot-chat', 'Avante', 'AvanteInput' },
-        overrides = {
-          buftype = {
-            nofile = {
-              win_options = {
-                conceallevel = {
-                  default = 0,
-                  rendered = 2,
-                },
-                concealcursor = {
-                  default = 'nvic',
-                  rendered = 'nvic',
-                },
-              },
-            },
-          },
-        },
-        heading = {
-          sign = false,
-          icons = { " ◉ ", " ○ ", " ✸ ", " ✿ ", " ◉ ", " ○ " },
-        },
-        quote = {
-          -- Turn on / off block quote & callout rendering
-          enabled = true,
-          -- Replaces '>' of 'block_quote'
-          icon = '▋',
-          -- Highlight for the quote icon
-          highlight = 'RenderMarkdownQuote',
-        },
-        code = {
-          sign = false,
-          border = "thick",
-          highlight = 'RenderMarkdownCode',
-          highlight_inline = '',
-        },
-        bullet = {
-          icons = { '●', '○', '◆', '◇' },
-          -- Padding to add to the right of bullet point
-          right_pad = 0,
-          -- Highlight for the bullet icon
-          -- highlight = 'RenderMarkdownBullet',
-          highlight = 'Identifier'
-        },
-        html = {
-          -- Turn on / off all HTML rendering
-          enabled = true,
-          comment = {
-            -- Turn on / off HTML comment concealing
-            conceal = false,
-            -- Optional text to inline before the concealed comment
-            text = nil,
-            -- Highlight for the inlined text
-            highlight = 'RenderMarkdownHtmlComment',
-          },
-        },
-        win_options = {
-          -- See :h 'conceallevel'
-          conceallevel = {
-            -- Used when not being rendered, get user setting
-            default = 0,
-            -- Used when being rendered, concealed text is completely hidden
-            rendered = 2,
-          },
-        },
-        link = {
-          -- Turn on / off inline link icon rendering
-          enabled = true,
-          -- Inlined with 'image' elements
-          image = '󰥶 ',
-          -- Inlined with 'email_autolink' elements
-          email = '󰀓 ',
-          -- Fallback icon for 'inline_link' elements
-          hyperlink = '󰌹 ',
-          -- Applies to the fallback inlined icon
-          highlight = 'RenderMarkdownLink',
-          -- Applies to WikiLink elements
-          wiki = { icon = '󱗖 ', highlight = 'RenderMarkdownWikiLink' },
-          -- Define custom destination patterns so icons can quickly inform you of what a link
-          -- contains. Applies to 'inline_link' and wikilink nodes.
-          -- Can specify as many additional values as you like following the 'web' pattern below
-          --   The key in this case 'web' is for healthcheck and to allow users to change its values
-          --   'pattern':   Matched against the destination text see :h lua-pattern
-          --   'icon':      Gets inlined before the link text
-          --   'highlight': Highlight for the 'icon'
-          custom = {
-            web = { pattern = '^http[s]?://', icon = '󰖟 ', highlight = 'RenderMarkdownLink' },
-          },
-        },
-        callout = {
-          note = { raw = '[!NOTE]', rendered = '󰋽 Note', highlight = 'RenderMarkdownInfo' },
-          tip = { raw = '[!TIP]', rendered = '󰌶 Tip', highlight = 'RenderMarkdownSuccess' },
-          important = { raw = '[!IMPORTANT]', rendered = '󰅾 Important', highlight = 'Identifier' },
-          warning = { raw = '[!WARNING]', rendered = '󰀪 Warning', highlight = 'RenderMarkdownWarn' },
-          caution = { raw = '[!CAUTION]', rendered = '󰳦 Caution', highlight = 'RenderMarkdownError' },
-          -- Obsidian: https://help.a.md/Editing+and+formatting/Callouts
-          abstract = { raw = '[!ABSTRACT]', rendered = '󰨸 Abstract', highlight = 'RenderMarkdownInfo' },
-          todo = { raw = '[!TODO]', rendered = '󰗡 Todo', highlight = 'RenderMarkdownInfo' },
-          success = { raw = '[!SUCCESS]', rendered = '󰄬 Success', highlight = 'RenderMarkdownSuccess' },
-          question = { raw = '[!QUESTION]', rendered = '󰘥 Question', highlight = 'RenderMarkdownWarn' },
-          failure = { raw = '[!FAILURE]', rendered = '󰅖 Failure', highlight = 'RenderMarkdownError' },
-          danger = { raw = '[!DANGER]', rendered = '󱐌 Danger', highlight = 'RenderMarkdownError' },
-          bug = { raw = '[!BUG]', rendered = '󰨰 Bug', highlight = 'RenderMarkdownError' },
-          example = { raw = '[!EXAMPLE]', rendered = '󰉹 Example', highlight = 'RenderMarkdownHint' },
-          quote = { raw = '[!QUOTE]', rendered = '󱆨 Quote', highlight = 'RenderMarkdownQuote' },
-        },
-      })
+      require("user.config.plugins.MarkdownNvim").setup()
     end
   },
   {
@@ -1924,6 +1839,9 @@ lvim.plugins = {
   {
     "ESSO0428/mkdnflow.nvim",
     ft = { "markdown" }, -- 只在 markdown 開啟
+    config = function()
+      require("user.config.plugins.mkdnflow").setup()
+    end
   },
   {
     "nvchad/volt",
@@ -1935,7 +1853,10 @@ lvim.plugins = {
   },
   {
     "nvchad/menu",
-    lazy = true,
+    event = "VeryLazy",
+    config = function()
+      require("user.mouse").setup()
+    end,
   },
   {
     "dhruvasagar/vim-table-mode",
@@ -1961,7 +1882,10 @@ lvim.plugins = {
       "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
       "MunifTanjim/nui.nvim",
       "s1n7ax/nvim-window-picker",
-    }
+    },
+    config = function()
+      require("user.neotree").setup()
+    end
   },
   {
     'nyngwang/NeoZoom.lua',
@@ -2025,7 +1949,10 @@ lvim.plugins = {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "m00qek/baleia.nvim"
-    }
+    },
+    config = function()
+      require("user.config.plugins.image").setup()
+    end,
   },
   -- { "tpope/vim-fugitive" },
   {
@@ -2039,6 +1966,9 @@ lvim.plugins = {
   {
     "sindrets/diffview.nvim",
     cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
+    config = function()
+      require("user.config.plugins.DiffView").setup()
+    end,
   },
   {
     "kiyoon/jupynium.nvim",

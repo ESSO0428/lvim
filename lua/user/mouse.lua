@@ -1,3 +1,4 @@
+local M = {}
 vim.cmd [[:amenu 10.100 PopUp.Code\ Actions <cmd>:lua require('actions-preview').code_actions()<CR>]]
 vim.cmd [[:amenu 10.110 PopUp.Breakpoint\ Toggle <cmd>:lua require('persistent-breakpoints.api').toggle_breakpoint()<CR>]]
 vim.cmd [[:amenu 10.120 PopUp.-sep1- *]]
@@ -13,16 +14,19 @@ vim.cmd [[:amenu 10.210 PopUp.-sep3- *]]
 vim.cmd [[:amenu 10.220 PopUp.Color\ Picker <cmd>:lua require("minty.huefy").open()<CR>]]
 vim.cmd [[:amenu 10.230 PopUp.-sep4- *]]
 
--- NOTE: Plugin of Developmenting, so only use in NvimTree
--- mouse users + nvimtree users!
-local nvimtree_memu_options = require("menus.nvimtree")
--- Search and replace the cmd of "Open in terminal" in nvimtree_memu_options
-for i, item in ipairs(nvimtree_memu_options) do
-  if item.name == "  Open in terminal" then
-    require("menus.nvimtree")[i].cmd = function() horizontal_term() end
-    break
+function M.setup()
+  -- NOTE: Plugin of Developmenting, so only use in NvimTree
+  -- mouse users + nvimtree users!
+  local nvimtree_memu_options = require("menus.nvimtree")
+  -- Search and replace the cmd of "Open in terminal" in nvimtree_memu_options
+  for i, item in ipairs(nvimtree_memu_options) do
+    if item.name == "  Open in terminal" then
+      require("menus.nvimtree")[i].cmd = function() horizontal_term() end
+      break
+    end
   end
 end
+
 vim.keymap.set("n", "<RightMouse>",
   function()
     vim.cmd.exec '"normal! \\<RightMouse>"'
@@ -145,3 +149,5 @@ vim.keymap.set("n", "<RightMouse>",
   end,
   { silent = true, noremap = true }
 )
+
+return M

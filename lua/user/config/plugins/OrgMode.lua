@@ -1,162 +1,173 @@
+local M = {}
 vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
-local opt_org_agenda_files = { '~/Dropbox/org/**/*', '~/my-orgs/**/*', ('%s/orgmode/**/*'):format(vim.fn.getcwd()) }
 
--- 將 ~ 轉成絕對路徑
-local home = os.getenv("HOME") or ""
+function M.setup()
+  -- Setup treesitter
+  require('nvim-treesitter.configs').setup({
+    highlight = {
+      enable = true,
+    },
+    ignore_install = { 'org' },
+  })
+  local opt_org_agenda_files = { '~/Dropbox/org/**/*', '~/my-orgs/**/*', ('%s/orgmode/**/*'):format(vim.fn.getcwd()) }
+  -- 將 ~ 轉成絕對路徑
+  local home = os.getenv("HOME") or ""
 
-for i, item in ipairs(opt_org_agenda_files) do
-  opt_org_agenda_files[i] = item:gsub("^~", home)
-end
-
--- 将 Lua 表转换为集合，去除重复项
-local unique_opt_org_agenda_files = {}
-for _, item in ipairs(opt_org_agenda_files) do
-  unique_opt_org_agenda_files[item] = true
-end
--- 将去重后的集合转换回 Lua 表
-opt_org_agenda_files = {}
-for item, _ in pairs(unique_opt_org_agenda_files) do
-  table.insert(opt_org_agenda_files, item)
-end
-
-local utils = require('orgmode.utils')
-local link_utils = require('orgmode.org.links.utils')
-local original_open_file_and_search = link_utils.open_file_and_search
-local external_filetypes = {
-  -- pdf is considered a valid filetype even though it cannot be correctly read
-  'pdf',
-  -- Add common image file types
-  'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'tiff',
-}
-
-link_utils.open_file_and_search = function(file_path, search_text)
-  if not file_path or file_path == '' then
-    return true
+  for i, item in ipairs(opt_org_agenda_files) do
+    opt_org_agenda_files[i] = item:gsub("^~", home)
   end
-  local filetype = vim.filetype.match({ filename = file_path })
-  if filetype ~= "org" then
-    local editable = true
-    if file_path:match("^https?://") or vim.tbl_contains(external_filetypes, filetype) then
-      vim.ui.open(file_path)
-      editable = false
-    end
-    -- Return without attempt to find text. File is not editable.
-    if not editable then
+
+  -- 将 Lua 表转换为集合，去除重复项
+  local unique_opt_org_agenda_files = {}
+  for _, item in ipairs(opt_org_agenda_files) do
+    unique_opt_org_agenda_files[item] = true
+  end
+  -- 将去重后的集合转换回 Lua 表
+  opt_org_agenda_files = {}
+  for item, _ in pairs(unique_opt_org_agenda_files) do
+    table.insert(opt_org_agenda_files, item)
+  end
+
+  local utils = require('orgmode.utils')
+  local link_utils = require('orgmode.org.links.utils')
+  local original_open_file_and_search = link_utils.open_file_and_search
+  local external_filetypes = {
+    -- pdf is considered a valid filetype even though it cannot be correctly read
+    'pdf',
+    -- Add common image file types
+    'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'tiff',
+  }
+
+  link_utils.open_file_and_search = function(file_path, search_text)
+    if not file_path or file_path == '' then
       return true
     end
+    local filetype = vim.filetype.match({ filename = file_path })
+    if filetype ~= "org" then
+      local editable = true
+      if file_path:match("^https?://") or vim.tbl_contains(external_filetypes, filetype) then
+        vim.ui.open(file_path)
+        editable = false
+      end
+      -- Return without attempt to find text. File is not editable.
+      if not editable then
+        return true
+      end
 
-    vim.cmd(('edit %s'):format(file_path))
-    return true
+      vim.cmd(('edit %s'):format(file_path))
+      return true
+    end
+    return original_open_file_and_search(file_path, search_text)
   end
-  return original_open_file_and_search(file_path, search_text)
+
+  require('orgmode').setup({
+    -- org_agenda_files = { '~/Dropbox/org/*', '~/my-orgs/**/*', ('%s/Dropbox/org/*'):format(vim.fn.getcwd()) },
+    org_agenda_files = opt_org_agenda_files,
+    org_default_notes_file = '~/Dropbox/org/notes.org',
+    -- org_default_notes_file = ('%s/Dropbox/org/notes.org'):format(vim.fn.getcwd()),
+    -- org_indent_mode = 'noindent',
+    org_capture_templates = {
+      t = {
+        description = 'Task',
+        template = '* TODO %?\n %u',
+        -- target = '~/Dropbox/org/task.org'
+        target = '~/Dropbox/org/notes.org'
+      },
+      T = {
+        description = 'Task (WorkSpace)',
+        template = '* TODO %?\n %u',
+        -- target = '~/Dropbox/org/task.org'
+        target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/notes.org") or
+            ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
+      },
+      j = {
+        description = 'Journal',
+        template = '\n*** %<%Y-%m-%d> %<%A>\n**** %U\n\n%?',
+        -- target = '~/Dropbox/org/journal.org'
+        target = '~/Dropbox/org/notes.org'
+      },
+      J = {
+        description = 'Journal (WorkSpace)',
+        template = '\n*** %<%Y-%m-%d> %<%A>\n**** %U\n\n%?',
+        -- target = '~/Dropbox/org/journal.org'
+        target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/notes.org") or
+            ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
+      },
+      n = {
+        description = 'Catch',
+        template = '* %?\n %u',
+        -- target = '~/Dropbox/org/catch.org'
+        target = '~/Dropbox/org/notes.org'
+      },
+      N = {
+        description = 'Catch (WorkSpace)',
+        template = '* %?\n %u',
+        -- target = '~/Dropbox/org/catch.org'
+        target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/notes.org") or
+            ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
+      },
+      p = {
+        description = 'Project',
+        template = '* %?\n %u',
+        target = '~/Dropbox/org/projects.org'
+      },
+      P = {
+        description = 'Project (WorkSpace)',
+        template = '* %?\n %u',
+        target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/projects.org") or
+            ('%s/orgmode/projects.org'):format(vim.fn.getcwd())
+      }
+    },
+    org_tags_column = -80,
+    mappings = {
+      prefix = '<Leader>o',
+      global = {
+        org_agenda = '<leader>toa',
+        org_capture = '<leader>toc'
+      },
+      org = {
+        org_toggle_checkbox = 'gS',
+        org_timestamp_up = '<a-d>',        -- Increase date part under cursor (year/month/day/hour/minute/repeater/active|inactive)
+        org_timestamp_down = '<a-a>',      -- Decrease date part under cursor (year/month/day/hour/minute/repeater/active|inactive)
+        org_timestamp_up_day = '<S-DOWN>', -- Increase date under cursor by 1 day
+        org_timestamp_down_day = '<S-UP>', -- Decrease date under cursor by 1 day
+        org_move_subtree_up = '<prefix><Up>',
+        org_move_subtree_down = '<prefix><Down>',
+        org_meta_return = '<prefix>h',
+        org_deadline = '<prefix>id',
+        org_schedule = '<prefix>is',
+        org_insert_link = '<prefix>il',
+        org_open_at_point = '<a-o>',
+        org_cycle = '<TAB>',
+        org_global_cycle = '<S-TAB>',
+        -- org_demote_subtree = '>s',
+        org_demote_subtree = '<a-}>',
+        -- org_promote_subtree = '<s',
+        org_promote_subtree = '<a-{>',
+        -- org_do_demote = '>>',
+        org_do_demote = '<a->>',
+        -- org_do_promote = "<<",
+        org_do_promote = "<a-<>",
+      },
+      capture = {
+        org_capture_finalize = 'S',
+      },
+      agenda = {
+        -- org_agenda_earlier = 'a',
+        org_agenda_earlier = '<',
+        -- org_agenda_later = 'd',
+        org_agenda_later = '>',
+        org_agenda_quit = '<leader>q',
+        org_agenda_goto_date = 'cid',
+        org_agenda_clock_in = 'U',
+        org_agenda_clock_out = 'O',
+        org_agenda_clock_cancel = 'C',
+      }
+    }
+  })
 end
 
-require('orgmode').setup({
-  -- org_agenda_files = { '~/Dropbox/org/*', '~/my-orgs/**/*', ('%s/Dropbox/org/*'):format(vim.fn.getcwd()) },
-  org_agenda_files = opt_org_agenda_files,
-  org_default_notes_file = '~/Dropbox/org/notes.org',
-  -- org_default_notes_file = ('%s/Dropbox/org/notes.org'):format(vim.fn.getcwd()),
-  -- org_indent_mode = 'noindent',
-  org_capture_templates = {
-    t = {
-      description = 'Task',
-      template = '* TODO %?\n %u',
-      -- target = '~/Dropbox/org/task.org'
-      target = '~/Dropbox/org/notes.org'
-    },
-    T = {
-      description = 'Task (WorkSpace)',
-      template = '* TODO %?\n %u',
-      -- target = '~/Dropbox/org/task.org'
-      target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/notes.org") or
-      ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
-    },
-    j = {
-      description = 'Journal',
-      template = '\n*** %<%Y-%m-%d> %<%A>\n**** %U\n\n%?',
-      -- target = '~/Dropbox/org/journal.org'
-      target = '~/Dropbox/org/notes.org'
-    },
-    J = {
-      description = 'Journal (WorkSpace)',
-      template = '\n*** %<%Y-%m-%d> %<%A>\n**** %U\n\n%?',
-      -- target = '~/Dropbox/org/journal.org'
-      target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/notes.org") or
-      ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
-    },
-    n = {
-      description = 'Catch',
-      template = '* %?\n %u',
-      -- target = '~/Dropbox/org/catch.org'
-      target = '~/Dropbox/org/notes.org'
-    },
-    N = {
-      description = 'Catch (WorkSpace)',
-      template = '* %?\n %u',
-      -- target = '~/Dropbox/org/catch.org'
-      target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/notes.org") or
-      ('%s/orgmode/notes.org'):format(vim.fn.getcwd())
-    },
-    p = {
-      description = 'Project',
-      template = '* %?\n %u',
-      target = '~/Dropbox/org/projects.org'
-    },
-    P = {
-      description = 'Project (WorkSpace)',
-      template = '* %?\n %u',
-      target = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/projects.org") or
-      ('%s/orgmode/projects.org'):format(vim.fn.getcwd())
-    }
-  },
-  org_tags_column = -80,
-  mappings = {
-    prefix = '<Leader>o',
-    global = {
-      org_agenda = '<leader>toa',
-      org_capture = '<leader>toc'
-    },
-    org = {
-      org_toggle_checkbox = 'gS',
-      org_timestamp_up = '<a-d>',        -- Increase date part under cursor (year/month/day/hour/minute/repeater/active|inactive)
-      org_timestamp_down = '<a-a>',      -- Decrease date part under cursor (year/month/day/hour/minute/repeater/active|inactive)
-      org_timestamp_up_day = '<S-DOWN>', -- Increase date under cursor by 1 day
-      org_timestamp_down_day = '<S-UP>', -- Decrease date under cursor by 1 day
-      org_move_subtree_up = '<prefix><Up>',
-      org_move_subtree_down = '<prefix><Down>',
-      org_meta_return = '<prefix>h',
-      org_deadline = '<prefix>id',
-      org_schedule = '<prefix>is',
-      org_insert_link = '<prefix>il',
-      org_open_at_point = '<a-o>',
-      org_cycle = '<TAB>',
-      org_global_cycle = '<S-TAB>',
-      -- org_demote_subtree = '>s',
-      org_demote_subtree = '<a-}>',
-      -- org_promote_subtree = '<s',
-      org_promote_subtree = '<a-{>',
-      -- org_do_demote = '>>',
-      org_do_demote = '<a->>',
-      -- org_do_promote = "<<",
-      org_do_promote = "<a-<>",
-    },
-    capture = {
-      org_capture_finalize = 'S',
-    },
-    agenda = {
-      -- org_agenda_earlier = 'a',
-      org_agenda_earlier = '<',
-      -- org_agenda_later = 'd',
-      org_agenda_later = '>',
-      org_agenda_quit = '<leader>q',
-      org_agenda_goto_date = 'cid',
-      org_agenda_clock_in = 'U',
-      org_agenda_clock_out = 'O',
-      org_agenda_clock_cancel = 'C',
-    }
-  }
-})
 function modify_calendar_keymaps()
   local max_attempts = 3
   local attempts = 0
@@ -285,7 +296,7 @@ end
 
 function goto_WorkSpaceOrgFile(filename)
   local org_dir = vim.fn.expand('~') == vim.fn.getcwd() and vim.fn.expand("~/Dropbox/org/") or
-  ('%s/orgmode/'):format(vim.fn.getcwd())
+      ('%s/orgmode/'):format(vim.fn.getcwd())
   create_directory(org_dir)
   local file_full_path = org_dir .. filename
   local buf_nr = vim.fn.bufnr(file_full_path)
@@ -350,3 +361,5 @@ vim.api.nvim_create_autocmd({
     vim.cmd('nnoremap <silent> <buffer> <leader>o <Nop>')
   end
 })
+
+return M
