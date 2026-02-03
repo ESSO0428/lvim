@@ -416,47 +416,6 @@ lvim.plugins = {
     },
   },
   {
-    "ESSO0428/semshi",
-    ft = "python",
-    build = ":UpdateRemotePlugins",
-    init = function()
-      --#region semshi colorscheme settings
-      -- Disabled these features better provided by LSP or other more general plugins
-      vim.g["semshi#error_sign"] = false
-      vim.g["semshi#simplify_markup"] = false
-      vim.g["semshi#update_delay_factor"] = 0.001
-
-      -- This autocmd must be defined in init to take effect
-      vim.api.nvim_create_autocmd({ "VimEnter", "ColorScheme" }, {
-        group = vim.api.nvim_create_augroup("SemanticHighlight", {}),
-        callback = function()
-          -- Only add style, inherit or link to the LSP's colors
-          -- vim.cmd "au ColorScheme * highlight! semshiImported gui=bold guifg=#e0949e"
-          -- vim.cmd "au ColorScheme * highlight! semshiImported gui=bold guifg=#ff6666"
-          -- vim.cmd "au ColorScheme * highlight! semshiGlobal gui=bold guifg=#9cdcfe"
-          -- vim.cmd "au ColorScheme * highlight! link semshiAttribute @attribute"
-          -- vim.cmd "au ColorScheme * highlight! link semshiBuiltin @function.builtin"
-          -- vim.cmd "au ColorScheme * highlight! link semshiBuiltin @field"
-          vim.cmd([[
-            " highlight! semshiImported gui=bold guifg=#4ec9b0
-            highlight! semshiImported gui=bold guifg=none
-            " highlight! semshiGlobal gui=bold
-            " highlight! semshiImported guifg=#4ec9b0
-            highlight! link semshiGlobal cleared
-            highlight! link semshiParameter @parameter.python
-            highlight! link semshiParameterUnused @parameter.python
-            highlight! semshiParameterUnused gui=undercurl
-            highlight! link semshiAttribute @field
-            highlight! semshiBuiltin guifg=#dcdcaa
-            highlight! link semshiUnresolved @text.warning
-            highlight! link semshiSelf @variable.builtin
-            ]])
-        end,
-      })
-      --#endregion
-    end,
-  },
-  {
     "mechatroner/rainbow_csv",
     ft = {
       'csv',

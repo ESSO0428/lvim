@@ -88,6 +88,18 @@ vim.cmd "au ColorScheme * hi link @lsp.type.method.python @method.call.python"
 vim.cmd "au ColorScheme * hi link @lsp.type.parameter.python @parameter.python"
 vim.cmd "au ColorScheme * hi @function.python guifg=#daccaa"
 vim.cmd "au ColorScheme * hi @function.call.python guifg=#daccaa"
+vim.cmd "au ColorScheme * hi link @variable.parameter.python @parameter.python"
+vim.cmd "au ColorScheme * hi link @function.builtin.python @function.call.python"
+vim.cmd "au ColorScheme * hi link @function.method.python @function.call.python"
+vim.cmd "au ColorScheme * hi link @lsp.typemod.function.defaultLibrary.python @function.call.python"
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = function()
+    vim.api.nvim_set_hl(0, "@lsp.type.parameter.python", {})
+  end,
+})
+vim.cmd "au ColorScheme * hi link @attribute.python @function.call.python"
+vim.cmd "au ColorScheme * hi link @keyword.function.python @boolean.python"
 vim.cmd "au ColorScheme * hi @field.python guifg=#d19a66"
 vim.cmd "au ColorScheme * hi @boolean.python guifg=#3794FF"
 vim.cmd "au ColorScheme * hi link @constant.builtin.python @boolean.python"
