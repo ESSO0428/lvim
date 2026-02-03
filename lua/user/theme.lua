@@ -389,8 +389,19 @@ lvim.builtin.telescope.defaults.layout_config          = {
   }
 }
 vim.cmd "autocmd User TelescopePreviewerLoaded setlocal number"
-
--- Stolen from Akinsho
+-- vim.api.nvim_create_autocmd({ "BufWinEnter", "WinNew" }, {
+--   callback = function(args)
+--     local b = args.buf
+--     if vim.bo[b].buftype == "nofile" then
+--       -- 你可以再加一些條件避免誤傷，例如 buffer name 包含 "lsp"
+--       local name = vim.api.nvim_buf_get_name(b)
+--       if name:match("lsp") or name == "" then
+--         vim.bo[b].filetype = "markdown"
+--         pcall(vim.treesitter.start, b, "markdown")
+--       end
+--     end
+--   end,
+-- })
 local autocommands = {
   {
     "TextYankPost",      -- see `:h autocmd-events`
@@ -407,6 +418,17 @@ local autocommands = {
         vim.opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
         vim.opt.fillchars:append { diff = "╱" }
       end
+    }
+  },
+  {
+    { "BufWinEnter", "WinNew" },
+    {
+      callback = function(args)
+        local b = args.buf
+        if vim.bo[b].buftype == "nofile" and vim.bo[b].filetype == "markdown" then
+          vim.opt_local.syntax = "on"
+        end
+      end,
     }
   },
 }
