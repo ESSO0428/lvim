@@ -71,6 +71,8 @@ vim.cmd "let &fcs='eob: '"
 -- vim.cmd "au ColorScheme * hi BufferLineSeparatorVisible guifg=#000000"
 -- vim.cmd "au ColorScheme * hi BufferLineTabSeparator guifg=#000000"
 
+vim.cmd "au ColorScheme * hi Keyword guifg=#c586c0"
+vim.cmd "au ColorScheme * hi @keyword.vim guifg=#9d7cd8"
 vim.cmd "au ColorScheme * hi @include.python guifg=#c586c0"
 vim.cmd "au ColorScheme * hi pythonInclude guifg=#c586c0"
 vim.cmd "au ColorScheme * hi @keyword.import guifg=#c586c0"
@@ -92,14 +94,9 @@ vim.cmd "au ColorScheme * hi link @variable.parameter.python @parameter.python"
 vim.cmd "au ColorScheme * hi link @function.builtin.python @function.call.python"
 vim.cmd "au ColorScheme * hi link @function.method.python @function.call.python"
 vim.cmd "au ColorScheme * hi link @lsp.typemod.function.defaultLibrary.python @function.call.python"
-vim.api.nvim_create_autocmd("ColorScheme", {
-  pattern = "*",
-  callback = function()
-    vim.api.nvim_set_hl(0, "@lsp.type.parameter.python", {})
-  end,
-})
+vim.cmd "au ColorScheme * hi link @lsp.type.selfParameter.python @variable.builtin.python"
 vim.cmd "au ColorScheme * hi link @attribute.python @function.call.python"
-vim.cmd "au ColorScheme * hi link @keyword.function.python @boolean.python"
+vim.cmd "au ColorScheme * hi @keyword.function.python guifg=#569cd6"
 vim.cmd "au ColorScheme * hi link @keyword.type.python @boolean.python"
 vim.cmd "au ColorScheme * hi @field.python guifg=#d19a66"
 vim.cmd "au ColorScheme * hi @boolean.python guifg=#3794FF"
