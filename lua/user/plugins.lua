@@ -810,9 +810,8 @@ lvim.plugins = {
   },
   {
     "yetone/avante.nvim",
-    -- event = "VeryLazy",
-    cmd = { "AvanteAsk", "AvanteToggle" }, -- 依你自己常用的指令
-    version = false,                       -- Never set this value to "*"! Never!
+    event = "VeryLazy",
+    version = false, -- Never set this value to "*"! Never!
     -- NOTE: If you can't activate the plugin, please check the following (same as CopilotChat.nvim):
     -- 1. Check if the $XDG_RUNTIME_DIR directory exists.
     -- 2. Verify the permissions of $XDG_RUNTIME_DIR:
@@ -871,9 +870,9 @@ lvim.plugins = {
       },
     },
     keys = {
-      { "<leader>aa", "<cmd>AvanteAsk<cr>",    desc = "Avante: Ask" },
-      { "<leader>ae", "<cmd>AvanteEdit<cr>",   desc = "Avante: Edit" },
-      { "<leader>a?", "<cmd>AvanteModels<cr>", desc = "Avante: Select Models" },
+      { "<leader>aa", "<cmd>AvanteAsk<cr>",    mode = { "n", "v" }, desc = "Avante: Ask" },
+      { "<leader>ae", "<cmd>AvanteEdit<cr>",   mode = { "n", "v" }, desc = "Avante: Edit" },
+      { "<leader>a?", "<cmd>AvanteModels<cr>", mode = { "n", "v" }, desc = "Avante: Select Models" },
     }
   },
   -- { "HiPhish/nvim-ts-rainbow2" },
@@ -884,7 +883,6 @@ lvim.plugins = {
   },
   {
     "nvim-treesitter/playground",
-    -- event = "BufRead",
     cmd = { "TSPlaygroundToggle", "TSHighlightCapturesUnderCursor" },
   },
   -- WARNING: 使用此套件時請謹慎，因為它可能會導致在 nvim-tree 中結合使用 telescope 時出現開啟文件的錯誤。
@@ -1834,6 +1832,7 @@ lvim.plugins = {
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
+    cmd = "Neotree",
     branch = "v3.x",
     deprecated = {
       "miversen33/netman.nvim",

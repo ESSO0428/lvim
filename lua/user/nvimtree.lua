@@ -6,7 +6,6 @@ table.insert(lvim.plugins, {
   -- enabled = lvim.builtin.nvimtree.active,
   enabled = true,
   cmd = { "NvimTreeToggle", "NvimTreeOpen", "NvimTreeFocus", "NvimTreeFindFileToggle" },
-  event = "VimEnter",
 })
 -- 全局表，用于存储特定顺序的最后五个离开的窗口信息
 _LastFiveBufWinLeaveInfo = {}
