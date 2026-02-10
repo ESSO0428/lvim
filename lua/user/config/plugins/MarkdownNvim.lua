@@ -5,6 +5,14 @@ vim.treesitter.language.register('markdown', 'copilot-chat')
 vim.treesitter.language.register('markdown', 'AvanteInput')
 
 function M.setup()
+  vim.api.nvim_create_autocmd("ExitPre", {
+    group = vim.api.nvim_create_augroup("DisableRenderMarkdownOnQuit", { clear = true }),
+    callback = function()
+      pcall(function()
+        require('render-markdown').disable()
+      end)
+    end,
+  })
   require("render-markdown.lib.icons").get = function(language)
     if has_devicons then
       return devicons.get_icon_by_filetype(language)
