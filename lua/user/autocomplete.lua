@@ -2,7 +2,6 @@ require "user.snippets"
 require("luasnip.loaders.from_lua").lazy_load { paths = "~/.config/lvim/LuaSnipSourceSnippets/" }
 local cmp = require("lvim.utils.modules").require_on_index "cmp"
 local cmp_mapping = require "cmp.config.mapping"
-local luasnip = require("lvim.utils.modules").require_on_index "luasnip"
 local original_cmp_path_dirname = require("cmp_path")._dirname
 
 require("cmp_path").get_trigger_characters = function()
@@ -470,7 +469,6 @@ for k, v in pairs(lvim.builtin.cmp.mapping) do
     end)
   end
 end
-local cmp_mapping = require "cmp.config.mapping"
 lvim.builtin.cmp.mapping['<M-i>'] = cmp_mapping(function(fallback)
   if cmp.visible() then
     -- cmp.select_prev_item()
