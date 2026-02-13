@@ -350,20 +350,19 @@ lvim.keys.normal_mode["<leader>."] = {
       return
     end
 
-    -- blank → default name
-    if name == "" then
-      name = "Scratch"
-    end
-
     local ft = vim.fn.input("Filetype (markdown/lua/python...): ")
     if ft == "" then
       ft = "markdown"
     end
 
-    Snacks.scratch.open({
-      name = name,
-      ft = ft,
-    })
+    if name == "" then
+      Snacks.scratch()
+    else
+      Snacks.scratch.open({
+        name = name,
+        ft = ft,
+      })
+    end
   end,
   desc = "Create Scratch (named)",
 }
