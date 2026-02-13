@@ -335,7 +335,7 @@ vim.keymap.set("n", "<Plug>(snacks-scratch-raw)", function()
 end, { desc = "Snacks scratch raw toggle" })
 lvim.keys.normal_mode["<leader>."] = {
   function()
-    local name = vim.fn.input("Scratch name (number/name/nothing): ")
+    local name = vim.fn.input("Scratch name (number/name/%/nothing): ")
     name = vim.trim(name)
 
     -- Input number → equivalent to n x Snacks.scratch()
@@ -356,6 +356,9 @@ lvim.keys.normal_mode["<leader>."] = {
       local ft = vim.fn.input("Filetype (markdown/lua/python...): ")
       if ft == "" then
         ft = nil
+      end
+      if name == "%" then
+        name = vim.fn.expand("%")
       end
       Snacks.scratch.open({
         name = name,
