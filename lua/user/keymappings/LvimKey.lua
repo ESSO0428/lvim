@@ -352,7 +352,7 @@ lvim.keys.normal_mode["<leader>."] = {
 
     local ft = vim.fn.input("Filetype (markdown/lua/python...): ")
     if ft == "" then
-      ft = "markdown"
+      ft = nil
     end
 
     if name == "" then
