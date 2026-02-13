@@ -354,7 +354,7 @@ lvim.keys.normal_mode["<leader>."] = {
       "Scratch Command:",
       "----------------------------------",
       "  .   → note to current",
-      "  >   → quick note (float)",
+      "  <   → quick note (float)",
       "  i/j/k/l → top/bottom/left/right",
       "  n/<CR> → new scratch",
       "  q → cancel",
@@ -373,10 +373,10 @@ lvim.keys.normal_mode["<leader>."] = {
     end
 
     -- quick note
-    if cmd == "." or cmd == ">" or pos[cmd] then
+    if cmd == "." or cmd == "<" or pos[cmd] then
       local position = "float"
 
-      if cmd == ">" then
+      if cmd == "<" then
         position = "float" -- 先 float，再 dock
       elseif pos[cmd] then
         position = pos[cmd]
@@ -401,11 +401,11 @@ lvim.keys.normal_mode["<leader>."] = {
     if cmd ~= "n" then
       return
     end
-    local name = Nvim.Menu.menu_getkeys({ "Scratch name (number/name/%/./nothing): " })
+    local name = Nvim.Menu.menu_getkeys({ "Scratch name (number/name/%/./>/</nothing): " })
     name = vim.trim(name)
 
-    -- expand % early so all branches see final name
     if name == "%" or name == "." then
+      -- expand % early so all branches see final name
       name = vim.fn.expand("%")
     end
 
@@ -422,6 +422,20 @@ lvim.keys.normal_mode["<leader>."] = {
       -- empty -> default toggle
       ExecuteSnackOpen = function(_)
         Snacks.scratch()
+      end
+    elseif name == "<" or name == ">" then
+      ExecuteSnackOpen = function(mark)
+        local filename = vim.fn.expand("%")
+        local mode = {
+          ["<"] = "float",
+          [">"] = "n"
+        }
+        local position = (mode == "n" or mode == ".") and "float" or (pos[mode] or "float")
+        Snacks.scratch.open({
+          name = filename,
+          win = { position = position },
+        })
+        return mode[mark]
       end
     else
       -- named scratch (ask ft)
