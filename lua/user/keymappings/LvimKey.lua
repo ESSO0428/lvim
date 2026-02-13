@@ -327,3 +327,39 @@ lvim.builtin.which_key.mappings.d['le'] = {
 -- DiffTool
 lvim.keys.normal_mode["cv"] = { "<cmd>ConflictDiff<cr>", desc = "Compare Conflict" }
 lvim.keys.normal_mode["cp"] = { "<cmd>ConflictAllDiff<cr>", desc = "Compare Conflict (All Buffer)" }
+
+-- Snacks
+-- Scratch File
+lvim.keys.normal_mode["<leader>."] = {
+  function()
+    local name = vim.fn.input("Scratch name (number/name/nothing): ")
+    name = vim.trim(name)
+
+    -- Input number → equivalent to n x Snacks.scratch()
+    if name:match("^%d+$") then
+      local count = tonumber(name)
+      vim.cmd(("normal! %d<leader>."):format(count))
+      return
+    end
+
+    -- blank → default name
+    if name == "" then
+      name = "Scratch"
+    end
+
+    local ft = vim.fn.input("Filetype (markdown/lua/python...): ")
+    if ft == "" then
+      ft = "markdown"
+    end
+
+    Snacks.scratch.open({
+      name = name,
+      ft = ft,
+    })
+  end,
+  desc = "Create Scratch (named)",
+}
+lvim.keys.normal_mode["<leader>>"] = {
+  "<cmd>lua Snacks.scratch.select()<cr>",
+  desc = "Select Scratch Buffer",
+}
