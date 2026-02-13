@@ -350,14 +350,13 @@ lvim.keys.normal_mode["<leader>."] = {
       return
     end
 
-    local ft = vim.fn.input("Filetype (markdown/lua/python...): ")
-    if ft == "" then
-      ft = nil
-    end
-
     if name == "" then
       Snacks.scratch()
     else
+      local ft = vim.fn.input("Filetype (markdown/lua/python...): ")
+      if ft == "" then
+        ft = nil
+      end
       Snacks.scratch.open({
         name = name,
         ft = ft,
