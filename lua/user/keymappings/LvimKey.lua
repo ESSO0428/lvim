@@ -330,44 +330,138 @@ lvim.keys.normal_mode["cp"] = { "<cmd>ConflictAllDiff<cr>", desc = "Compare Conf
 
 -- Snacks
 -- Scratch File
+-- raw toggle that supports count slots
 vim.keymap.set("n", "<Plug>(snacks-scratch-raw)", function()
   Snacks.scratch()
 end, { desc = "Snacks scratch raw toggle" })
+lvim.keys.normal_mode["<leader>r."] = {
+  function()
+    Snacks.scratch.open({
+      name = vim.fn.expand("%"),
+      ft = "markdown",
+    })
+
+    vim.schedule(function()
+      pcall(vim.cmd, "FloatIntoCurrent")
+    end)
+  end,
+  desc = "Quick Note (current window)",
+}
+
 lvim.keys.normal_mode["<leader>."] = {
   function()
-    local name = vim.fn.input("Scratch name (number/name/%/nothing): ")
-    name = vim.trim(name)
+    local lines = {
+      "Scratch Command:",
+      "----------------------------------",
+      "  .   → note to current",
+      "  >   → quick note (float)",
+      "  i/j/k/l → top/bottom/left/right",
+      "  n/<CR> → new scratch",
+      "  q → cancel",
+      "----------------------------------",
+      "Press key: ",
+    }
 
-    -- Input number → equivalent to n x Snacks.scratch()
-    if name:match("^%d+$") then
-      local count = tonumber(name)
-      local keys = tostring(count) .. "<Plug>(snacks-scratch-raw)"
-      vim.api.nvim_feedkeys(
-        vim.api.nvim_replace_termcodes(keys, true, false, true),
-        "n",
-        false
-      )
+    local cmd = Nvim.Menu.menu_getkeys(lines)
+    local pos = { i = "top", k = "bottom", j = "left", l = "right" }
+
+    -- normalize <CR>
+    if cmd == "" then cmd = "n" end
+
+    if cmd == "q" then
       return
     end
 
-    if name == "" then
-      Snacks.scratch()
-    else
-      local ft = vim.fn.input("Filetype (markdown/lua/python...): ")
-      if ft == "" then
-        ft = nil
+    -- quick note
+    if cmd == "." or cmd == ">" or pos[cmd] then
+      local position = "float"
+
+      if cmd == ">" then
+        position = "float" -- 先 float，再 dock
+      elseif pos[cmd] then
+        position = pos[cmd]
       end
-      if name == "%" then
-        name = vim.fn.expand("%")
-      end
+
       Snacks.scratch.open({
-        name = name,
-        ft = ft,
+        name = vim.fn.expand("%"),
+        ft = "markdown",
+        win = { position = position },
       })
+
+      if cmd == "." then
+        vim.schedule(function()
+          pcall(vim.cmd, "FloatIntoCurrent")
+        end)
+      end
+
+      return
+    end
+
+    -- only "n" goes to the create/new flow
+    if cmd ~= "n" then
+      return
+    end
+    local name = Nvim.Menu.menu_getkeys({ "Scratch name (number/name/%/./nothing): " })
+    name = vim.trim(name)
+
+    -- expand % early so all branches see final name
+    if name == "%" or name == "." then
+      name = vim.fn.expand("%")
+    end
+
+    local ExecuteSnackOpen = function(_) end
+
+    if name:match("^%d+$") then
+      -- number -> count slot scratch
+      ExecuteSnackOpen = function(filename)
+        local count = tonumber(filename)
+        local keys = tostring(count) .. "<Plug>(snacks-scratch-raw)"
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), "n", false)
+      end
+    elseif name == "" then
+      -- empty -> default toggle
+      ExecuteSnackOpen = function(_)
+        Snacks.scratch()
+      end
+    else
+      -- named scratch (ask ft)
+      ExecuteSnackOpen = function(filename)
+        local ft = Nvim.Menu.menu_getkeys({ "Filetype (markdown/lua/python/./...): " })
+        local mode = Nvim.Menu.menu_getkeys({ "Window? [Enter]=float, [n/.]=current, i,k,j,l:top/bottom/left/right: " })
+        mode = vim.trim(mode):lower()
+
+        if mode == "" then mode = "n" end
+        if ft == "" or ft == "." then
+          ft = nil
+        end
+        local pos = { i = "top", k = "bottom", j = "left", l = "right" }
+
+        -- "n" is always float first (then FloatIntoCurrent)
+        local position = (mode == "n" or mode == ".") and "float" or (pos[mode] or "float")
+        Snacks.scratch.open({
+          name = filename,
+          ft = ft,
+          win = { position = position },
+        })
+        return mode
+      end
+    end
+
+    -- MUST run for all paths
+    if name:match("^%d+$") or name == "" then
+      ExecuteSnackOpen(name)
+    else
+      local mode = ExecuteSnackOpen(name)
+      if mode == "n" or mode == "." then
+        vim.schedule(function()
+          pcall(vim.cmd, "FloatIntoCurrent")
+        end)
+      end
     end
   end,
   desc = "Create Scratch (named)",
 }
+
 lvim.keys.normal_mode["<leader>>"] = {
   "<cmd>lua Snacks.scratch.select()<cr>",
   desc = "Select Scratch Buffer",

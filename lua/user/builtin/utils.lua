@@ -1,4 +1,5 @@
 Nvim.null_ls = {}
+Nvim.Menu = {}
 Nvim.DiffTool = {}
 Nvim.MarkDownTool = {}
 Nvim.Buffer_Manager = {}
@@ -112,6 +113,18 @@ function Nvim.null_ls.create_cli_format_action(opts)
     -- directly format file
     format_file()
   end
+end
+
+function Nvim.Menu.menu_getkeys(lines)
+  vim.cmd(('echon "%s"'):format(table.concat(lines, "\\n")))
+
+  local ch = vim.fn.nr2char(vim.fn.getchar())
+  vim.cmd("redraw!") -- clear the menu after key press
+
+  if ch == "\r" or ch == "\n" then
+    return ""
+  end
+  return ch
 end
 
 --- Opens a conflict resolution diff tool in Neovim.

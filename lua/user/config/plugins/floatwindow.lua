@@ -46,9 +46,31 @@ local function open_float_window()
   vim.api.nvim_set_option_value('winblend', 0, { win = float_win })
 end
 
+local function float_into_current_window()
+  local float_win = vim.api.nvim_get_current_win()
+  local buf = vim.api.nvim_get_current_buf()
+
+  local cfg = vim.api.nvim_win_get_config(float_win)
+  if cfg.relative == "" then
+    return -- 不是 float
+  end
+
+  -- 找一個普通 window（通常是上一個）
+  vim.cmd("wincmd p")
+
+  -- 把 float 的 buffer 放進現在這個 window
+  vim.api.nvim_win_set_buf(0, buf)
+
+  -- 關掉 float
+  vim.api.nvim_win_close(float_win, true)
+end
+
 -- 將此函數添加到 Neovim 命令
 vim.api.nvim_create_user_command('OpenFloat', open_float_window, {})
+vim.api.nvim_create_user_command('FloatIntoCurrent', float_into_current_window, {})
 lvim.keys.normal_mode['sw'] = "<cmd>OpenFloat<CR>"
+lvim.keys.normal_mode['sq'] = "<Cmd>FloatIntoCurrent<CR>"
+
 
 
 local pickers = require('telescope.pickers')
