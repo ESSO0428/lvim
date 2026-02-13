@@ -330,6 +330,9 @@ lvim.keys.normal_mode["cp"] = { "<cmd>ConflictAllDiff<cr>", desc = "Compare Conf
 
 -- Snacks
 -- Scratch File
+vim.keymap.set("n", "<Plug>(snacks-scratch-raw)", function()
+  Snacks.scratch()
+end, { desc = "Snacks scratch raw toggle" })
 lvim.keys.normal_mode["<leader>."] = {
   function()
     local name = vim.fn.input("Scratch name (number/name/nothing): ")
@@ -338,7 +341,12 @@ lvim.keys.normal_mode["<leader>."] = {
     -- Input number → equivalent to n x Snacks.scratch()
     if name:match("^%d+$") then
       local count = tonumber(name)
-      vim.cmd(("normal! %d<leader>."):format(count))
+      local keys = tostring(count) .. "<Plug>(snacks-scratch-raw)"
+      vim.api.nvim_feedkeys(
+        vim.api.nvim_replace_termcodes(keys, true, false, true),
+        "n",
+        false
+      )
       return
     end
 
