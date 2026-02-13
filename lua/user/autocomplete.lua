@@ -1,5 +1,5 @@
 require "user.snippets"
-require("luasnip.loaders.from_lua").lazy_load { paths = vim.fn.stdpath('config') .. "/LuaSnipSourceSnippets/" }
+require("luasnip.loaders.from_lua").lazy_load { paths = vim.fn.stdpath("config") .. "/LuaSnipSourceSnippets/" }
 local cmp = require("lvim.utils.modules").require_on_index "cmp"
 local cmp_mapping = require "cmp.config.mapping"
 local original_cmp_path_dirname = require("cmp_path")._dirname

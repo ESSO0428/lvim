@@ -714,7 +714,7 @@ lvim.plugins = {
       local mcpservers_path = vim.fn.expand("~/.config/mcphub/servers.json")
       local mcpservers_dir = vim.fn.fnamemodify(mcpservers_path, ":h")
 
-      local template_path = vim.fn.expand("~/.config/lvim/templates/mcphub/servers.json")
+      local template_path = vim.fn.expand(vim.fn.stdpath("config") .. "/templates/mcphub/servers.json")
 
       if vim.fn.filereadable(mcpservers_path) == 0 then
         -- Check if template exists

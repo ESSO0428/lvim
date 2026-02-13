@@ -213,4 +213,4 @@ EOF
 let g:nvim_ipy_perform_mappings = 0
 
 " my custom vim plug
-source ~/.config/lvim/vim/ssh_command.vim
+execute "source " . stdpath("config") . "/vim/ssh_command.vim"
