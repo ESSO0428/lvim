@@ -25,7 +25,7 @@ lvim.builtin.treesitter.ensure_installed       = {
   "dap_repl"
   -- "regex"
 }
-lvim.builtin.treesitter.ignore_install         = { "regex" }
+lvim.builtin.treesitter.ignore_install         = { "regex", "org" }
 lvim.builtin.treesitter.highlight              = {
   enable = true, -- false will disable the whole extension
   -- disable = { "rust" }, -- list of language that will be disabled
