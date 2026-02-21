@@ -63,7 +63,6 @@ require "user.debug.python"
 require "user.debug.php"
 require "user.debug.javascript"
 
-require "nvim-dap-virtual-text".setup()
 local function reloadLaunchJson()
   local status, err = pcall(function()
     require('dap.ext.vscode').load_launchjs()

@@ -35,8 +35,7 @@ local function update_last_buf_win_leave_info_specfic_telescope_and_nvimtree(fil
   end
 end
 
--- handle_telescope_nvimtree_interaction 函数
-function handle_telescope_nvimtree_interaction()
+local function handle_telescope_nvimtree_interaction()
   local curfiletype = vim.bo.filetype
   local curbuftype = vim.bo.buftype
   local curname = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())

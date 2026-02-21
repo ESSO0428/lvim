@@ -8,7 +8,7 @@ function find_tabpage_index(tab_id)
   return nil -- 如果找不到相應的 index，返回 nil
 end
 
-function get_current_tab_name()
+local function get_current_tab_name()
   local tab_id = vim.fn.tabpagenr()
 
   local status, TablineData = pcall(vim.fn.json_decode, vim.g.Tabline_session_data)
@@ -23,7 +23,7 @@ function get_current_tab_name()
   end
 end
 
-function CurrentTabRename()
+local function CurrentTabRename()
   -- vim.keymap.set('n', '<leader>tn', ':TablineTabRename ' .. get_current_tab_name(), { silent = false })
   -- 获取当前选项卡的名称
   local tab_name = get_current_tab_name()

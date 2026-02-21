@@ -61,8 +61,6 @@ lvim.keys.normal_mode['<leader><cr>']  = "<cmd>nohlsearch<cr>"
 -- require vim-peekaboo
 lvim.keys.normal_mode['<c-f>']         = "<cmd>Telescope current_buffer_fuzzy_find<cr>"
 lvim.keys.normal_mode['<leader><c-f>'] = "<cmd>lua require('telescope.builtin').live_grep({grep_open_files=true})<cr>"
-lvim.keys.normal_mode['<c-h>']         = "<cmd>MurenToggle<cr>"
-lvim.keys.normal_mode['<leader><c-h>'] = "<cmd>MurenUnique<cr>"
 lvim.keys.normal_mode['<c-d>']         = "\"dyy\"dp"
 lvim.keys.normal_mode['<a-L>']         = "<Plug>(VM-Select-All)"
 lvim.keys.visual_mode['<a-L>']         = "<Plug>(VM-Visual-All)"
@@ -252,12 +250,12 @@ lvim.keys.normal_mode["<F6>"]            = { "<cmd>lua require'dap'.step_out()<c
 vim.cmd('noremap <a-p> <Nop>')
 vim.keymap.set('i', '<a-u>', "<Esc>:m .-2<cr>==gi")
 vim.keymap.set('i', '<a-o>', "<Esc>:m .+1<cr>==gi")
-function DAP_edit_breakpoint()
+local function dap_edit_breakpoint()
   local function get_input_with_default(prompt, default)
     local input = vim.fn.input(prompt, default or ''):gsub("^%s*(.-)%s*$", "%1")
     return input ~= "" and input or nil
   end
-  local Breakpoint_Condition = function()
+  local breakpoint_condition = function()
     local condition_input = get_input_with_default('Breakpoint condition: ')
     local hitCondition_input = get_input_with_default('Hit condition: ')
     local logMessage_input = get_input_with_default('Log point message: ')
@@ -273,7 +271,7 @@ function DAP_edit_breakpoint()
 
   -- Check if breakpoints is empty or nil, if so return
   if breakpoints == nil or vim.tbl_isempty(breakpoints) then
-    Breakpoint_Condition()
+    breakpoint_condition()
     return
   end
 
@@ -297,7 +295,7 @@ function DAP_edit_breakpoint()
 
           -- If none exists, return
           if not (condition_exists or hitCondition_exists or logMessage_exists) then
-            Breakpoint_Condition()
+            breakpoint_condition()
             return
           end
 
@@ -317,11 +315,12 @@ function DAP_edit_breakpoint()
     end
   end
   -- If no matching breakpoint, create a new one
-  Breakpoint_Condition()
+  breakpoint_condition()
 end
 
+vim.api.nvim_create_user_command('DAPEditBreakpoint', dap_edit_breakpoint, {})
 lvim.builtin.which_key.mappings.d['le'] = {
-  "<cmd>lua DAP_edit_breakpoint()<cr>",
+  dap_edit_breakpoint,
   'Edit Breakpoint' }
 
 -- DiffTool
@@ -480,3 +479,23 @@ lvim.keys.normal_mode["<leader>>"] = {
   "<cmd>lua Snacks.scratch.select()<cr>",
   desc = "Select Scratch Buffer",
 }
+
+-- Undo
+lvim.keys.normal_mode["Z"] = { "<cmd>UndotreeToggle<cr>", desc = "Toggle undo tree" }
+
+-- Repl
+lvim.keys.normal_mode["'q"] = { "<cmd>RunQtConsole<cr>gg", desc = "Run QtConsole" }
+lvim.keys.normal_mode["\\E"] = { "<cmd>IronRepl<cr>", desc = "Open REPL" }
+lvim.keys.normal_mode["\\w"] = { "<cmd>IPython --existing --no-window<cr><Plug>(IPy-RunCell)", desc = "Run Cell" }
+lvim.keys.normal_mode["\\e"] = { "<cmd>IPython --existing --no-window<cr><Plug>(IPy-RunAll)", desc = "Run All" }
+
+lvim.keys.normal_mode["[w"] = { "strah", desc = "Send Line Above" }
+lvim.keys.normal_mode["]w"] = { "stR", desc = "Send Line Below" }
+lvim.keys.normal_mode["[r"] = { "stR", desc = "Send Line Above" }
+lvim.keys.normal_mode["]r"] = { "stR", desc = "Send Line Below" }
+lvim.keys.normal_mode["[R"] = { "stR", desc = "Send Line Above" }
+lvim.keys.normal_mode["]R"] = { "stR", desc = "Send Line Below" }
+lvim.keys.visual_mode["[w"] = { "str", desc = "Send Selection Above" }
+lvim.keys.visual_mode["]w"] = { "str", desc = "Send Selection Below" }
+lvim.keys.visual_mode["[r"] = { "str", desc = "Send Selection Above" }
+lvim.keys.visual_mode["]r"] = { "str", desc = "Send Selection Below" }

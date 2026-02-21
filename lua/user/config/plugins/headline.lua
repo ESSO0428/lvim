@@ -31,12 +31,12 @@ vim.cmd "au ColorScheme * highlight link markdownH4Delimiter Statement"
 vim.cmd "au ColorScheme * highlight link markdownH5Delimiter PreProc"
 vim.cmd "au ColorScheme * highlight link markdownH6Delimiter Type"
 
-vim.cmd("au ColorScheme * highlight! link @markup.heading.1.markdown @variable")
-vim.cmd("au ColorScheme * highlight! link @markup.heading.2.markdown Title")
-vim.cmd("au ColorScheme * highlight! link @markup.heading.3.markdown Identifier")
-vim.cmd("au ColorScheme * highlight! link @markup.heading.4.markdown Statement")
-vim.cmd("au ColorScheme * highlight! link @markup.heading.5.markdown PreProc")
-vim.cmd("au ColorScheme * highlight! link @markup.heading.6.markdown Type")
+vim.cmd "au ColorScheme * highlight! link @markup.heading.1.markdown @variable"
+vim.cmd "au ColorScheme * highlight! link @markup.heading.2.markdown Title"
+vim.cmd "au ColorScheme * highlight! link @markup.heading.3.markdown Identifier"
+vim.cmd "au ColorScheme * highlight! link @markup.heading.4.markdown Statement"
+vim.cmd "au ColorScheme * highlight! link @markup.heading.5.markdown PreProc"
+vim.cmd "au ColorScheme * highlight! link @markup.heading.6.markdown Type"
 
 function M.setup()
   require("headlines").setup {

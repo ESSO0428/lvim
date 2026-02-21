@@ -1,44 +1,81 @@
-require "user.snippets"
-require("luasnip.loaders.from_lua").lazy_load { paths = vim.fn.stdpath("config") .. "/LuaSnipSourceSnippets/" }
+vim.api.nvim_create_autocmd("InsertEnter", {
+  once = true,
+  callback = function()
+    pcall(require, "user.snippets")
+    local ok, loader = pcall(require, "luasnip.loaders.from_lua")
+    if ok then
+      loader.lazy_load { paths = vim.fn.stdpath("config") .. "/LuaSnipSourceSnippets/" }
+    end
+  end,
+})
+
 local cmp = require("lvim.utils.modules").require_on_index "cmp"
 local cmp_mapping = require "cmp.config.mapping"
-local original_cmp_path_dirname = require("cmp_path")._dirname
-
-require("cmp_path").get_trigger_characters = function()
-  return { '/', '.', "'", '"', ":" }
+local function util_cmp_config(i, source)
+  if source.name == "nvim_lsp" then
+    lvim.builtin.cmp.sources[i] = {
+      name = "nvim_lsp",
+      priority = 10,
+      -- max_item_count = 200,
+      entry_filter = function(entry, ctx)
+        local kind = require("cmp.types.lsp").CompletionItemKind[entry:get_kind()]
+        if kind == "Snippet" and ctx.prev_context.filetype == "java" then
+          return false
+        end
+        return true
+      end
+    }
+  end
 end
-require("cmp_path")._dirname = function(self, params, option)
-  local original_return = original_cmp_path_dirname(self, params, option)
-  if original_return ~= nil then
-    return original_return
+
+local function setup_cmp_path()
+  local ok, cmp_path = pcall(require, "cmp_path")
+  if not ok then
+    return
   end
-  local NAME_REGEX = "\\%([^/\\\\:\\*?<>'\"`\\|]\\)"
-  local PATH_REGEX = vim.regex(([[\%([/"\']PAT\+\)*[/"\']\zePAT*$]]):gsub("PAT", NAME_REGEX))
-  local cursor_line = params.context.cursor_before_line
+  local original_cmp_path_dirname = cmp_path._dirname
 
-  local s = PATH_REGEX:match_str(cursor_line)
-
-  if s then
-    local buf_dirname = option.get_cwd(params)
-    local dirname = string.gsub(string.sub(cursor_line, s + 2), '%a*$', '') -- exclude '/'
-    local prefix = string.sub(cursor_line, 1, s + 1)                        -- include '/'
-    if prefix:match("\"$") or prefix:match("'$") then
-      return vim.fn.resolve(buf_dirname .. "/" .. dirname)
+  cmp_path.get_trigger_characters = function()
+    return { '/', '.', "'", '"', ":" }
+  end
+  cmp_path._dirname = function(self, params, option)
+    local original_return = original_cmp_path_dirname(self, params, option)
+    if original_return ~= nil then
+      return original_return
     end
-  end
+    local NAME_REGEX = "\\%([^/\\\\:\\*?<>'\"`\\|]\\)"
+    local PATH_REGEX = vim.regex(([[\%([/"\']PAT\+\)*[/"\']\zePAT*$]]):gsub("PAT", NAME_REGEX))
+    local cursor_line = params.context.cursor_before_line
 
-  local orgmode_s = cursor_line:find("%[%[file:")
-  if orgmode_s then
-    local buf_dirname = option.get_cwd(params)
-    local dirname = string.gsub(string.sub(cursor_line, orgmode_s + 7), '%a*$', '') -- exclude '/'
-    local prefix = string.sub(cursor_line, 7, orgmode_s + 7)                        -- include '/'
-    if prefix:match(':/$') then
-      return vim.fn.resolve('/' .. dirname)
+    local s = PATH_REGEX:match_str(cursor_line)
+
+    if s then
+      local buf_dirname = option.get_cwd(params)
+      local dirname = string.gsub(string.sub(cursor_line, s + 2), '%a*$', '') -- exclude '/'
+      local prefix = string.sub(cursor_line, 1, s + 1)                        -- include '/'
+      if prefix:match("\"$") or prefix:match("'$") then
+        return vim.fn.resolve(buf_dirname .. "/" .. dirname)
+      end
     end
-  end
 
-  return nil
+    local orgmode_s = cursor_line:find("%[%[file:")
+    if orgmode_s then
+      local buf_dirname = option.get_cwd(params)
+      local dirname = string.gsub(string.sub(cursor_line, orgmode_s + 7), '%a*$', '') -- exclude '/'
+      local prefix = string.sub(cursor_line, 7, orgmode_s + 7)                        -- include '/'
+      if prefix:match(':/$') then
+        return vim.fn.resolve('/' .. dirname)
+      end
+    end
+
+    return nil
+  end
 end
+
+vim.api.nvim_create_autocmd("InsertEnter", {
+  once = true,
+  callback = setup_cmp_path,
+})
 
 lvim.builtin.cmp.enabled = function()
   local filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
@@ -47,75 +84,89 @@ lvim.builtin.cmp.enabled = function()
   end
   return lvim.builtin.cmp.active
 end
-require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-  sources = {
-    { name = "dap" },
-    {
-      name = "buffer",
-      option = {
-        get_bufnrs = function()
-          local max_size = 100000 -- 设置文件大小限制为 100,000 字节
-          local bufs = {}
 
-          -- 获取当前 Tab 中的所有窗口
-          local windows = vim.api.nvim_tabpage_list_wins(0)
-          for _, win in ipairs(windows) do
-            -- 获取每个窗口的缓冲区编号
-            local buf = vim.api.nvim_win_get_buf(win)
-            -- 检查文件类型是否不是 neo-tree
-            if vim.api.nvim_get_option_value("filetype", { buf = buf }) ~= 'neo-tree' then
-              -- 检查文件大小
-              local size = vim.fn.getfsize(vim.api.nvim_buf_get_name(buf))
-              if size > 0 and size < max_size then
-                bufs[buf] = true
+local function setup_cmp_filetypes()
+  local ok, cmp = pcall(require, "cmp")
+  if not ok then
+    return
+  end
+  cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+    sources = {
+      { name = "dap" },
+      {
+        name = "buffer",
+        option = {
+          get_bufnrs = function()
+            local max_size = 100000 -- 设置文件大小限制为 100,000 字节
+            local bufs = {}
+
+            -- 获取当前 Tab 中的所有窗口
+            local windows = vim.api.nvim_tabpage_list_wins(0)
+            for _, win in ipairs(windows) do
+              -- 获取每个窗口的缓冲区编号
+              local buf = vim.api.nvim_win_get_buf(win)
+              -- 检查文件类型是否不是 neo-tree
+              if vim.api.nvim_get_option_value("filetype", { buf = buf }) ~= 'neo-tree' then
+                -- 检查文件大小
+                local size = vim.fn.getfsize(vim.api.nvim_buf_get_name(buf))
+                if size > 0 and size < max_size then
+                  bufs[buf] = true
+                end
               end
             end
-          end
 
-          return vim.tbl_keys(bufs)
-        end
+            return vim.tbl_keys(bufs)
+          end
+        }
       }
     }
-  }
-})
-require("cmp").setup.filetype({ "copilot-chat" }, {
-  sources = {
-    { name = "copilot-chat" },
-    { name = "copilot" },
-    {
-      name = "buffer",
-      option = {
-        get_bufnrs = function()
-          local max_size = 100000 -- 设置文件大小限制为 100,000 字节
-          local bufs = {}
+  })
+  cmp.setup.filetype({ "copilot-chat" }, {
+    sources = {
+      { name = "copilot-chat" },
+      { name = "copilot" },
+      {
+        name = "buffer",
+        option = {
+          get_bufnrs = function()
+            local max_size = 100000 -- 设置文件大小限制为 100,000 字节
+            local bufs = {}
 
-          -- 获取当前 Tab 中的所有窗口
-          local windows = vim.api.nvim_tabpage_list_wins(0)
-          for _, win in ipairs(windows) do
-            -- 获取每个窗口的缓冲区编号
-            local buf = vim.api.nvim_win_get_buf(win)
-            -- 检查文件类型是否不是 neo-tree
-            if vim.api.nvim_get_option_value("filetype", { buf = buf }) ~= 'neo-tree' then
-              -- 检查文件大小
-              local size = vim.fn.getfsize(vim.api.nvim_buf_get_name(buf))
-              if size > 0 and size < max_size then
-                bufs[buf] = true
+            -- 获取当前 Tab 中的所有窗口
+            local windows = vim.api.nvim_tabpage_list_wins(0)
+            for _, win in ipairs(windows) do
+              -- 获取每个窗口的缓冲区编号
+              local buf = vim.api.nvim_win_get_buf(win)
+              -- 检查文件类型是否不是 neo-tree
+              if vim.api.nvim_get_option_value("filetype", { buf = buf }) ~= 'neo-tree' then
+                -- 检查文件大小
+                local size = vim.fn.getfsize(vim.api.nvim_buf_get_name(buf))
+                if size > 0 and size < max_size then
+                  bufs[buf] = true
+                end
               end
             end
-          end
 
-          return vim.tbl_keys(bufs)
-        end
-      }
-    },
-    { name = "path" }
-  }
+            return vim.tbl_keys(bufs)
+          end
+        }
+      },
+      { name = "path" }
+    }
+  })
+end
+
+vim.api.nvim_create_autocmd("InsertEnter", {
+  once = true,
+  callback = setup_cmp_filetypes,
 })
+
 lvim.builtin.cmp.performance = {
   trigger_debounce_time = 500,
   throttle = 550,
   fetching_timeout = 80,
 }
+
 local function remove_copilot_if_node_version_too_low()
   -- 執行 `node --version` 並獲取輸出
   local handle = io.popen("node --version")
@@ -142,8 +193,11 @@ local function remove_copilot_if_node_version_too_low()
   end
 end
 
--- 調用函數
-remove_copilot_if_node_version_too_low()
+vim.api.nvim_create_autocmd("InsertEnter", {
+  once = true,
+  callback = remove_copilot_if_node_version_too_low,
+})
+
 lvim.builtin.cmp.experimental.ghost_text = true
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "luasnip" }
 -- lvim.builtin.cmp.sources[#lvim.builtin.cmp.sources + 1] = { name = "jupyter" }
@@ -176,7 +230,6 @@ table.insert(lvim.builtin.cmp.sources, 1, {
   }
 })
 lvim.builtin.cmp.formatting.source_names["html-css"] = "(html-css)"
----[[
 lvim.builtin.cmp.formatting.format = function(entry, vim_item)
   local max_width = lvim.builtin.cmp.formatting.max_width
   if max_width ~= 0 and #vim_item.abbr > max_width then
@@ -262,51 +315,8 @@ lvim.builtin.cmp.formatting.format = function(entry, vim_item)
   end
   return vim_item
 end
---]]
--- lvim.builtin.cmp.formatting.source_names["html-css"] = "(html-css)"
--- pcall(require('html-css'):setup())
 
---[[
-for i, source in pairs(lvim.builtin.cmp.sources) do
-  if source.name == "buffer" then
-    lvim.builtin.cmp.sources[i] = {
-      name = "buffer",
-      option = {
-        get_bufnrs = function()
-          local function is_not_neotree(buf)
-            return vim.api.nvim_buf_get_option(buf, 'filetype') ~= 'neo-tree'
-          end
-
-          local buf_list = vim.api.nvim_list_bufs()
-          local filtered_buf_list = vim.tbl_filter(is_not_neotree, buf_list)
-          return filtered_buf_list
-        end
-      }
-    }
-  end
-end
---]]
---[[
-for i, source in pairs(lvim.builtin.cmp.sources) do
-  if source.name == "buffer" then
-    lvim.builtin.cmp.sources[i] = {
-      name = "buffer",
-      option = {
-        get_bufnrs = function()
-          local function is_not_neotree(buf)
-            return vim.api.nvim_buf_get_option(buf, 'filetype') ~= 'neo-tree'
-          end
-
-          local buf_list = vim.api.nvim_list_bufs()
-          local filtered_buf_list = vim.tbl_filter(is_not_neotree, buf_list)
-          return filtered_buf_list
-        end
-      }
-    }
-  end
-end
---]]
-function BufferAllCompleteToggle()
+local function buffer_all_complete_toggle()
   for i, source in pairs(lvim.builtin.cmp.sources) do
     if source.name == "buffer" then
       if not lvim.builtin.cmp.sources[i].option or next(lvim.builtin.cmp.sources[i].option) == nil then
@@ -336,7 +346,7 @@ function BufferAllCompleteToggle()
   end
 end
 
-function CurrentTabCompleteToggle()
+local function current_tab_complete_toggle()
   for i, source in pairs(lvim.builtin.cmp.sources) do
     if source.name == "buffer" then
       if not lvim.builtin.cmp.sources[i].option or next(lvim.builtin.cmp.sources[i].option) == nil then
@@ -378,24 +388,13 @@ function CurrentTabCompleteToggle()
   end
 end
 
-function util_cmp_config(i, source)
-  if source.name == "nvim_lsp" then
-    lvim.builtin.cmp.sources[i] = {
-      name = "nvim_lsp",
-      priority = 10,
-      -- max_item_count = 200,
-      entry_filter = function(entry, ctx)
-        local kind = require("cmp.types.lsp").CompletionItemKind[entry:get_kind()]
-        if kind == "Snippet" and ctx.prev_context.filetype == "java" then
-          return false
-        end
-        return true
-      end
-    }
-  end
-end
+vim.api.nvim_create_user_command("BufferAllCompleteToggle", buffer_all_complete_toggle, {})
+vim.api.nvim_create_user_command("CurrentTabCompleteToggle", current_tab_complete_toggle, {})
 
-CurrentTabCompleteToggle()
+vim.api.nvim_create_autocmd("InsertEnter", {
+  once = true,
+  callback = current_tab_complete_toggle
+})
 local status_cmp_ok, cmp_types = pcall(require, "cmp.types.cmp")
 local ConfirmBehavior = cmp_types.ConfirmBehavior
 local SelectBehavior = cmp_types.SelectBehavior

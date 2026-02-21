@@ -290,6 +290,9 @@ lvim.builtin.lualine.sections = {
     components.lsp,
     {
       function()
+        if not vim.g.loaded_avante then
+          return ""
+        end
         local ok, conf = pcall(require, "avante.config")
         if ok and conf and conf.mode then
           return "Avante:" .. tostring(conf.mode)

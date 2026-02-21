@@ -23,12 +23,12 @@ vim.api.nvim_create_user_command('FileTypeOnRfcSemicolon', 'set filetype=rfc_sem
 
 -----------------------------------------------------------------
 -- 添加更多映射
-my_ext_syntax_map = {
+local my_ext_syntax_map = {
   ['csv'] = 'csv',
   ['txt'] = 'tsv',
   ['tab'] = 'tsv'
 }
-function toggle_syntax()
+local function toggle_syntax()
   local current_filetype = vim.bo.filetype
   local ext = vim.fn.expand('%:e')
   if current_filetype == '' and ext == '' then
@@ -70,7 +70,7 @@ function toggle_syntax()
 end
 
 -- NOTE: for link highlight toggle
-function toggle_conceal()
+local function toggle_conceal()
   -- 初始化当前 buffer 的 conceal 状态，如果它还不存在
   if vim.b.current_buffer_conceal_change == nil or vim.b.current_buffer_conceal_change == '' then
     vim.b.current_buffer_conceal_change = 'off'
@@ -132,8 +132,8 @@ function SetupMarkdownBufferSyntaxConceal()
   end
 end
 
-lvim.keys.normal_mode["sn"] = { "<cmd>lua toggle_syntax()<cr>" }
-lvim.keys.normal_mode["sc"] = { "<cmd>lua toggle_conceal()<cr>" }
+lvim.keys.normal_mode["sn"] = toggle_syntax
+lvim.keys.normal_mode["sc"] = toggle_conceal
 vim.cmd([[
   " autocmd FileType csv,tsv syntax off
   augroup disable_syntax

@@ -188,7 +188,7 @@ end
 
 GetServerHostName(host)
 
-vim.cmd('source $HOME/.config/lvim/init.vim')
+vim.cmd('source $HOME/.config/lvim/vim/ssh_command.vim')
 vim.cmd('source $HOME/.config/lvim/keymap.vim')
 
 

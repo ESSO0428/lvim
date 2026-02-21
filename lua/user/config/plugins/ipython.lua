@@ -1,9 +1,12 @@
-local actions = require('telescope.actions')
-local pickers = require('telescope.pickers')
-local finders = require('telescope.finders')
-local action_state = require('telescope.actions.state')
-
-function select_current_nvim_jupyter_kernel_in_current_buffer()
+local function select_current_nvim_jupyter_kernel_in_current_buffer()
+  local ok_actions, actions = pcall(require, "telescope.actions")
+  if not ok_actions then
+    vim.notify("telescope not available", vim.log.levels.WARN)
+    return
+  end
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local action_state = require("telescope.actions.state")
   local neovim_pid = vim.fn.getpid()
   local neovim_sub_pids = vim.fn.systemlist("pgrep -P " .. neovim_pid)
 
@@ -46,7 +49,5 @@ function select_current_nvim_jupyter_kernel_in_current_buffer()
   end
 end
 
-vim.api.nvim_create_user_command("SelectCurrentNvimActJupyterKernel",
-  select_current_nvim_jupyter_kernel_in_current_buffer, {})
-lvim.builtin.which_key.mappings.s.q = { "<cmd>SelectCurrentNvimActJupyterKernel<CR>",
+lvim.builtin.which_key.mappings.s.q = { select_current_nvim_jupyter_kernel_in_current_buffer,
   "Check Jupyter Kernel (Current nvim)" }
