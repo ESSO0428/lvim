@@ -51,17 +51,17 @@ return {
     ft = { "org" }, -- 只在 org 檔載入
     dependencies = {
       { 'nvim-treesitter/nvim-treesitter', lazy = true },
+      {
+        "akinsho/org-bullets.nvim",
+        ft = { "org" },
+        config = function()
+          require('org-bullets').setup()
+        end
+      },
     },
     config = function()
       require("user.config.plugins.OrgMode").setup()
     end,
-  },
-  {
-    "akinsho/org-bullets.nvim",
-    ft = { "org" },
-    config = function()
-      require('org-bullets').setup()
-    end
   },
   -- NOTE: because orgmode update and org.parser.files depend on orgmode, so I have to disable it
   -- {
