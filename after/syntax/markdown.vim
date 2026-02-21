@@ -4,7 +4,7 @@ set softtabstop=2
 set expandtab
 
 if &buftype ==# 'nofile'
-  setlocal concealcursor=nv
+  setlocal concealcursor=nc
 endif
 
 " highlight @unchecked_list_item guifg=#F8F8F2

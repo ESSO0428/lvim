@@ -32,12 +32,26 @@ function M.setup()
               rendered = 2,
             },
             concealcursor = {
-              default = 'nvic',
-              rendered = 'nvic',
+              default = '',
+              rendered = 'nc',
             },
           },
         },
       },
+      filetype = {
+        ['copilot-chat'] = {
+          win_options = {
+            conceallevel = {
+              default = 0,
+              rendered = 2,
+            },
+            concealcursor = {
+              default = '',
+              rendered = '',
+            },
+          },
+        },
+      }
     },
     heading = {
       sign = false,
@@ -62,7 +76,11 @@ function M.setup()
       sign = false,
       border = "thick",
       highlight = 'RenderMarkdownCode',
-      highlight_inline = '',
+      highlight_info = 'RenderMarkdownCodeInfo',
+      highlight_language = nil,
+      highlight_border = false,
+      highlight_fallback = 'RenderMarkdownCodeFallback',
+      highlight_inline = 'RenderMarkdownCodeInline',
     },
     bullet = {
       icons = { '●', '○', '◆', '◇' },
