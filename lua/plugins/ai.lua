@@ -22,7 +22,64 @@ return {
     dependencies = {
       { "github/copilot.vim" },    -- or github/copilot.vim
       { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
-    }
+    },
+    keys = {
+      {
+        "<leader>uki",
+        function()
+          require("user.copilot").quickchat(false)
+        end,
+        desc = "CopilotChat: quick chat panel",
+      },
+      {
+        "<leader>uki",
+        function()
+          require("user.copilot").quickchat_visual(false)
+        end,
+        mode = { "v" },
+        desc = "CopilotChat: quick chat panel",
+      },
+      {
+        "<leader>ukw",
+        function()
+          require("user.copilot").no_context_chat()
+        end,
+        desc = "CopilotChat: no context chat",
+      },
+      {
+        "<leader>uka",
+        function()
+          require("user.copilot").quickchat(true)
+        end,
+        desc = "CopilotChat: quick chat",
+      },
+      {
+        "<leader>uka",
+        function()
+          require("user.copilot").quickchat_visual(true)
+        end,
+        mode = { "v" },
+        desc = "CopilotChat: quick chat",
+      },
+      {
+        "<leader>ukk",
+        function()
+          require("user.copilot").prompt_action()
+        end,
+        desc = "CopilotChat: prompt action",
+      },
+      {
+        "<leader>ukk",
+        function()
+          require("user.copilot").prompt_action()
+        end,
+        mode = { "v" },
+        desc = "CopilotChat: prompt action",
+      },
+    },
+    config = function()
+      require("user.copilot").setup()
+    end,
   },
   {
     "gutsavgupta/nvim-gemini-companion",
