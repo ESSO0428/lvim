@@ -1,4 +1,4 @@
-function code_runner()
+local function code_runner()
   local filetype = vim.bo.filetype                                   -- 获取当前文件类型
   local filedir = vim.fn.expand('%:p:h')                             -- 获取当前文件的目录
   local term_cd_cmd = "cd " .. vim.fn.shellescape(filedir) .. " && " -- 构造终端中执行的 cd 命令

@@ -12,35 +12,8 @@ Nvim.builtin.refactoring.method = {
   "move_block_to_file",
 }
 
-function refactor_prompt()
-  -- vim.ui.select exits visual mode without setting the `<` and `>` marks
-  local mode = vim.api.nvim_get_mode().mode
-  if mode == "v" or mode == "V" or mode == "vs" or mode == "Vs" then
-    vim.cmd("norm! ")
-  end
-
-  -- vim.g.dress_input = true
-  -- vim.ui.input({ prompt = 'Refactor ', completion = 'customlist,v:lua.refactor_completion' }, function(method)
-  vim.ui.select(Nvim.builtin.refactoring.method, { prompt = 'Refactor ' }, function(method)
-    if method and method_is_valid(method) then
-      vim.g.dress_input = true
-      if method == "move_block_to_file" then
-        move_block_to_file(mode)
-        return
-      end
-      vim.ui.input({ prompt = 'Refactor ' .. method .. ' ' }, function(input)
-        if input then
-          vim.fn.execute(table.concat({ "Refactor", method, input }, " "))
-        else
-          vim.fn.execute(table.concat({ "Refactor", method }, " "))
-        end
-      end)
-    end
-  end)
-end
-
 -- 验证方法是否存在于补全列表中
-function method_is_valid(method)
+local function method_is_valid(method)
   local completions = Nvim.builtin.refactoring.method
   for _, option in ipairs(completions) do
     if option == method then
@@ -50,24 +23,11 @@ function method_is_valid(method)
   return false
 end
 
--- 用于补全的函数
-function refactor_completion(ArgLead, CmdLine, CursorPos)
-  local completions = Nvim.builtin.refactoring.method
-
-  local matches = {}
-  for _, option in ipairs(completions) do
-    if option:sub(1, #ArgLead) == ArgLead then
-      table.insert(matches, option)
-    end
-  end
-  return matches
-end
-
-function move_block_to_file(mode)
+local function move_block_to_file(mode)
   if mode == nil then
     mode = vim.api.nvim_get_mode().mode
     if mode == "v" or mode == "V" or mode == "vs" or mode == "Vs" then
-      vim.cmd("norm! ")
+      vim.cmd("norm! ")
     end
   end
 
@@ -149,11 +109,37 @@ function move_block_to_file(mode)
   -- 这一步可能不是必需的，取决于你的具体需求
 end
 
+local function refactor_prompt()
+  -- vim.ui.select exits visual mode without setting the `<` and `>` marks
+  local mode = vim.api.nvim_get_mode().mode
+  if mode == "v" or mode == "V" or mode == "vs" or mode == "Vs" then
+    vim.cmd("norm! ")
+  end
+
+  -- vim.g.dress_input = true
+  vim.ui.select(Nvim.builtin.refactoring.method, { prompt = 'Refactor ' }, function(method)
+    if method and method_is_valid(method) then
+      vim.g.dress_input = true
+      if method == "move_block_to_file" then
+        move_block_to_file(mode)
+        return
+      end
+      vim.ui.input({ prompt = 'Refactor ' .. method .. ' ' }, function(input)
+        if input then
+          vim.fn.execute(table.concat({ "Refactor", method, input }, " "))
+        else
+          vim.fn.execute(table.concat({ "Refactor", method }, " "))
+        end
+      end)
+    end
+  end)
+end
+
 -- 将函数注册为一个 Neovim 命令，以便可以在可视模式下调用
 vim.api.nvim_create_user_command('MoveBlockToFile', move_block_to_file, { range = true })
 
 lvim.builtin.which_key.mappings.u["="] = { "<cmd>lua require('lvim.lsp.utils').format()<cr>", "Format" }
 -- lvim.builtin.which_key.mappings.u.r = { "<cmd>LspLensToggle<cr>", "Like IDEA : definition info" }
 
-lvim.keys.visual_mode['<leader>rf'] = "<cmd>lua refactor_prompt()<cr>"
-lvim.keys.normal_mode['<leader>rf'] = "<cmd>lua refactor_prompt()<cr>"
+lvim.keys.visual_mode['<leader>rf'] = refactor_prompt
+lvim.keys.normal_mode['<leader>rf'] = refactor_prompt
