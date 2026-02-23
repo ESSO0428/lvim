@@ -55,7 +55,10 @@ return {
         close_tab_shortcut_i = '<C-d>', -- if you're in insert mode
         close_tab_shortcut_n = 'dd',    -- if you're in normal mode
       }
-    end
+    end,
+    keys = {
+      { "<leader>su", "<cmd>Telescope telescope-tabs list_tabs<cr>", desc = "Telescope Tabs" },
+    },
   },
   {
     "LinArcX/telescope-command-palette.nvim",
