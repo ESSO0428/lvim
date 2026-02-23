@@ -41,7 +41,6 @@ return {
   },
   {
     "debugloop/telescope-undo.nvim",
-    event = "VeryLazy",
     dependencies = { -- note how they're inverted to above example
       {
         "nvim-telescope/telescope.nvim",

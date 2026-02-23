@@ -76,9 +76,13 @@ return {
       pcall(require("telescope").load_extension, "file_browser")
     end
   },
-  { "nvim-telescope/telescope-media-files.nvim" },
+  {
+    "nvim-telescope/telescope-media-files.nvim",
+    event = "VeryLazy",
+  },
   {
     "Zane-/cder.nvim",
+    event = "VeryLazy",
     -- build = 'cargo install exa'
     build = 'cargo install --list | grep -q "exa v" || cargo install exa'
   },
