@@ -116,23 +116,42 @@ return {
       "nvim-tree/nvim-tree.lua",
       "nvim-neo-tree/neo-tree.nvim"
     },
-    event = "LspAttach",
+    -- event = "LspAttach",
+    ft = { "NvimTree", "neo-tree" },
     config = function()
-      require("lsp-file-operations").setup {
-        -- used to see debug logs in file `vim.fn.stdpath("cache") .. lsp-file-operations.log`
-        debug = false,
-        -- select which file operations to enable
-        operations = {
-          willRenameFiles = true,
-          didRenameFiles = true,
-          willCreateFiles = true,
-          didCreateFiles = true,
-          willDeleteFiles = true,
-          didDeleteFiles = true,
-        },
-        -- how long to wait (in milliseconds) for file rename information before cancelling
-        timeout_ms = 10000,
-      }
+      vim.api.nvim_create_autocmd("LspAttach", {
+        once = true,
+        callback = function()
+          require("lsp-file-operations").setup {
+            -- used to see debug logs in file `vim.fn.stdpath("cache") .. lsp-file-operations.log`
+            debug = false,
+            -- select which file operations to enable
+            operations = {
+              willRenameFiles = true,
+              didRenameFiles = true,
+              willCreateFiles = true,
+              didCreateFiles = true,
+              willDeleteFiles = true,
+              didDeleteFiles = true,
+            },
+            -- how long to wait (in milliseconds) for file rename information before cancelling
+            timeout_ms = 10000,
+          }
+          local capabilities = vim.lsp.protocol.make_client_capabilities()
+          local ok_lfo, lfo = pcall(require, "lsp-file-operations")
+          if ok_lfo and type(lfo.default_capabilities) == "function" then
+            capabilities = vim.tbl_deep_extend(
+              "force",
+              capabilities,
+              -- returns configured operations if setup() was already called
+              -- or default operations if not
+              lfo.default_capabilities()
+            )
+          end
+          Nvim.builtin.lsp = Nvim.builtin.lsp or {}
+          Nvim.builtin.lsp.capabilities = capabilities
+        end
+      })
     end,
   },
   {

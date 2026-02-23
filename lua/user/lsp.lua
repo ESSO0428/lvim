@@ -82,22 +82,12 @@ vim.api.nvim_create_autocmd("FileType", {
 
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-local ok_lfo, lfo = pcall(require, "lsp-file-operations")
-if ok_lfo and type(lfo.default_capabilities) == "function" then
-  capabilities = vim.tbl_deep_extend(
-    "force",
-    capabilities,
-    -- returns configured operations if setup() was already called
-    -- or default operations if not
-    lfo.default_capabilities()
-  )
-end
 capabilities.textDocument.foldingRange = {
   dynamicRegistration = false,
   lineFoldingOnly = true,
 }
 capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
-Nvim.builtin.lsp = {}
+Nvim.builtin.lsp = Nvim.builtin.lsp or {}
 Nvim.builtin.lsp.capabilities = capabilities
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "yaml",
