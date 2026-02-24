@@ -71,6 +71,7 @@ end
 
 -- create the actual snippet
 local snippets = {
+  -- Shebang snippet, triggered by "#!"
   s("#!", {
     t { "#!/usr/bin/env python", "" },
     i(0),
@@ -82,6 +83,14 @@ local snippets = {
     t({ "", "@author: " }), f(current_user, {}), t({ "", '"""', "" }),
     i(0) -- Jump here after filling header
   }),
+  -- Region snippets, with and without the "r" trigger for the start
+  s({ trig = "#region", name = "Region Start" }, {
+    t("#region"), i(0)
+  }),
+  s({ trig = "#endregion", name = "Region End" }, {
+    t("#endregion"), i(0)
+  }),
+  -- Other snippets
   s({ trig = 'classd', dscr = 'Class with docstring' }, {
     t('class '),
     i(1, 'MyClass'),

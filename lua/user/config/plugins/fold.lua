@@ -16,11 +16,39 @@ vim.o.foldmethod = "manual"
 
 function M.setup()
   -- NOTE: foldingRange capability is injected in the main LSP setup.
+
   local ftMap = {
     vim = 'indent',
-    python = { 'indent' },
+    -- python = { 'indent', 'treesitter' },
+    python = { 'indent', 'marker' },
     git = ''
   }
+  local aggregate_ftMap = {
+    'python',
+  }
+  local empty_return_filetypes = {
+    'org',
+    'markdown',
+    'copilot-chat',
+    'Avante',
+  }
+  ---@param providers table|string List of providers to aggregate, e.g. {'indent', 'marker'}, or a string provider name
+  local function aggregate_providers(providers)
+    return function(buf)
+      if type(providers) ~= 'table' then
+        return providers
+      end
+      local ufo = require('ufo')
+      local res = {}
+      for _, provider in ipairs(providers) do
+        local ok, folds = pcall(ufo.getFolds, buf, provider)
+        if ok and folds then
+          vim.list_extend(res, folds)
+        end
+      end
+      return res
+    end
+  end
   local handler = function(virtText, lnum, endLnum, width, truncate)
     local newVirtText = {}
     local suffix = (' … 󱦶 %d '):format(endLnum - lnum)
@@ -48,17 +76,14 @@ function M.setup()
     table.insert(newVirtText, { suffix, 'MoreMsg' })
     return newVirtText
   end
-  require('ufo').setup({
+  local opts = {
     fold_virt_text_handler = handler,
     provider_selector = function(bufnr, filetype, buftype)
-      local empty_return_filetypes = {
-        'org',
-        'markdown',
-        'copilot-chat',
-        'Avante',
-      }
       if vim.tbl_contains(empty_return_filetypes, filetype) then
         return ''
+      end
+      if vim.tbl_contains(aggregate_ftMap, filetype) then
+        return aggregate_providers(ftMap[filetype])
       end
       -- if you prefer treesitter provider rather than lsp,
       -- return ftMap[filetype] or {'treesitter', 'indent'}
@@ -73,7 +98,8 @@ function M.setup()
         switch = 'u'
       }
     },
-  })
+  }
+  require('ufo').setup(opts)
 
   -- global handler
   -- `handler` is the 2nd parameter of `setFoldVirtTextHandler`,
