@@ -10,7 +10,18 @@ return {
       -- refer to the configuration section below
       terminal = {
         auto_insert = false,
-      }
+      },
+      indent = {
+        enabled = true,
+        animate = {
+          enabled = false,
+        },
+        scope = {
+          enabled = true,
+          underline = true,
+        },
+      },
+
     },
   },
   {
