@@ -303,9 +303,9 @@ return {
       },
     },
     keys = {
-      { "<leader>aa", "<cmd>AvanteAsk<cr>",    mode = { "n", "v" }, desc = "Avante: Ask" },
-      { "<leader>ae", "<cmd>AvanteEdit<cr>",   mode = { "n", "v" }, desc = "Avante: Edit" },
-      { "<leader>a?", "<cmd>AvanteModels<cr>", mode = { "n", "v" }, desc = "Avante: Select Models" },
+      { "<leader>aa", "<cmd>AvanteAsk<cr>",    desc = "Avante: Ask" },
+      { "<leader>ae", "<cmd>AvanteEdit<cr>",   desc = "Avante: Edit" },
+      { "<leader>a?", "<cmd>AvanteModels<cr>", desc = "Avante: Select Models" },
     }
   },
 }
