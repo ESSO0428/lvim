@@ -112,17 +112,23 @@ function M.setup()
   -- local bufnr = vim.api.nvim_get_current_buf()
   -- require('ufo').setFoldVirtTextHandler(bufnr, handler)
 
+  vim.api.nvim_create_autocmd("OptionSet", {
+    pattern = "foldmarker",
+    callback = function()
+      require("ufo").enableFold()
+    end
+  })
   vim.api.nvim_create_autocmd("BufEnter", {
     pattern = "*",
     callback = function()
       if vim.api.nvim_buf_get_name(0):match("UfoPreviewFloatWin") then
         vim.opt_local.list = false
-        vim.cmd('UfoAttach')
-        vim.cmd('UfoEnableFold')
+        require("ufo").attach()
+        require("ufo").enableFold()
         vim.cmd('normal! zX')
       else
         if vim.wo.foldenable then
-          vim.cmd('UfoEnableFold')
+          require("ufo").enableFold()
         end
       end
     end
