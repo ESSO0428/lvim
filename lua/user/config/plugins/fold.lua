@@ -135,4 +135,35 @@ function M.setup()
   })
 end
 
+local function apply_marker_and_fold(action)
+  local buf = vim.api.nvim_get_current_buf()
+  local ft = vim.bo[buf].filetype
+  local marker = Nvim.builtin.FtFoldMarker[ft]
+
+  marker = (type(marker) == "string" and marker:find(",")) and marker or "{{{,}}}"
+
+  local marker_start = vim.split(marker, ",")[1]
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+
+  for row, line in ipairs(lines) do
+    if line:find(marker_start, 1, true) then
+      if action == "close" then
+        pcall(vim.cmd, row .. "foldclose")
+      elseif action == "open" then
+        pcall(vim.cmd, row .. "foldopen")
+      end
+    end
+  end
+end
+
+lvim.keys.normal_mode["<leader>Om"] = {
+  function() apply_marker_and_fold("close") end,
+  desc = "Close all filetype markers (ufo)",
+}
+
+lvim.keys.normal_mode["<leader>OM"] = {
+  function() apply_marker_and_fold("open") end,
+  desc = "Open all filetype markers (ufo)",
+}
+
 return M
