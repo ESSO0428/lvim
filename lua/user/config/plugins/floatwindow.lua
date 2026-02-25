@@ -72,15 +72,9 @@ lvim.keys.normal_mode['sw'] = "<cmd>OpenFloat<CR>"
 lvim.keys.normal_mode['sq'] = "<Cmd>FloatIntoCurrent<CR>"
 
 
-
-local pickers = require('telescope.pickers')
-local finders = require('telescope.finders')
-local previewers = require('telescope.previewers')
-local conf = require('telescope.config').values
-local actions = require('telescope.actions')
-local action_state = require('telescope.actions.state')
-
 local function close_selected_window(window_infos, prompt_bufnr)
+  local finders = require('telescope.finders')
+  local action_state = require('telescope.actions.state')
   local success, err_message = pcall(function()
     local current_picker = action_state.get_current_picker(prompt_bufnr)
     local selection = action_state.get_selected_entry()
@@ -139,6 +133,12 @@ M.restricted_fts_set = {}
 -- end
 
 local function list_and_select_windows_in_tab()
+  local pickers = require('telescope.pickers')
+  local finders = require('telescope.finders')
+  local previewers = require('telescope.previewers')
+  local conf = require('telescope.config').values
+  local actions = require('telescope.actions')
+  local action_state = require('telescope.actions.state')
   local window_infos = {}
 
   local windows = vim.api.nvim_tabpage_list_wins(0)
