@@ -16,7 +16,6 @@ vim.o.foldmethod = "manual"
 
 function M.setup()
   -- NOTE: foldingRange capability is injected in the main LSP setup.
-
   local ftMap = {
     vim = 'indent',
     -- python = { 'indent', 'treesitter' },
@@ -112,22 +111,22 @@ function M.setup()
   -- will override global handler if it is existed
   -- local bufnr = vim.api.nvim_get_current_buf()
   -- require('ufo').setFoldVirtTextHandler(bufnr, handler)
-end
 
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "*",
-  callback = function()
-    if vim.api.nvim_buf_get_name(0):match("UfoPreviewFloatWin") then
-      vim.opt_local.list = false
-      vim.cmd('UfoAttach')
-      vim.cmd('UfoEnableFold')
-      vim.cmd('normal! zX')
-    else
-      if vim.wo.foldenable then
+  vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = "*",
+    callback = function()
+      if vim.api.nvim_buf_get_name(0):match("UfoPreviewFloatWin") then
+        vim.opt_local.list = false
+        vim.cmd('UfoAttach')
         vim.cmd('UfoEnableFold')
+        vim.cmd('normal! zX')
+      else
+        if vim.wo.foldenable then
+          vim.cmd('UfoEnableFold')
+        end
       end
     end
-  end
-})
+  })
+end
 
 return M

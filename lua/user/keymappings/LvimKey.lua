@@ -343,6 +343,14 @@ lvim.keys.normal_mode["<leader>r."] = {
     vim.schedule(function()
       pcall(vim.cmd, "FloatIntoCurrent")
     end)
+
+    vim.schedule(function()
+      local ft = vim.bo.filetype
+      local marker = Nvim.builtin.FtFoldMarker[ft]
+      if marker and type(marker) == "string" and marker:find(",") then
+        vim.opt_local.foldmarker = marker
+      end
+    end)
   end,
   desc = "Quick Note (current window)",
 }
@@ -392,6 +400,14 @@ lvim.keys.normal_mode["<leader>."] = {
           pcall(vim.cmd, "FloatIntoCurrent")
         end)
       end
+
+      vim.schedule(function()
+        local ft = vim.bo.filetype
+        local marker = Nvim.builtin.FtFoldMarker[ft]
+        if marker and type(marker) == "string" and marker:find(",") then
+          vim.opt_local.foldmarker = marker
+        end
+      end)
 
       return
     end
@@ -471,6 +487,14 @@ lvim.keys.normal_mode["<leader>."] = {
         end)
       end
     end
+
+    vim.schedule(function()
+      local ft = vim.bo.filetype
+      local marker = Nvim.builtin.FtFoldMarker[ft]
+      if marker and type(marker) == "string" and marker:find(",") then
+        vim.opt_local.foldmarker = marker
+      end
+    end)
   end,
   desc = "Create Scratch (named)",
 }

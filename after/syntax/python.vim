@@ -1,1 +1,0 @@
-setlocal foldmarker=#region,#endregion
