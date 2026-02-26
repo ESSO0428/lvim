@@ -336,7 +336,7 @@ end, { desc = "Snacks scratch raw toggle" })
 lvim.keys.normal_mode["<leader>r."] = {
   function()
     Snacks.scratch.open({
-      name = vim.fn.expand("%"),
+      name = vim.fn.expand("%:."),
       ft = "markdown",
     })
 
@@ -390,7 +390,7 @@ lvim.keys.normal_mode["<leader>."] = {
       end
 
       Snacks.scratch.open({
-        name = vim.fn.expand("%"),
+        name = vim.fn.expand("%:."),
         ft = "markdown",
         win = { position = position },
       })
@@ -421,7 +421,7 @@ lvim.keys.normal_mode["<leader>."] = {
 
     if name == "%" or name == "." then
       -- expand % early so all branches see final name
-      name = vim.fn.expand("%")
+      name = vim.fn.expand("%:.")
     end
 
     local ExecuteSnackOpen = function(_) end
@@ -440,7 +440,7 @@ lvim.keys.normal_mode["<leader>."] = {
       end
     elseif name == "<" or name == ">" then
       ExecuteSnackOpen = function(mark)
-        local filename = vim.fn.expand("%")
+        local filename = vim.fn.expand("%:.")
         local mode = {
           ["<"] = "float",
           [">"] = "n"
