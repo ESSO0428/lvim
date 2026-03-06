@@ -221,7 +221,7 @@ M.setup = function()
     providers = {
       copilot = {
         endpoint = "https://api.githubcopilot.com",
-        model = "claude-sonnet-4.5",
+        model = "claude-sonnet-4.6",
         proxy = nil,            -- [protocol://]host[:port] Use this proxy
         allow_insecure = false, -- Allow insecure server connections
         timeout = 30000,        -- Timeout in milliseconds
@@ -237,46 +237,10 @@ M.setup = function()
           max_tokens = 32768,
         },
       },
-      ["copilot-claude-4-sonnet"] = {
+      ["copilot-claude-4.5-sonnet"] = {
         __inherited_from = "copilot",
         endpoint = "https://api.githubcopilot.com",
-        model = "claude-4-sonnet",
-        proxy = nil,
-        allow_insecure = false,
-        timeout = 30000,
-        extra_request_body = {
-          temperature = 0,
-          max_tokens = 32768,
-        },
-      },
-      ["copilot-claude-3.7-sonnet-thought"] = {
-        __inherited_from = "copilot",
-        endpoint = "https://api.githubcopilot.com",
-        model = "claude-3.7-sonnet-thought",
-        proxy = nil,
-        allow_insecure = false,
-        timeout = 30000,
-        extra_request_body = {
-          temperature = 0,
-          max_tokens = 32768,
-        },
-      },
-      ["copilot-claude-3.7-sonnet"] = {
-        __inherited_from = "copilot",
-        endpoint = "https://api.githubcopilot.com",
-        model = "claude-3.7-sonnet",
-        proxy = nil,
-        allow_insecure = false,
-        timeout = 30000,
-        extra_request_body = {
-          temperature = 0,
-          max_tokens = 32768,
-        },
-      },
-      ["copilot-claude-3.5-sonnet"] = {
-        __inherited_from = "copilot",
-        endpoint = "https://api.githubcopilot.com",
-        model = "claude-3.5-sonnet",
+        model = "claude-4.5-sonnet",
         proxy = nil,
         allow_insecure = false,
         timeout = 30000,
@@ -307,18 +271,6 @@ M.setup = function()
         extra_request_body = {
           temperature = 0,
           max_tokens = 64000,
-        },
-      },
-      ["copilot-o1"] = {
-        __inherited_from = "copilot",
-        endpoint = "https://api.githubcopilot.com",
-        model = "o1",
-        proxy = nil,
-        allow_insecure = false,
-        timeout = 30000,
-        extra_request_body = {
-          temperature = 0,
-          max_tokens = 20000,
         },
       },
     },
