@@ -156,7 +156,11 @@ local function apply_marker_and_fold(action)
           pcall(vim.cmd, row .. "foldclose")
         end
       elseif action == "open" and is_closed then
-        pcall(vim.cmd, row .. "foldopen!")
+        if is_closed and close_fold_number ~= row then
+          pcall(vim.cmd, row .. "foldopen!")
+        else
+          pcall(vim.cmd, row .. "foldopen")
+        end
       end
     end
   end
