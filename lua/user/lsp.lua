@@ -89,31 +89,26 @@ capabilities.textDocument.foldingRange = {
 capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
 Nvim.builtin.lsp = Nvim.builtin.lsp or {}
 Nvim.builtin.lsp.capabilities = capabilities
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "yaml",
-  once = true,
-  callback = function()
-    local schemas = {}
-    local ok_schemastore, schemastore = pcall(require, "schemastore")
-    if ok_schemastore and schemastore.yaml and type(schemastore.yaml.schemas) == "function" then
-      schemas = schemastore.yaml.schemas()
-    end
-    require("lvim.lsp.manager").setup("yamlls", {
-      capabilities = Nvim.builtin.lsp.capabilities,
-      settings = {
-        yaml = {
-          hover = true,
-          completion = true,
-          validate = true,
-          schemaStore = {
-            enable = true,
-            url = "https://www.schemastore.org/api/json/catalog.json",
-          },
-          schemas = schemas,
-        },
-      }
-    })
-  end
+
+local schemas = {}
+local ok_schemastore, schemastore = pcall(require, "schemastore")
+if ok_schemastore and schemastore.yaml and type(schemastore.yaml.schemas) == "function" then
+  schemas = schemastore.yaml.schemas()
+end
+require("lvim.lsp.manager").setup("yamlls", {
+  capabilities = Nvim.builtin.lsp.capabilities,
+  settings = {
+    yaml = {
+      hover = true,
+      completion = true,
+      validate = true,
+      schemaStore = {
+        enable = true,
+        url = "https://www.schemastore.org/api/json/catalog.json",
+      },
+      schemas = schemas,
+    },
+  }
 })
 
 -- NOTE: The TailwindCSS LSP configuration is commented out because it is already included in
