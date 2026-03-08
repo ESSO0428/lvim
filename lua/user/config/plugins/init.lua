@@ -18,6 +18,7 @@ require "user.config.plugins.headline"
 require "user.config.plugins.fold"
 require "user.config.plugins.Narrowing"
 require "user.config.plugins.DiffView"
+require "user.config.plugins.scratch"
 
 require "user.config.plugins.text"
 -- .env file will load by dotenv
