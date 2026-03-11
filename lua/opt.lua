@@ -293,6 +293,18 @@ lvim.builtin.indentlines.active                     = false
 -- delete lvim auto resize
 vim.api.nvim_del_augroup_by_name('_auto_resize')
 
+-- checktime when focus gained, terminal closed or left
+local group = vim.api.nvim_create_augroup("checktime", { clear = true })
+
+vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
+  group = group,
+  callback = function()
+    if vim.bo.buftype ~= "nofile" then
+      vim.cmd("checktime")
+    end
+  end,
+})
+
 -- relationship with gx
 ---@diagnostic disable-next-line: duplicate-set-field
 vim.ui.open = function(url)
