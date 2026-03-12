@@ -293,11 +293,36 @@ lvim.builtin.indentlines.active                     = false
 -- delete lvim auto resize
 vim.api.nvim_del_augroup_by_name('_auto_resize')
 
+-- terminal events
+local term_group = vim.api.nvim_create_augroup("TerminalEvents", { clear = true })
+
+-- trigger User BufferTermOpen when terminal buffer is opened
+vim.api.nvim_create_autocmd("BufLeave", {
+  group = term_group,
+  pattern = "term://*",
+  callback = function(args)
+    vim.api.nvim_exec_autocmds("User", {
+      pattern = "BufTermLeave",
+      modeline = false,
+      data = { bufnr = args.buf }
+    })
+  end,
+})
+
 -- checktime when focus gained, terminal closed or left
 local group = vim.api.nvim_create_augroup("checktime", { clear = true })
 
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
   group = group,
+  callback = function()
+    if vim.bo.buftype ~= "nofile" then
+      vim.cmd("checktime")
+    end
+  end,
+})
+vim.api.nvim_create_autocmd("User", {
+  group = group,
+  pattern = "BufTermLeave", -- 你的自定義事件名稱要放在 pattern
   callback = function()
     if vim.bo.buftype ~= "nofile" then
       vim.cmd("checktime")
