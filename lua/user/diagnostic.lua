@@ -6,6 +6,23 @@ local ns = vim.api.nvim_create_namespace("my_namespace")
 -- Get a reference to the original signs handler
 local orig_signs_handler = vim.diagnostic.handlers.signs
 
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '',
+      [vim.diagnostic.severity.WARN]  = '',
+      [vim.diagnostic.severity.INFO]  = '',
+      [vim.diagnostic.severity.HINT]  = '',
+    },
+    numhl = {
+      [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
+      [vim.diagnostic.severity.WARN]  = 'DiagnosticWarn',
+      [vim.diagnostic.severity.INFO]  = 'DiagnosticInfo',
+      [vim.diagnostic.severity.HINT]  = 'DiagnosticHint',
+    },
+  },
+})
+
 -- Override the built-in signs handler
 vim.diagnostic.handlers.signs = {
   show = function(_, bufnr, _, opts)

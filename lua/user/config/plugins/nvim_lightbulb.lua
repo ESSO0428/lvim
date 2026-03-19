@@ -48,7 +48,7 @@ M.opt = {
   -- Configuration for various handlers:
   -- 1. Sign column.
   sign = {
-    enabled = true,
+    enabled = false,
     -- Text to show in the sign column.
     -- Must be between 1-2 characters.
     text = "💡",
@@ -59,7 +59,7 @@ M.opt = {
 
   -- 2. Virtual text.
   virtual_text = {
-    enabled = false,
+    enabled = true,
     -- Text to show in the virt_text.
     text = "💡",
     lens_text = "🔎",
