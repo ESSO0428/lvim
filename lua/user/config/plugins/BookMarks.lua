@@ -42,7 +42,7 @@ function M.setup()
       ["@t"] = "☑️", -- mark annotation startswith @t ,signs this icon as `Todo`
       ["@w"] = "⚠️", -- mark annotation startswith @w ,signs this icon as `Warn`
       ["@f"] = "⛏", -- mark annotation startswith @f ,signs this icon as `Fix`
-      ["@n"] = "󰍨 ", -- mark annotation startswith @n ,signs this icon as `Note`
+      ["@n"] = "󰍨", -- mark annotation startswith @n ,signs this icon as `Note`
     },
     on_attach = function(bufnr)
       local bm = require "bookmarks"

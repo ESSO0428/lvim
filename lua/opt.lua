@@ -52,7 +52,9 @@ vim.g.clipboard = {
 vim.opt.termguicolors = true
 
 -- signcolumn
-vim.wo.signcolumn = "auto:6"
+vim.opt.numberwidth = 3
+vim.opt.signcolumn = "auto:6"
+vim.opt.foldcolumn = "auto:1"
 
 -- 取消預覽取代結果
 -- vim.o.fileformats = "unix"
