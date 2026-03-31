@@ -145,24 +145,37 @@ local function has_runtime_reopen(view)
   return type(view.restore) == "function" or view.pinned or type(view.open) == "function" or type(view.open) == "string"
 end
 
-local function build_deferred_entry(view)
+local function build_deferred_entries(view)
   if has_runtime_reopen(view) then
-    return nil
+    return {}
   end
 
   if type(view.deferred) ~= "function" then
-    return nil
+    return {}
   end
+
+  local entries = {}
 
   for _, win in ipairs(view.wins or {}) do
     if win:is_valid() then
       local ok, entry = pcall(view.deferred, view, win.win)
       if ok and entry then
-        entry.key = entry.key or view_key(view)
-        return entry
+        if vim.islist(entry) then
+          for _, item in ipairs(entry) do
+            if item then
+              item.key = item.key or view_key(view)
+              table.insert(entries, item)
+            end
+          end
+        else
+          entry.key = entry.key or view_key(view)
+          table.insert(entries, entry)
+        end
       end
     end
   end
+
+  return entries
 end
 
 local function run_deferred(state)
@@ -170,6 +183,63 @@ local function run_deferred(state)
     if type(entry.cmd) == "string" and entry.cmd ~= "" then
       pcall(vim.cmd, entry.cmd)
     end
+  end
+end
+
+local function toggleterm_restore()
+  local ok, toggleterm = pcall(require, "toggleterm")
+  if ok then
+    toggleterm.toggle(0)
+  end
+end
+
+local function trouble_deferred(_, win)
+  local info = vim.w[win].trouble
+  if type(info) ~= "table" or not info.mode then
+    return
+  end
+
+  local parts = {
+    "Trouble",
+    info.mode,
+    "open",
+    "focus=false",
+    "open_no_results=true",
+  }
+
+  if info.type then
+    table.insert(parts, "win.type=" .. info.type)
+  end
+  if info.position then
+    table.insert(parts, "win.position=" .. info.position)
+  end
+  if info.relative then
+    table.insert(parts, "win.relative=" .. info.relative)
+  end
+
+  return { cmd = table.concat(parts, " ") }
+end
+
+local function help_topic_from_win(win)
+  local buf = vim.api.nvim_win_get_buf(win)
+  local name = vim.api.nvim_buf_get_name(buf)
+  if vim.bo[buf].buftype == "help" and name ~= "" then
+    return vim.fn.fnamemodify(name, ":t:r")
+  end
+end
+
+local function help_deferred(_, win)
+  local topic = help_topic_from_win(win)
+  if topic then
+    return { cmd = "help " .. topic }
+  end
+end
+
+local function man_deferred(_, win)
+  local buf = vim.api.nvim_win_get_buf(win)
+  local name = vim.api.nvim_buf_get_name(buf)
+  if vim.bo[buf].buftype == "nofile" and name ~= "" then
+    return { cmd = "Man " .. vim.fn.fnamemodify(name, ":t:r") }
   end
 end
 
@@ -189,8 +259,7 @@ function M.save_tab_state(tab)
         local saved_view_state = get_view_state(view)
         if saved_view_state then
           table.insert(state.panels, saved_view_state)
-          local deferred = build_deferred_entry(view)
-          if deferred then
+          for _, deferred in ipairs(build_deferred_entries(view)) do
             table.insert(state.deferred, deferred)
           end
         end
@@ -453,12 +522,7 @@ M.config = {
     {
       ft = "toggleterm",
       size = { height = 0.4 },
-      restore = function()
-        local ok, toggleterm = pcall(require, "toggleterm")
-        if ok then
-          toggleterm.toggle(0)
-        end
-      end,
+      restore = toggleterm_restore,
       -- exclude floating windows
       filter = function(buf, win)
         return vim.api.nvim_win_get_config(win).relative == ""
@@ -474,32 +538,7 @@ M.config = {
     },
     {
       ft = "Trouble",
-      deferred = function(_, win)
-        local info = vim.w[win].trouble
-        if type(info) ~= "table" or not info.mode then
-          return
-        end
-
-        local parts = {
-          "Trouble",
-          info.mode,
-          "open",
-          "focus=false",
-          "open_no_results=true",
-        }
-
-        if info.type then
-          table.insert(parts, "win.type=" .. info.type)
-        end
-        if info.position then
-          table.insert(parts, "win.position=" .. info.position)
-        end
-        if info.relative then
-          table.insert(parts, "win.relative=" .. info.relative)
-        end
-
-        return { cmd = table.concat(parts, " ") }
-      end,
+      deferred = trouble_deferred,
     },
     -- WARNING: This will break the layout if the qf is used as an edgy bottom
     -- { ft = "qf", title = "QuickFix" },
@@ -510,13 +549,7 @@ M.config = {
       title = function()
         return title_update_based_edgy_status("help", "help", "")
       end,
-      deferred = function(_, win)
-        local buf = vim.api.nvim_win_get_buf(win)
-        local name = vim.api.nvim_buf_get_name(buf)
-        if vim.bo[buf].buftype == "help" and name ~= "" then
-          return { cmd = "help " .. vim.fn.fnamemodify(name, ":t:r") }
-        end
-      end,
+      deferred = help_deferred,
       filter = function(buf)
         return vim.bo[buf].buftype == "help"
       end,
@@ -527,13 +560,7 @@ M.config = {
       title = function()
         return title_update_based_edgy_status("man", "man", "")
       end,
-      deferred = function(_, win)
-        local buf = vim.api.nvim_win_get_buf(win)
-        local name = vim.api.nvim_buf_get_name(buf)
-        if vim.bo[buf].buftype == "nofile" and name ~= "" then
-          return { cmd = "Man " .. vim.fn.fnamemodify(name, ":t:r") }
-        end
-      end,
+      deferred = man_deferred,
     },
     {
       ft = "markdown",
