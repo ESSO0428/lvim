@@ -123,6 +123,14 @@ local function restore_view(view)
   end
 end
 
+local function cleanup_view(view)
+  if type(view.tab_leave_cleanup) == "function" then
+    pcall(view.tab_leave_cleanup, view)
+  elseif type(view.tab_leave_cleanup) == "string" then
+    pcall(vim.cmd, view.tab_leave_cleanup)
+  end
+end
+
 local function find_view(config, panel)
   local edgebar = config.layout[panel.pos]
   if not edgebar then
@@ -272,6 +280,32 @@ function M.save_tab_state(tab)
   vim.api.nvim_tabpage_set_var(tab, "edgy_state", state)
 end
 
+function M.cleanup_tab_views(tab)
+  local ok, config = pcall(require, "edgy.config")
+  if not ok or not config.layout then
+    return
+  end
+
+  tab = tab or vim.api.nvim_get_current_tabpage()
+  if tab ~= vim.api.nvim_get_current_tabpage() then
+    return
+  end
+
+  for _, pos in ipairs({ "left", "right", "bottom", "top" }) do
+    local edgebar = config.layout[pos]
+    if edgebar then
+      for _, view in ipairs(edgebar.views) do
+        for _, win in ipairs(view.wins or {}) do
+          if win:is_valid() then
+            cleanup_view(view)
+            break
+          end
+        end
+      end
+    end
+  end
+end
+
 function M.restore_tab_state(tab)
   local ok, config = pcall(require, "edgy.config")
   if not ok or not config.layout then
@@ -357,6 +391,7 @@ function M.setup_tab_restore()
         return
       end
       M.save_tab_state()
+      M.cleanup_tab_views()
       pcall(require("edgy").close)
     end,
   })
@@ -649,6 +684,7 @@ M.config = {
               end,
               ft = "Outline",
               open = "OutlineOpen!",
+              tab_leave_cleanup = "OutlineClose",
               pinned = true,
               collapsed = false,
             },
