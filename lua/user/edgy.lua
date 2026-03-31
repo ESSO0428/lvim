@@ -472,7 +472,34 @@ M.config = {
         return not vim.b[buf].lazyterm_cmd
       end,
     },
-    "Trouble",
+    {
+      ft = "Trouble",
+      deferred = function(_, win)
+        local info = vim.w[win].trouble
+        if type(info) ~= "table" or not info.mode then
+          return
+        end
+
+        local parts = {
+          "Trouble",
+          info.mode,
+          "open",
+          "focus=false",
+        }
+
+        if info.type then
+          table.insert(parts, "win.type=" .. info.type)
+        end
+        if info.position then
+          table.insert(parts, "win.position=" .. info.position)
+        end
+        if info.relative then
+          table.insert(parts, "win.relative=" .. info.relative)
+        end
+
+        return { cmd = table.concat(parts, " ") }
+      end,
+    },
     -- WARNING: This will break the layout if the qf is used as an edgy bottom
     -- { ft = "qf", title = "QuickFix" },
     {
