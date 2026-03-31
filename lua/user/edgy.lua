@@ -485,6 +485,7 @@ M.config = {
           info.mode,
           "open",
           "focus=false",
+          "open_no_results=true",
         }
 
         if info.type then
