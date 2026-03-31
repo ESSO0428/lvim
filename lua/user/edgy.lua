@@ -1,6 +1,5 @@
 local M = {}
 M.view_side = "left"
-M.tab_states = {}
 
 -- HACK: This is used instead of the suggested configuration for edgy.nvim
 -- We aren't using the qf as an edgy bottom because it would break the layout
@@ -129,7 +128,7 @@ function M.save_tab_state(tab)
     end
   end
 
-  M.tab_states[tab] = state
+  vim.api.nvim_tabpage_set_var(tab, "edgy_state", state)
 end
 
 function M.restore_tab_state(tab)
@@ -139,7 +138,10 @@ function M.restore_tab_state(tab)
   end
 
   tab = tab or vim.api.nvim_get_current_tabpage()
-  local state = M.tab_states[tab]
+  local ok_state, state = pcall(vim.api.nvim_tabpage_get_var, tab, "edgy_state")
+  if not ok_state then
+    return
+  end
   if not state or vim.tbl_isempty(state.views) then
     return
   end
