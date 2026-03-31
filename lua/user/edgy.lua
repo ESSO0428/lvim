@@ -80,6 +80,7 @@ M.init_winbar = function()
   end
 end
 
+-- Tab restore helpers
 local function view_key(view)
   return table.concat({ view.edgebar.pos, view.ft or "", view.get_title() }, "::")
 end
@@ -186,6 +187,7 @@ local function run_deferred(state)
   end
 end
 
+-- View-specific restore hooks
 local function toggleterm_restore()
   local ok, toggleterm = pcall(require, "toggleterm")
   if ok then
