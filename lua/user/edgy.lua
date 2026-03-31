@@ -102,9 +102,75 @@ local function get_view_state(view)
   end
 
   return {
-    open = true,
+    key = view_key(view),
+    pos = view.edgebar.pos,
+    ft = view.ft,
+    title = view.get_title(),
     visible = has_visible_win,
   }
+end
+
+local function restore_view(view)
+  if type(view.restore) == "function" then
+    pcall(view.restore, view)
+  elseif view.pinned then
+    view:open_pinned()
+  elseif type(view.open) == "function" then
+    pcall(view.open)
+  elseif type(view.open) == "string" then
+    pcall(vim.cmd, view.open)
+  end
+end
+
+local function find_view(config, panel)
+  local edgebar = config.layout[panel.pos]
+  if not edgebar then
+    return
+  end
+
+  for _, view in ipairs(edgebar.views) do
+    if view_key(view) == panel.key then
+      return view
+    end
+  end
+
+  for _, view in ipairs(edgebar.views) do
+    if view.ft == panel.ft and view.get_title() == panel.title then
+      return view
+    end
+  end
+end
+
+local function has_runtime_reopen(view)
+  return type(view.restore) == "function" or view.pinned or type(view.open) == "function" or type(view.open) == "string"
+end
+
+local function build_deferred_entry(view)
+  if has_runtime_reopen(view) then
+    return nil
+  end
+
+  if type(view.deferred) ~= "function" then
+    return nil
+  end
+
+  for _, win in ipairs(view.wins or {}) do
+    if win:is_valid() then
+      local ok, entry = pcall(view.deferred, view, win.win)
+      if ok and entry then
+        entry.key = entry.key or view_key(view)
+        return entry
+      end
+    end
+  end
+end
+
+local function run_deferred(state)
+  for _, entry in ipairs(state.deferred or {}) do
+    if type(entry.cmd) == "string" and entry.cmd ~= "" then
+      pcall(vim.cmd, entry.cmd)
+    end
+  end
 end
 
 function M.save_tab_state(tab)
@@ -114,7 +180,7 @@ function M.save_tab_state(tab)
   end
 
   tab = tab or vim.api.nvim_get_current_tabpage()
-  local state = { views = {} }
+  local state = { panels = {}, deferred = {} }
 
   for _, pos in ipairs({ "left", "right", "bottom", "top" }) do
     local edgebar = config.layout[pos]
@@ -122,7 +188,11 @@ function M.save_tab_state(tab)
       for _, view in ipairs(edgebar.views) do
         local saved_view_state = get_view_state(view)
         if saved_view_state then
-          state.views[view_key(view)] = saved_view_state
+          table.insert(state.panels, saved_view_state)
+          local deferred = build_deferred_entry(view)
+          if deferred then
+            table.insert(state.deferred, deferred)
+          end
         end
       end
     end
@@ -142,7 +212,7 @@ function M.restore_tab_state(tab)
   if not ok_state then
     return
   end
-  if not state or vim.tbl_isempty(state.views) then
+  if not state or vim.tbl_isempty(state.panels or {}) then
     return
   end
 
@@ -166,36 +236,26 @@ function M.restore_tab_state(tab)
       return
     end
 
-    for _, pos in ipairs({ "left", "right", "bottom", "top" }) do
-      local edgebar = config.layout[pos]
-      if edgebar then
-        for _, view in ipairs(edgebar.views) do
-          local saved_view_state = state.views[view_key(view)]
-          if saved_view_state and saved_view_state.open then
-            if view.pinned then
-              view:open_pinned()
-            elseif type(view.open) == "function" then
-              pcall(view.open)
-            elseif type(view.open) == "string" then
-              pcall(vim.cmd, view.open)
-            end
-          end
-        end
+    for _, panel in ipairs(state.panels) do
+      local view = find_view(config, panel)
+      if view then
+        restore_view(view)
       end
     end
 
     vim.schedule(function()
-      for _, pos in ipairs({ "left", "right", "bottom", "top" }) do
-        local edgebar = config.layout[pos]
-        if edgebar then
-          for _, view in ipairs(edgebar.views) do
-            local saved_view_state = state.views[view_key(view)]
-            if saved_view_state and not saved_view_state.visible then
-              for _, win in ipairs(view.wins or {}) do
-                if win:is_valid() and win.visible then
-                  win:hide()
-                  break
-                end
+      run_deferred(state)
+    end)
+
+    vim.schedule(function()
+      for _, panel in ipairs(state.panels) do
+        if not panel.visible then
+          local view = find_view(config, panel)
+          if view then
+            for _, win in ipairs(view.wins or {}) do
+              if win:is_valid() and win.visible then
+                win:hide()
+                break
               end
             end
           end
@@ -222,6 +282,9 @@ function M.setup_tab_restore()
   vim.api.nvim_create_autocmd("TabLeave", {
     group = group,
     callback = function()
+      if vim.v.exiting ~= vim.NIL then
+        return
+      end
       M.save_tab_state()
       pcall(require("edgy").close)
     end,
@@ -230,6 +293,9 @@ function M.setup_tab_restore()
   vim.api.nvim_create_autocmd("TabEnter", {
     group = group,
     callback = function()
+      if vim.v.exiting ~= vim.NIL then
+        return
+      end
       M.restore_tab_state()
     end,
   })
@@ -387,6 +453,12 @@ M.config = {
     {
       ft = "toggleterm",
       size = { height = 0.4 },
+      restore = function()
+        local ok, toggleterm = pcall(require, "toggleterm")
+        if ok then
+          toggleterm.toggle(0)
+        end
+      end,
       -- exclude floating windows
       filter = function(buf, win)
         return vim.api.nvim_win_get_config(win).relative == ""
@@ -410,6 +482,13 @@ M.config = {
       title = function()
         return title_update_based_edgy_status("help", "help", "")
       end,
+      deferred = function(_, win)
+        local buf = vim.api.nvim_win_get_buf(win)
+        local name = vim.api.nvim_buf_get_name(buf)
+        if vim.bo[buf].buftype == "help" and name ~= "" then
+          return { cmd = "help " .. vim.fn.fnamemodify(name, ":t:r") }
+        end
+      end,
       filter = function(buf)
         return vim.bo[buf].buftype == "help"
       end,
@@ -419,6 +498,13 @@ M.config = {
       size = { height = 20 },
       title = function()
         return title_update_based_edgy_status("man", "man", "")
+      end,
+      deferred = function(_, win)
+        local buf = vim.api.nvim_win_get_buf(win)
+        local name = vim.api.nvim_buf_get_name(buf)
+        if vim.bo[buf].buftype == "nofile" and name ~= "" then
+          return { cmd = "Man " .. vim.fn.fnamemodify(name, ":t:r") }
+        end
       end,
     },
     {
