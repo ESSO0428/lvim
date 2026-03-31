@@ -1,5 +1,6 @@
 local M = {}
 M.view_side = "left"
+M.tab_states = {}
 
 -- HACK: This is used instead of the suggested configuration for edgy.nvim
 -- We aren't using the qf as an edgy bottom because it would break the layout
@@ -79,6 +80,159 @@ M.init_winbar = function()
     vim.cmd("doautocmd VimResized")
   end
 end
+
+local function view_key(view)
+  return table.concat({ view.edgebar.pos, view.ft or "", view.get_title() }, "::")
+end
+
+local function get_view_state(view)
+  local has_valid_win = false
+  local has_visible_win = false
+
+  for _, win in ipairs(view.wins or {}) do
+    if win:is_valid() then
+      has_valid_win = true
+      if win.visible then
+        has_visible_win = true
+      end
+    end
+  end
+
+  if not has_valid_win then
+    return nil
+  end
+
+  return {
+    open = true,
+    visible = has_visible_win,
+  }
+end
+
+function M.save_tab_state(tab)
+  local ok, config = pcall(require, "edgy.config")
+  if not ok or not config.layout then
+    return
+  end
+
+  tab = tab or vim.api.nvim_get_current_tabpage()
+  local state = { views = {} }
+
+  for _, pos in ipairs({ "left", "right", "bottom", "top" }) do
+    local edgebar = config.layout[pos]
+    if edgebar then
+      for _, view in ipairs(edgebar.views) do
+        local saved_view_state = get_view_state(view)
+        if saved_view_state then
+          state.views[view_key(view)] = saved_view_state
+        end
+      end
+    end
+  end
+
+  M.tab_states[tab] = state
+end
+
+function M.restore_tab_state(tab)
+  local ok, config = pcall(require, "edgy.config")
+  if not ok or not config.layout then
+    return
+  end
+
+  tab = tab or vim.api.nvim_get_current_tabpage()
+  local state = M.tab_states[tab]
+  if not state or vim.tbl_isempty(state.views) then
+    return
+  end
+
+  local target_win = vim.api.nvim_get_current_win()
+  local target_is_edgy = false
+  if vim.api.nvim_win_is_valid(target_win) then
+    local target_buf = vim.api.nvim_win_get_buf(target_win)
+    target_is_edgy = vim.bo[target_buf].filetype == "edgy"
+  end
+
+  if target_is_edgy then
+    local ok_editor, editor = pcall(require, "edgy.editor")
+    if ok_editor then
+      editor:goto_main()
+      target_win = vim.api.nvim_get_current_win()
+    end
+  end
+
+  vim.schedule(function()
+    if not vim.api.nvim_tabpage_is_valid(tab) or tab ~= vim.api.nvim_get_current_tabpage() then
+      return
+    end
+
+    for _, pos in ipairs({ "left", "right", "bottom", "top" }) do
+      local edgebar = config.layout[pos]
+      if edgebar then
+        for _, view in ipairs(edgebar.views) do
+          local saved_view_state = state.views[view_key(view)]
+          if saved_view_state and saved_view_state.open then
+            if view.pinned then
+              view:open_pinned()
+            elseif type(view.open) == "function" then
+              pcall(view.open)
+            elseif type(view.open) == "string" then
+              pcall(vim.cmd, view.open)
+            end
+          end
+        end
+      end
+    end
+
+    vim.schedule(function()
+      for _, pos in ipairs({ "left", "right", "bottom", "top" }) do
+        local edgebar = config.layout[pos]
+        if edgebar then
+          for _, view in ipairs(edgebar.views) do
+            local saved_view_state = state.views[view_key(view)]
+            if saved_view_state and not saved_view_state.visible then
+              for _, win in ipairs(view.wins or {}) do
+                if win:is_valid() and win.visible then
+                  win:hide()
+                  break
+                end
+              end
+            end
+          end
+        end
+      end
+    end)
+
+    vim.schedule(function()
+      if vim.api.nvim_win_is_valid(target_win) then
+        vim.api.nvim_set_current_win(target_win)
+      else
+        local ok_editor, editor = pcall(require, "edgy.editor")
+        if ok_editor then
+          editor:goto_main()
+        end
+      end
+    end)
+  end)
+end
+
+function M.setup_tab_restore()
+  local group = vim.api.nvim_create_augroup("user_edgy_tab_restore", { clear = true })
+
+  vim.api.nvim_create_autocmd("TabLeave", {
+    group = group,
+    callback = function()
+      M.save_tab_state()
+      pcall(require("edgy").close)
+    end,
+  })
+
+  vim.api.nvim_create_autocmd("TabEnter", {
+    group = group,
+    callback = function()
+      M.restore_tab_state()
+    end,
+  })
+end
+
 M.config = {
   ---@type table<Edgy.Pos, {size:integer | fun():integer, wo?:vim.wo}>
   options = {
@@ -349,7 +503,7 @@ M.config = {
                 return "Outline"
               end,
               ft = "Outline",
-              open = "OutlineOpen",
+              open = "OutlineOpen!",
               pinned = true,
               collapsed = false,
             },
@@ -389,6 +543,7 @@ if edgy_ok then
   for _, ft in ipairs(restricted_fts) do
     require("user.config.plugins.floatwindow").restricted_fts_set[ft] = true
   end
+  M.setup_tab_restore()
 end
 
 
