@@ -1020,14 +1020,15 @@ end
 function Nvim.DAPUI.with_layout_handling_when_dapui_open(fn)
   return function(...)
     local dapui_scope_found = Nvim.Buffer_check.is_current_tab_filetype_win_exists("dapui_scopes")
-    local current_side = require("user.edgy").view_side
+    local edgy_ok, edgy = pcall(require, "user.edgy")
+    local current_side = edgy_ok and edgy.view_side or "left"
     -- local current_side = vim.builtin.nvimtree.setup.view.side
     local new_side = dapui_scope_found and "right" or "left"
 
     -- Pre-execution layout handling
-    if current_side ~= new_side then
-      require("user.edgy").view_side = new_side
-      require("user.edgy").swap_layouts()
+    if edgy_ok and current_side ~= new_side then
+      edgy.view_side = new_side
+      pcall(edgy.swap_layouts)
     end
 
     -- Execute the wrapped function

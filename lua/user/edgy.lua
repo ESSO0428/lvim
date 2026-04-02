@@ -54,6 +54,7 @@ end
 
 M.title_memory = {
   help = "help",
+  man = "man",
   CopilotChat = "CopilotChat"
 }
 
@@ -67,7 +68,7 @@ local title_update_based_edgy_status = function(title_name, buftype, filetype)
     vim.b.edgy_winbar_title = title_name
     M.title_memory[title_name] = title
   end
-  return M.title_memory[title_name]
+  return M.title_memory[title_name] or title_name
 end
 
 M.init_winbar = function()
@@ -701,11 +702,10 @@ M.config = {
   } ---@type (Edgy.View.Opts|string)[]
 }
 
-local edgy_ok, edgy = pcall(require, "edgy")
-if edgy_ok then
+function M.setup()
+  local edgy = require("edgy")
   edgy.setup(M.config)
 
-  -- print(lvim.builtion.nvimtree.active)
   local restricted_fts = {}
   local regions = { "bottom", "left", "right", "top" }
 
@@ -721,28 +721,45 @@ if edgy_ok then
   end
 
   -- **優化：改用 table 來存儲 ft，提升查找速度**
-  for _, ft in ipairs(restricted_fts) do
-    require("user.config.plugins.floatwindow").restricted_fts_set[ft] = true
+  local ok_floatwindow, floatwindow = pcall(require, "user.config.plugins.floatwindow")
+  if ok_floatwindow and type(floatwindow.restricted_fts_set) == "table" then
+    for _, ft in ipairs(restricted_fts) do
+      floatwindow.restricted_fts_set[ft] = true
+    end
   end
+
   M.setup_tab_restore()
 end
 
 
 -- Function to swap left and right layouts
 function M.swap_layouts()
-  -- NOTE: reload the plugin
-  local plugin = require("lazy.core.config").plugins["edgy.nvim"]
-  require("lazy.core.loader").reload(plugin)
-
-  -- Store the left and right layouts temporarily
-  local config = require("user.edgy").config
+  local config = M.config
 
   -- Swap the layouts
   config.left, config.right = config.right, config.left
   config.options.left, config.options.right = config.options.right, config.options.left
 
+  if not package.loaded["edgy"] then
+    return false
+  end
+
+  local ok_lazy_config, lazy_config = pcall(require, "lazy.core.config")
+  local ok_lazy_loader, lazy_loader = pcall(require, "lazy.core.loader")
+  local ok_edgy, edgy = pcall(require, "edgy")
+  if not (ok_lazy_config and ok_lazy_loader and ok_edgy) then
+    return false
+  end
+
+  -- NOTE: reload the plugin
+  local plugin = lazy_config.plugins["edgy.nvim"]
+  if plugin then
+    lazy_loader.reload(plugin)
+  end
+
   -- Reload the Edgy plugin with the updated configuration
-  require("edgy").setup(config)
+  edgy.setup(config)
+  return true
 end
 
 return M
