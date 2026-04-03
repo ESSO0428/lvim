@@ -89,22 +89,56 @@ local function open_scratch_manager()
     local preview_width = math.min(max_preview_width, math.max(20, right_space))
     preview_col = math.max(0, math.min(preview_col, vim.o.columns - preview_width - 2))
 
-    local preview_height = math.min(math.max(manager_height, 12), math.max(6, vim.o.lines - 4))
+    local max_preview_height = math.max(8, vim.o.lines - 4)
+    local desired_preview_height = math.max(manager_height + 6, math.floor(vim.o.lines * 0.7))
+    local preview_height = math.min(desired_preview_height, max_preview_height)
     local preview_row = math.max(0, math.min(manager_row, vim.o.lines - preview_height - 2))
 
     return {
       style = "scratch",
-      file = nil,
-      ft = nil,
+      buf = nil,
       position = "float",
       enter = false,
-      focusable = false,
+      focusable = true,
       footer_keys = false,
       width = preview_width,
       height = preview_height,
       row = preview_row,
       col = preview_col,
     }
+  end
+
+  local function ensure_preview_buffer(scratch)
+    local preview_buf = vim.fn.bufadd(scratch.file)
+    if not vim.api.nvim_buf_is_loaded(preview_buf) then
+      vim.fn.bufload(preview_buf)
+    end
+
+    vim.bo[preview_buf].buftype = ""
+    vim.bo[preview_buf].bufhidden = "hide"
+    vim.bo[preview_buf].buflisted = false
+    vim.bo[preview_buf].swapfile = false
+    vim.bo[preview_buf].modifiable = true
+    vim.bo[preview_buf].readonly = false
+    if scratch.ft and scratch.ft ~= "" then
+      vim.bo[preview_buf].filetype = scratch.ft
+    end
+
+    if not vim.b[preview_buf].snacks_scratch_preview_autowrite then
+      vim.b[preview_buf].snacks_scratch_preview_autowrite = true
+      vim.api.nvim_create_autocmd("BufHidden", {
+        group = vim.api.nvim_create_augroup("snacks_scratch_preview_autowrite_" .. preview_buf, { clear = true }),
+        buffer = preview_buf,
+        callback = function(ev)
+          vim.api.nvim_buf_call(ev.buf, function()
+            vim.cmd("silent! write")
+            vim.bo[ev.buf].buflisted = false
+          end)
+        end,
+      })
+    end
+
+    return preview_buf
   end
 
   local function update_preview()
@@ -125,10 +159,24 @@ local function open_scratch_manager()
     close_preview()
     preview_file = scratch.file
     local opts = preview_win_opts()
-    opts.file = scratch.file
-    opts.ft = scratch.ft
+    opts.buf = ensure_preview_buffer(scratch)
     opts.title = string.format(" Scratch Preview: %s [%s] ", scratch.name or "Scratch", scratch.ft or "txt")
     preview_win = Snacks.win(opts):show()
+  end
+
+  local function scroll_preview(preview_keys, fallback_keys)
+    local target_win = preview_win and preview_win:valid() and preview_win.win or nil
+    local keys = preview_keys
+
+    if not (target_win and vim.api.nvim_win_is_valid(target_win)) then
+      target_win = win
+      keys = fallback_keys or preview_keys
+    end
+
+    local termcodes = vim.api.nvim_replace_termcodes(keys, true, false, true)
+    vim.api.nvim_win_call(target_win, function()
+      vim.cmd.normal({ bang = true, args = { termcodes } })
+    end)
   end
 
   local original_entries = {}
@@ -319,6 +367,14 @@ local function open_scratch_manager()
     end
   end, { buffer = buf, desc = "Toggle Scratch Preview" })
 
+  vim.keymap.set("n", "<C-u>", function()
+    scroll_preview("<C-u>")
+  end, { buffer = buf, desc = "Scroll Preview Up" })
+
+  vim.keymap.set("n", "<C-o>", function()
+    scroll_preview("<C-d>", "<C-o>")
+  end, { buffer = buf, desc = "Scroll Preview Down" })
+
   vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI", "TextChanged", "TextChangedI" }, {
     buffer = buf,
     callback = update_preview,
@@ -382,12 +438,20 @@ local function open_scratch_manager()
   vim.keymap.set("n", "q", close_ui, { buffer = buf, desc = "Close" })
   vim.keymap.set("n", "<Esc>", close_ui, { buffer = buf, desc = "Close" })
 
-  vim.api.nvim_create_autocmd("BufLeave", {
+  vim.api.nvim_create_autocmd("WinClosed", {
+    pattern = tostring(win),
+    once = true,
+    callback = function()
+      preview_enabled = false
+      close_preview()
+    end,
+  })
+
+  vim.api.nvim_create_autocmd("BufWipeout", {
     buffer = buf,
     callback = function()
       preview_enabled = false
       close_preview()
-      vim.bo[buf].modified = false
     end
   })
 end
@@ -416,28 +480,28 @@ lvim.keys.normal_mode["<leader>r."] = {
 
 lvim.keys.normal_mode["<leader>."] = {
   function()
-      local function prompt_key(lines)
-        vim.cmd("redraw!")
-        return Nvim.Menu.menu_getkeys(lines)
-      end
+    local function prompt_key(lines)
+      vim.cmd("redraw!")
+      return Nvim.Menu.menu_getkeys(lines)
+    end
 
-      local function prompt_text(prompt, default)
-        vim.cmd("redraw!")
-        local value = vim.fn.input(prompt, default or "")
-        vim.cmd("redraw!")
-        return vim.trim(value)
-      end
+    local function prompt_text(prompt, default)
+      vim.cmd("redraw!")
+      local value = vim.fn.input(prompt, default or "")
+      vim.cmd("redraw!")
+      return vim.trim(value)
+    end
 
-      local lines = {
-        "Scratch Command:",
-        "----------------------------------",
-        "  .   → note to current",
-        "  d   → TODO scratch to current",
-        "  <   → quick note (float)",
-        "  w   → manage scratches UI",
-        "  i/j/k/l → top/bottom/left/right",
-        "  n/<CR> → new scratch",
-        "  q → cancel",
+    local lines = {
+      "Scratch Command:",
+      "----------------------------------",
+      "  .   → note to current",
+      "  d   → NOTE scratch to current",
+      "  <   → quick note (float)",
+      "  w   → manage scratches UI",
+      "  i/j/k/l → top/bottom/left/right",
+      "  n/<CR> → new scratch",
+      "  q → cancel",
       "----------------------------------",
       "Press key: ",
     }
@@ -459,7 +523,7 @@ lvim.keys.normal_mode["<leader>."] = {
 
     if cmd == "d" then
       Snacks.scratch.open({
-        name = "TODO",
+        name = "NOTE",
         ft = "markdown",
         win = { position = "float" },
       })
