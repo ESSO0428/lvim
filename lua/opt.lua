@@ -190,9 +190,8 @@ end
 
 GetServerHostName(host)
 
-vim.cmd('source $HOME/.config/lvim/vim/ssh_command.vim')
-vim.cmd('source $HOME/.config/lvim/keymap.vim')
-
+vim.cmd("source " .. vim.fn.stdpath("config") .. "/vim/ssh_command.vim")
+vim.cmd("source " .. vim.fn.stdpath("config") .. "/keymap.vim")
 
 
 -- 排除當前使用者或 Andy6, andy6 使用者目錄下的 home 目錄，避免遞迴讀取 home 目錄底下的所有使用者目錄 (root 除外)

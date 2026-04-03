@@ -21,7 +21,38 @@ return {
           underline = true,
         },
       },
-
+      picker = {
+        sources = {
+          explorer = {
+            actions = {
+              grep_in_dir = function(picker, item)
+                local dir = item.dir and item.file or vim.fn.fnamemodify(item.file, ":h")
+                Snacks.picker.grep({
+                  dirs = { dir },
+                  title = "Grep in: " .. vim.fn.fnamemodify(dir, ":t"),
+                  hidden = true,
+                })
+              end,
+              find_files_in_dir = function(picker, item)
+                local dir = item.dir and item.file or vim.fn.fnamemodify(item.file, ":h")
+                Snacks.picker.files({
+                  dirs = { dir },
+                  title = "Find Files in: " .. vim.fn.fnamemodify(dir, ":t"),
+                  hidden = true,
+                })
+              end,
+            },
+            win = {
+              list = {
+                keys = {
+                  ["<leader>sg"] = "grep_in_dir",
+                  ["<leader>sf"] = "find_files_in_dir",
+                },
+              },
+            },
+          },
+        },
+      },
     },
   },
   {

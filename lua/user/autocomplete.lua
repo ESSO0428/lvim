@@ -79,7 +79,7 @@ vim.api.nvim_create_autocmd("InsertEnter", {
 
 lvim.builtin.cmp.enabled = function()
   local filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-  if filetype == "neo-tree-popup" or filetype == "prompt" or filetype == "TelescopePrompt" then
+  if filetype == "neo-tree-popup" or filetype == "prompt" or filetype == "TelescopePrompt" or filetype == "snacks_picker_input" then
     return false or require("cmp_dap").is_dap_buffer()
   end
   return lvim.builtin.cmp.active
