@@ -242,11 +242,11 @@ lvim.builtin.which_key.mappings.u.o = { "<cmd>Neogen<cr>", "Document Generate" }
 
 -- NOTE: telescope custom finders
 lvim.builtin.which_key.mappings.U.F = {
-  "<cmd>lua require('lvim.core.telescope.custom-finders').find_Lazy_pack_files()<cr>",
+  lvim_core_telescope_custom_finders_find_Lazy_pack_files,
   "Find Lazy pack files",
 }
 lvim.builtin.which_key.mappings.U.G = {
-  "<cmd>lua require('lvim.core.telescope.custom-finders').grep_Lazy_pack_files()<cr>",
+  lvim_core_telescope_custom_finders_grep_Lazy_pack_files,
   "Grep Lazy pack files",
 }
 

@@ -1,7 +1,6 @@
 -- import the integrated WindowsTerminal module
 local windows_terminal = require("user.integrated.WindowsTerminal")
 
-
 -- lvim.keys.normal_mode["<a-q>"] = { "<cmd>copen<cr>" }
 lvim.keys.normal_mode["<a-q>"] = { Nvim.Quickfix.open_quickfix_safety, desc = "Open Quickfix at bottom-right" }
 lvim.keys.normal_mode["<c-q>"] = { Nvim.Quickfix.toggle_quickfix_safety, desc = "Toggle Quickfix at bottom-right" }
@@ -27,12 +26,11 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 
-lvim.keys.normal_mode['<leader>rc'] = "<cmd>e $HOME/.config/lvim/config.lua<cr>"
-lvim.keys.normal_mode['<leader>rb'] = "<cmd>e $HOME/.bashrc<cr>"
+lvim.keys.normal_mode['<leader>rc']    = "<cmd>e $HOME/.config/lvim/config.lua<cr>"
+lvim.keys.normal_mode['<leader>rb']    = "<cmd>e $HOME/.bashrc<cr>"
 
 -- bind the function to the <leader>rw keybinding
-lvim.keys.normal_mode['<leader>rw'] = windows_terminal.find_and_edit_terminal_settings
-
+lvim.keys.normal_mode['<leader>rw']    = windows_terminal.find_and_edit_terminal_settings
 
 lvim.keys.normal_mode['<leader>rt']    = "<cmd>ToggleTermSendCurrentLine<cr>"
 lvim.keys.visual_mode['<leader>rt']    = { ":ToggleTermSendVisualLines", silent = false }
@@ -132,16 +130,15 @@ function Vscode_like_foldLevel_enhance(n)
   end
 end
 
-lvim.keys.normal_mode[']1'] = { "<cmd>lua Vscode_like_foldLevel_enhance(1)<cr>" }
-lvim.keys.normal_mode[']2'] = { "<cmd>lua Vscode_like_foldLevel_enhance(2)<cr>" }
-lvim.keys.normal_mode[']3'] = { "<cmd>lua Vscode_like_foldLevel_enhance(3)<cr>" }
-lvim.keys.normal_mode[']4'] = { "<cmd>lua Vscode_like_foldLevel_enhance(4)<cr>" }
-lvim.keys.normal_mode[']5'] = { "<cmd>lua Vscode_like_foldLevel_enhance(5)<cr>" }
-lvim.keys.normal_mode[']6'] = { "<cmd>lua Vscode_like_foldLevel_enhance(6)<cr>" }
-lvim.keys.normal_mode[']7'] = { "<cmd>lua Vscode_like_foldLevel_enhance(7)<cr>" }
-lvim.keys.normal_mode[']8'] = { "<cmd>lua Vscode_like_foldLevel_enhance(8)<cr>" }
-lvim.keys.normal_mode[']9'] = { "<cmd>lua Vscode_like_foldLevel_enhance(9)<cr>" }
-
+lvim.keys.normal_mode[']1']            = { "<cmd>lua Vscode_like_foldLevel_enhance(1)<cr>" }
+lvim.keys.normal_mode[']2']            = { "<cmd>lua Vscode_like_foldLevel_enhance(2)<cr>" }
+lvim.keys.normal_mode[']3']            = { "<cmd>lua Vscode_like_foldLevel_enhance(3)<cr>" }
+lvim.keys.normal_mode[']4']            = { "<cmd>lua Vscode_like_foldLevel_enhance(4)<cr>" }
+lvim.keys.normal_mode[']5']            = { "<cmd>lua Vscode_like_foldLevel_enhance(5)<cr>" }
+lvim.keys.normal_mode[']6']            = { "<cmd>lua Vscode_like_foldLevel_enhance(6)<cr>" }
+lvim.keys.normal_mode[']7']            = { "<cmd>lua Vscode_like_foldLevel_enhance(7)<cr>" }
+lvim.keys.normal_mode[']8']            = { "<cmd>lua Vscode_like_foldLevel_enhance(8)<cr>" }
+lvim.keys.normal_mode[']9']            = { "<cmd>lua Vscode_like_foldLevel_enhance(9)<cr>" }
 
 -- lvim.keys.visual_mode['<leader>Od'] = "zo"
 
@@ -167,8 +164,8 @@ lvim.keys.normal_mode["<a-k>"]         = "<c-d>"
 lvim.builtin.which_key.mappings.b.k    = { "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directory" }
 lvim.keys.normal_mode["<a-i>"]         = "<c-u>"
 lvim.builtin.which_key.mappings.b.i    = { "<cmd>BufferLinePickClose<cr>", "Close Buffer" }
-lvim.keys.normal_mode["<a-g>"]         = { ":BufferLineGroupToggle", silent = false }
-lvim.keys.normal_mode["<leader><a-g>"] = { ":BufferLineGroupClose", silent = false }
+lvim.keys.normal_mode["<a-g>"]         = { ":BufferLineGroupToggle ", silent = false }
+lvim.keys.normal_mode["<leader><a-g>"] = { ":BufferLineGroupClose ", silent = false }
 lvim.keys.normal_mode["<leader><a-i>"] = "<cmd>BufferLineTogglePin<cr>"
 -- lvim.keys.normal_mode["<c-w>"]         = "<cmd>BufferKill<cr>"
 lvim.keys.normal_mode["<c-w>"]         = "<cmd>BufferLineKill<cr>"
@@ -203,15 +200,11 @@ lvim.keys.normal_mode["<a-`>"]           = "<cmd>b#<cr>"
 -- vim.keymap.set('n', '<leader>ef', '<cmd>IronFocus<cr>')
 -- vim.keymap.set('n', '<leader>eh', '<cmd>IronHide<cr>')
 
--- lvim.keys.normal_mode["<S-l>"] = "<cmd>BufferLineCycleNext<cr>"
--- lvim.keys.normal_mode["<S-h>"] = "<cmd>BufferLineCyclePrev<cr>"
-
 lvim.keys.normal_mode["<A-BS>"]          = "<cmd>cd ../<cr>"
 lvim.keys.normal_mode["<leader><A-BS>"]  = "<cmd>cd %:p:h <cr>"
 lvim.keys.normal_mode["<leader>r<A-BS>"] = "<cmd>execute ':cd ' . g:WorkDirectoryPath<cr>"
 lvim.keys.normal_mode['<leader>se']      = { '<cmd>SessionManager load_session<cr>' }
--- lvim.keys.normal_mode['<leader>f']      = { '<Plug>(leap-forward)' }
--- lvim.keys.normal_mode['<leader>F']      = { '<Plug>(leap-backward)' }
+
 lvim.keys.normal_mode["<M-n>"]           = { "<cmd>lua require('illuminate').goto_next_reference(wrap)<cr>" }
 lvim.keys.normal_mode["<M-N>"]           = { "<cmd>lua require('illuminate').goto_prev_reference(wrap)<cr>" }
 

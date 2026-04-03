@@ -2,10 +2,10 @@ local _, themes = pcall(require, "telescope.themes")
 local _, builtin = pcall(require, "telescope.builtin")
 local actions = require("lvim.utils.modules").require_on_exported_call "telescope.actions"
 local action_layout = require("lvim.utils.modules").require_on_exported_call "telescope.actions.layout"
-local state = require("telescope.state")
-local action_state = require("telescope.actions.state")
 
 local slow_scroll = function(prompt_bufnr, direction)
+  local state = require("telescope.state")
+  local action_state = require("telescope.actions.state")
   local previewer = action_state.get_current_picker(prompt_bufnr).previewer
   local status = state.get_status(prompt_bufnr)
 
@@ -39,7 +39,7 @@ lvim.builtin.telescope.pickers.live_grep.additional_args = function(args)
   return vim.list_extend(args,
     { "--hidden", "--no-ignore" })
 end
-require("lvim.core.telescope.custom-finders").find_Lazy_pack_files = function(opts)
+lvim_core_telescope_custom_finders_find_Lazy_pack_files = function(opts)
   opts = opts or {}
   local theme_opts = themes.get_ivy {
     sorting_strategy = "ascending",
@@ -53,7 +53,7 @@ require("lvim.core.telescope.custom-finders").find_Lazy_pack_files = function(op
   builtin.find_files(opts)
 end
 
-require("lvim.core.telescope.custom-finders").grep_Lazy_pack_files = function(opts)
+lvim_core_telescope_custom_finders_grep_Lazy_pack_files = function(opts)
   opts = opts or {}
   local theme_opts = themes.get_ivy {
     sorting_strategy = "ascending",
@@ -329,14 +329,19 @@ end
 
 lvim.keys.normal_mode['<c-p>'] = "<cmd>Telescope command_palette<cr>"
 
-local lga_actions = require("telescope-live-grep-args.actions")
 lvim.builtin.telescope.extensions.live_grep_args = {
   auto_quoting = true, -- enable/disable auto-quoting
   -- define mappings, e.g.
-  mappings = {         -- extend mappings
-    ["i"] = {
-      ["<M-u>"] = lga_actions.quote_prompt({ postfix = ' -t' }),
-      ["<M-o>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+  mappings = {
+    i = {
+      ["<M-u>"] = function(prompt_bufnr)
+        local action = require("telescope-live-grep-args.actions").quote_prompt { postfix = " -t" }
+        return action(prompt_bufnr)
+      end,
+      ["<M-o>"] = function(prompt_bufnr)
+        local action = require("telescope-live-grep-args.actions").quote_prompt { postfix = " --iglob " }
+        return action(prompt_bufnr)
+      end,
     },
   },
   -- ... also accepts theme settings, for example:
@@ -407,44 +412,32 @@ lvim.keys.normal_mode["_"]             = "<cmd>lua require('harpoon.ui').nav_pre
 lvim.keys.normal_mode["+"]             = "<cmd>lua require('harpoon.ui').nav_next()<cr>"
 
 
-lvim.builtin.which_key.mappings.b["["]              = { "<cmd>BufferLineCloseLeft<cr>", "Close all to the left" }
-lvim.builtin.which_key.mappings.b["]"]              = { "<cmd>BufferLineCloseRight<cr>", "Close all to the Right" }
+lvim.builtin.which_key.mappings.b["["]                 = { "<cmd>BufferLineCloseLeft<cr>", "Close all to the left" }
+lvim.builtin.which_key.mappings.b["]"]                 = { "<cmd>BufferLineCloseRight<cr>", "Close all to the Right" }
 -- lvim.keys.normal_mode["<c-p>"] = '<cmd>lua require("lvim.core.telescope.custom-finders").find_project_files { previewer = true }<cr>'
 
 -- install chafa for img preview
-lvim.builtin.which_key.mappings.s["m"]              = {
+lvim.builtin.which_key.mappings.s["m"]                 = {
   "<cmd>lua require('telescope').extensions.media_files.media_files()<cr>",
   "Find Image" }
-lvim.builtin.telescope.defaults.mappings.i["<c-u>"] = function(bufnr) slow_scroll(bufnr, -1) end
-lvim.builtin.telescope.defaults.mappings.i["<c-o>"] = function(bufnr) slow_scroll(bufnr, 1) end
-lvim.builtin.telescope.defaults.mappings.i["<c-j>"] = actions.preview_scrolling_left
-lvim.builtin.telescope.defaults.mappings.i["<c-l>"] = actions.preview_scrolling_right
-lvim.builtin.telescope.defaults.mappings.n["<c-u>"] = function(bufnr) slow_scroll(bufnr, -1) end
-lvim.builtin.telescope.defaults.mappings.n["<c-o>"] = function(bufnr) slow_scroll(bufnr, 1) end
-lvim.builtin.telescope.defaults.mappings.n["<c-j>"] = actions.preview_scrolling_left
-lvim.builtin.telescope.defaults.mappings.n["<c-l>"] = actions.preview_scrolling_right
+lvim.builtin.telescope.defaults.mappings.i["<c-u>"]    = function(bufnr) slow_scroll(bufnr, -1) end
+lvim.builtin.telescope.defaults.mappings.i["<c-o>"]    = function(bufnr) slow_scroll(bufnr, 1) end
+lvim.builtin.telescope.defaults.mappings.i["<c-j>"]    = actions.preview_scrolling_left
+lvim.builtin.telescope.defaults.mappings.i["<c-l>"]    = actions.preview_scrolling_right
+lvim.builtin.telescope.defaults.mappings.n["<c-u>"]    = function(bufnr) slow_scroll(bufnr, -1) end
+lvim.builtin.telescope.defaults.mappings.n["<c-o>"]    = function(bufnr) slow_scroll(bufnr, 1) end
+lvim.builtin.telescope.defaults.mappings.n["<c-j>"]    = actions.preview_scrolling_left
+lvim.builtin.telescope.defaults.mappings.n["<c-l>"]    = actions.preview_scrolling_right
 
 -- source : https://github.com/nvim-telescope/telescope.nvim/issues/623#issuecomment-792233601
-local previewers                                    = require('telescope.previewers')
-local previewers_utils                              = require('telescope.previewers.utils')
--- local ns_previewer = vim.api.nvim_create_namespace "telescope.previewers"
--- local jump_to_line = function(self, bufnr, lnum)
---   pcall(vim.api.nvim_buf_clear_namespace, bufnr, ns_previewer, 0, -1)
---   if lnum and lnum > 0 then
---     pcall(vim.api.nvim_buf_add_highlight, bufnr, ns_previewer, "TelescopePreviewLine", lnum - 1, 0, -1)
---     pcall(vim.api.nvim_win_set_cursor, self.state.winid, { lnum, 0 })
---     vim.api.nvim_buf_call(bufnr, function()
---       vim.cmd "norm! zz"
---     end)
---   end
--- end
+local truncate_large_files                             = function(filepath, bufnr, opts)
+  local previewers       = require('telescope.previewers')
+  local previewers_utils = require('telescope.previewers.utils')
 
+  local max_size         = 500000
+  opts                   = opts or {}
 
-local max_size = 500000
-local truncate_large_files = function(filepath, bufnr, opts)
-  opts = opts or {}
-
-  filepath = vim.fn.expand(filepath)
+  filepath               = vim.fn.expand(filepath)
   vim.loop.fs_stat(filepath, function(_, stat)
     if not stat then return end
     if stat.size > max_size then
@@ -456,96 +449,4 @@ local truncate_large_files = function(filepath, bufnr, opts)
   end)
 end
 
---[[
-local buffer_previewer = previewers.new_buffer_previewer({
-  define_preview = function(self, entry, _)
-    -- If using :Telescope buffers, entry.bufnr is the source buffer
-    local truncated_lines = {}
-    local src_filetype = ""
-    if entry.bufnr and vim.api.nvim_buf_is_loaded(entry.bufnr) then
-      -- We need to read line by line to avoid loading the entire large buffer into memory
-      local line_count = vim.api.nvim_buf_line_count(entry.bufnr)
-      local total_bytes = 0
-
-      for i = 1, line_count do
-        local line = vim.api.nvim_buf_get_lines(entry.bufnr, i - 1, i, false)[1]
-        if not line then
-          break
-        end
-
-        -- +1 means including the newline character in the byte count
-        local line_bytes = #line + 1
-
-        -- If adding this line exceeds max_size, only take the remaining bytes and add a notice
-        if total_bytes + line_bytes > max_size then
-          local remaining = max_size - total_bytes
-          if remaining > 1 then
-            -- Only include the usable portion of the line (subtract 1 for newline)
-            table.insert(truncated_lines, line:sub(1, remaining - 1))
-          end
-          table.insert(truncated_lines, "[... TRUNCATED ...]")
-          break
-        else
-          table.insert(truncated_lines, line)
-          total_bytes = total_bytes + line_bytes
-        end
-      end
-
-      -- Write the truncated content to the preview buffer (self.state.bufnr)
-      vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, truncated_lines)
-
-      src_filetype = vim.api.nvim_get_option_value("filetype", { buf = entry.bufnr })
-      vim.api.nvim_set_option_value("filetype", src_filetype, { buf = self.state.bufnr })
-      pcall(function()
-        vim.api.nvim_command("setlocal foldmethod=expr")
-        vim.api.nvim_command("setlocal foldexpr=nvim_treesitter#foldexpr()")
-        vim.schedule(function()
-          jump_to_line(self, self.state.bufnr, entry.lnum)
-        end)
-      end)
-    else
-      -- In case the source buffer doesn't exist, use fallback, e.g. display file or show a notice
-      -- truncate_large_files(entry.filename, self.state.bufnr)
-      local filepath = entry.filename
-      filepath = vim.fn.expand(filepath)
-
-      if filepath == "" or not vim.loop.fs_stat(filepath) then
-        table.insert(truncated_lines, "[File Not Found]")
-      else
-        src_filetype = vim.filetype.match({ filename = filepath })
-        vim.loop.fs_stat(filepath, function(_, stat)
-          if not stat then
-            table.insert(truncated_lines, "[File Not Found]")
-          elseif stat.size > max_size then
-            -- **File is too large, only reading `max_size` bytes**
-            local cmd = { "head", "-c", tostring(max_size), filepath }
-            local handle = io.popen(table.concat(cmd, " "))
-            local content = handle:read("*a")
-            handle:close()
-
-            -- Process content
-            for line in content:gmatch("[^\r\n]+") do
-              table.insert(truncated_lines, line)
-            end
-            table.insert(truncated_lines, "[... TRUNCATED ...]")
-          else
-            -- **File is smaller than `max_size`, reading entire content**
-            for line in io.lines(filepath) do
-              table.insert(truncated_lines, line)
-            end
-          end
-
-          -- **Write to buffer**
-          vim.schedule(function()
-            vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, truncated_lines)
-            vim.api.nvim_set_option_value("filetype", src_filetype, { buf = self.state.bufnr })
-            jump_to_line(self, self.state.bufnr, entry.lnum)
-          end)
-        end)
-      end
-    end
-  end,
-})
-lvim.builtin.telescope.pickers.buffers.previewer = buffer_previewer
---]]
 lvim.builtin.telescope.defaults.buffer_previewer_maker = truncate_large_files
