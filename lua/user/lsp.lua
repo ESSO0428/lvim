@@ -81,34 +81,72 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.foldingRange = {
-  dynamicRegistration = false,
-  lineFoldingOnly = true,
-}
-capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
 Nvim.builtin.lsp = Nvim.builtin.lsp or {}
-Nvim.builtin.lsp.capabilities = capabilities
 
-local schemas = {}
-local ok_schemastore, schemastore = pcall(require, "schemastore")
-if ok_schemastore and schemastore.yaml and type(schemastore.yaml.schemas) == "function" then
-  schemas = schemastore.yaml.schemas()
-end
-require("lvim.lsp.manager").setup("yamlls", {
-  capabilities = Nvim.builtin.lsp.capabilities,
-  settings = {
-    yaml = {
-      hover = true,
-      completion = true,
-      validate = true,
-      schemaStore = {
-        enable = true,
-        url = "https://www.schemastore.org/api/json/catalog.json",
-      },
-      schemas = schemas,
-    },
+local function get_lsp_capabilities()
+  if Nvim.builtin.lsp.capabilities then
+    return Nvim.builtin.lsp.capabilities
+  end
+
+  local capabilities = require("lvim.lsp").common_capabilities()
+  capabilities.textDocument = capabilities.textDocument or {}
+  capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true,
   }
+  capabilities.workspace = capabilities.workspace or {}
+  capabilities.workspace.didChangeWatchedFiles = capabilities.workspace.didChangeWatchedFiles or {}
+  capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
+
+  Nvim.builtin.lsp.capabilities = capabilities
+  return capabilities
+end
+
+Nvim.builtin.lsp.get_capabilities = get_lsp_capabilities
+
+local yaml_schemas
+local function get_yaml_schemas()
+  if yaml_schemas ~= nil then
+    return yaml_schemas
+  end
+
+  yaml_schemas = {}
+  local ok_schemastore, schemastore = pcall(require, "schemastore")
+  if ok_schemastore and schemastore.yaml and type(schemastore.yaml.schemas) == "function" then
+    yaml_schemas = schemastore.yaml.schemas()
+  end
+
+  return yaml_schemas
+end
+
+local yamlls_setup_done = false
+local function setup_yamlls()
+  if yamlls_setup_done then
+    return
+  end
+
+  require("lvim.lsp.manager").setup("yamlls", {
+    capabilities = get_lsp_capabilities(),
+    settings = {
+      yaml = {
+        hover = true,
+        completion = true,
+        validate = true,
+        schemaStore = {
+          enable = true,
+          url = "https://www.schemastore.org/api/json/catalog.json",
+        },
+        schemas = get_yaml_schemas(),
+      },
+    }
+  })
+
+  yamlls_setup_done = true
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "yaml", "yaml.docker-compose", "yaml.gitlab" },
+  callback = setup_yamlls,
 })
 
 -- NOTE: The TailwindCSS LSP configuration is commented out because it is already included in
@@ -130,7 +168,7 @@ vim.api.nvim_create_autocmd("FileType", {
   once = true,
   callback = function()
     require("lvim.lsp.manager").setup("cssls", {
-      capabilities = Nvim.builtin.lsp.capabilities,
+      capabilities = get_lsp_capabilities(),
       settings = {
         css = {
           validate = true,
@@ -159,7 +197,7 @@ vim.api.nvim_create_autocmd("FileType", {
   once = true,
   callback = function()
     require("lvim.lsp.manager").setup("ts_ls", {
-      capabilities = Nvim.builtin.lsp.capabilities,
+      capabilities = get_lsp_capabilities(),
       settings = {
         typescript = {
           inlayHints = {

@@ -20,14 +20,6 @@ return {
     end
   },
   {
-    "LiadOz/nvim-dap-repl-highlights",
-    -- event = "VeryLazy",
-    ft = "dap-repl",
-    config = function()
-      require('nvim-dap-repl-highlights').setup()
-    end
-  },
-  {
     "theHamsta/nvim-dap-virtual-text",
     -- event = "VeryLazy",
     event = "User FileOpened",

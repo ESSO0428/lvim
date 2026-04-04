@@ -9,14 +9,30 @@ local auto_check_debounce_ms = 250
 local debounce_timers = {}
 local markdown_autocmds_attached = {}
 
+local function close_timer(timer)
+  if not timer then
+    return
+  end
+
+  pcall(timer.stop, timer)
+
+  local ok, is_closing = pcall(function()
+    return timer:is_closing()
+  end)
+  if ok and is_closing then
+    return
+  end
+
+  pcall(timer.close, timer)
+end
+
 local function stop_debounce_timer(bufnr)
   local timer = debounce_timers[bufnr]
   if not timer then
     return
   end
-  timer:stop()
-  timer:close()
   debounce_timers[bufnr] = nil
+  close_timer(timer)
 end
 
 local function cancel_current_async_job(bufnr)
@@ -303,8 +319,7 @@ local function schedule_markdown_links_check(bufnr)
     if debounce_timers[bufnr] == timer then
       debounce_timers[bufnr] = nil
     end
-    timer:stop()
-    timer:close()
+    close_timer(timer)
     maybe_check_markdown_links(bufnr)
   end))
 end

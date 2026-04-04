@@ -12,7 +12,7 @@ local opts = {
           "requirements.txt",
         }))(...)
   end,
-  capabilities = Nvim.builtin.lsp.capabilities,
+  capabilities = Nvim.builtin.lsp.get_capabilities(),
 }
 require("lvim.lsp.manager").setup("tailwindcss")
 require("lvim.lsp.manager").setup("intelephense", opts)

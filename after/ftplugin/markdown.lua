@@ -1,3 +1,3 @@
 require("lvim.lsp.manager").setup("marksman", {
-  capabilities = Nvim.builtin.lsp.capabilities
+  capabilities = Nvim.builtin.lsp.get_capabilities()
 })

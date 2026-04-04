@@ -41,7 +41,7 @@ local opts = {
       return root
     end
   end,
-  capabilities = Nvim.builtin.lsp.capabilities,
+  capabilities = Nvim.builtin.lsp.get_capabilities(),
   settings = {
     basedpyright = {
       analysis = {
