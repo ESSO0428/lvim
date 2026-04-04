@@ -29,6 +29,37 @@ vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 -- add rtp $HOME/.cheetseet/ as help file
 vim.opt.rtp:append { os.getenv("HOME") .. "/.cheatsheet" }
 
+local uv = vim.uv or vim.loop
+
+local function source_config_vimscript(relative_path)
+  local file = vim.fs.joinpath(vim.fn.stdpath("config"), relative_path)
+  if vim.fn.filereadable(file) == 1 then
+    vim.cmd(("source %s"):format(vim.fn.fnameescape(file)))
+  end
+end
+
+local function source_config_vimscript_later(relative_path)
+  vim.schedule(function()
+    source_config_vimscript(relative_path)
+  end)
+end
+
+local function get_current_username()
+  if vim.env.USER and vim.env.USER ~= "" then
+    return vim.env.USER
+  end
+  if vim.env.LOGNAME and vim.env.LOGNAME ~= "" then
+    return vim.env.LOGNAME
+  end
+  if uv and uv.os_get_passwd then
+    local ok, passwd = pcall(uv.os_get_passwd)
+    if ok and passwd and passwd.username and passwd.username ~= "" then
+      return passwd.username
+    end
+  end
+  return vim.trim(vim.fn.system("whoami"))
+end
+
 local function get_clipboard_content()
   local content = vim.fn.getreg('')
   local regtype = vim.fn.getregtype('')
@@ -149,7 +180,6 @@ end
 -- ex: code --remote ssh-remote+LabServerDP
 -- default hostname
 vim.g.host = "YourVscodeReomoteServerName"
-local host = vim.g.host
 
 -- 與 `vscode remote ssh` 集成
 -- 取得如範例的指令: `code --remote ssh-remote+LabServerDP`
@@ -188,15 +218,13 @@ function GetServerHostName(host)
   end
 end
 
-GetServerHostName(host)
-
-vim.cmd("source " .. vim.fn.stdpath("config") .. "/vim/ssh_command.vim")
-vim.cmd("source " .. vim.fn.stdpath("config") .. "/keymap.vim")
+-- `rcode` will resolve the host on demand, so avoid doing shell/file IO on every startup.
+source_config_vimscript_later("vim/ssh_command.vim")
+source_config_vimscript("keymap.vim")
 
 
 -- 排除當前使用者或 Andy6, andy6 使用者目錄下的 home 目錄，避免遞迴讀取 home 目錄底下的所有使用者目錄 (root 除外)
-local username = vim.fn.system("whoami")
-username = username:gsub("\n", "") -- 移除換行符號
+local username = get_current_username()
 if username == "root" then
   username = "_Andy6_"
 end
@@ -230,16 +258,22 @@ lvim.builtin.nvimtree.setup.tab.sync.open = false
 lvim.builtin.nvimtree.setup.view.preserve_window_proportions = true
 
 local function is_nfs_mount(path)
-  local handle = io.popen("df -T " .. path .. " | tail -n 1")
+  local nfs_super_magic = 0x6969
+  if uv and uv.fs_statfs then
+    local stat = uv.fs_statfs(path)
+    if stat and stat.type then
+      return stat.type == nfs_super_magic
+    end
+  end
+
+  local handle = io.popen("df -T " .. vim.fn.shellescape(path) .. " | tail -n 1")
+  if not handle then
+    return false
+  end
   local result = handle:read("*a")
   handle:close()
 
-  -- 检查文件系统类型是否为 nfs
-  if result:find("nfs") then
-    return true
-  else
-    return false
-  end
+  return result:find("nfs", 1, true) ~= nil
 end
 
 -- NOTE: judge if current path is on

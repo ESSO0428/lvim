@@ -67,7 +67,6 @@ lvim_core_telescope_custom_finders_grep_Lazy_pack_files = function(opts)
   builtin.live_grep(opts)
 end
 
-lvim.builtin.which_key.mappings.s.n = { "<cmd>Telescope notify<cr>", "notify (Viewing History)" }
 lvim.builtin.telescope.defaults.mappings.n = {
   ["q"] = {
     actions.close,
@@ -349,22 +348,27 @@ lvim.builtin.telescope.extensions.live_grep_args = {
   -- theme = { }, -- use own theme spec
   -- layout_config = { mirror=true }, -- mirror preview pane
 }
+local fb_actions
+local function fb_action(name)
+  return function(...)
+    fb_actions = fb_actions or require("telescope").extensions.file_browser.actions
+    return fb_actions[name](...)
+  end
+end
 
-
-local fb_actions                               = require "telescope".extensions.file_browser.actions
 lvim.builtin.telescope.extensions.file_browser = {
   mappings = {
     ["i"] = {
       -- remap to going to home directory
       ["<C-w>"] = actions.move_selection_previous,
       ["<C-s>"] = actions.move_selection_next,
-      ["<a-a>"] = fb_actions.create,
+      ["<a-a>"] = fb_action("create"),
       ["<a-r>"] = false,
-      ["<c-j>"] = fb_actions.goto_cwd,
-      ["<c-l>"] = fb_actions.change_cwd,
-      ["<c-r>"] = fb_actions.toggle_all,
-      ["<c-x>"] = fb_actions.move,
-      ["<a-c>"] = fb_actions.rename
+      ["<c-j>"] = fb_action("goto_cwd"),
+      ["<c-l>"] = fb_action("change_cwd"),
+      ["<c-r>"] = fb_action("toggle_all"),
+      ["<c-x>"] = fb_action("move"),
+      ["<a-c>"] = fb_action("rename")
     }
   }
 }
@@ -392,10 +396,10 @@ lvim.builtin.telescope.extensions.howdoi       = vim.tbl_deep_extend(
 )
 vim.cmd('cnoreabbrev howdo Telescope howdoi')
 
--- lvim.keys.normal_mode['<a-b>'] = { "<cmd>Telescope buffers<cr>" }
 lvim.builtin.which_key.mappings.s.c    = { "<cmd>Telescope command_history<cr>", "Command History" }
 lvim.builtin.which_key.mappings.s["/"] = { "<cmd>Telescope search_history<cr>", "Search History" }
 lvim.builtin.which_key.mappings.s.s    = { "<cmd>Telescope buffers<cr>", "Find" }
+lvim.builtin.which_key.mappings.s.n    = { "<cmd>Telescope notify<cr>", "notify (Viewing History)" }
 lvim.builtin.which_key.mappings.s['`'] = { "<cmd>Telescope marks<cr>", "Marks" }
 lvim.builtin.which_key.mappings.s["'"] = { "<cmd>execute 'Telescope find_files default_text=' . expand('<cfile>')<cr>",
   "Find File (<cfile>)" }
@@ -414,7 +418,6 @@ lvim.keys.normal_mode["+"]             = "<cmd>lua require('harpoon.ui').nav_nex
 
 lvim.builtin.which_key.mappings.b["["]                 = { "<cmd>BufferLineCloseLeft<cr>", "Close all to the left" }
 lvim.builtin.which_key.mappings.b["]"]                 = { "<cmd>BufferLineCloseRight<cr>", "Close all to the Right" }
--- lvim.keys.normal_mode["<c-p>"] = '<cmd>lua require("lvim.core.telescope.custom-finders").find_project_files { previewer = true }<cr>'
 
 -- install chafa for img preview
 lvim.builtin.which_key.mappings.s["m"]                 = {

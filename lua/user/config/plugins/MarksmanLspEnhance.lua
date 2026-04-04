@@ -1,7 +1,49 @@
 -- NOTE: Code action for checking markdown links
 -- local ts_utils = require 'nvim-treesitter.ts_utils'
+local uv = vim.uv or vim.loop
 local ns_id = vim.api.nvim_create_namespace("markdown_link_checker")
 local auto_check_var = "auto_check_markdown_links"
+local null_ls_registered = false
+local markdown_link_query
+local auto_check_debounce_ms = 250
+local debounce_timers = {}
+local markdown_autocmds_attached = {}
+
+local function stop_debounce_timer(bufnr)
+  local timer = debounce_timers[bufnr]
+  if not timer then
+    return
+  end
+  timer:stop()
+  timer:close()
+  debounce_timers[bufnr] = nil
+end
+
+local function cancel_current_async_job(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
+  local async_job = vim.b[bufnr].current_async_job
+  if type(async_job) == "function" then
+    async_job()
+  elseif type(async_job) == "table" and async_job.stop then
+    async_job:stop()
+  end
+  vim.b[bufnr].current_async_job = nil
+end
+
+local function get_markdown_link_query()
+  if markdown_link_query == false then
+    return nil
+  end
+  if markdown_link_query == nil then
+    local ok, parsed = pcall(vim.treesitter.query.parse, 'markdown_inline', [[
+      (link_destination) @link_destination
+    ]])
+    markdown_link_query = ok and parsed or false
+  end
+  return markdown_link_query or nil
+end
 
 -- Helper function to get the visual position of a character in a line
 local function get_visual_position(line, col)
@@ -10,14 +52,18 @@ end
 
 -- Use Tree-sitter to find all inline_link nodes
 local function find_links_in_line(line, line_num, current_dir, not_ignore_http)
+  if not line:find('](', 1, true) then
+    return {}
+  end
+
+  local query = get_markdown_link_query()
+  if not query then
+    return {}
+  end
+
   local parser = vim.treesitter.get_string_parser(line, 'markdown_inline')
   local tree = parser:parse()[1]
   local root = tree:root()
-
-  -- Query the syntax tree for inline_link nodes
-  local query = vim.treesitter.query.parse('markdown_inline', [[
-    (link_destination) @link_destination
-  ]])
 
   local links = {}
   for id, node in query:iter_captures(root, 0, 0, -1) do
@@ -55,7 +101,7 @@ end
 
 -- Function to find all links in the buffer
 local function find_links_with_treesitter(bufnr, not_ignore_http)
-  local success, parser = pcall(vim.treesitter.get_parser, bufnr, 'markdown_inline')
+  local success = pcall(vim.treesitter.get_parser, bufnr, 'markdown_inline')
   if not success then
     vim.notify("WARNING: Please install markdown_inline: TSInstall markdown_inline", vim.log.levels.WARN)
     return {}
@@ -78,6 +124,10 @@ end
 
 -- async function to check definition information of links
 local function check_link_definition_async(links, diagnostics, bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_buf_is_loaded(bufnr) then
+    return
+  end
+
   if #links == 0 then
     -- all links have been checked, set the diagnostic information
     vim.diagnostic.set(ns_id, bufnr, diagnostics, {})
@@ -93,19 +143,23 @@ local function check_link_definition_async(links, diagnostics, bufnr)
   }
 
   -- Cancel last time async job
-  if vim.b.current_async_job and vim.b.current_async_job.stop then
-    vim.b.current_async_job:stop()
-  end
+  cancel_current_async_job(bufnr)
 
   -- Use LSP to check if the link is valid
   -- vim.lsp.buf_request(bufnr, 'textDocument/definition', params, function(err, result, ctx, config)
-  vim.b.current_async_job = vim.lsp.buf_request(bufnr, 'textDocument/definition', params,
+  local _, cancel = vim.lsp.buf_request(bufnr, 'textDocument/definition', params,
     function(err, result, ctx, config)
       vim.schedule(function()
+        if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_buf_is_loaded(bufnr) then
+          return
+        end
         if not result then
           -- use async file system operation
-          vim.loop.fs_stat(path, function(err, stat)
+          uv.fs_stat(path, function(err, stat)
             vim.schedule(function()
+              if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_buf_is_loaded(bufnr) then
+                return
+              end
               if not stat then
                 -- If there is no result and the path is not a valid file or directory, add a warning diagnostic to the list
                 table.insert(diagnostics, {
@@ -116,21 +170,25 @@ local function check_link_definition_async(links, diagnostics, bufnr)
                 })
               end
               -- check next link definition
-              vim.b.current_async_job = nil
+              vim.b[bufnr].current_async_job = nil
               check_link_definition_async(links, diagnostics, bufnr)
             end)
           end)
         else
           -- check next link definition
-          vim.b.current_async_job = nil
+          vim.b[bufnr].current_async_job = nil
           check_link_definition_async(links, diagnostics, bufnr)
         end
       end)
     end)
+  vim.b[bufnr].current_async_job = cancel
 end
 
-local function check_markdown_links_async()
-  local bufnr = vim.api.nvim_get_current_buf()
+local function check_markdown_links_async(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_buf_is_loaded(bufnr) then
+    return
+  end
   -- Cancel all previous diagnostics
   vim.diagnostic.reset(ns_id, bufnr)
 
@@ -141,14 +199,17 @@ local function check_markdown_links_async()
   check_link_definition_async(links, diagnostics, bufnr)
 end
 
-local function toggle_auto_check()
-  if vim.b[auto_check_var] == nil or vim.b[auto_check_var] == true then
+local function toggle_auto_check(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  if vim.b[bufnr][auto_check_var] == nil or vim.b[bufnr][auto_check_var] == true then
     print("Auto check disabled")
-    vim.b[auto_check_var] = false
+    stop_debounce_timer(bufnr)
+    cancel_current_async_job(bufnr)
+    vim.b[bufnr][auto_check_var] = false
   else
     print("Auto check enabled")
-    vim.b[auto_check_var] = true
-    check_markdown_links_async()
+    vim.b[bufnr][auto_check_var] = true
+    check_markdown_links_async(bufnr)
   end
 end
 
@@ -208,34 +269,86 @@ vim.api.nvim_create_user_command('ListUniqueMarkdownLinks', function()
   list_unique_links_in_quickfix()
 end, {})
 
-local function is_lsp_attached()
-  local bufnr = vim.api.nvim_get_current_buf()
+local function is_lsp_attached(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
   local clients = vim.lsp.get_clients({ bufnr = bufnr })
   return next(clients) ~= nil
 end
 
--- autocmd BufWinEnter,TextChanged,InsertLeave *.md lua check_markdown_links_async()
-vim.api.nvim_create_autocmd({ "BufWinEnter", "TextChanged", "InsertLeave" }, {
-  pattern = "*.md",
-  callback = function()
-    if vim.b[auto_check_var] == false then
-      return
+local function can_auto_check(bufnr)
+  return vim.api.nvim_buf_is_valid(bufnr)
+    and vim.api.nvim_buf_is_loaded(bufnr)
+    and vim.bo[bufnr].filetype == "markdown"
+    and vim.b[bufnr][auto_check_var] ~= false
+    and is_lsp_attached(bufnr)
+end
+
+local function maybe_check_markdown_links(bufnr)
+  if can_auto_check(bufnr) then
+    check_markdown_links_async(bufnr)
+  end
+end
+
+local function schedule_markdown_links_check(bufnr)
+  if not can_auto_check(bufnr) then
+    stop_debounce_timer(bufnr)
+    return
+  end
+
+  stop_debounce_timer(bufnr)
+
+  local timer = uv.new_timer()
+  debounce_timers[bufnr] = timer
+  timer:start(auto_check_debounce_ms, 0, vim.schedule_wrap(function()
+    if debounce_timers[bufnr] == timer then
+      debounce_timers[bufnr] = nil
     end
-    if is_lsp_attached() then
-      check_markdown_links_async()
-    end
+    timer:stop()
+    timer:close()
+    maybe_check_markdown_links(bufnr)
+  end))
+end
+
+local function attach_markdown_buffer_autocmds(bufnr)
+  if markdown_autocmds_attached[bufnr] then
+    return
+  end
+
+  markdown_autocmds_attached[bufnr] = true
+
+  vim.api.nvim_create_autocmd("BufWinEnter", {
+    buffer = bufnr,
+    callback = function(args)
+      maybe_check_markdown_links(args.buf)
+    end,
+  })
+
+  vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
+    buffer = bufnr,
+    callback = function(args)
+      schedule_markdown_links_check(args.buf)
+    end,
+  })
+
+  -- Clear namespace when buffer is unloaded
+  vim.api.nvim_create_autocmd("BufUnload", {
+    buffer = bufnr,
+    once = true,
+    callback = function(args)
+      stop_debounce_timer(args.buf)
+      cancel_current_async_job(args.buf)
+      vim.diagnostic.reset(ns_id, args.buf)
+      markdown_autocmds_attached[args.buf] = nil
+    end,
+  })
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function(args)
+    attach_markdown_buffer_autocmds(args.buf)
   end,
 })
--- Clear namespace when buffer is unloaded
-vim.api.nvim_create_autocmd("BufUnload", {
-  pattern = "*.md",
-  callback = function()
-    vim.diagnostic.reset(ns_id, vim.api.nvim_get_current_buf())
-  end,
-})
-
-
-local null_ls = require("null-ls")
 local code_actions = {
   {
     name = "check_markdown_links",
@@ -258,24 +371,42 @@ local code_actions = {
     action = list_unique_links_in_quickfix
   }
 }
--- Use a for loop to register all code actions
-for _, action in ipairs(code_actions) do
+
+local function ensure_markdown_code_actions_registered()
+  if null_ls_registered then
+    return
+  end
+
+  local ok, null_ls = pcall(require, "null-ls")
+  if not ok then
+    return
+  end
+
   null_ls.register({
-    name = action.name,
+    name = "markdown_link_actions",
     method = null_ls.methods.CODE_ACTION,
     filetypes = { "markdown" },
     generator = {
-      fn = function(params)
-        return {
-          {
+      fn = function()
+        local actions = {}
+        for _, action in ipairs(code_actions) do
+          actions[#actions + 1] = {
             title = action.title,
             action = action.action,
-          },
-        }
+          }
+        end
+        return actions
       end,
     },
   })
+
+  null_ls_registered = true
 end
 
--- set up null-ls
-null_ls.setup()
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    if vim.bo[args.buf].filetype == "markdown" then
+      ensure_markdown_code_actions_registered()
+    end
+  end,
+})

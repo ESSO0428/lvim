@@ -1,10 +1,10 @@
 local M = {}
-local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
 vim.g.MarkdownNvim = 1
 vim.treesitter.language.register('markdown', 'copilot-chat')
 vim.treesitter.language.register('markdown', 'AvanteInput')
 
 function M.setup()
+  local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
   vim.api.nvim_create_autocmd("ExitPre", {
     group = vim.api.nvim_create_augroup("DisableRenderMarkdownOnQuit", { clear = true }),
     callback = function()
