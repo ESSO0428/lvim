@@ -18,6 +18,7 @@ function M.setup()
   -- NOTE: foldingRange capability is injected in the main LSP setup.
   local ftMap = {
     vim = 'indent',
+    yaml = 'indent',
     -- python = { 'indent', 'treesitter' },
     python = { 'indent', 'marker' },
     git = ''
