@@ -2,7 +2,7 @@
 local windows_terminal = require("user.integrated.WindowsTerminal")
 
 -- lvim.keys.normal_mode["<a-q>"] = { "<cmd>copen<cr>" }
-lvim.keys.normal_mode["<a-q>"] = { Nvim.Quickfix.open_quickfix_safety, desc = "Open Quickfix at bottom-right" }
+lvim.keys.normal_mode["<a-q>"] = { "<cmd>copen<cr>", desc = "Open Quickfix" }
 lvim.keys.normal_mode["<c-q>"] = { Nvim.Quickfix.toggle_quickfix_safety, desc = "Toggle Quickfix at bottom-right" }
 --[[ -- lvim core command <c-q>
 vim.cmd [[
@@ -18,9 +18,7 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'qf',
   callback = function()
     vim.keymap.set('n', 'zc', function()
-      vim.cmd("cclose")
       vim.fn.setqflist({}, "r")
-      Nvim.Quickfix.open_quickfix_safety()
     end, { buffer = true, silent = true })
   end
 })

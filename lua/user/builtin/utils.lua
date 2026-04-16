@@ -956,23 +956,6 @@ function Nvim.Buffer_check.is_current_tab_filetype_win_exists(filetype)
   return false
 end
 
--- HACK: Avoid edgy.nvim layout conflict
-function Nvim.Quickfix.open_quickfix_safety()
-  vim.cmd("rightbelow copen")
-  vim.cmd("wincmd J")
-  vim.schedule(function()
-    vim.cmd("resize 10")
-  end)
-end
-
-function Nvim.Quickfix.open_loclist_safety()
-  vim.cmd("rightbelow lopen")
-  vim.cmd("wincmd J")
-  vim.schedule(function()
-    vim.cmd("resize 10")
-  end)
-end
-
 function Nvim.Quickfix.toggle_quickfix_safety()
   local quickfix_open = false
 
@@ -986,7 +969,7 @@ function Nvim.Quickfix.toggle_quickfix_safety()
   if quickfix_open then
     vim.cmd("cclose")
   else
-    Nvim.Quickfix.open_quickfix_safety()
+    vim.cmd("copen")
   end
 end
 
@@ -1003,7 +986,7 @@ function Nvim.Quickfix.toggle_loclist_safety()
   if quickfix_open then
     vim.cmd("lclose")
   else
-    Nvim.Quickfix.open_loclist_safety()
+    vim.cmd("lopen")
   end
 end
 
