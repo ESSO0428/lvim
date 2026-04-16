@@ -598,6 +598,7 @@ M.config = {
     {
       title = "Hover",
       ft = "markdown",
+      size = { height = 0.3 },
       wo = {
         number = false,
         relativenumber = false,
