@@ -167,7 +167,20 @@ end
 local function run_deferred(state)
   for _, entry in ipairs(state.deferred or {}) do
     if type(entry.cmd) == "string" and entry.cmd ~= "" then
-      pcall(vim.cmd, entry.cmd)
+      if entry.winid then
+        local current_win = vim.api.nvim_get_current_win()
+        if vim.api.nvim_win_is_valid(entry.winid)
+            and vim.api.nvim_win_get_tabpage(entry.winid) == vim.api.nvim_get_current_tabpage() then
+          vim.api.nvim_set_current_win(entry.winid)
+          pcall(vim.cmd, entry.cmd)
+          if vim.api.nvim_win_is_valid(current_win)
+              and vim.api.nvim_win_get_tabpage(current_win) == vim.api.nvim_get_current_tabpage() then
+            vim.api.nvim_set_current_win(current_win)
+          end
+        end
+      else
+        pcall(vim.cmd, entry.cmd)
+      end
     end
   end
 end
@@ -228,6 +241,23 @@ local function man_deferred(_, win)
   if vim.bo[buf].buftype == "nofile" and name ~= "" then
     return { cmd = "Man " .. vim.fn.fnamemodify(name, ":t:r") }
   end
+end
+
+local function quickfix_deferred(_, win)
+  local info = vim.fn.getwininfo(win)[1]
+  if not info or info.quickfix ~= 1 then
+    return
+  end
+
+  if info.loclist == 1 then
+    local loclist = vim.fn.getloclist(win, { filewinid = 0 })
+    if type(loclist) == "table" and type(loclist.filewinid) == "number" and loclist.filewinid > 0 then
+      return { cmd = "lopen", winid = loclist.filewinid }
+    end
+    return
+  end
+
+  return { cmd = "copen" }
 end
 
 function M.save_tab_state(tab)
@@ -532,7 +562,7 @@ M.config = {
   fix_win_height = vim.fn.has("nvim-0.10.0") == 0,
   top = {}, ---@type (Edgy.View.Opts|string)[]
   bottom = {
-    { ft = "qf",            title = "QuickFix" },
+    { ft = "qf", title = "QuickFix", deferred = quickfix_deferred },
     -- toggleterm / lazyterm at the bottom with a height of 40% of the screen
     {
       ft = "toggleterm",
