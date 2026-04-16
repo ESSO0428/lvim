@@ -596,10 +596,6 @@ M.config = {
       end,
     },
     {
-      ft = "Trouble",
-      deferred = trouble_deferred,
-    },
-    {
       title = "Hover",
       ft = "markdown",
       wo = {
@@ -611,6 +607,10 @@ M.config = {
       filter = function(buf)
         return vim.b[buf].is_lsp_hover_split == true
       end,
+    },
+    {
+      ft = "Trouble",
+      deferred = trouble_deferred,
     },
     {
       ft = "help",
