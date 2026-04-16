@@ -1,30 +1,6 @@
 local M = {}
 M.view_side = "left"
 
--- HACK: This is used instead of the suggested configuration for edgy.nvim
--- We aren't using the qf as an edgy bottom because it would break the layout
-function M.qf_winbar()
-  local win_info = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1]
-  local is_quickfix = win_info and win_info.quickfix == 1
-  local is_loclist = win_info and win_info.loclist == 1
-  local title = "QuickFix"
-  if is_quickfix and is_loclist then
-    title = "LocList"
-  end
-  local winbar = string.format("%%#EdgyIconActive# %%#EdgyWinBar# %s", title)
-  if vim.api.nvim_get_option_value("mod", { buf = 0 }) then
-    local mod = string.format(" %%#LspCodeLens#%s", lvim.icons.ui.Circle)
-    winbar = winbar .. mod
-  end
-  return winbar
-end
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'qf',
-  callback = function()
-    vim.opt_local.winbar = "%{%v:lua.require'user.edgy'.qf_winbar()%}"
-  end
-})
 function M.reload_edgy_if_error()
   -- Check edgy.nvim had an error or not (last)
   -- If it had an error, reload the plugin
@@ -556,6 +532,7 @@ M.config = {
   fix_win_height = vim.fn.has("nvim-0.10.0") == 0,
   top = {}, ---@type (Edgy.View.Opts|string)[]
   bottom = {
+    { ft = "qf",            title = "QuickFix" },
     -- toggleterm / lazyterm at the bottom with a height of 40% of the screen
     {
       ft = "toggleterm",
@@ -578,8 +555,6 @@ M.config = {
       ft = "Trouble",
       deferred = trouble_deferred,
     },
-    -- WARNING: This will break the layout if the qf is used as an edgy bottom
-    -- { ft = "qf", title = "QuickFix" },
     {
       ft = "help",
       size = { height = 20 },
@@ -730,7 +705,6 @@ function M.setup()
 
   M.setup_tab_restore()
 end
-
 
 -- Function to swap left and right layouts
 function M.swap_layouts()

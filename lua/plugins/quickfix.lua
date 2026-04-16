@@ -50,34 +50,14 @@ return {
           {
             ">",
             function()
-              local win_info = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1]
-              local is_quickfix = win_info and win_info.quickfix == 1
-              local is_loclist = win_info and win_info.loclist == 1
-              if is_quickfix and not is_loclist then
-                vim.cmd("cclose")
-                require("quicker").collapse()
-                require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
-                Nvim.Quickfix.open_quickfix_safety()
-              else
-                require("quicker").collapse()
-                require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
-              end
+              require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
             end,
             desc = "Expand quickfix context",
           },
           {
             "<",
             function()
-              local win_info = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1]
-              local is_quickfix = win_info and win_info.quickfix == 1
-              local is_loclist = win_info and win_info.loclist == 1
-              if is_quickfix and not is_loclist then
-                vim.cmd("cclose")
-                require("quicker").collapse()
-                Nvim.Quickfix.open_quickfix_safety()
-              else
-                require("quicker").collapse()
-              end
+              require("quicker").collapse()
             end,
             desc = "Collapse quickfix context",
           },
