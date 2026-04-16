@@ -243,6 +243,20 @@ local function man_deferred(_, win)
   end
 end
 
+local function hoversplit_restore()
+  local ok, hoversplit = pcall(require, "hoversplit")
+  if ok then
+    hoversplit.split_remain_focused()
+  end
+end
+
+local function hoversplit_cleanup()
+  local ok, hoversplit = pcall(require, "hoversplit")
+  if ok then
+    hoversplit.close_hover_split()
+  end
+end
+
 local function quickfix_deferred(_, win)
   local info = vim.fn.getwininfo(win)[1]
   if not info or info.quickfix ~= 1 then
@@ -562,7 +576,7 @@ M.config = {
   fix_win_height = vim.fn.has("nvim-0.10.0") == 0,
   top = {}, ---@type (Edgy.View.Opts|string)[]
   bottom = {
-    { ft = "qf", title = "QuickFix", deferred = quickfix_deferred },
+    { ft = "qf",            title = "QuickFix",     deferred = quickfix_deferred },
     -- toggleterm / lazyterm at the bottom with a height of 40% of the screen
     {
       ft = "toggleterm",
@@ -584,6 +598,19 @@ M.config = {
     {
       ft = "Trouble",
       deferred = trouble_deferred,
+    },
+    {
+      title = "Hover",
+      ft = "markdown",
+      wo = {
+        number = false,
+        relativenumber = false,
+      },
+      restore = hoversplit_restore,
+      tab_leave_cleanup = hoversplit_cleanup,
+      filter = function(buf)
+        return vim.b[buf].is_lsp_hover_split == true
+      end,
     },
     {
       ft = "help",
