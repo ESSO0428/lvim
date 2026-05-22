@@ -5,23 +5,23 @@ local snippets = {}
 local snippet_definitions = {
   {
     triggers = { "!note", ">note" },
-    text = { "> [!NOTE]", "> ", "> " },
+    text = { "> [!NOTE]", "> " },
   },
   {
     triggers = { "!tip", ">tip" },
-    text = { "> [!TIP]", "> ", "> " },
+    text = { "> [!TIP]", "> " },
   },
   {
     triggers = { "!important", ">important" },
-    text = { "> [!IMPORTANT]", "> ", "> " },
+    text = { "> [!IMPORTANT]", "> " },
   },
   {
     triggers = { "!warning", ">warning" },
-    text = { "> [!WARNING]", "> ", "> " },
+    text = { "> [!WARNING]", "> " },
   },
   {
     triggers = { "!caution", ">caution" },
-    text = { "> [!CAUTION]", "> ", "> " },
+    text = { "> [!CAUTION]", "> " },
   },
 }
 
