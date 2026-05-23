@@ -109,11 +109,11 @@ endfunction
 
 nnoremap <c-w> :bd<cr>
 
-" Find pair
-nnoremap g{ %
-nnoremap g} $%
-vnoremap g{ %
-vnoremap g} $%
+" H M L
+nnoremap g{ H
+nnoremap g} L
+vnoremap g{ H
+vnoremap g} L
 
 " Search
 " nnoremap <leader><cr> :nohlsearch<cr>
