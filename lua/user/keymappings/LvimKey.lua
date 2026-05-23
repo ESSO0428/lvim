@@ -67,8 +67,8 @@ lvim.keys.visual_mode['<a-L>']         = "<Plug>(VM-Visual-All)"
 -- lvim.keys.normal_mode['<c-u>'] = "<Plug>MoveLineUp"
 lvim.keys.normal_mode['<a-up>']        = "<Plug>MoveLineUp"
 lvim.keys.normal_mode['<a-down>']      = "<Plug>MoveLineDown"
-lvim.keys.normal_mode['<c-u>']         = "10<c-y>"
-lvim.keys.normal_mode['<c-o>']         = "10<c-e>"
+lvim.keys.normal_mode['<c-u>']         = "<c-y>"
+lvim.keys.normal_mode['<c-o>']         = "<c-e>"
 
 -- vim.keymap.set('v', '<c-u>', "<Plug>MoveBlockUp")
 -- vim.keymap.set('v', '<c-o>', "<Plug>MoveBlockDown")
