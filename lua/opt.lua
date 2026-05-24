@@ -251,6 +251,8 @@ lvim.builtin.nvimtree.setup.actions.open_file.window_picker.exclude = {
   filetype = { "notify", "lazy", "qf", "diff", "fugitive", "fugitiveblame", "terminal", "Outline", "edgy" },
   buftype = { "nofile", "terminal", "help", "Outline", "quickfix" },
 }
+lvim.builtin.nvimtree.setup.actions.open_file.window_picker.picker = require('window-picker').pick_window
+
 -- nvimtree tab sync default is false
 lvim.builtin.nvimtree.setup.tab.sync.open = false
 

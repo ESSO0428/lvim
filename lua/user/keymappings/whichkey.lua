@@ -249,9 +249,3 @@ lvim.builtin.which_key.mappings.U.G = {
   lvim_core_telescope_custom_finders_grep_Lazy_pack_files,
   "Grep Lazy pack files",
 }
-
--- gemini_companion
-lvim.builtin.which_key.mappings.u["kl"] = { "<cmd>GeminiToggle<cr>", "Toggle Gemini CLI" }
-lvim.builtin.which_key.mappings.u["kj"] = { "<cmd>GeminiClose<cr>", "Close Gemini CLI process" }
-lvim.builtin.which_key.mappings.u["ky"] = { "<cmd>GeminiAccept<cr>", "Accept Gemini suggested changes" }
-lvim.builtin.which_key.mappings.u["kn"] = { "<cmd>GeminiReject<cr>", "Reject Gemini suggested changes" }

@@ -30,14 +30,6 @@ return {
     "nvim-treesitter/playground",
     cmd = { "TSPlaygroundToggle", "TSHighlightCapturesUnderCursor" },
   },
-  -- WARNING: 使用此套件時請謹慎，因為它可能會導致在 nvim-tree 中結合使用 telescope 時出現開啟文件的錯誤。
-  -- 當前的暫時解決方案是在 Neovim 配置文件中添加名為 handle_telescope_nvimtree_interaction (nvimtree.lua) 的函數，
-  -- 並在 BufWinLeave 事件中觸發該函數。
-  -- 這個解決方案主要處理了 NvimTreePicker 啟用前會先離開 NvimTree 的機制：
-  -- 在啟用 window-picker 功能前，會先離開 filetype 為 NvimTree 和 buftype 為 nofile 的 buffer window，
-  -- 在離開該窗口時，此函數將關閉所有疑似由 nvim-treesitter-context 插件創建的浮動窗口 (沒處理好的話會在 window-picker 前被讀取)，
-  -- 這些窗口包含 filenam == '', filetype == '' 和 buftype == 'nofile 的屬性，可能會干擾文件正常的打開過程。
-  -- NOTE: 這裡先固定 commit 後續 nvim 大改再考慮更新
   {
     "nvim-treesitter/nvim-treesitter-context",
     event = { "BufReadPost", "BufNewFile" },

@@ -7,65 +7,6 @@ table.insert(lvim.plugins, {
   enabled = true,
   cmd = { "NvimTreeToggle", "NvimTreeOpen", "NvimTreeFocus", "NvimTreeFindFileToggle" },
 })
--- 全局表，用于存储特定顺序的最后五个离开的窗口信息
-_LastFiveBufWinLeaveInfo = {}
--- 函数，用于检查并更新 _LastFiveBufWinLeaveInfo
-local function update_last_buf_win_leave_info_specfic_telescope_and_nvimtree(filetype, buftype, name)
-  -- 如果表是空的，且当前文件类型和缓冲类型是 NvimTree nofile，则添加到表中
-  if #_LastFiveBufWinLeaveInfo == 0 and filetype == "NvimTree" and buftype == "nofile" then
-    table.insert(_LastFiveBufWinLeaveInfo, { filetype = filetype, buftype = buftype, name = name })
-    return
-  end
-
-  -- 如果表不是空的，根据当前表的大小和内容进行检查和添加
-  if #_LastFiveBufWinLeaveInfo > 0 then
-    -- 根据表的大小进行不同的条件检查
-    if (#_LastFiveBufWinLeaveInfo == 1 and filetype == "TelescopePrompt" and buftype == "prompt") or
-        (#_LastFiveBufWinLeaveInfo == 2 and filetype ~= "NvimTree" and filetype ~= "TelescopePrompt") or
-        (#_LastFiveBufWinLeaveInfo == 3 and filetype == "NvimTree" and buftype == "nofile") or
-        (#_LastFiveBufWinLeaveInfo == 4 and _LastFiveBufWinLeaveInfo[3].name == name) then
-      table.insert(_LastFiveBufWinLeaveInfo, { filetype = filetype, buftype = buftype, name = name })
-    else
-      -- 如果不满足条件，则清空表并根据当前文件类型和缓冲类型重新开始
-      _LastFiveBufWinLeaveInfo = {}
-      if filetype == "NvimTree" and buftype == "nofile" then
-        table.insert(_LastFiveBufWinLeaveInfo, { filetype = filetype, buftype = buftype, name = name })
-      end
-    end
-  end
-end
-
-local function handle_telescope_nvimtree_interaction()
-  local curfiletype = vim.bo.filetype
-  local curbuftype = vim.bo.buftype
-  local curname = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
-
-  -- 更新 _LastFiveBufWinLeaveInfo
-  update_last_buf_win_leave_info_specfic_telescope_and_nvimtree(curfiletype, curbuftype, curname)
-
-  -- 如果累积了五条记录并且满足特定条件，则执行操作
-  if #_LastFiveBufWinLeaveInfo == 5 then
-    -- 执行关闭窗口的逻辑
-    local tabpage = vim.api.nvim_get_current_tabpage()
-    local windows = vim.api.nvim_tabpage_list_wins(tabpage)
-    for _, win in ipairs(windows) do
-      local buf = vim.api.nvim_win_get_buf(win)
-      local name = vim.api.nvim_buf_get_name(buf)
-      local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
-      local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
-
-      if name == "" and buftype == "nofile" and filetype == "" then
-        vim.api.nvim_win_close(win, false)
-      end
-    end
-  end
-end
-
--- 设置自动命令以在离开任何窗口时调用 close_specific_windows 函数
-vim.api.nvim_create_autocmd("WinLeave", {
-  pattern = "*",
-  callback = handle_telescope_nvimtree_interaction
-})
 
 require "user.integrated.TermForNvimTree"
 function open_nvim_tree()

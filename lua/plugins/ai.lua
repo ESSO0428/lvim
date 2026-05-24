@@ -82,55 +82,6 @@ return {
     end,
   },
   {
-    "gutsavgupta/nvim-gemini-companion",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "folke/snacks.nvim",
-    },
-    -- event = "VeryLazy",
-    cmd = { "GeminiToggle", "GeminiClose", "GeminiAccept", "GeminiReject" },
-    config = function()
-      -- You can configure the plugin by passing a table to the setup function
-      -- Example:
-      -- require("gemini").setup({
-      --   cmds = {"gemini"},
-      --   win = {
-      --     preset = "floating",
-      --     width = 0.8,
-      --     height = 0.8,
-      --   }
-      -- })
-
-      -- Auto-reload when files are changed on disk.
-      -- NOTE: :checktime will only auto-read if the buffer has no unsaved changes.
-      vim.opt.autoread = true
-
-      -- Treat "leaving the embedded Gemini/Qwen CLI terminal" as a pseudo FocusGained.
-      -- Why: when the CLI writes patches to disk, returning from its terminal to any
-      --       normal buffer should trigger a reload (similar to clicking back from tmux).
-      local aug_term = vim.api.nvim_create_augroup("GeminiCliTermReload", { clear = true })
-      vim.api.nvim_create_autocmd({ "BufLeave", "TermClose" }, {
-        group = aug_term,
-        pattern = { "term://*gemini*", "term://*qwen*" },
-        callback = function()
-          vim.schedule(function() pcall(vim.cmd, "checktime") end)
-        end,
-        desc = "Treat leaving Gemini CLI terminal as FocusGained and reload files",
-      })
-      require("gemini").setup({
-        -- NOTE: Disable other LLM CLI providers to avoid <Tab> keymap overlap
-        -- cmds = { 'gemini', 'qwen' },
-        cmds = { 'gemini' },
-      })
-    end,
-    -- keys = {
-    --   { "<leader>ukl", "<cmd>GeminiToggle<cr>", desc = "Toggle Gemini CLI" },
-    --   { "<leader>ukj", "<cmd>GeminiClose<cr>",  desc = "Close Gemini CLI process" },
-    --   { "<leader>uky", "<cmd>GeminiAccept<cr>", desc = "Accept Gemini suggested changes" },
-    --   { "<leader>ukn", "<cmd>GeminiReject<cr>", desc = "Reject Gemini suggested changes" },
-    -- }
-  },
-  {
     "ravitemer/mcphub.nvim",
     -- event = { "ModeChanged", "CursorHold" },
     dependencies = {
