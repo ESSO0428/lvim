@@ -68,8 +68,12 @@ end
 vim.g.clipboard = {
   name = 'OSC 52',
   copy = {
-    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+    ['+'] = function(lines)
+      require('vim.ui.clipboard.osc52').copy('+')(lines)
+    end,
+    ['*'] = function(lines)
+      require('vim.ui.clipboard.osc52').copy('*')(lines)
+    end,
   },
   paste = {
     -- neovim official pasted method (will delay in windows terminal)

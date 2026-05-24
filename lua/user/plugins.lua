@@ -180,7 +180,10 @@ lvim.plugins = {
   },
   {
     "nvimtools/hydra.nvim",
-    event = "VeryLazy", -- 只有你真的用 hydra 的時候才會拖一點
+    -- event = "VeryLazy", -- 只有你真的用 hydra 的時候才會拖一點
+    keys = {
+      { "<leader>h", mode = "n", desc = "Hydra Submenus Prefix" }
+    },
     config = function()
       require("user.keymappings.hydra").setup()
     end,

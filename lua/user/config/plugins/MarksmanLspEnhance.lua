@@ -293,10 +293,10 @@ end
 
 local function can_auto_check(bufnr)
   return vim.api.nvim_buf_is_valid(bufnr)
-    and vim.api.nvim_buf_is_loaded(bufnr)
-    and vim.bo[bufnr].filetype == "markdown"
-    and vim.b[bufnr][auto_check_var] ~= false
-    and is_lsp_attached(bufnr)
+      and vim.api.nvim_buf_is_loaded(bufnr)
+      and vim.bo[bufnr].filetype == "markdown"
+      and vim.b[bufnr][auto_check_var] ~= false
+      and is_lsp_attached(bufnr)
 end
 
 local function maybe_check_markdown_links(bufnr)
