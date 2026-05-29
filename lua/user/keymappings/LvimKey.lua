@@ -130,45 +130,49 @@ function Vscode_like_foldLevel_enhance(n)
   end
 end
 
-lvim.keys.normal_mode[']1']            = { "<cmd>lua Vscode_like_foldLevel_enhance(1)<cr>" }
-lvim.keys.normal_mode[']2']            = { "<cmd>lua Vscode_like_foldLevel_enhance(2)<cr>" }
-lvim.keys.normal_mode[']3']            = { "<cmd>lua Vscode_like_foldLevel_enhance(3)<cr>" }
-lvim.keys.normal_mode[']4']            = { "<cmd>lua Vscode_like_foldLevel_enhance(4)<cr>" }
-lvim.keys.normal_mode[']5']            = { "<cmd>lua Vscode_like_foldLevel_enhance(5)<cr>" }
-lvim.keys.normal_mode[']6']            = { "<cmd>lua Vscode_like_foldLevel_enhance(6)<cr>" }
-lvim.keys.normal_mode[']7']            = { "<cmd>lua Vscode_like_foldLevel_enhance(7)<cr>" }
-lvim.keys.normal_mode[']8']            = { "<cmd>lua Vscode_like_foldLevel_enhance(8)<cr>" }
-lvim.keys.normal_mode[']9']            = { "<cmd>lua Vscode_like_foldLevel_enhance(9)<cr>" }
+lvim.keys.normal_mode[']1']                         = { "<cmd>lua Vscode_like_foldLevel_enhance(1)<cr>" }
+lvim.keys.normal_mode[']2']                         = { "<cmd>lua Vscode_like_foldLevel_enhance(2)<cr>" }
+lvim.keys.normal_mode[']3']                         = { "<cmd>lua Vscode_like_foldLevel_enhance(3)<cr>" }
+lvim.keys.normal_mode[']4']                         = { "<cmd>lua Vscode_like_foldLevel_enhance(4)<cr>" }
+lvim.keys.normal_mode[']5']                         = { "<cmd>lua Vscode_like_foldLevel_enhance(5)<cr>" }
+lvim.keys.normal_mode[']6']                         = { "<cmd>lua Vscode_like_foldLevel_enhance(6)<cr>" }
+lvim.keys.normal_mode[']7']                         = { "<cmd>lua Vscode_like_foldLevel_enhance(7)<cr>" }
+lvim.keys.normal_mode[']8']                         = { "<cmd>lua Vscode_like_foldLevel_enhance(8)<cr>" }
+lvim.keys.normal_mode[']9']                         = { "<cmd>lua Vscode_like_foldLevel_enhance(9)<cr>" }
 
 -- lvim.keys.visual_mode['<leader>Od'] = "zo"
 
-lvim.keys.normal_mode["<leader>S"]     = { ":SessionManager save_current_session<cr>", silent = false }
+lvim.keys.normal_mode["<leader>S"]                  = { ":SessionManager save_current_session<cr>", silent = false }
 
-lvim.keys.normal_mode["<a-'>"]         = "<cmd>tab split<cr>"
-lvim.keys.normal_mode["<a-/>"]         = "<cmd>tabn 1<cr>"
-lvim.keys.normal_mode["<a-,>"]         = "<cmd>tabprevious<cr>"
-lvim.keys.normal_mode["<a-.>"]         = "<cmd>tabnext<cr>"
+lvim.keys.normal_mode["<a-'>"]                      = "<cmd>tab split<cr>"
+lvim.keys.normal_mode["<a-/>"]                      = "<cmd>tabn 1<cr>"
+lvim.keys.normal_mode["<a-,>"]                      = "<cmd>tabprevious<cr>"
+lvim.keys.normal_mode["<a-.>"]                      = "<cmd>tabnext<cr>"
 
-lvim.keys.normal_mode["<C-Left>"]      = "<cmd>tabmove -1<cr>"
-lvim.keys.normal_mode["<C-Right>"]     = "<cmd>tabmove +1<cr>"
-lvim.keys.normal_mode["<a-\\>"]        = "<cmd>tabclose<cr>"
+lvim.keys.normal_mode["<C-Left>"]                   = "<cmd>tabmove -1<cr>"
+lvim.keys.normal_mode["<C-Right>"]                  = "<cmd>tabmove +1<cr>"
+lvim.keys.normal_mode["<a-\\>"]                     = "<cmd>tabclose<cr>"
 
-lvim.keys.normal_mode["<leader>["]     = "<cmd>cprevious<cr>"
-lvim.keys.normal_mode["<leader>]"]     = "<cmd>cnext<cr>"
+lvim.keys.normal_mode["<leader>["]                  = "<cmd>cprevious<cr>"
+lvim.keys.normal_mode["<leader>]"]                  = "<cmd>cnext<cr>"
 
 -- lvim.keys.normal_mode["<C-j>"]         = "<cmd>BufferLineCyclePrev<cr>"
 -- lvim.keys.normal_mode["<C-l>"]         = "<cmd>BufferLineCycleNext<cr>"
-lvim.keys.normal_mode["<C-j>"]         = "<cmd>bp<cr>"
-lvim.keys.normal_mode["<C-l>"]         = "<cmd>bn<cr>"
-lvim.keys.normal_mode["<a-j>"]         = "<cmd>BufferLineMovePrev<cr>"
-lvim.keys.normal_mode["<a-l>"]         = "<cmd>BufferLineMoveNext<cr>"
-lvim.keys.normal_mode["<a-k>"]         = "<c-d>"
-lvim.builtin.which_key.mappings.b.k    = { "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directory" }
-lvim.keys.normal_mode["<a-i>"]         = "<c-u>"
-lvim.builtin.which_key.mappings.b.i    = { "<cmd>BufferLinePickClose<cr>", "Close Buffer" }
-lvim.keys.normal_mode["<leader><a-i>"] = "<cmd>BufferLineTogglePin<cr>"
+lvim.keys.normal_mode["<C-j>"]                      = "<cmd>bp<cr>"
+lvim.keys.normal_mode["<C-l>"]                      = "<cmd>bn<cr>"
+
+-- disable bufferline's buffer sort persistence
+lvim.builtin.bufferline.options.persist_buffer_sort = false
+-- lvim.keys.normal_mode["<a-j>"]         = "<cmd>BufferLineMovePrev<cr>"
+-- lvim.keys.normal_mode["<a-l>"]         = "<cmd>BufferLineMoveNext<cr>"
+
+lvim.keys.normal_mode["<a-k>"]                      = "<c-d>"
+lvim.builtin.which_key.mappings.b.k                 = { "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directory" }
+lvim.keys.normal_mode["<a-i>"]                      = "<c-u>"
+lvim.builtin.which_key.mappings.b.i                 = { "<cmd>BufferLinePickClose<cr>", "Close Buffer" }
+lvim.keys.normal_mode["<leader><a-i>"]              = "<cmd>BufferLineTogglePin<cr>"
 -- lvim.keys.normal_mode["<c-w>"]         = "<cmd>BufferKill<cr>"
-lvim.keys.normal_mode["<c-w>"]         = "<cmd>BufferLineKill<cr>"
+lvim.keys.normal_mode["<c-w>"]                      = "<cmd>BufferLineKill<cr>"
 -- NOTE: 利用 BufferKill 強制關閉緩衝區
 function ForceBufferKill(_)
   require("lvim.core.bufferline").buf_kill("bd", 0, true)
