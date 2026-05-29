@@ -123,32 +123,9 @@ function M.setup()
     end
     state.commands.open(state)
   end
-  local function avante_add_files(state)
-    local node = state.tree:get_node()
-    local filepath = node:get_id()
-    local relative_path = require('avante.utils').relative_path(filepath)
-
-    local sidebar = require('avante').get()
-
-    local open = sidebar:is_open()
-    -- ensure avante sidebar is open
-    if not open then
-      require('avante.api').ask()
-      sidebar = require('avante').get()
-    end
-
-    sidebar.file_selector:add_selected_file(relative_path)
-
-    -- remove neo tree buffer
-    if not open then
-      sidebar.file_selector:remove_selected_file('neo-tree filesystem [1]')
-    end
-  end
-
   local custom_mappings = {
     -- ["/"] = "telescope",
     -- navigate_up == dir_up
-    ['@'] = avante_add_files,
     ['u'] = float_termMore,
     ['e'] = function() vim.cmd('Neotree focus filesystem left') end,
     ['b'] = function() vim.cmd('Neotree focus buffers left') end,
@@ -346,7 +323,7 @@ function M.setup()
         }
       },
       follow_current_file = {
-        enabled = true,        -- This will find and focus the file in the active buffer every time
+        enabled = true,          -- This will find and focus the file in the active buffer every time
         --              -- the current file is changed while the tree is open.
         leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
       },
@@ -360,7 +337,7 @@ function M.setup()
       },
       follow_current_file = {
         -- WARNING: below parameters are must set, if not the function will not work
-        enabled = true,        -- This will find and focus the file in the active buffer every time
+        enabled = true,          -- This will find and focus the file in the active buffer every time
         --               -- the current file is changed while the tree is open.
         leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
       },
