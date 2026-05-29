@@ -28,7 +28,7 @@ _<_/_>_: c previous/next
   })
 
   hint = [[
-_<_/_>_: previous/next
+_<c-j>_/_<c-l>_: previous/next
 ]]
 
   hydra({
@@ -46,8 +46,8 @@ _<_/_>_: previous/next
     },
     body = "<leader>ha",
     heads = {
-      { '>', ':next<cr>',     { desc = 'next' } },
-      { '<', ':previous<CR>', { desc = 'previous' } }
+      { '<c-l>', ':next<cr>',     { desc = 'next' } },
+      { '<c-j>', ':previous<CR>', { desc = 'previous' } }
     }
   })
 

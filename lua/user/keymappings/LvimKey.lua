@@ -163,6 +163,7 @@ lvim.keys.normal_mode["<C-l>"]                      = "<cmd>bn<cr>"
 
 -- disable bufferline's buffer sort persistence
 lvim.builtin.bufferline.options.persist_buffer_sort = false
+lvim.keys.normal_mode["<a-j>"]                      = false
 -- lvim.keys.normal_mode["<a-j>"]         = "<cmd>BufferLineMovePrev<cr>"
 -- lvim.keys.normal_mode["<a-l>"]         = "<cmd>BufferLineMoveNext<cr>"
 
