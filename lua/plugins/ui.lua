@@ -54,7 +54,8 @@ return {
   },
   {
     "folke/trouble.nvim",
-    event = "VeryLazy",
+    -- event = "VeryLazy",
+    cmd = "Trouble",
     config = function()
       require("user.trouble").setup()
     end

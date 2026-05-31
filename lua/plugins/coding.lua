@@ -27,7 +27,10 @@ return {
   {
     "ThePrimeagen/refactoring.nvim",
     -- event = { "BufReadPre", "BufNewFile" },
-    event = "User FileOpened",
+    -- event = "User FileOpened",
+    keys = {
+      { "<leader>rf", '<cmd>lua require "user.refactoring".refactor_prompt()<cr>', mode = { "n", "v" }, desc = "Refactor" }
+    },
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",

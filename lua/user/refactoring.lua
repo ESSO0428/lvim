@@ -12,6 +12,7 @@ Nvim.builtin.refactoring.method = {
   "move_block_to_file",
 }
 
+local M = {}
 -- 验证方法是否存在于补全列表中
 local function method_is_valid(method)
   local completions = Nvim.builtin.refactoring.method
@@ -109,7 +110,7 @@ local function move_block_to_file(mode)
   -- 这一步可能不是必需的，取决于你的具体需求
 end
 
-local function refactor_prompt()
+function M.refactor_prompt()
   -- vim.ui.select exits visual mode without setting the `<` and `>` marks
   local mode = vim.api.nvim_get_mode().mode
   if mode == "v" or mode == "V" or mode == "vs" or mode == "Vs" then
@@ -141,5 +142,6 @@ vim.api.nvim_create_user_command('MoveBlockToFile', move_block_to_file, { range 
 lvim.builtin.which_key.mappings.u["="] = { "<cmd>lua require('lvim.lsp.utils').format()<cr>", "Format" }
 -- lvim.builtin.which_key.mappings.u.r = { "<cmd>LspLensToggle<cr>", "Like IDEA : definition info" }
 
-lvim.keys.visual_mode['<leader>rf'] = refactor_prompt
-lvim.keys.normal_mode['<leader>rf'] = refactor_prompt
+-- lvim.keys.visual_mode['<leader>rf'] = refactor_prompt
+-- lvim.keys.normal_mode['<leader>rf'] = refactor_prompt
+return M

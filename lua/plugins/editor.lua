@@ -13,7 +13,8 @@ return {
   },
   {
     "theniceboy/antovim",
-    event = "VeryLazy",
+    -- event = "VeryLazy",
+    cmd = "Antovim",
   },
   {
     "godlygeek/tabular",

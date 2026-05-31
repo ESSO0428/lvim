@@ -14,7 +14,17 @@ return {
   },
   {
     "roobert/hoversplit.nvim",
-    event = "VeryLazy",
+    -- event = "VeryLazy",
+    keys = {
+      {
+        "sgh",
+        function()
+          require("hoversplit").split_remain_focused()
+        end,
+        mode = "n",
+        desc = "Hover in split",
+      },
+    },
     config = function()
       require("hoversplit").setup({
         key_bindings = {

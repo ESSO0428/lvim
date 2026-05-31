@@ -174,8 +174,7 @@ function ForceBufferKill(_)
   require("lvim.core.bufferline").buf_kill("bd", 0, true)
 end
 
--- lvim.keys.normal_mode["<leader><c-w>"]  = "<cmd>lua ForceBufferKill()<cr>"
-lvim.keys.normal_mode["<leader><c-w>"]   = "<cmd>ForceBufferLineKill<cr>"
+lvim.keys.normal_mode["<leader><c-w>"]   = "<cmd>lua ForceBufferKill()<cr>"
 -- NOTE: 直接使用 bd! 強制關閉緩衝區
 lvim.keys.normal_mode["<leader>d<c-w>"]  = "<cmd>bd!<cr>"
 

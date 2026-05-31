@@ -128,14 +128,6 @@ lvim.plugins = {
     }
   },
   {
-    "kazhala/close-buffers.nvim",
-    -- event = "BufReadPost",
-    event = "User FileOpened",
-    config = function()
-      require("user.config.plugins.bufferlinekill").setup()
-    end
-  },
-  {
     "ThePrimeagen/harpoon",
     event = "User FileOpened",
     config = function()
