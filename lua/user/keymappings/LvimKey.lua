@@ -167,7 +167,7 @@ lvim.builtin.which_key.mappings.b.i    = { "<cmd>BufferLinePickClose<cr>", "Clos
 lvim.keys.normal_mode["<a-g>"]         = { ":BufferLineGroupToggle ", silent = false }
 lvim.keys.normal_mode["<leader><a-g>"] = { ":BufferLineGroupClose ", silent = false }
 lvim.keys.normal_mode["<leader><a-i>"] = "<cmd>BufferLineTogglePin<cr>"
-lvim.keys.normal_mode["<c-w>"]         = "<cmd>BufferKill<cr>"
+lvim.keys.normal_mode["<c-w>"]         = { "<cmd>BufferKill<cr>", { nowait = true } }
 
 -- NOTE: 利用 BufferKill 強制關閉緩衝區
 function ForceBufferKill(_)

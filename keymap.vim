@@ -107,7 +107,7 @@ function! s:YankMarkdownCodeBlockOuter(type) abort
   endtry
 endfunction
 
-nnoremap <c-w> :bd<cr>
+nnoremap <nowait><c-w> :bd<cr>
 
 " H M L
 nnoremap g{ H
