@@ -129,7 +129,10 @@ lvim.plugins = {
   },
   {
     "kazhala/close-buffers.nvim",
-    cmd = "BDelete",
+    cmd = { "BDelete", "BufferLineKill", "ForceBufferLineKill" },
+    config = function()
+      require("user.config.plugins.bufferlinekill").setup()
+    end,
   },
   {
     "ThePrimeagen/harpoon",

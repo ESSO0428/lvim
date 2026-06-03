@@ -167,14 +167,16 @@ lvim.builtin.which_key.mappings.b.i    = { "<cmd>BufferLinePickClose<cr>", "Clos
 lvim.keys.normal_mode["<a-g>"]         = { ":BufferLineGroupToggle ", silent = false }
 lvim.keys.normal_mode["<leader><a-g>"] = { ":BufferLineGroupClose ", silent = false }
 lvim.keys.normal_mode["<leader><a-i>"] = "<cmd>BufferLineTogglePin<cr>"
-lvim.keys.normal_mode["<c-w>"]         = { "<cmd>BufferKill<cr>", { nowait = true } }
+-- lvim.keys.normal_mode["<c-w>"]         = { "<cmd>BufferKill<cr>", { nowait = true } }
+lvim.keys.normal_mode["<c-w>"]         = { "<cmd>BufferLineKill<cr>", { nowait = true } }
 
 -- NOTE: 利用 BufferKill 強制關閉緩衝區
 function ForceBufferKill(_)
   require("lvim.core.bufferline").buf_kill("bd", 0, true)
 end
 
-lvim.keys.normal_mode["<leader><c-w>"]   = "<cmd>lua ForceBufferKill()<cr>"
+-- lvim.keys.normal_mode["<leader><c-w>"]   = "<cmd>lua ForceBufferKill()<cr>"
+lvim.keys.normal_mode["<leader><c-w>"]   = "<cmd>ForceBufferLineKill<cr>"
 -- NOTE: 直接使用 bd! 強制關閉緩衝區
 lvim.keys.normal_mode["<leader>d<c-w>"]  = "<cmd>bd!<cr>"
 
