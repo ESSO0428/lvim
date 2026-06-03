@@ -128,6 +128,10 @@ lvim.plugins = {
     }
   },
   {
+    "kazhala/close-buffers.nvim",
+    cmd = "BDelete",
+  },
+  {
     "ThePrimeagen/harpoon",
     event = "User FileOpened",
     config = function()
