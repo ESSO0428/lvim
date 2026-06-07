@@ -169,12 +169,12 @@ end
 
 lvim.keys.normal_mode["<leader>Om"] = {
   function() apply_marker_and_fold("close") end,
-  desc = "Close all filetype markers (ufo)",
+  { desc = "Close all filetype markers (ufo)" }
 }
 
 lvim.keys.normal_mode["<leader>OM"] = {
   function() apply_marker_and_fold("open") end,
-  desc = "Open all filetype markers (ufo)",
+  { desc = "Open all filetype markers (ufo)" }
 }
 
 return M

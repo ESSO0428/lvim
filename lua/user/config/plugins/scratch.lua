@@ -475,7 +475,7 @@ lvim.keys.normal_mode["<leader>r."] = {
       end
     end)
   end,
-  desc = "Quick Note (current window)",
+  { desc = "Quick Note (current window)" }
 }
 
 lvim.keys.normal_mode["<leader>."] = {
@@ -660,10 +660,10 @@ lvim.keys.normal_mode["<leader>."] = {
       end
     end)
   end,
-  desc = "Create Scratch (named)",
+  { desc = "Create Scratch (named)" }
 }
 
 lvim.keys.normal_mode["<leader>>"] = {
   "<cmd>lua Snacks.scratch.select()<cr>",
-  desc = "Select Scratch Buffer",
+  { desc = "Select Scratch Buffer" }
 }

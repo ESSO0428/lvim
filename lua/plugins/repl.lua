@@ -9,21 +9,21 @@ vim.api.nvim_create_user_command("RunQtConsole", function()
   vim.fn.jobstart(cmd)
 end, {})
 
--- lvim.keys.normal_mode["'q"] = { "<cmd>RunQtConsole<cr>gg", desc = "Run QtConsole" }
+-- lvim.keys.normal_mode["'q"] = { "<cmd>RunQtConsole<cr>gg", { desc = "Run QtConsole" } }
 -- lvim.keys.normal_mode["\\E"] = { "<cmd>IronRepl<cr>", desc = "Open REPL" }
--- lvim.keys.normal_mode["\\w"] = { "<cmd>IPython --existing --no-window<cr><Plug>(IPy-RunCell)", desc = "Run Cell" }
--- lvim.keys.normal_mode["\\e"] = { "<cmd>IPython --existing --no-window<cr><Plug>(IPy-RunAll)", desc = "Run All" }
+-- lvim.keys.normal_mode["\\w"] = { "<cmd>IPython --existing --no-window<cr><Plug>(IPy-RunCell)", { desc = "Run Cell" } }
+-- lvim.keys.normal_mode["\\e"] = { "<cmd>IPython --existing --no-window<cr><Plug>(IPy-RunAll)", { desc = "Run All" } }
 
--- lvim.keys.normal_mode["[w"] = { "strah", desc = "Send Line Above" }
--- lvim.keys.normal_mode["]w"] = { "stR", desc = "Send Line Below" }
--- lvim.keys.normal_mode["[r"] = { "stR", desc = "Send Line Above" }
--- lvim.keys.normal_mode["]r"] = { "stR", desc = "Send Line Below" }
--- lvim.keys.normal_mode["[R"] = { "stR", desc = "Send Line Above" }
--- lvim.keys.normal_mode["]R"] = { "stR", desc = "Send Line Below" }
--- lvim.keys.visual_mode["[w"] = { "str", desc = "Send Selection Above" }
--- lvim.keys.visual_mode["]w"] = { "str", desc = "Send Selection Below" }
--- lvim.keys.visual_mode["[r"] = { "str", desc = "Send Selection Above" }
--- lvim.keys.visual_mode["]r"] = { "str", desc = "Send Selection Below" }
+-- lvim.keys.normal_mode["[w"] = { "strah", { desc = "Send Line Above" } }
+-- lvim.keys.normal_mode["]w"] = { "stR", { desc = "Send Line Below" } }
+-- lvim.keys.normal_mode["[r"] = { "stR", { desc = "Send Line Above" } }
+-- lvim.keys.normal_mode["]r"] = { "stR", { desc = "Send Line Below" } }
+-- lvim.keys.normal_mode["[R"] = { "stR", { desc = "Send Line Above" } }
+-- lvim.keys.normal_mode["]R"] = { "stR", { desc = "Send Line Below" } }
+-- lvim.keys.visual_mode["[w"] = { "str", { desc = "Send Selection Above" } }
+-- lvim.keys.visual_mode["]w"] = { "str", { desc = "Send Selection Below" } }
+-- lvim.keys.visual_mode["[r"] = { "str", { desc = "Send Selection Above" } }
+-- lvim.keys.visual_mode["]r"] = { "str", { desc = "Send Selection Below" } }
 
 return {
   {

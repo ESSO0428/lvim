@@ -2,8 +2,8 @@
 local windows_terminal = require("user.integrated.WindowsTerminal")
 
 -- lvim.keys.normal_mode["<a-q>"] = { "<cmd>copen<cr>" }
-lvim.keys.normal_mode["<a-q>"] = { "<cmd>copen<cr>", desc = "Open Quickfix" }
-lvim.keys.normal_mode["<c-q>"] = { Nvim.Quickfix.toggle_quickfix_safety, desc = "Toggle Quickfix at bottom-right" }
+lvim.keys.normal_mode["<a-q>"] = { "<cmd>copen<cr>", { desc = "Open Quickfix" } }
+lvim.keys.normal_mode["<c-q>"] = { Nvim.Quickfix.toggle_quickfix_safety, { desc = "Toggle Quickfix at bottom-right" } }
 --[[ -- lvim core command <c-q>
 vim.cmd [[
   function! QuickFixToggle()
@@ -31,7 +31,7 @@ lvim.keys.normal_mode['<leader>rb']    = "<cmd>e $HOME/.bashrc<cr>"
 lvim.keys.normal_mode['<leader>rw']    = windows_terminal.find_and_edit_terminal_settings
 
 lvim.keys.normal_mode['<leader>rt']    = "<cmd>ToggleTermSendCurrentLine<cr>"
-lvim.keys.visual_mode['<leader>rt']    = { ":ToggleTermSendVisualLines", silent = false }
+lvim.keys.visual_mode['<leader>rt']    = { ":ToggleTermSendVisualLines", { silent = false } }
 
 lvim.keys.normal_mode["<leader>w"]     = "viw"
 lvim.keys.normal_mode["<leader>y"]     = "yiw"
@@ -142,7 +142,7 @@ lvim.keys.normal_mode[']9']            = { "<cmd>lua Vscode_like_foldLevel_enhan
 
 -- lvim.keys.visual_mode['<leader>Od'] = "zo"
 
-lvim.keys.normal_mode["<leader>S"]     = { ":SessionManager save_current_session<cr>", silent = false }
+lvim.keys.normal_mode["<leader>S"]     = { ":SessionManager save_current_session<cr>", { silent = false } }
 
 lvim.keys.normal_mode["<a-'>"]         = "<cmd>tab split<cr>"
 lvim.keys.normal_mode["<a-/>"]         = "<cmd>tabn 1<cr>"
@@ -164,8 +164,8 @@ lvim.keys.normal_mode["<a-k>"]         = "<c-d>"
 lvim.builtin.which_key.mappings.b.k    = { "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directory" }
 lvim.keys.normal_mode["<a-i>"]         = "<c-u>"
 lvim.builtin.which_key.mappings.b.i    = { "<cmd>BufferLinePickClose<cr>", "Close Buffer" }
-lvim.keys.normal_mode["<a-g>"]         = { ":BufferLineGroupToggle ", silent = false }
-lvim.keys.normal_mode["<leader><a-g>"] = { ":BufferLineGroupClose ", silent = false }
+lvim.keys.normal_mode["<a-g>"]         = { ":BufferLineGroupToggle ", { silent = false } }
+lvim.keys.normal_mode["<leader><a-g>"] = { ":BufferLineGroupClose ", { silent = false } }
 lvim.keys.normal_mode["<leader><a-i>"] = "<cmd>BufferLineTogglePin<cr>"
 -- lvim.keys.normal_mode["<c-w>"]         = { "<cmd>BufferKill<cr>", { nowait = true } }
 lvim.keys.normal_mode["<c-w>"]         = { "<cmd>BufferLineKill<cr>", { nowait = true } }
@@ -192,14 +192,6 @@ lvim.keys.normal_mode["<a-8>"]           = "<cmd>BufferLineGoToBuffer 8<cr>"
 lvim.keys.normal_mode["<a-9>"]           = "<cmd>BufferLineGoToBuffer 9<cr>"
 lvim.keys.normal_mode["<a-0>"]           = "<cmd>BufferLineGoToBuffer -1<cr>"
 lvim.keys.normal_mode["<a-`>"]           = "<cmd>b#<cr>"
--- -- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without formatting" }
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<cr>", "Projects" }
--- nvim notebook (Andy6)
--- vim.keymap.set('n', '<leader>es', '<cmd>IronRepl<cr>')
--- vim.keymap.set('n', '<leader>er', '<cmd>IronRestart<cr>')
--- vim.keymap.set('n', '<leader>ef', '<cmd>IronFocus<cr>')
--- vim.keymap.set('n', '<leader>eh', '<cmd>IronHide<cr>')
 
 lvim.keys.normal_mode["<A-BS>"]          = "<cmd>cd ../<cr>"
 lvim.keys.normal_mode["<leader><A-BS>"]  = "<cmd>cd %:p:h <cr>"
@@ -318,25 +310,25 @@ lvim.builtin.which_key.mappings.d['le'] = {
   'Edit Breakpoint' }
 
 -- DiffTool
-lvim.keys.normal_mode["cv"] = { "<cmd>ConflictDiff<cr>", desc = "Compare Conflict" }
-lvim.keys.normal_mode["cp"] = { "<cmd>ConflictAllDiff<cr>", desc = "Compare Conflict (All Buffer)" }
+lvim.keys.normal_mode["cv"] = { "<cmd>ConflictDiff<cr>", { desc = "Compare Conflict" } }
+lvim.keys.normal_mode["cp"] = { "<cmd>ConflictAllDiff<cr>", { desc = "Compare Conflict (All Buffer)" } }
 
 -- Undo
-lvim.keys.normal_mode["Z"] = { "<cmd>UndotreeToggle<cr>", desc = "Toggle undo tree" }
-
+lvim.keys.normal_mode["Z"] = { "<cmd>UndotreeToggle<cr>", { desc = "Toggle undo tree" }
+}
 -- Repl
-lvim.keys.normal_mode["'q"] = { "<cmd>RunQtConsole<cr>gg", desc = "Run QtConsole" }
-lvim.keys.normal_mode["\\E"] = { "<cmd>IronRepl<cr>", desc = "Open REPL" }
-lvim.keys.normal_mode["\\w"] = { "<cmd>IPython --existing --no-window<cr><Plug>(IPy-RunCell)", desc = "Run Cell" }
-lvim.keys.normal_mode["\\e"] = { "<cmd>IPython --existing --no-window<cr><Plug>(IPy-RunAll)", desc = "Run All" }
+lvim.keys.normal_mode["'q"] = { "<cmd>RunQtConsole<cr>gg", { desc = "Run QtConsole" } }
+lvim.keys.normal_mode["\\E"] = { "<cmd>IronRepl<cr>", { desc = "Open REPL" } }
+lvim.keys.normal_mode["\\w"] = { "<cmd>IPython --existing --no-window<cr><Plug>(IPy-RunCell)", { desc = "Run Cell" } }
+lvim.keys.normal_mode["\\e"] = { "<cmd>IPython --existing --no-window<cr><Plug>(IPy-RunAll)", { desc = "Run All" } }
 
-lvim.keys.normal_mode["[w"] = { "strah", desc = "Send Line Above" }
-lvim.keys.normal_mode["]w"] = { "stR", desc = "Send Line Below" }
-lvim.keys.normal_mode["[r"] = { "stR", desc = "Send Line Above" }
-lvim.keys.normal_mode["]r"] = { "stR", desc = "Send Line Below" }
-lvim.keys.normal_mode["[R"] = { "stR", desc = "Send Line Above" }
-lvim.keys.normal_mode["]R"] = { "stR", desc = "Send Line Below" }
-lvim.keys.visual_mode["[w"] = { "str", desc = "Send Selection Above" }
-lvim.keys.visual_mode["]w"] = { "str", desc = "Send Selection Below" }
-lvim.keys.visual_mode["[r"] = { "str", desc = "Send Selection Above" }
-lvim.keys.visual_mode["]r"] = { "str", desc = "Send Selection Below" }
+lvim.keys.normal_mode["[w"] = { "strah", { desc = "Send Line Above" } }
+lvim.keys.normal_mode["]w"] = { "stR", { desc = "Send Line Below" } }
+lvim.keys.normal_mode["[r"] = { "stR", { desc = "Send Line Above" } }
+lvim.keys.normal_mode["]r"] = { "stR", { desc = "Send Line Below" } }
+lvim.keys.normal_mode["[R"] = { "stR", { desc = "Send Line Above" } }
+lvim.keys.normal_mode["]R"] = { "stR", { desc = "Send Line Below" } }
+lvim.keys.visual_mode["[w"] = { "str", { desc = "Send Selection Above" } }
+lvim.keys.visual_mode["]w"] = { "str", { desc = "Send Selection Below" } }
+lvim.keys.visual_mode["[r"] = { "str", { desc = "Send Selection Above" } }
+lvim.keys.visual_mode["]r"] = { "str", { desc = "Send Selection Below" } }
