@@ -6,7 +6,7 @@ return {
   },
   {
     "rbong/vim-flog",
-    cmd = { "Flog", "Flogsplit" },
+    cmd = { "Flog", "Floggit", "Flogsplit" },
   },
   {
     "sindrets/diffview.nvim",

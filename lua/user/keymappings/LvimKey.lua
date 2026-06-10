@@ -78,27 +78,26 @@ lvim.keys.normal_mode['<c-o>']         = "<c-f>"
 -- vim.keymap.set('v', '<a-down>', "<Plug>MoveBlockDown")
 -- vim.keymap.set('v', '<a-left>', "<Plug>MoveBlockLeft")
 -- vim.keymap.set('v', '<a-right>', "<Plug>MoveBlockRight")
-vim.keymap.set('v', '<a-up>',
+lvim.keys.visual_mode['<a-up>']        = {
   function()
     if vim.fn.mode() == "v" then return "<Plug>MoveBlockUp" else return "<Plug>SchleppUp" end
   end, { expr = true, silent = true }
-)
-vim.keymap.set('v', '<a-down>',
+}
+lvim.keys.visual_mode['<a-down>']      = {
   function()
     if vim.fn.mode() == "v" then return "<Plug>MoveBlockDown" else return "<Plug>SchleppDown" end
   end, { expr = true, silent = true }
-)
-vim.keymap.set('v', '<a-left>',
+}
+lvim.keys.visual_mode['<a-left>']      = {
   function()
     if vim.fn.mode() == "v" then return "<Plug>MoveBlockLeft" else return "<Plug>SchleppLeft" end
   end, { expr = true, silent = true }
-)
-vim.keymap.set('v', '<a-right>',
+}
+lvim.keys.visual_mode['<a-right>']     = {
   function()
     if vim.fn.mode() == "v" then return "<Plug>MoveBlockRight" else return "<Plug>SchleppRight" end
   end, { expr = true, silent = true }
-)
-
+}
 
 -- <leader>o
 -- lvim.builtin.which_key.mappings['o'] = { "za", "Folding Code (Toggle)" }
@@ -106,7 +105,7 @@ vim.keymap.set('v', '<a-right>',
 -- -- lvim.builtin.which_key.mappings['O'] = { "zR", "Folding Code (Open All)" }
 -- lvim.builtin.which_key.mappings['Oa'] = { "zM", "Folding Code (Close All)" }
 -- lvim.builtin.which_key.mappings['Od'] = { "zR", "Folding Code (Open All)" }
-lvim.keys.visual_mode['<leader>o'] = "za"
+lvim.keys.visual_mode['<leader>o']     = "za"
 
 function PeekFoldedLinesUnderCursor()
   require('ufo').peekFoldedLinesUnderCursor()
@@ -120,7 +119,7 @@ end
 lvim.keys.normal_mode['<leader>uu'] = { "<cmd>lua PeekFoldedLinesUnderCursor()<cr>" }
 
 
-function Vscode_like_foldLevel_enhance(n)
+local function Vscode_like_foldLevel_enhance(n)
   require('fold-cycle').close_all()
   n = n - 1
   if n >= 1 then
@@ -130,15 +129,15 @@ function Vscode_like_foldLevel_enhance(n)
   end
 end
 
-lvim.keys.normal_mode[']1']            = { "<cmd>lua Vscode_like_foldLevel_enhance(1)<cr>" }
-lvim.keys.normal_mode[']2']            = { "<cmd>lua Vscode_like_foldLevel_enhance(2)<cr>" }
-lvim.keys.normal_mode[']3']            = { "<cmd>lua Vscode_like_foldLevel_enhance(3)<cr>" }
-lvim.keys.normal_mode[']4']            = { "<cmd>lua Vscode_like_foldLevel_enhance(4)<cr>" }
-lvim.keys.normal_mode[']5']            = { "<cmd>lua Vscode_like_foldLevel_enhance(5)<cr>" }
-lvim.keys.normal_mode[']6']            = { "<cmd>lua Vscode_like_foldLevel_enhance(6)<cr>" }
-lvim.keys.normal_mode[']7']            = { "<cmd>lua Vscode_like_foldLevel_enhance(7)<cr>" }
-lvim.keys.normal_mode[']8']            = { "<cmd>lua Vscode_like_foldLevel_enhance(8)<cr>" }
-lvim.keys.normal_mode[']9']            = { "<cmd>lua Vscode_like_foldLevel_enhance(9)<cr>" }
+lvim.keys.normal_mode[']1']            = { function() Vscode_like_foldLevel_enhance(1) end }
+lvim.keys.normal_mode[']2']            = { function() Vscode_like_foldLevel_enhance(2) end }
+lvim.keys.normal_mode[']3']            = { function() Vscode_like_foldLevel_enhance(3) end }
+lvim.keys.normal_mode[']4']            = { function() Vscode_like_foldLevel_enhance(4) end }
+lvim.keys.normal_mode[']5']            = { function() Vscode_like_foldLevel_enhance(5) end }
+lvim.keys.normal_mode[']6']            = { function() Vscode_like_foldLevel_enhance(6) end }
+lvim.keys.normal_mode[']7']            = { function() Vscode_like_foldLevel_enhance(7) end }
+lvim.keys.normal_mode[']8']            = { function() Vscode_like_foldLevel_enhance(8) end }
+lvim.keys.normal_mode[']9']            = { function() Vscode_like_foldLevel_enhance(9) end }
 
 -- lvim.keys.visual_mode['<leader>Od'] = "zo"
 
@@ -161,7 +160,7 @@ lvim.keys.normal_mode["<C-l>"]         = "<cmd>BufferLineCycleNext<cr>"
 lvim.keys.normal_mode["<a-j>"]         = "<cmd>BufferLineMovePrev<cr>"
 lvim.keys.normal_mode["<a-l>"]         = "<cmd>BufferLineMoveNext<cr>"
 lvim.keys.normal_mode["<a-k>"]         = "<c-d>"
-lvim.builtin.which_key.mappings.b.k    = { "<cmd>BufferLineSortByDirectory<cr>", "Sort By Directory" }
+lvim.builtin.which_key.mappings.b.k    = { "<cmd>BufferLineSortByRelativeDirectory<cr>", "Sort By Relative Directory" }
 lvim.keys.normal_mode["<a-i>"]         = "<c-u>"
 lvim.builtin.which_key.mappings.b.i    = { "<cmd>BufferLinePickClose<cr>", "Close Buffer" }
 lvim.keys.normal_mode["<a-g>"]         = { ":BufferLineGroupToggle ", { silent = false } }
@@ -234,8 +233,9 @@ lvim.keys.normal_mode["<F20>"]           = { "<cmd>lua require'dap'.step_over()<
 lvim.keys.normal_mode["<F6>"]            = { "<cmd>lua require'dap'.step_out()<cr>" }
 
 vim.cmd('noremap <a-p> <Nop>')
-vim.keymap.set('i', '<a-u>', "<Esc>:m .-2<cr>==gi")
-vim.keymap.set('i', '<a-o>', "<Esc>:m .+1<cr>==gi")
+lvim.keys.insert_mode["<a-u>"] = "<Esc>:m .-2<cr>==gi"
+lvim.keys.insert_mode["<a-o>"] = "<Esc>:m .+1<cr>==gi"
+
 local function dap_edit_breakpoint()
   local function get_input_with_default(prompt, default)
     local input = vim.fn.input(prompt, default or ''):gsub("^%s*(.-)%s*$", "%1")

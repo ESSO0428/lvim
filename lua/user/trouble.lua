@@ -233,7 +233,7 @@ lvim.builtin.which_key.mappings["t"] = {
   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
   w = { "<cmd>Trouble diagnostics toggle<cr>", "Diagnostics" },
 }
-vim.keymap.set("n", "]t", function()
+lvim.keys.normal_mode["]t"] = { function()
   local status_ok, trouble = pcall(require, 'trouble')
   if not status_ok then
     vim.notify('trouble ' .. trouble .. ' not found!')
@@ -241,16 +241,16 @@ vim.keymap.set("n", "]t", function()
   else
     require("trouble").next({ skip_groups = true, jump = true })
   end
-end, { desc = "Next trouble" })
+end, { desc = "Next trouble" } }
 
-vim.keymap.set("n", "[t", function()
+lvim.keys.normal_mode["[t"] = { function()
   local status_ok, trouble = pcall(require, 'trouble')
   if not status_ok then
     vim.notify('trouble ' .. trouble .. ' not found!')
     return
   else
-    require("trouble").previous({ skip_groups = true, jump = true })
+    require("trouble").prev({ skip_groups = true, jump = true })
   end
-end, { desc = "Previous trouble" })
+end, { desc = "Previous trouble" } }
 
 return M
