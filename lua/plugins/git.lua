@@ -7,6 +7,9 @@ return {
   {
     "rbong/vim-flog",
     cmd = { "Flog", "Floggit", "Flogsplit" },
+    dependencies = {
+      "ESSO0428/vim-fugitive",
+    },
   },
   {
     "sindrets/diffview.nvim",
