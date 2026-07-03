@@ -4,36 +4,80 @@ local M = {}
 -- 改用 HiPhish/nvim-ts-rainbow2
 -- 或 HiPhish/rainbow-delimiters.nvim (推薦)
 
+local function switch_to_bufferline_neighbor(windows)
+  local bufferline = require("bufferline")
+  local state = require("bufferline.state")
+
+  local current = vim.api.nvim_get_current_buf()
+
+  local elements = {}
+  for _, component in ipairs(state.components) do
+    local element = component:as_element()
+    if element then
+      table.insert(elements, element)
+    end
+  end
+
+  local current_index = nil
+  local current_group = nil
+
+  for i, element in ipairs(elements) do
+    if element.id == current then
+      current_index = i
+      current_group = element.group
+      break
+    end
+  end
+
+  if not current_index then
+    bufferline.cycle(1)
+  else
+    local group_elements = {}
+
+    if current_group ~= nil then
+      for i, element in ipairs(elements) do
+        if element.group == current_group then
+          table.insert(group_elements, {
+            index = i,
+            element = element,
+          })
+        end
+      end
+    end
+
+    local is_in_group = current_group ~= nil and #group_elements > 0
+    local is_group_has_multiple_buffers = #group_elements >= 2
+    local is_last_in_group = false
+
+    if is_in_group and is_group_has_multiple_buffers then
+      local last_group_item = group_elements[#group_elements]
+      is_last_in_group = last_group_item.index == current_index
+    end
+
+    if is_group_has_multiple_buffers and is_last_in_group then
+      -- 目前 buffer 是同 group 內最後一個，所以關閉後往前一個 bufferline buffer 移動
+      bufferline.cycle(-1)
+    elseif current_index == #elements then
+      -- 不符合 group 特例時
+      -- 如果是整個 bufferline 的最後一個，往前移動
+      bufferline.cycle(-1)
+    else
+      -- 一般情況往下一個移動
+      bufferline.cycle(1)
+    end
+  end
+
+  local bufnr = vim.api.nvim_get_current_buf()
+
+  for _, window in ipairs(windows) do
+    vim.api.nvim_win_set_buf(window, bufnr)
+  end
+end
+
 function M.setup()
   require("close_buffers").setup({
     preserve_window_layout = { "this" },
-    next_buffer_cmd = function(windows)
-      local bufferline = require("bufferline")
-      local current = vim.api.nvim_get_current_buf()
-
-      -- 使用 bufferline.nvim 自己維護的 buffer 顯示順序
-      local elements = bufferline.get_elements().elements
-
-      local current_index = nil
-      for i, element in ipairs(elements) do
-        if element.id == current then
-          current_index = i
-          break
-        end
-      end
-
-      if current_index == #elements then
-        bufferline.cycle(-1)
-      else
-        bufferline.cycle(1)
-      end
-
-      local bufnr = vim.api.nvim_get_current_buf()
-
-      for _, window in ipairs(windows) do
-        vim.api.nvim_win_set_buf(window, bufnr)
-      end
-    end,
+    next_buffer_cmd = switch_to_bufferline_neighbor,
   })
 
   function BufferLineKill(opts)
