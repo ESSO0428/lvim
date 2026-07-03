@@ -5,10 +5,29 @@ local M = {}
 -- 或 HiPhish/rainbow-delimiters.nvim (推薦)
 
 function M.setup()
-  require('close_buffers').setup({
-    preserve_window_layout = { 'this' },
+  require("close_buffers").setup({
+    preserve_window_layout = { "this" },
     next_buffer_cmd = function(windows)
-      require('bufferline').cycle(1)
+      local bufferline = require("bufferline")
+      local current = vim.api.nvim_get_current_buf()
+
+      -- 使用 bufferline.nvim 自己維護的 buffer 顯示順序
+      local elements = bufferline.get_elements().elements
+
+      local current_index = nil
+      for i, element in ipairs(elements) do
+        if element.id == current then
+          current_index = i
+          break
+        end
+      end
+
+      if current_index == #elements then
+        bufferline.cycle(-1)
+      else
+        bufferline.cycle(1)
+      end
+
       local bufnr = vim.api.nvim_get_current_buf()
 
       for _, window in ipairs(windows) do
@@ -16,57 +35,55 @@ function M.setup()
       end
     end,
   })
-end
 
-function BufferLineKill(opts)
-  opts = opts or {}
-  local force = opts.force or false
-  local bo = vim.bo
-  local api = vim.api
-  local fmt = string.format
-  local fn = vim.fn
-  local choice
+  function BufferLineKill(opts)
+    opts = opts or {}
+    local force = opts.force or false
+    local bo = vim.bo
+    local api = vim.api
+    local fmt = string.format
+    local fn = vim.fn
+    local choice
 
-  local bufnr = vim.api.nvim_get_current_buf()
-  local bufname = api.nvim_buf_get_name(bufnr)
+    local bufnr = vim.api.nvim_get_current_buf()
+    local bufname = api.nvim_buf_get_name(bufnr)
 
-  if api.nvim_get_option_value("buftype", { buf = bufnr }) == "terminal" then
-    if force ~= true then
-      vim.cmd('BufferKill')
+    if api.nvim_get_option_value("buftype", { buf = bufnr }) == "terminal" then
+      if force ~= true then
+        vim.cmd('BufferKill')
+      else
+        vim.cmd([[lua require("lvim.core.bufferline").buf_kill("bd", 0, true)]])
+      end
     else
-      vim.cmd([[lua require("lvim.core.bufferline").buf_kill("bd", 0, true)]])
-    end
-  else
-    if force ~= true then
-      if bo[bufnr].modified then
-        choice = fn.confirm(fmt([[Save changes to "%s"?]], bufname), "&Yes\n&No\n&Cancel")
-        if choice == 1 then
-          vim.api.nvim_buf_call(bufnr, function()
-            vim.cmd("w")
-          end)
-        elseif choice == 2 then
-          do end -- Empty block, no operation
-        else
-          return
+      if force ~= true then
+        if bo[bufnr].modified then
+          choice = fn.confirm(fmt([[Save changes to "%s"?]], bufname), "&Yes\n&No\n&Cancel")
+          if choice == 1 then
+            vim.api.nvim_buf_call(bufnr, function()
+              vim.cmd("w")
+            end)
+          elseif choice == 2 then
+            do end -- Empty block, no operation
+          else
+            return
+          end
         end
       end
-    end
 
-    -- Get list of active buffers
-    local buffers = vim.tbl_filter(function(buf)
-      return api.nvim_buf_is_valid(buf) and bo[buf].buflisted
-    end, api.nvim_list_bufs())
-    if #buffers == 1 then
-      vim.cmd([[lua require("lvim.core.bufferline").buf_kill("bd", 0, true)]])
-    else
-      vim.cmd([[lua require('close_buffers').delete({type = 'this', force = true})]])
+      -- Get list of active buffers
+      local buffers = vim.tbl_filter(function(buf)
+        return api.nvim_buf_is_valid(buf) and bo[buf].buflisted
+      end, api.nvim_list_bufs())
+      if #buffers == 1 then
+        vim.cmd([[lua require("lvim.core.bufferline").buf_kill("bd", 0, true)]])
+      else
+        vim.cmd([[lua require('close_buffers').delete({type = 'this', force = true})]])
+      end
     end
   end
-end
 
-vim.cmd([[
-command! BufferLineKill lua BufferLineKill({ force = false })
-command! ForceBufferLineKill lua BufferLineKill({ force = true })
-]])
+  vim.api.nvim_create_user_command('BufferLineKill', function() BufferLineKill({ force = false }) end, {})
+  vim.api.nvim_create_user_command('ForceBufferLineKill', function() BufferLineKill({ force = true }) end, {})
+end
 
 return M
